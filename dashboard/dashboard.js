@@ -217,8 +217,6 @@ function hueControls(msg) {
 
     const model = msg.payload
 
-    console.log(msg)
-
     let controls =
         '<section class="padded"><h3>' +
         model.title +
