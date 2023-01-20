@@ -1,0 +1,149 @@
+body {
+
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: silver;
+    background-color: darkslategray;
+    padding: 2em;
+
+}
+
+a {
+
+    color: white;
+    text-decoration: none;
+
+}
+
+a:hover {
+
+    text-decoration: underline;
+
+}
+
+a:visited {
+
+    color: white;
+
+}
+
+.centered {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.split {
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.wrapped {
+
+    display: flex;
+    flex-flow: row wrap;
+
+}
+
+.not-wrapped {
+
+    display: flex;
+    flex-flow: row nowrap;
+
+}
+
+.padded {
+
+    margin: 0.25em;
+    padding: 0.25em;
+
+}
+
+.cluster {
+
+    margin: 0.25em;
+    padding: 0.25em;
+    border: 1px solid silver;
+
+}
+
+input,
+button,
+select,
+table,
+th,
+td {
+
+    margin: 0.25em;
+
+}
+
+#ws-status {
+
+    text-align: center;
+
+}
+
+#ws-url {
+
+    width: 15em;
+
+}
+
+fieldset p {
+
+    width: 15em;
+
+}
+
+.ws-connecting {
+
+    color: black;
+    background-color: yellow;
+
+}
+
+.ws-connected {
+
+    color: white;
+    background-color: green;
+
+}
+
+.ws-disconnecting,
+.ws-disconnected {
+
+    color: white;
+    background-color: red;
+
+}
+
+.hue-uninitialized {
+
+    color: white;
+    background-color: gray;
+
+}
+
+.hue-connecting {
+
+    color: black;
+    background-color: yellow;
+
+}
+
+.hue-connected {
+
+    color: white;
+    background-color: green;
+
+}
+
+.hue-disconnected {
+
+    color: white;
+    background-color: red;
+
+}
