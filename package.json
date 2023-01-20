@@ -1,0 +1,15 @@
+{
+    "name": "home-automation",
+    "description": "Home Automation",
+    "version": "1.0.0",
+    "dependencies": {
+        "@parasaurolophus/node-red-eventsource": "1.3.5",
+        "node-red-node-discovery": "0.0.23"
+    },
+    "node-red": {
+        "settings": {
+            "flowFile": "flows.json",
+            "credentialsFile": "flows_cred.json"
+        }
+    }
+}
