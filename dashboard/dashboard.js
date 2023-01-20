@@ -102,7 +102,7 @@ function activateWindowShadesScene(event) {
 
 }
 
-function refreshControlsClicked(event) {
+function refreshControlsClicked(_event) {
 
     const msg = {
         payload: new Date().getTime(),
@@ -280,11 +280,11 @@ function wsReadyState() {
                         readyState
 
     let content =
-        '<div class="padded ws-' +
+        '<span class="padded ws-' +
         text +
         '">' +
         text +
-        '</div>'
+        '</span>'
 
     document.querySelector("#ws-status").innerHTML = content
 
@@ -319,7 +319,7 @@ function escapeHTML(unescaped) {
 
 }
 
-function disconnectWS(event) {
+function disconnectWS(_event) {
 
     if (wsReconnectTimer !== null) {
 
@@ -332,7 +332,7 @@ function disconnectWS(event) {
 
 }
 
-function connectWS(event) {
+function connectWS(_event) {
 
     if (ws !== null) {
 
@@ -354,7 +354,7 @@ function connectWS(event) {
     wsReadyState()
     wsReconnectTimer = setInterval(connectWS, 5000)
 
-    ws.onopen = (event) => {
+    ws.onopen = (_event) => {
 
         document.querySelector('#settings').disabled = false
         document.querySelector('#hue-bridges-fields').disabled = false
@@ -364,7 +364,7 @@ function connectWS(event) {
 
     }
 
-    ws.onclose = (event) => {
+    ws.onclose = (_event) => {
 
         wsReadyState()
         document.querySelector('#settings').disabled = true
@@ -489,6 +489,3 @@ function connectWS(event) {
 
     }
 }
-
-document.querySelector('#ws-url').value = wsURL(window.location)
-connectWS()

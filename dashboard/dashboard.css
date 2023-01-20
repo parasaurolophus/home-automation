@@ -34,12 +34,6 @@ a:visited {
 
 }
 
-.split {
-
-    display: flex;
-    justify-content: space-between;
-}
-
 .wrapped {
 
     display: flex;
@@ -61,14 +55,6 @@ a:visited {
 
 }
 
-.cluster {
-
-    margin: 0.25em;
-    padding: 0.25em;
-    border: 1px solid silver;
-
-}
-
 input,
 button,
 select,
@@ -80,19 +66,8 @@ td {
 
 }
 
-#ws-status {
-
-    text-align: center;
-
-}
-
+fieldset p,
 #ws-url {
-
-    width: 15em;
-
-}
-
-fieldset p {
 
     width: 15em;
 

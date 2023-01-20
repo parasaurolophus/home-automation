@@ -2,9 +2,11 @@
 
 <head>
 
-    <title>Automation Dashboard</title>
+    <title>Home Automation Dashboard</title>
 
     <link href="dashboard.css" rel="stylesheet" />
+
+    <script src="dashboard.js"></script>
 
 </head>
 
@@ -44,8 +46,6 @@
                     back end
                 </p>
 
-                <div id="ws-status"></div>
-
                 <div>
 
                     <label for="ws-url">
@@ -56,11 +56,13 @@
 
                 </div>
 
-                <div class="split">
+                <div class="columns">
 
                     <button id="reconnect-ws" onclick="connectWS(event)">
                         Connect
                     </button>
+
+                    <span id="ws-status"></span>
 
                     <button id="reconnect-ws" onclick="disconnectWS(event)">
                         Disconnect
@@ -211,6 +213,9 @@
 
     </section>
 
-    <script src="dashboard.js"></script>
+    <script>
+        document.querySelector('#ws-url').value = wsURL(window.location)
+        connectWS()
+    </script>
 
 </body>
