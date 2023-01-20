@@ -339,6 +339,20 @@
             Dynamically generated controls for home automation devices
         </p>
 
+        <p>
+            PowerView API:
+            <a href="https://motorisation.hde.nl/hd/powerview/general-guides/API/" target="_blank">
+                https://motorisation.hde.nl/hd/powerview/general-guides/API/
+            </a>
+        </p>
+
+        <p>
+            Hue Bridge API V2:
+            <a href="https://developers.meethue.com/develop/hue-api-v2/" target="_blank">
+                https://developers.meethue.com/develop/hue-api-v2/
+            </a>
+        </p>
+
         <section id="controls-container" class="not-wrapped">
             <p>
                 none
@@ -496,6 +510,15 @@
 
             let controls = '<section class="padded"><h3>Window Shades</h3>'
 
+            if (msg.info) {
+
+                controls +=
+                    '<div class="info">' +
+                    msg.info +
+                    '</div>'
+
+            }
+
             for (let room of msg.payload) {
 
                 controls += powerviewRoom(room)
@@ -555,12 +578,25 @@
 
         }
 
-        function hueControls(model) {
+        function hueControls(msg) {
+
+            const model = msg.payload
+
+            console.log(msg)
 
             let controls =
                 '<section class="padded"><h3>' +
                 model.title +
                 '</h3>'
+
+            if (msg.info) {
+
+                controls +=
+                    '<div class="info">' +
+                    msg.info +
+                    '</div>'
+
+            }
 
             for (let group of model.groups) {
 
@@ -801,7 +837,7 @@
 
                 if (Array.isArray(matches) && (matches.length == 2)) {
 
-                    models[matches[1]] = hueControls(msg.payload)
+                    models[matches[1]] = hueControls(msg)
                     // do not return here
 
                 }
