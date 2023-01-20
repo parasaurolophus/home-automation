@@ -322,7 +322,7 @@
                     <span id="timer-time"></span>
                 </div>
 
-                <pre id="automation-trigger" class="padded"></pre>
+                <div id="automation-trigger" class="padded"></div>
 
             </fieldset>
 
@@ -716,8 +716,11 @@
 
                 if (msg.topic == 'automation/trigger') {
 
+                    msg.payload.timestamp = new Date(msg.payload.timestamp).toLocaleString()
                     document.querySelector('#automation-trigger').innerHTML =
-                        escapeHTML(JSON.stringify(msg.payload, undefined, 1))
+                        '<div><div>Automation trigger:</div><pre>' +
+                        escapeHTML(JSON.stringify(msg.payload, undefined, 1)) +
+                        '</pre></div>'
                     return
 
                 }
