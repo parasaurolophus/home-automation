@@ -95,7 +95,13 @@
 
         #ws-url {
 
-            width: 20em;
+            width: 15em;
+
+        }
+
+        fieldset p {
+
+            width: 15em;
 
         }
 
@@ -156,13 +162,12 @@
 
     <header>
 
-        <div id="location"></div>
-
-        <h1>Automation Dashboard</h1>
+        <h1>Home Automation Dashboard</h1>
 
         <p>
             Home automation <a href="#dashboard">dashboard</a> and device
-            <a href="#controls">controls</a>
+            <a href="#controls">controls</a> implemented as a single-file web application, using
+            <a href="https://nodered.org" target="_blank">Node-RED</a> for its back end
         </p>
 
     </header>
@@ -184,13 +189,21 @@
 
                 <legend>Message Broker</legend>
 
+                <p>
+                    Monitor and control the connection to the <a href="https://nodered.org" target="_blank">Node-RED</a>
+                    back end
+                </p>
+
                 <div id="ws-status"></div>
 
                 <div>
+
                     <label for="ws-url">
                         URL
                     </label>
+
                     <input id="ws-url" />
+
                 </div>
 
                 <div class="split">
@@ -211,33 +224,61 @@
 
                 <legend>Settings</legend>
 
-                <div>
-                    <label for="settings-shades">
-                        Window Shades Automation
-                    </label>
-                    <input type="checkbox" id="settings-shades" onchange="settingsCheckboxChanged(event)" />
+                <div class="padded">
+
+                    <div>
+
+                        <input type="checkbox" id="settings-shades" onchange="settingsCheckboxChanged(event)" />
+
+                        <label for="settings-shades">
+                            Enable window shades automation
+                        </label>
+
+                    </div>
+
+                    <div>
+
+                        <input type="checkbox" id="settings-lighting" onchange="settingsCheckboxChanged(event)" />
+
+                        <label for="settings-lighting">
+                            Enable lighting automation
+                        </label>
+
+                    </div>
+
                 </div>
 
-                <div>
-                    <label for="settings-lighting">
-                        Lighting Automation
-                    </label>
-                    <input type="checkbox" id="settings-lighting" onchange="settingsCheckboxChanged(event)" />
-                </div>
+                <div class="padded">
 
-                <div>
+                    <p>
+                        Bedtime will be at the time selected here plus or minus a randomly chosen offset of up to 30
+                        minutes that changes each day
+                    </p>
+
                     <label for="settings-bedtime">Bedtime</label>
+
                     <select id="settings-bedtime" onchange="bedtimeChanged(event)">
                         <option id="9PM" value="21"> 9PM</option>
                         <option id="10PM" value="22">10PM</option>
                         <option id="11PM" value="23">11PM</option>
                     </select>
+
                 </div>
 
-                <div>
-                    <button id="controls-refresh" onclick="refreshControlsClicked(event)">
-                        Refresh Controls
-                    </button>
+                <div class="padded">
+
+                    <div>
+
+                        <p>
+                            Instruct the back end to recreate all dynamically-generated controls
+                        </p>
+
+                        <button id="controls-refresh" onclick="refreshControlsClicked(event)">
+                            Refresh Controls
+                        </button>
+
+                    </div>
+
                 </div>
 
             </fieldset>
@@ -280,6 +321,8 @@
                     Time:
                     <span id="timer-time"></span>
                 </div>
+
+                <pre id="automation-trigger" class="padded"></pre>
 
             </fieldset>
 
@@ -670,6 +713,14 @@
 
                 // node-red's msg object is received via websocket's event.data
                 const msg = JSON.parse(event.data)
+
+                if (msg.topic == 'automation/trigger') {
+
+                    document.querySelector('#automation-trigger').innerHTML =
+                        escapeHTML(JSON.stringify(msg.payload, undefined, 1))
+                    return
+
+                }
 
                 if (msg.topic == 'hue/bridges') {
 
