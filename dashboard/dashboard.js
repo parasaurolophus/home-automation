@@ -445,6 +445,12 @@ function connectWS(_event) {
         if (Array.isArray(matches) && (matches.length == 2)) {
 
             console.log(msg)
+            document.querySelector('#hue-key').innerHTML =
+                '<p>Key for Hue Bridge at ' +
+                msg.bridgeAddress +
+                ':</p><pre>' +
+                JSON.stringify(msg.payload, undefined, 1) +
+                '</pre>'
             return
 
         }

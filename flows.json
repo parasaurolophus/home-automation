@@ -422,9 +422,7 @@
             "fc4a30ba1d40468a"
         ],
         "x": 14,
-        "y": 119,
-        "w": 1212,
-        "h": 162
+        "y": 119
     },
     {
         "id": "96971e50c13ead01",
@@ -462,9 +460,7 @@
             "73069dbbef56b507"
         ],
         "x": 14,
-        "y": 299,
-        "w": 1292,
-        "h": 302
+        "y": 299
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -511,8 +507,6 @@
         ],
         "x": 94,
         "y": 219,
-        "w": 872,
-        "h": 122,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -536,9 +530,7 @@
             "b09299a9b262346a"
         ],
         "x": 94,
-        "y": 79,
-        "w": 932,
-        "h": 122
+        "y": 79
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -563,9 +555,7 @@
             "2357258b01c15112"
         ],
         "x": 94,
-        "y": 359,
-        "w": 992,
-        "h": 162
+        "y": 359
     },
     {
         "id": "a21835234a7481fe",
@@ -592,9 +582,7 @@
             "a4e1a5b908d33066"
         ],
         "x": 94,
-        "y": 39,
-        "w": 1112,
-        "h": 242
+        "y": 39
     },
     {
         "id": "0b0da0b6b3a2a19d",
@@ -621,9 +609,7 @@
             "903dfd8686a14a20"
         ],
         "x": 94,
-        "y": 299,
-        "w": 1332,
-        "h": 202
+        "y": 299
     },
     {
         "id": "b3c2354a4072ebba",
@@ -679,9 +665,7 @@
             "c5ff1af177263526"
         ],
         "x": 94,
-        "y": 439,
-        "w": 1252,
-        "h": 322
+        "y": 439
     },
     {
         "id": "8326ae1a15518f8f",
@@ -708,9 +692,7 @@
             "4af56550b33550f6"
         ],
         "x": 94,
-        "y": 219,
-        "w": 1292,
-        "h": 202
+        "y": 219
     },
     {
         "id": "9f074aa55117ee9d",
@@ -734,9 +716,7 @@
             "a46dd6d5d1660821"
         ],
         "x": 94,
-        "y": 119,
-        "w": 1432,
-        "h": 82
+        "y": 119
     },
     {
         "id": "4893dd6a2321040d",
@@ -760,9 +740,7 @@
             "9022da24da372166"
         ],
         "x": 14,
-        "y": 619,
-        "w": 1012,
-        "h": 122
+        "y": 619
     },
     {
         "id": "3a0077281d6eefee",
@@ -781,9 +759,7 @@
             "244648542f3d3dc7"
         ],
         "x": 94,
-        "y": 19,
-        "w": 452,
-        "h": 82
+        "y": 19
     },
     {
         "id": "123bcb0f4c0fcdbe",
@@ -825,9 +801,7 @@
             "705e958bfd02f3fb"
         ],
         "x": 894,
-        "y": 19,
-        "w": 322,
-        "h": 82
+        "y": 19
     },
     {
         "id": "26f487c14ad29cb4",
@@ -4252,7 +4226,7 @@
         "z": "d3b34304591c64d7",
         "g": "23bf1f9635c44cc8",
         "name": "response",
-        "func": "const message = RED.util.cloneMessage(msg)\nconst keys = global.get('hue-keys', 'file') || {}\n\nmessage.topic = 'hue/' + msg.bridgeAddress + '/key'\nkeys[message.topic] = message.payload\nglobal.set('keys', keys, 'file')\nreturn message",
+        "func": "const keys = global.get('hue-keys', 'file') || {}\n\nkeys[msg.bridgeAddress] = msg.payload\nglobal.set('hue-keys', keys, 'file')\n\nconst message = RED.util.cloneMessage(msg)\n\nmessage.topic = 'hue/' + msg.bridgeAddress + '/key'\nmessage.retain = false\nreturn message",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
