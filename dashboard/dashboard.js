@@ -501,3 +501,10 @@ function connectWS(_event) {
 
     }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    document.querySelector('#ws-url').value = wsURL(window.location)
+    connectWS()
+
+})
