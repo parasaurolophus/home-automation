@@ -366,7 +366,9 @@
             "90c4d02d576477e1"
         ],
         "x": 94,
-        "y": 19
+        "y": 19,
+        "w": 1252,
+        "h": 202
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -391,7 +393,9 @@
             "1df27a9ddf24badf"
         ],
         "x": 94,
-        "y": 239
+        "y": 239,
+        "w": 1252,
+        "h": 122
     },
     {
         "id": "0fb8e43c903b3506",
@@ -418,7 +422,9 @@
             "fc4a30ba1d40468a"
         ],
         "x": 14,
-        "y": 119
+        "y": 119,
+        "w": 1212,
+        "h": 162
     },
     {
         "id": "96971e50c13ead01",
@@ -456,7 +462,9 @@
             "73069dbbef56b507"
         ],
         "x": 14,
-        "y": 299
+        "y": 299,
+        "w": 1292,
+        "h": 302
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -477,7 +485,9 @@
             "331ba68b6f2ec455"
         ],
         "x": 94,
-        "y": 379
+        "y": 379,
+        "w": 732,
+        "h": 122
     },
     {
         "id": "9cf0457b813ca743",
@@ -501,6 +511,8 @@
         ],
         "x": 94,
         "y": 219,
+        "w": 872,
+        "h": 122,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -524,7 +536,9 @@
             "b09299a9b262346a"
         ],
         "x": 94,
-        "y": 79
+        "y": 79,
+        "w": 932,
+        "h": 122
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -549,7 +563,9 @@
             "2357258b01c15112"
         ],
         "x": 94,
-        "y": 359
+        "y": 359,
+        "w": 992,
+        "h": 162
     },
     {
         "id": "a21835234a7481fe",
@@ -628,7 +644,9 @@
             "a2ad87bcc1e3756c"
         ],
         "x": 94,
-        "y": 519
+        "y": 519,
+        "w": 652,
+        "h": 122
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -739,7 +757,9 @@
             "9022da24da372166"
         ],
         "x": 14,
-        "y": 619
+        "y": 619,
+        "w": 1012,
+        "h": 122
     },
     {
         "id": "3a0077281d6eefee",
@@ -802,7 +822,30 @@
             "705e958bfd02f3fb"
         ],
         "x": 894,
-        "y": 19
+        "y": 19,
+        "w": 322,
+        "h": 82
+    },
+    {
+        "id": "d64d4d2689200662",
+        "type": "group",
+        "z": "85ed27d795e6e866",
+        "name": "send client application key when flow starts",
+        "style": {
+            "stroke": "none",
+            "fill": "#ffffff",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#ffffff"
+        },
+        "nodes": [
+            "c028b2fa6fa17888",
+            "7afd5568ba2112ef"
+        ],
+        "x": 374,
+        "y": 19,
+        "w": 372,
+        "h": 82
     },
     {
         "id": "26f487c14ad29cb4",
@@ -1472,7 +1515,8 @@
             "a679743026204790",
             "c403a921c6812411",
             "0cc82a6180a6fdfe",
-            "b2fb86f232c7de3b"
+            "b2fb86f232c7de3b",
+            "7afd5568ba2112ef"
         ],
         "x": 1110,
         "y": 640,
@@ -1784,6 +1828,41 @@
                 "4b9c1c4c1a78af55"
             ]
         ]
+    },
+    {
+        "id": "c028b2fa6fa17888",
+        "type": "function",
+        "z": "85ed27d795e6e866",
+        "g": "d64d4d2689200662",
+        "name": "send key at start",
+        "func": "\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "const ADDRESS = env.get('ADDRESS')\nconst KEY = env.get('KEY')\n\nsetTimeout(() => {\n\n    node.send({\n        payload: KEY,\n        topic: 'hue/' + ADDRESS + '/key',\n        retain: true,\n        bridgeAddress: ADDRESS\n    })\n\n}, 1000)",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 60,
+        "wires": [
+            [
+                "7afd5568ba2112ef"
+            ]
+        ]
+    },
+    {
+        "id": "7afd5568ba2112ef",
+        "type": "link out",
+        "z": "85ed27d795e6e866",
+        "g": "d64d4d2689200662",
+        "name": "publish key",
+        "mode": "link",
+        "links": [
+            "1a6cd54cd77b5442"
+        ],
+        "x": 650,
+        "y": 60,
+        "wires": [],
+        "l": true
     },
     {
         "id": "02eb116aa3a7efad",
@@ -2214,7 +2293,8 @@
             "15ec9d2e92da73d2",
             "c5ff1af177263526",
             "244648542f3d3dc7",
-            "a46dd6d5d1660821"
+            "a46dd6d5d1660821",
+            "02a2f4934d95c73c"
         ],
         "x": 190,
         "y": 180,
@@ -2539,7 +2619,7 @@
         "z": "1f224d5f7092fb57",
         "g": "0b0da0b6b3a2a19d",
         "name": "time",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = Number.parseFloat(env.get('LATITUDE'))\nconst LONGITUDE = Number.parseFloat(env.get('LONGITUDE'))\n\nconst now = msg.payload.now\nconst sunrise = msg.payload['daily/sunrise']\nconst sunset = msg.payload['daily/sunset']\nconst bedtime = msg.payload['daily/bedtime']\n\nconst position = suncalc.getPosition(\n    new Date(now),\n    LATITUDE,\n    LONGITUDE)\n\nconst message = RED.util.cloneMessage(msg)\n\nif ((now <= sunrise) || (now >= bedtime)) {\n\n    message.payload = 'night'\n\n} else if (now >= sunset) {\n\n    message.payload = 'evening'\n\n} else if (position.azimuth > 0.8) {\n\n    message.payload = 'midday'\n\n} else if (position.azimuth > 0) {\n\n    message.payload = 'afternoon'\n\n} else {\n\n    message.payload = 'morning'\n\n}\n\nnode.status({\n    text: message.payload,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nmessage.topic = 'timer/time'\nmessage.retain = true\nreturn message",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = Number.parseFloat(env.get('LATITUDE'))\nconst LONGITUDE = Number.parseFloat(env.get('LONGITUDE'))\n\nconst now = msg.payload.now\nconst sunrise = msg.payload['daily/sunrise']\nconst sunset = msg.payload['daily/sunset']\nconst bedtime = msg.payload['daily/bedtime']\n\nconst position = suncalc.getPosition(\n    new Date(now),\n    LATITUDE,\n    LONGITUDE)\n\nconst message = RED.util.cloneMessage(msg)\n\nif ((now <= sunrise) || (now >= bedtime)) {\n\n    message.payload = 'night'\n\n} else if (now >= sunset) {\n\n    message.payload = 'evening'\n\n} else if (position.altitude > 0.8) {\n\n    message.payload = 'midday'\n\n} else if (position.azimuth > 0) {\n\n    message.payload = 'afternoon'\n\n} else {\n\n    message.payload = 'morning'\n\n}\n\nnode.status({\n    text: message.payload,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nmessage.topic = 'timer/time'\nmessage.retain = true\nreturn message",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -4132,7 +4212,7 @@
         "z": "d3b34304591c64d7",
         "g": "23bf1f9635c44cc8",
         "name": "response",
-        "func": "const keys = global.get('hue-keys', 'file') || {}\n\nkeys[msg.bridgeAddress] = msg.payload\nglobal.set('hue-keys', keys, 'file')\n\nconst message = RED.util.cloneMessage(msg)\n\nmessage.topic = 'hue/' + msg.bridgeAddress + '/key'\nmessage.retain = false\nreturn message",
+        "func": "const successTopic = 'hue/' + msg.bridgeAddress + '/key'\nconst messages = []\n\nfunction errorMessage(payload) {\n\n    const message = RED.util.cloneMessage(msg)\n\n    message.payload = payload\n    message.topic = 'hue/' + msg.bridgeAddress + '/error'\n    message.retain = false\n    return message\n\n}\n\nif (Array.isArray(msg.payload)) {\n\n    for (let result of msg.payload) {\n\n        if (Object.prototype.hasOwnProperty.call(result, 'success')) {\n\n            const message = RED.util.cloneMessage(msg)\n\n            message.payload = result.success.username\n            message.topic = successTopic\n            message.retain = true\n            messages.push(message)\n\n        }\n\n        if (Object.prototype.hasOwnProperty.call(result, 'error')) {\n\n            messages.push(errorMessage(result.error.description))\n\n        }\n    }\n\n} else {\n\n    messages.push(errorMessage(msg.payload))\n\n}\n\nnode.status({\n    text: Object.keys(messages).length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn [messages]",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

@@ -1,4 +1,4 @@
-var hueBridgeStatus = {}
+var hueKeys = {}
 var models = {}
 var ws = null
 var wsReadyStateTimer = null
@@ -444,13 +444,18 @@ function connectWS(_event) {
 
         if (Array.isArray(matches) && (matches.length == 2)) {
 
-            console.log(msg)
-            document.querySelector('#hue-key').innerHTML =
-                '<p>Key for Hue Bridge at ' +
-                msg.bridgeAddress +
-                ':</p><pre>' +
-                JSON.stringify(msg.payload, undefined, 1) +
-                '</pre>'
+            hueKeys[msg.bridgeAddress] = msg.payload
+
+            let content = '<dl>'
+
+            for (let address in hueKeys) {
+
+                content += '<dt>' + address + '</dt>'
+                content += '<dd>' + hueKeys[address] + '</dd>'
+
+            }
+
+            document.querySelector('#hue-key').innerHTML = content
             return
 
         }
@@ -458,7 +463,10 @@ function connectWS(_event) {
         if (/^.+\/error$/.exec(msg.topic)) {
 
             console.log(msg)
-            window.alert(JSON.stringify(msg, undefined, 1))
+            window.alert(
+                msg.topic +
+                ':\n' +
+                JSON.stringify(msg.payload, undefined, 1))
             return
 
         }
