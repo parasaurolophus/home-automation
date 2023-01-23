@@ -592,9 +592,7 @@
             "a4e1a5b908d33066"
         ],
         "x": 94,
-        "y": 39,
-        "w": 1112,
-        "h": 242
+        "y": 39
     },
     {
         "id": "0b0da0b6b3a2a19d",
@@ -621,9 +619,7 @@
             "903dfd8686a14a20"
         ],
         "x": 94,
-        "y": 299,
-        "w": 1332,
-        "h": 202
+        "y": 299
     },
     {
         "id": "b3c2354a4072ebba",
@@ -678,9 +674,7 @@
             "5e838b011b496bb4"
         ],
         "x": 94,
-        "y": 439,
-        "w": 1192,
-        "h": 322
+        "y": 439
     },
     {
         "id": "8326ae1a15518f8f",
@@ -705,9 +699,7 @@
             "679d6a0d2002bcb7"
         ],
         "x": 94,
-        "y": 219,
-        "w": 1112,
-        "h": 202
+        "y": 219
     },
     {
         "id": "9f074aa55117ee9d",
@@ -731,9 +723,7 @@
             "a46dd6d5d1660821"
         ],
         "x": 94,
-        "y": 119,
-        "w": 1432,
-        "h": 82
+        "y": 119
     },
     {
         "id": "4893dd6a2321040d",
@@ -778,9 +768,7 @@
             "244648542f3d3dc7"
         ],
         "x": 94,
-        "y": 19,
-        "w": 452,
-        "h": 82
+        "y": 19
     },
     {
         "id": "123bcb0f4c0fcdbe",
@@ -1394,7 +1382,7 @@
         "z": "85ed27d795e6e866",
         "g": "96971e50c13ead01",
         "name": "model",
-        "func": "const ADDRESS = env.get('ADDRESS')\nconst TOPIC = 'hue/' + ADDRESS\nconst MODEL = TOPIC + '/model'\nconst PUT = 'put/' + TOPIC + '/resource'\n\nconst message = RED.util.cloneMessage(msg)\n\nmessage.payload = { groups: [], title: env.get('TITLE') }\nmessage.topic = MODEL\nmessage.retain = true\nmessage.info = '<p>' + ADDRESS + '</p>'\n\nfunction findOwner(grouped_light) {\n\n    const groups = msg.payload[grouped_light.owner.rtype]\n\n    if (Object.prototype.hasOwnProperty.call(groups, grouped_light.owner.rid)) {\n\n        return groups[grouped_light.owner.rid]\n\n    }\n\n    throw 'no container found for grouped_light ' + grouped_light.id\n\n}\n\nfunction findScenes(owner) {\n\n    const scenes = []\n\n    for (let sceneId in msg.payload.scene) {\n\n        const scene = msg.payload.scene[sceneId]\n\n        if (scene.group.rid == owner.id) {\n\n            scene.value = PUT + '/scene/' + scene.id\n            scenes.push(scene)\n\n        }\n    }\n\n    return scenes.sort((a, b) => {\n\n        return a.metadata.name.localeCompare(b.metadata.name)\n\n    })\n\n}\n\nfor (let grouped_light_id in msg.payload.grouped_light) {\n\n    const grouped_light = msg.payload.grouped_light[grouped_light_id]\n    const owner = findOwner(grouped_light)\n    const scenes = findScenes(owner)\n\n    message.payload.groups.push({\n        grouped_light: grouped_light,\n        owner: owner,\n        scenes: scenes,\n        name: (owner.metadata ? owner.metadata.name : 'All Lights'),\n        value: PUT + '/grouped_light/' + grouped_light.id\n    })\n\n}\n\nmessage.payload.groups = message.payload.groups.sort((a, b) => {\n\n    return a.name.localeCompare(b.name)\n\n})\n\nreturn message",
+        "func": "const ADDRESS = env.get('ADDRESS')\nconst TOPIC = 'hue/' + ADDRESS\nconst MODEL = TOPIC + '/model'\nconst PUT = 'put/' + TOPIC + '/resource'\n\nconst message = RED.util.cloneMessage(msg)\n\nmessage.payload = { groups: [], title: env.get('TITLE') }\n\nmessage.topic = MODEL\nmessage.retain = true\nmessage.info = ADDRESS\n\nfunction findOwner(grouped_light) {\n\n    const groups = msg.payload[grouped_light.owner.rtype]\n\n    if (Object.prototype.hasOwnProperty.call(groups, grouped_light.owner.rid)) {\n\n        return groups[grouped_light.owner.rid]\n\n    }\n\n    throw 'no container found for grouped_light ' + grouped_light.id\n\n}\n\nfunction findScenes(owner) {\n\n    const scenes = []\n\n    for (let sceneId in msg.payload.scene) {\n\n        const scene = msg.payload.scene[sceneId]\n\n        if (scene.group.rid == owner.id) {\n\n            scene.value = PUT + '/scene/' + scene.id\n            scenes.push(scene)\n\n        }\n    }\n\n    return scenes.sort((a, b) => {\n\n        return a.metadata.name.localeCompare(b.metadata.name)\n\n    })\n\n}\n\nfor (let grouped_light_id in msg.payload.grouped_light) {\n\n    const grouped_light = msg.payload.grouped_light[grouped_light_id]\n    const owner = findOwner(grouped_light)\n    const scenes = findScenes(owner)\n\n    message.payload.groups.push({\n        grouped_light: grouped_light,\n        owner: owner,\n        scenes: scenes,\n        name: (owner.metadata ? owner.metadata.name : 'All Lights'),\n        value: PUT + '/grouped_light/' + grouped_light.id\n    })\n\n}\n\nmessage.payload.groups = message.payload.groups.sort((a, b) => {\n\n    return a.name.localeCompare(b.name)\n\n})\n\nreturn message",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3765,7 +3753,7 @@
         "z": "40413194443e96c6",
         "g": "9823c620ddf3d6e0",
         "name": "model",
-        "func": "let model = []\n\nfunction findScenes(roomId) {\n\n    const scenes = []\n\n    for (const scene of msg.payload.sceneData) {\n\n        if (scene.roomId == roomId) {\n\n            scenes.push({\n                name: scene.name,\n                id: scene.id\n            })\n        }\n    }\n\n    return scenes.sort((a, b) => {\n\n        return a.name.localeCompare(b.name)\n\n    })\n}\n\nfor (const room of msg.payload.roomData) {\n\n    const scenes = findScenes(room.id)\n\n    if (scenes.length > 0) {\n\n        model.push({\n            name: room.name,\n            id: room.id,\n            scenes: scenes\n        })\n    }\n}\n\nmodel = model.sort((a, b) => {\n\n    a.name.localeCompare(b.name)\n\n})\n\nconst message = RED.util.cloneMessage(msg)\n\nmessage.payload = model\nmessage.topic = 'powerview/model'\nmessage.retain = true\nmessage.info = '<p>' + env.get('POWERVIEW_ADDRESS') + '</p>'\nreturn message",
+        "func": "let model = []\n\nfunction findScenes(roomId) {\n\n    const scenes = []\n\n    for (const scene of msg.payload.sceneData) {\n\n        if (scene.roomId == roomId) {\n\n            scenes.push({\n                name: scene.name,\n                id: scene.id\n            })\n        }\n    }\n\n    return scenes.sort((a, b) => {\n\n        return a.name.localeCompare(b.name)\n\n    })\n}\n\nfor (const room of msg.payload.roomData) {\n\n    const scenes = findScenes(room.id)\n\n    if (scenes.length > 0) {\n\n        model.push({\n            name: room.name,\n            id: room.id,\n            scenes: scenes\n        })\n    }\n}\n\nmodel = model.sort((a, b) => {\n\n    a.name.localeCompare(b.name)\n\n})\n\nconst message = RED.util.cloneMessage(msg)\n\nmessage.payload = model\nmessage.topic = 'powerview/model'\nmessage.retain = true\nmessage.info = env.get('POWERVIEW_ADDRESS')\nreturn message",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
