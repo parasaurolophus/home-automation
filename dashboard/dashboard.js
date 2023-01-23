@@ -55,8 +55,15 @@ function createHueKey(event) {
 function hueBridges(bridges) {
 
     const div = document.createElement('div')
+    let count = 0
 
     for (let bridge of bridges) {
+
+        if (count++ > 0) {
+
+            div.appendChild(document.createElement('hr'))
+
+        }
 
         const dl = document.createElement('dl')
 
