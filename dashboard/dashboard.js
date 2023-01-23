@@ -54,69 +54,54 @@ function createHueKey(event) {
 
 function hueBridges(bridges) {
 
-    const labels = ['id', 'name', 'mode', 'host', 'address', 'port', 'status', '&nbsp;']
-    const table = document.createElement('table')
-    const headingRow = document.createElement('tr')
-
-    for (let label of labels) {
-
-        const heading = document.createElement('th')
-
-        if (label == '&nbsp;') {
-
-            heading.innerHTML = '&nbsp;'
-
-        } else {
-
-            heading.appendChild(document.createTextNode(label))
-
-        }
-
-        headingRow.appendChild(heading)
-
-    }
-
-    table.appendChild(headingRow)
+    const div = document.createElement('div')
 
     for (let bridge of bridges) {
 
-        const row = document.createElement('tr')
+        const dl = document.createElement('dl')
 
-        for (let label of labels) {
+        for (let key in bridge) {
 
-            const data = document.createElement('td')
+            const value = bridge[key]
+            const dt = document.createElement('dt')
+            const dd = document.createElement('dd')
 
-            if (label == 'status') {
+            dt.textContent = key
 
-                data.className = 'centered'
-                data.appendChild(hueStatus(bridge.status))
+            if (key == 'status') {
 
-            } else if (label == '&nbsp;') {
-
-                const button = document.createElement('button')
-
-                button.setAttribute('value', bridge.address)
-                button.setAttribute('onclick', 'createHueKey(event)')
-                button.appendChild(document.createTextNode('Create Key'))
-                data.appendChild(button)
+                dd.className = 'hue-status'
+                dd.appendChild(hueStatus(value))
 
             } else {
 
-                data.appendChild(document.createTextNode(bridge[label]))
+                dd.textContent = value
 
             }
 
-            row.appendChild(data)
+            dl.appendChild(dt)
+            dl.appendChild(dd)
 
         }
 
-        table.appendChild(row)
+        const dt = document.createElement('dt')
+        const dd = document.createElement('dd')
+        const button = document.createElement('button')
+
+        button.setAttribute('value', bridge.address)
+        button.setAttribute('onclick', 'createHueKey(event)')
+        button.appendChild(document.createTextNode('Create Key'))
+        dt.textContent = 'send command'
+        dd.appendChild(button)
+        dl.appendChild(dt)
+        dl.appendChild(dd)
+        div.appendChild(dl)
 
     }
 
     const container = document.querySelector('#hue-bridges')
 
-    replaceChildren(container, table)
+    replaceChildren(container, div)
     return container
 
 }
