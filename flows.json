@@ -366,9 +366,7 @@
             "90c4d02d576477e1"
         ],
         "x": 94,
-        "y": 19,
-        "w": 1252,
-        "h": 202
+        "y": 19
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -393,9 +391,7 @@
             "1df27a9ddf24badf"
         ],
         "x": 94,
-        "y": 239,
-        "w": 1252,
-        "h": 122
+        "y": 239
     },
     {
         "id": "0fb8e43c903b3506",
@@ -422,9 +418,7 @@
             "fc4a30ba1d40468a"
         ],
         "x": 14,
-        "y": 119,
-        "w": 1212,
-        "h": 162
+        "y": 119
     },
     {
         "id": "96971e50c13ead01",
@@ -462,9 +456,7 @@
             "73069dbbef56b507"
         ],
         "x": 14,
-        "y": 299,
-        "w": 1292,
-        "h": 302
+        "y": 299
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -485,9 +477,7 @@
             "331ba68b6f2ec455"
         ],
         "x": 94,
-        "y": 379,
-        "w": 732,
-        "h": 122
+        "y": 379
     },
     {
         "id": "9cf0457b813ca743",
@@ -640,9 +630,7 @@
             "a2ad87bcc1e3756c"
         ],
         "x": 94,
-        "y": 519,
-        "w": 652,
-        "h": 122
+        "y": 519
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -747,9 +735,7 @@
             "9022da24da372166"
         ],
         "x": 14,
-        "y": 619,
-        "w": 1012,
-        "h": 122
+        "y": 619
     },
     {
         "id": "3a0077281d6eefee",
@@ -810,9 +796,7 @@
             "705e958bfd02f3fb"
         ],
         "x": 894,
-        "y": 19,
-        "w": 322,
-        "h": 82
+        "y": 19
     },
     {
         "id": "d64d4d2689200662",
@@ -831,9 +815,7 @@
             "7afd5568ba2112ef"
         ],
         "x": 374,
-        "y": 19,
-        "w": 372,
-        "h": 82
+        "y": 19
     },
     {
         "id": "26f487c14ad29cb4",
@@ -3753,7 +3735,7 @@
         "z": "40413194443e96c6",
         "g": "9823c620ddf3d6e0",
         "name": "model",
-        "func": "let model = []\n\nfunction findScenes(roomId) {\n\n    const scenes = []\n\n    for (const scene of msg.payload.sceneData) {\n\n        if (scene.roomId == roomId) {\n\n            scenes.push({\n                name: scene.name,\n                id: scene.id\n            })\n        }\n    }\n\n    return scenes.sort((a, b) => {\n\n        return a.name.localeCompare(b.name)\n\n    })\n}\n\nfor (const room of msg.payload.roomData) {\n\n    const scenes = findScenes(room.id)\n\n    if (scenes.length > 0) {\n\n        model.push({\n            name: room.name,\n            id: room.id,\n            scenes: scenes\n        })\n    }\n}\n\nmodel = model.sort((a, b) => {\n\n    a.name.localeCompare(b.name)\n\n})\n\nconst message = RED.util.cloneMessage(msg)\n\nmessage.payload = model\nmessage.topic = 'powerview/model'\nmessage.retain = true\nmessage.info = env.get('POWERVIEW_ADDRESS')\nreturn message",
+        "func": "let model = []\n\nfunction findScenes(roomId) {\n\n    const scenes = []\n\n    for (const scene of msg.payload.sceneData) {\n\n        if (scene.roomId == roomId) {\n\n            scenes.push({\n                name: scene.name,\n                id: scene.id\n            })\n        }\n    }\n\n    return scenes.sort((a, b) => {\n\n        return a.name.localeCompare(b.name)\n\n    })\n}\n\nfor (const room of msg.payload.roomData) {\n\n    const scenes = findScenes(room.id)\n\n    if (scenes.length > 0) {\n\n        model.push({\n            name: room.name,\n            id: room.id,\n            scenes: scenes\n        })\n    }\n}\n\nmodel = model.sort((a, b) => {\n\n    return a.name.localeCompare(b.name)\n\n})\n\nconst message = RED.util.cloneMessage(msg)\n\nmessage.payload = model\nmessage.topic = 'powerview/model'\nmessage.retain = true\nmessage.info = env.get('POWERVIEW_ADDRESS')\nreturn message",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
