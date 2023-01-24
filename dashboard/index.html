@@ -16,45 +16,139 @@
 
         <h1>Home Automation Dashboard</h1>
 
-        <p>
-            Home automation <a href="#dashboard">dashboard</a> and device
-            <a href="#controls">controls</a> implemented as a single-page web application, using
-            <a href="https://nodered.org" target="_blank">Node-RED</a> for its back end
-        </p>
+        <div class="wrapped">
 
-        <p>
-            <a href="#more-information">More information</a>
-        </p>
+            <p class="equal">
+                Home automation dashboard and device controls implemented as a single-page web application, using
+                <a href="https://nodered.org" target="_blank">Node-RED</a> for its back end
+            </p>
+
+            <ul class="equal">
+                <li>
+                    <a id="editor-link" target="_blank">
+                        Editor
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/parasaurolophus/home-automation/" target="_blank">
+                        GitHub
+                    </a>
+                </li>
+                <li>
+                    <a href="https://nodered.org/" target="_blank">
+                        Node-RED
+                    </a>
+                </li>
+                <li>
+                    <a href="https://flows.nodered.org/node/node-red-node-discovery/" target="_blank">
+                        node-red-node-discovery
+                    </a>
+                </li>
+                <li>
+                    <a href="https://flows.nodered.org/node/@parasaurolophus/node-red-eventsource/" target="_blank">
+                        @parasaurolophus/node-red-eventsource
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.npmjs.com/package/suncalc/" target="_blank">
+                        suncalc
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="equal">
+                <li>
+                    <a href="https://developers.meethue.com/develop/hue-api-v2/" target="_blank">
+                        Hue Bridge API V2
+                    </a>
+                </li>
+                <li>
+                    <a href="https://developers.meethue.com/develop/hue-api-v2/core-concepts/#events" target="_blank">
+                        Hue Bridge Server-Sent Events
+                    </a>
+                </li>
+                <li>
+                    <a href="https://developers.meethue.com/develop/application-design-guidance/hue-bridge-discovery/"
+                        target="_blank">
+                        Hue Bridge Discovery
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="equal">
+                <li>
+                    <a href="https://motorisation.hde.nl/hd/powerview/general-guides/API/" target="_blank">
+                        PowerView API
+                    </a>
+                </li>
+            </ul>
+
+        </div>
 
     </header>
 
     <hr />
 
-    <a id="controls"></a>
-    <section>
+    <div id="controls-container" class="wrapped">
 
-        <h2>Controls</h2>
+        <section class="equal">
 
-        <p>
-            Dynamically generated controls for home automation devices
-        </p>
+            <h2>Dashboard</h2>
 
-        <section id="controls-container" class="not-wrapped">
-            <p>none</p>
-        </section>
+            <fieldset id="settings" disabled="true">
 
-    </section>
+                <legend>Settings</legend>
 
-    <a id="dashboard"></a>
-    <section>
+                <div>
 
-        <h2>Dashboard</h2>
+                    <p>
+                        Enable automation:
+                    </p>
 
-        <p>
-            Automation server settings and device management controls
-        </p>
+                    <div>
+                        <label>
+                            <input type="checkbox" id="settings-shades" onchange="settingsCheckboxChanged(event)" />
+                            Window shades
+                        </label>
+                    </div>
 
-        <div class="wrapped">
+                    <div>
+                        <label>
+                            <input type="checkbox" id="settings-lighting" onchange="settingsCheckboxChanged(event)" />
+                            Lighting
+                        </label>
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <p>
+                        Bedtime will be at the time selected here plus or minus a randomly chosen offset of up to 30
+                        minutes that changes each day:
+                    </p>
+
+                    <select id="settings-bedtime" onchange="bedtimeChanged(event)">
+                        <option id="9PM" value="21"> 9PM</option>
+                        <option id="10PM" value="22">10PM</option>
+                        <option id="11PM" value="23">11PM</option>
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <p>
+                        Instruct the back end to recreate all dynamically generated controls:
+                    </p>
+
+                    <button id="controls-refresh" onclick="refreshControlsClicked(event)">
+                        Refresh Controls
+                    </button>
+
+                </div>
+
+            </fieldset>
 
             <fieldset>
 
@@ -62,20 +156,16 @@
 
                 <p>
                     Monitor and control the connection to the <a href="https://nodered.org" target="_blank">Node-RED</a>
-                    back end
+                    back end:
                 </p>
 
                 <div>
 
-                    <label for="ws-url">
-                        URL
-                    </label>
-
+                    <label for="ws-url">URL</label>
                     <input id="ws-url" />
-
                 </div>
 
-                <div class="columns">
+                <div>
 
                     <button id="reconnect-ws" onclick="connectWS(event)">
                         Connect
@@ -91,109 +181,54 @@
 
             </fieldset>
 
-            <fieldset id="settings" disabled="true">
-
-                <legend>Settings</legend>
-
-                <div class="padded">
-
-                    <div>
-
-                        <input type="checkbox" id="settings-shades" onchange="settingsCheckboxChanged(event)" />
-
-                        <label for="settings-shades">
-                            Enable window shades automation
-                        </label>
-
-                    </div>
-
-                    <div>
-
-                        <input type="checkbox" id="settings-lighting" onchange="settingsCheckboxChanged(event)" />
-
-                        <label for="settings-lighting">
-                            Enable lighting automation
-                        </label>
-
-                    </div>
-
-                </div>
-
-                <div class="padded">
-
-                    <p>
-                        Bedtime will be at the time selected here plus or minus a randomly chosen offset of up to 30
-                        minutes that changes each day:
-                    </p>
-
-                    <label for="settings-bedtime">Bedtime</label>
-
-                    <select id="settings-bedtime" onchange="bedtimeChanged(event)">
-                        <option id="9PM" value="21"> 9PM</option>
-                        <option id="10PM" value="22">10PM</option>
-                        <option id="11PM" value="23">11PM</option>
-                    </select>
-
-                </div>
-
-                <div class="padded">
-
-                    <div>
-
-                        <p>
-                            Instruct the back end to recreate all dynamically generated controls:
-                        </p>
-
-                        <button id="controls-refresh" onclick="refreshControlsClicked(event)">
-                            Refresh Controls
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </fieldset>
-
             <fieldset>
 
                 <legend>Status</legend>
 
-                <div class="padded">
+                <p>
                     Sunrise:
                     <span id="daily-sunrise"></span>
-                </div>
+                </p>
 
-                <div class="padded">
+                <p>
                     Sunset:
                     <span id="daily-sunset"></span>
-                </div>
+                </p>
 
-                <div class="padded">
+                <p>
                     Bedtime:
                     <span id="daily-bedtime"></span>
-                </div>
+                </p>
 
-                <div class="padded">
+                <p>
                     Theme:
                     <span id="daily-theme"></span>
-                </div>
+                </p>
 
-                <div class="padded">
+                <p>
                     Time:
                     <span id="timer-time"></span>
-                </div>
+                </p>
 
-                <div id="automation-trigger" class="padded"></div>
-
-                <div id="hue-key" class="padded"></div>
+                <p id="automation-trigger"></p>
 
             </fieldset>
 
-            <fieldset id="hue-bridges-fields" disabled="true">
+        </section>
+
+    </div>
+
+    <section>
+
+        <h2>Manage</h2>
+
+        <div class="wrapped">
+
+            <fieldset id="hue-bridges-fieldset" disabled="true">
 
                 <legend>Hue Bridges</legend>
 
-                <div id="hue-bridges">
+                <div id="hue-bridges" class="wrapped">
                     <p>unknown</p>
                 </div>
 
@@ -202,96 +237,5 @@
         </div>
 
     </section>
-
-    <a id="more-information"></a>
-    <footer class="wrapped">
-
-        <dl>
-
-            <dt>GitHub</dt>
-            <dd>
-                <div>
-                    <a href="https://github.com/parasaurolophus/home-automation/" target="_blank">
-                        https://github.com/parasaurolophus/home-automation/
-                    </a>
-                </div>
-            </dd>
-
-            <dt>Node-RED</dt>
-            <dd>
-                <div>
-                    <a href="https://nodered.org/" target="_blank">
-                        https://nodered.org/
-                    </a>
-                </div>
-            </dd>
-
-            <dt>node-red-node-discovery</dt>
-            <dd>
-                <div>
-                    <a href="https://flows.nodered.org/node/node-red-node-discovery/" target="_blank">
-                        https://flows.nodered.org/node/node-red-node-discovery/
-                    </a>
-                </div>
-            </dd>
-
-            <dt>@parasaurolophus/node-red-eventsource</dt>
-            <dd>
-                <div>
-                    <a href="https://flows.nodered.org/node/@parasaurolophus/node-red-eventsource/" target="_blank">
-                        https://flows.nodered.org/node/@parasaurolophus/node-red-eventsource/
-                    </a>
-                </div>
-            </dd>
-
-            <dt>suncalc</dt>
-            <dd>
-                <div>
-                    <a href="https://www.npmjs.com/package/suncalc/" target="_blank">
-                        https://www.npmjs.com/package/suncalc/
-                    </a>
-                </div>
-            </dd>
-
-        </dl>
-
-        <dl>
-
-            <dt>PowerView API</dt>
-            <dd>
-                <div>
-                    <a href="https://motorisation.hde.nl/hd/powerview/general-guides/API/" target="_blank">
-                        https://motorisation.hde.nl/hd/powerview/general-guides/API/
-                    </a>
-                </div>
-            </dd>
-
-        </dl>
-
-        <dl>
-
-            <dt>Hue Bridge API V2</dt>
-            <dd>
-                <div>
-                    <a href="https://developers.meethue.com/develop/hue-api-v2/" target="_blank">
-                        https://developers.meethue.com/develop/hue-api-v2/
-                    </a>
-                </div>
-                <div>
-                    <a href="https://developers.meethue.com/develop/hue-api-v2/core-concepts/#events" target="_blank">
-                        https://developers.meethue.com/develop/hue-api-v2/core-concepts/#events
-                    </a>
-                </div>
-                <div>
-                    <a href="https://developers.meethue.com/develop/application-design-guidance/hue-bridge-discovery/"
-                        target="_blank">
-                        https://developers.meethue.com/develop/application-design-guidance/hue-bridge-discovery/
-                    </a>
-                </div>
-            </dd>
-
-        </dl>
-
-    </footer>
 
 </body>

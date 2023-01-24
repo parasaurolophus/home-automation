@@ -1,6 +1,6 @@
 body {
 
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: sans-serif;
     color: silver;
     background-color: darkslategray;
     padding: 2em;
@@ -26,6 +26,12 @@ a:visited {
 
 }
 
+fieldset p {
+
+    margin-top: 1em;
+    margin-bottom: 0;
+}
+
 .centered {
 
     display: flex;
@@ -48,18 +54,23 @@ a:visited {
 
 }
 
+.column {
+
+    display: flex;
+    flex-flow: column nowrap;
+
+}
+
+.equal {
+
+    flex: 1;
+
+}
+
 .padded {
 
     margin: 0.25em;
     padding: 0.25em;
-
-}
-
-footer dd div,
-.info {
-
-    margin: 0.25em 0 0.25em 0;
-    padding: 0.25em 0 0.25em 0;
 
 }
 
@@ -71,13 +82,6 @@ th,
 td {
 
     margin: 0.25em;
-
-}
-
-fieldset p,
-#ws-url {
-
-    width: 15em;
 
 }
 

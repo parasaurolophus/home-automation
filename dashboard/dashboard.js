@@ -7,9 +7,35 @@ var wsReconnectTimer = null
 document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector('#ws-url').value = wsURL(window.location)
+    document.querySelector('#editor-link').setAttribute('href', editorURL(window.location))
     connectWS()
 
 })
+
+function editorURL(location) {
+
+    const parts = /([^:]+):\/\/([^/]+)(.*)/.exec(location)
+
+    if (Array.isArray(parts) && (parts.length == 4)) {
+
+        return parts[1] + '://' + parts[2] + '/'
+
+    }
+
+    return 'ws://127.0.0.1:1880/'
+
+}
+
+function clearDynamicControls() {
+
+    const container = document.querySelector('#controls-container')
+
+    while (container.childElementCount > 1) {
+
+        container.removeChild(container.lastChild)
+
+    }
+}
 
 function removeAllChildren(element) {
 
@@ -54,18 +80,15 @@ function createHueKey(event) {
 
 function hueBridges(bridges) {
 
-    const div = document.createElement('div')
-    let count = 0
+    const container = document.querySelector('#hue-bridges')
+
+    removeAllChildren(container)
 
     for (let bridge of bridges) {
 
-        if (count++ > 0) {
-
-            div.appendChild(document.createElement('hr'))
-
-        }
-
         const dl = document.createElement('dl')
+
+        dl.class="equal"
 
         for (let key in bridge) {
 
@@ -102,15 +125,9 @@ function hueBridges(bridges) {
         dd.appendChild(button)
         dl.appendChild(dt)
         dl.appendChild(dd)
-        div.appendChild(dl)
+        container.appendChild(dl)
 
     }
-
-    const container = document.querySelector('#hue-bridges')
-
-    replaceChildren(container, div)
-    return container
-
 }
 
 function hueGroupChanged(event) {
@@ -144,7 +161,7 @@ function activateWindowShadesScene(event) {
 
 function refreshControlsClicked(_event) {
 
-    removeAllChildren(document.querySelector('#controls-container'))
+    clearDynamicControls()
     models = {}
     ws.send(JSON.stringify({
         payload: new Date().getTime(),
@@ -188,12 +205,11 @@ function powerviewRoom(room) {
 function powerviewControls(msg) {
 
     const section = document.createElement('section')
-    const heading = document.createElement('h3')
+    const heading = document.createElement('h2')
 
     heading.textContent = 'Window Shades'
     section.appendChild(heading)
-    section.className = 'padded'
-    appendInfo(section, msg)
+    section.className = 'equal'
 
     for (let room of msg.payload) {
 
@@ -268,12 +284,11 @@ function hueControls(msg) {
     const model = msg.payload
 
     const section = document.createElement('section')
-    const heading = document.createElement('h3')
+    const heading = document.createElement('h2')
 
-    section.className = 'padded'
+    section.className = 'equal'
     heading.textContent = model.title
     section.appendChild(heading)
-    appendInfo(section, msg)
 
     for (let group of model.groups) {
 
@@ -283,19 +298,6 @@ function hueControls(msg) {
 
     return section
 
-}
-
-function appendInfo(section, msg) {
-
-    if (msg.info) {
-
-        const info = document.createElement('div')
-
-        info.className = 'info'
-        info.textContent = msg.info
-        section.appendChild(info)
-
-    }
 }
 
 function settingsCheckboxChanged(event) {
@@ -392,7 +394,7 @@ function connectWS(_event) {
     ws.onopen = (_event) => {
 
         document.querySelector('#settings').disabled = false
-        document.querySelector('#hue-bridges-fields').disabled = false
+        document.querySelector('#hue-bridges-fieldset').disabled = false
         wsReadyState()
         wsReadyStateTimer = setInterval(wsReadyState, 1000)
         models = {}
@@ -403,7 +405,7 @@ function connectWS(_event) {
 
         wsReadyState()
         document.querySelector('#settings').disabled = true
-        document.querySelector('#hue-bridges-fields').disabled = true
+        document.querySelector('#hue-bridges-fieldset').disabled = true
         document.querySelector('#controls-container').innerHTML = '<p>none</p>'
 
     }
@@ -467,6 +469,17 @@ function connectWS(_event) {
 
         }
 
+        if (/^.+\/error$/.exec(msg.topic)) {
+
+            console.log(msg)
+            window.alert(
+                msg.topic +
+                ':\n' +
+                JSON.stringify(msg.payload, undefined, 1))
+            return
+
+        }
+
         let matches = /^daily\/(sunrise|sunset|bedtime)$/.exec(msg.topic)
 
         if (Array.isArray(matches) && (matches.length == 2)) {
@@ -481,42 +494,6 @@ function connectWS(_event) {
         if (Array.isArray(matches) && (matches.length == 2)) {
 
             document.querySelector('#' + matches[1].replace('/', '-')).textContent = msg.payload
-            return
-
-        }
-
-        matches = /^hue\/([^/]+)\/key$/.exec(msg.topic)
-
-        if (Array.isArray(matches) && (matches.length == 2)) {
-
-            hueKeys[msg.bridgeAddress] = msg.payload
-
-            const dl = document.createElement('dl')
-
-            for (let address in hueKeys) {
-
-                const dt = document.createElement('dt')
-                const dd = document.createElement('dd')
-
-                dt.appendChild(document.createTextNode(address))
-                dd.appendChild(document.createTextNode(hueKeys[address]))
-                dl.appendChild(dt)
-                dl.appendChild(dd)
-
-            }
-
-            replaceChildren(document.querySelector('#hue-key'), dl)
-            return
-
-        }
-
-        if (/^.+\/error$/.exec(msg.topic)) {
-
-            console.log(msg)
-            window.alert(
-                msg.topic +
-                ':\n' +
-                JSON.stringify(msg.payload, undefined, 1))
             return
 
         }
@@ -541,7 +518,7 @@ function connectWS(_event) {
 
         const container = document.querySelector('#controls-container')
 
-        removeAllChildren(container)
+        clearDynamicControls()
 
         for (let label in models) {
 
