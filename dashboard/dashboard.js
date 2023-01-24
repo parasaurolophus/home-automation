@@ -88,7 +88,7 @@ function hueBridges(bridges) {
 
         const dl = document.createElement('dl')
 
-        dl.class="equal"
+        dl.class = "equal"
 
         for (let key in bridge) {
 
@@ -406,7 +406,7 @@ function connectWS(_event) {
         wsReadyState()
         document.querySelector('#settings').disabled = true
         document.querySelector('#hue-bridges-fieldset').disabled = true
-        document.querySelector('#controls-container').innerHTML = '<p>none</p>'
+        clearDynamicControls()
 
     }
 
@@ -476,6 +476,13 @@ function connectWS(_event) {
                 msg.topic +
                 ':\n' +
                 JSON.stringify(msg.payload, undefined, 1))
+            return
+
+        }
+
+        if (/^hue\/.+\/key$/.exec(msg.topic)) {
+
+            console.log(msg)
             return
 
         }
