@@ -546,13 +546,27 @@ function connectWS(_event) {
 
         }
 
+        const sorted = []
+
+        for (let label in models) {
+
+            sorted.push(models[label])
+
+        }
+
+        sorted.sort((a, b) => {
+
+            return a.firstChild.textContent.localeCompare(b.firstChild.textContent)
+
+        })
+
         const container = document.querySelector('#controls-container')
 
         clearDynamicControls()
 
-        for (let label in models) {
+        for (let section of sorted) {
 
-            container.appendChild(models[label])
+            container.appendChild(section)
 
         }
     }
