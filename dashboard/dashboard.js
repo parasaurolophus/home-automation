@@ -87,6 +87,7 @@ function hueBridges(bridges) {
     for (let bridge of bridges) {
 
         const dl = document.createElement('dl')
+        const id = bridge.address.replace(/\./g, '-')
 
         dl.classList.add('padded', 'equal')
 
@@ -119,7 +120,7 @@ function hueBridges(bridges) {
         const cachedKey = hueKeys[bridge.address]
 
         keyTerm.appendChild(document.createTextNode('key'))
-        keyDefinition.setAttribute('id', 'hue-key-' + bridge.address.replace(/\./g, '-'))
+        keyDefinition.setAttribute('id', 'hue-key-' + id)
         keyDefinition.textContent = cachedKey ? cachedKey : '\u00A0'
 
         dl.appendChild(keyTerm)
@@ -129,8 +130,10 @@ function hueBridges(bridges) {
         const createKeyDefinition = document.createElement('dd')
         const button = document.createElement('button')
 
+        button.setAttribute('id', 'hue-create-key-' + id)
         button.setAttribute('value', bridge.address)
         button.setAttribute('onclick', 'createHueKey(event)')
+        button.setAttribute('disabled', cachedKey ? false : true)
         button.appendChild(document.createTextNode('Create Key'))
         createKeyTerm.textContent = 'send command'
         createKeyDefinition.appendChild(button)
@@ -495,14 +498,30 @@ function connectWS(_event) {
         if (Array.isArray(matches) && (matches.length == 2)) {
 
             const address = matches[1]
+            const id = address.replace(/\./g, '-')
             const key = msg.payload
-            const element = document.querySelector('#hue-key-' + address.replace(/\./g, '-'))
+            const keyElement = document.querySelector('#hue-key-' + id)
+            const createKeyButton = document.querySelector('#hue-create-key-' + id)
 
-            hueKeys[address] = key
+            if (key === '') {
 
-            if (element) {
+                delete hueKeys[address]
 
-                element.textContent = key
+            } else {
+
+                hueKeys[address] = key
+
+            }
+
+            if (keyElement) {
+
+                keyElement.textContent = ((key === '') ? '\u00A0' : key)
+
+            }
+
+            if (createKeyButton) {
+
+                createKeyButton.setAttribute('disabled', key !== '')
 
             }
 
