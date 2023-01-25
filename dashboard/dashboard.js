@@ -88,7 +88,7 @@ function hueBridges(bridges) {
 
         const dl = document.createElement('dl')
 
-        dl.class = "equal"
+        dl.classList.add('padded', 'equal')
 
         for (let key in bridge) {
 
@@ -100,7 +100,7 @@ function hueBridges(bridges) {
 
             if (key == 'status') {
 
-                dd.className = 'hue-status'
+                dd.classList.add('hue-status')
                 dd.appendChild(hueStatus(value))
 
             } else {
@@ -114,17 +114,28 @@ function hueBridges(bridges) {
 
         }
 
-        const dt = document.createElement('dt')
-        const dd = document.createElement('dd')
+        const keyTerm = document.createElement('dt')
+        const keyDefinition = document.createElement('dd')
+        const cachedKey = hueKeys[bridge.address]
+
+        keyTerm.appendChild(document.createTextNode('key'))
+        keyDefinition.setAttribute('id', 'hue-key-' + bridge.address.replace(/\./g, '-'))
+        keyDefinition.textContent = cachedKey ? cachedKey : '\u00A0'
+
+        dl.appendChild(keyTerm)
+        dl.appendChild(keyDefinition)
+
+        const createKeyTerm = document.createElement('dt')
+        const createKeyDefinition = document.createElement('dd')
         const button = document.createElement('button')
 
         button.setAttribute('value', bridge.address)
         button.setAttribute('onclick', 'createHueKey(event)')
         button.appendChild(document.createTextNode('Create Key'))
-        dt.textContent = 'send command'
-        dd.appendChild(button)
-        dl.appendChild(dt)
-        dl.appendChild(dd)
+        createKeyTerm.textContent = 'send command'
+        createKeyDefinition.appendChild(button)
+        dl.appendChild(createKeyTerm)
+        dl.appendChild(createKeyDefinition)
         container.appendChild(dl)
 
     }
@@ -188,7 +199,7 @@ function powerviewRoom(room) {
     const div = document.createElement('div')
 
     legend.textContent = room.name
-    div.className = 'wrapped'
+    div.classList.add('wrapped')
     fieldset.appendChild(legend)
     fieldset.appendChild(div)
 
@@ -207,9 +218,9 @@ function powerviewControls(msg) {
     const section = document.createElement('section')
     const heading = document.createElement('h2')
 
+    section.classList.add('equal')
     heading.textContent = 'Window Shades'
     section.appendChild(heading)
-    section.className = 'equal'
 
     for (let room of msg.payload) {
 
@@ -238,7 +249,6 @@ function hueGroupCheckbox(group) {
 
     }
 
-    label.className = 'padded'
     label.appendChild(input)
     label.appendChild(text)
     return label
@@ -263,7 +273,7 @@ function hueGroup(group) {
     const legend = document.createElement('legend')
     const div = document.createElement('div')
 
-    div.className = 'wrapped'
+    div.classList.add('wrapped')
     legend.textContent = group.name
     fieldset.appendChild(legend)
     fieldset.appendChild(hueGroupCheckbox(group))
@@ -286,7 +296,7 @@ function hueControls(msg) {
     const section = document.createElement('section')
     const heading = document.createElement('h2')
 
-    section.className = 'equal'
+    section.classList.add('equal')
     heading.textContent = model.title
     section.appendChild(heading)
 
@@ -333,7 +343,7 @@ function wsReadyState() {
 
     const span = document.createElement('span')
 
-    span.className = 'padded ws-' + text
+    span.classList.add('padded', 'ws-' + text)
     span.appendChild(document.createTextNode(text))
     replaceChildren(document.querySelector("#ws-status"), span)
 
@@ -350,7 +360,7 @@ function hueStatus(status) {
 
     const div = document.createElement('div')
 
-    div.className = 'padded hue-' + text
+    div.classList.add('padded', 'hue-' + text)
     div.appendChild(document.createTextNode(text))
     return div
 
@@ -480,14 +490,27 @@ function connectWS(_event) {
 
         }
 
-        if (/^hue\/.+\/key$/.exec(msg.topic)) {
+        let matches = /^hue\/(.+)\/key$/.exec(msg.topic)
 
-            console.log(msg)
+        if (Array.isArray(matches) && (matches.length == 2)) {
+
+            const address = matches[1]
+            const key = msg.payload
+            const element = document.querySelector('#hue-key-' + address.replace(/\./g, '-'))
+
+            hueKeys[address] = key
+
+            if (element) {
+
+                element.textContent = key
+
+            }
+
             return
 
         }
 
-        let matches = /^daily\/(sunrise|sunset|bedtime)$/.exec(msg.topic)
+        matches = /^daily\/(sunrise|sunset|bedtime)$/.exec(msg.topic)
 
         if (Array.isArray(matches) && (matches.length == 2)) {
 

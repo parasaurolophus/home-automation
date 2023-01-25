@@ -47,6 +47,12 @@ fieldset p {
 
 }
 
+.equal {
+
+    flex: 1;
+
+}
+
 .not-wrapped {
 
     display: flex;
@@ -58,12 +64,6 @@ fieldset p {
 
     display: flex;
     flex-flow: column nowrap;
-
-}
-
-.equal {
-
-    flex: 1;
 
 }
 
@@ -83,6 +83,12 @@ td {
 
     margin: 0.25em;
 
+}
+
+#hue-bridges {
+
+    justify-content: space-evenly;
+    
 }
 
 .ws-connecting {
