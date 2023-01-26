@@ -7,6 +7,11 @@ body {
 
 }
 
+* {
+
+    border-color: silver;
+}
+
 a {
 
     color: white;
@@ -47,7 +52,7 @@ fieldset p {
 
 }
 
-.equal {
+.wrapped>* {
 
     flex: 1;
 
@@ -85,10 +90,10 @@ td {
 
 }
 
-#hue-bridges {
+#manage-container>* {
 
-    justify-content: space-evenly;
-    
+    flex: unset;
+
 }
 
 .ws-connecting {

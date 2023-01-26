@@ -89,7 +89,7 @@ function hueBridges(bridges) {
         const dl = document.createElement('dl')
         const id = bridge.address.replace(/\./g, '-')
 
-        dl.classList.add('padded', 'equal')
+        dl.classList.add('padded')
 
         for (let key in bridge) {
 
@@ -221,7 +221,6 @@ function powerviewControls(msg) {
     const section = document.createElement('section')
     const heading = document.createElement('h2')
 
-    section.classList.add('equal')
     heading.textContent = 'Window Shades'
     section.appendChild(heading)
 
@@ -299,7 +298,6 @@ function hueControls(msg) {
     const section = document.createElement('section')
     const heading = document.createElement('h2')
 
-    section.classList.add('equal')
     heading.textContent = model.title
     section.appendChild(heading)
 

@@ -18,12 +18,12 @@
 
         <div class="wrapped">
 
-            <p class="equal">
+            <p>
                 Home automation dashboard and device controls implemented as a single-page web application, using
                 <a href="https://nodered.org" target="_blank">Node-RED</a> for its back end
             </p>
 
-            <ul class="equal">
+            <ul>
                 <li>
                     <a id="editor-link" target="_blank">
                         Editor
@@ -56,7 +56,7 @@
                 </li>
             </ul>
 
-            <ul class="equal">
+            <ul>
                 <li>
                     <a href="https://developers.meethue.com/develop/hue-api-v2/" target="_blank">
                         Hue Bridge API V2
@@ -75,7 +75,7 @@
                 </li>
             </ul>
 
-            <ul class="equal">
+            <ul>
                 <li>
                     <a href="https://motorisation.hde.nl/hd/powerview/general-guides/API/" target="_blank">
                         PowerView API
@@ -91,7 +91,7 @@
 
     <div id="controls-container" class="wrapped">
 
-        <section class="equal">
+        <section>
 
             <h2>Dashboard</h2>
 
@@ -135,6 +135,17 @@
                     </select>
 
                 </div>
+                #hue-bridges {
+
+                justify-content: space-between;
+
+                }
+
+                #hue-bridges>* {
+
+                flex: unset;
+
+                }
 
                 <div>
 
@@ -218,11 +229,11 @@
 
     </div>
 
-    <div class="wrapped">
+    <section>
 
-        <section>
+        <h2>Manage</h2>
 
-            <h2>Manage</h2>
+        <div id="manage-container" class="wrapped">
 
             <fieldset id="hue-bridges-fieldset" disabled="true">
 
@@ -234,8 +245,8 @@
 
             </fieldset>
 
-        </section>
+        </div>
 
-    </div>
+    </section>
 
 </body>
