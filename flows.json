@@ -4,7 +4,7 @@
         "type": "tab",
         "label": "Broker",
         "disabled": false,
-        "info": "",
+        "info": "Broadcast messages received from any client to all clients. Note that\nall properties other than `msg._session` and `msg.retain` are\ntransmitted directly from the publisher to all subscribers.\n\n- Removes `msg._session` entirely, in the case of initially published\n  messages.\n\n- Handles `msg.topic` and `msg.retain` in a fashion inspired by MQTT.\n\nIf a client publishes a message with `msg.retain` set to `true`, the\n`retain` function node saves a clone of the message in flow context\nusing a file-system backed context store using `msg.topic` as the key.\nIt then sets `msg.retain` to `false` before broadcasting the message\nto subscribed clients.\n\nEach time a client connects, the `retained` function node sends that\nclient all currently stored messages with `msg.retain` set to `true`.\n\nRetained messages' contents can be updated by sending subsequent\nmessages with the same `msg.topic` and `msg.retain` set to `true`.\n\nRetained messages can be deleted by sending subsequent messages with\nthe same `msg.topic`, `msg.retain` set to `true` and `msg.payload`\nset to the empty string (`''`).",
         "env": []
     },
     {
@@ -12,7 +12,7 @@
         "type": "tab",
         "label": "Timer",
         "disabled": false,
-        "info": "",
+        "info": "Publish event messages, with `msg.topic` and `msg.payload` as described\nbelow, each time the corresponding conditions occur.\n\nThese messages are sent each time flows start and then once per day\nwhile the flow is running:\n\n- `msg.topic` set to `daily/theme` with `msg.payload` set to one of\n  the _theme_ values described below\n\n- `msg.topic` set to `daily/sunrise` with `msg.payload` set to the\n  timestamp for the time at which the sun rises on the current day\n\n- `msg.topic` set to `daily/sunset` with `msg.payload` set to the\n  timestamp for the time at which the sun sets on the current day\n\nThis message is sent at the same time the preceding daily events\nand also each time a user changes the _bedtime_ setting:\n\n- `msg.topic` set to `daily/bedtime` with `msg.payload` set to a\n  randomly chosen timestamp as described below\n\nThis message is sent each time flows start and then up to five times\nper day while the flow is running:\n\n- `msg.topic` set to `timer/time` with `msg.payload` set to one of the\n_time_ values described below\n\n### Bedtime\n\nThe dashboard provides a means for a user to select a given hour\nfor \"bedtime.\" The actual value for `daily/bedtime` event payloads\nvaries each day by adding a ranomly chosen offset of up to 30 minutes\nbefore or after the hour selected by a user.\n\n### Themes\n\nThe `msg.payload` for `daily/theme` is set to one of the following\nstrings based on the current date:\n\n- `tribal` - July 1 - 4 (US Independence Day)\n- `spooky` - any day in October\n- `jolly` - any day in December\n- `standard` - any other day\n\n### Times\n\nAn event message with `msg.topic` set to `timer/time` is published\neach time flows start and then at the start of each time range\ncorresponding to the following values for `msg.payload`. Note\nthat the rules are based on the sun's position each minute of each\nday:\n\n- `morning` - published when the sun's azimuth is from the east and\n  its altitude is below the threshold for `midday` described below\n\n- `midday` - published when the sun first reaches a particular altitude\n  each day; note that `midday` events do not occur on certain days\n  at certain latitudes\n\n- `afternoon` - published when the sun's azimuth is from the west\n  and its altitude is above the horizon but below the threshold for\n  `midday`\n\n- `evening` - published when the sun's altitude is below the horizon\n  and the current time is earlier than the randomly chosen _bedtime_\n\n- `night` - published when the sun's altitude is below the horizon\n  and the current time is later than the randomly chosen _bedtime_\n",
         "env": []
     },
     {
@@ -20,7 +20,7 @@
         "type": "tab",
         "label": "Automation",
         "disabled": false,
-        "info": "",
+        "info": "Subscribe to timer and settings events which trigger automation.\n\nNote that this is the one flow with hard-coded references to particular\ndevice groups and scenes.",
         "env": []
     },
     {
@@ -28,7 +28,7 @@
         "type": "tab",
         "label": "PowerView",
         "disabled": false,
-        "info": "",
+        "info": "Interoperate with the PowerView hub whose IP address is specified by the\n`${POWERVIEW_ADDRESS}` environment variable.\n\nThis flow obtains the current configuration data from the hub and\npublishes an event message whose `msg.topic` is `powerview/model`\nand whose `msg.payload` contains a JSON object with the structure\nexpected by the front-end code for the dashboard. It also subscribes\nto `put/powerview/scene` messages and activates the PowerView scenes\nindicated by their payloads.",
         "env": []
     },
     {
@@ -36,7 +36,7 @@
         "type": "tab",
         "label": "Hue",
         "disabled": false,
-        "info": "",
+        "info": "Interoperate with Philips Hue Bridges.\n\nThis flow:\n\n- Uses mDNS to discover Hue bridges on the LAN and publishes\n  corresponding `hue/bridges` event messages for use by the dashboard's\n  front-end logic\n\n- Contains two instances of the _Hue API V2_ subflow, one each for\n  the Hue bridges specified by the `${GROUND_FLOOR_HUE_ADDRESS}` and\n  `${BASEMENT_HUE_ADDRESS}` environment variables",
         "env": []
     },
     {
@@ -103,7 +103,7 @@
         "color": "#D8BFD8",
         "icon": "font-awesome/fa-lightbulb-o",
         "status": {
-            "x": 1100,
+            "x": 1020,
             "y": 700,
             "wires": [
                 {
@@ -350,7 +350,7 @@
         ],
         "x": 14,
         "y": 239,
-        "w": 1112,
+        "w": 952,
         "h": 122
     },
     {
@@ -417,7 +417,7 @@
         ],
         "x": 14,
         "y": 299,
-        "w": 1332,
+        "w": 1252,
         "h": 302
     },
     {
@@ -438,8 +438,8 @@
         ],
         "x": 14,
         "y": 379,
-        "w": 732,
-        "h": 122
+        "w": 952,
+        "h": 82
     },
     {
         "id": "9cf0457b813ca743",
@@ -460,10 +460,10 @@
             "54a31fbc4733c574",
             "8d706565bc654112"
         ],
-        "x": 94,
+        "x": 14,
         "y": 219,
-        "w": 852,
-        "h": 122,
+        "w": 1272,
+        "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -486,9 +486,9 @@
             "450c11f088a3f9ee",
             "9154f7fa8b08933f"
         ],
-        "x": 94,
+        "x": 14,
         "y": 79,
-        "w": 912,
+        "w": 832,
         "h": 122
     },
     {
@@ -513,10 +513,10 @@
             "62d44392a9aac7fc",
             "4e40e2700edff9ec"
         ],
-        "x": 94,
-        "y": 359,
-        "w": 1052,
-        "h": 142
+        "x": 14,
+        "y": 319,
+        "w": 1272,
+        "h": 122
     },
     {
         "id": "a21835234a7481fe",
@@ -534,18 +534,18 @@
             "fd931d60371497cc",
             "2172861d6eca2d1c",
             "ec4c72ab0b8b53ad",
-            "cbcdf85a73052db5",
             "b42f1fba69cb70e0",
             "46ac71815281ccea",
             "1182570b961cb1b0",
-            "a4e1a5b908d33066",
             "4b3a06bb3281f1c5",
-            "0fa595499d40a3fd"
+            "0fa595499d40a3fd",
+            "a4e1a5b908d33066",
+            "cbcdf85a73052db5"
         ],
         "x": 14,
         "y": 19,
-        "w": 1212,
-        "h": 222
+        "w": 1252,
+        "h": 202
     },
     {
         "id": "0b0da0b6b3a2a19d",
@@ -565,15 +565,15 @@
             "76bbc731fb4262bd",
             "9a9fbaf721bdfb20",
             "de9d9eb71b136375",
-            "154766c193057414",
             "48582d354b6b0fda",
             "903dfd8686a14a20",
             "386e624f284112c8",
-            "46c44e33f918af63"
+            "46c44e33f918af63",
+            "154766c193057414"
         ],
         "x": 14,
-        "y": 259,
-        "w": 1412,
+        "y": 239,
+        "w": 1252,
         "h": 162
     },
     {
@@ -601,7 +601,7 @@
         ],
         "x": 14,
         "y": 439,
-        "w": 912,
+        "w": 832,
         "h": 322
     },
     {
@@ -628,7 +628,7 @@
         ],
         "x": 14,
         "y": 219,
-        "w": 1172,
+        "w": 1012,
         "h": 202
     },
     {
@@ -655,7 +655,7 @@
         ],
         "x": 14,
         "y": 119,
-        "w": 1772,
+        "w": 1252,
         "h": 82
     },
     {
@@ -680,7 +680,7 @@
         ],
         "x": 14,
         "y": 619,
-        "w": 932,
+        "w": 852,
         "h": 122
     },
     {
@@ -703,7 +703,7 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 792,
+        "w": 712,
         "h": 82
     },
     {
@@ -726,7 +726,7 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 752,
+        "w": 672,
         "h": 82
     },
     {
@@ -746,9 +746,9 @@
             "048ec8eb41be82ae"
         ],
         "x": 14,
-        "y": 519,
-        "w": 652,
-        "h": 122
+        "y": 479,
+        "w": 952,
+        "h": 82
     },
     {
         "id": "431414ce08ebb3c0",
@@ -1275,7 +1275,7 @@
         "links": [
             "fdc1f995f016ddba"
         ],
-        "x": 1010,
+        "x": 930,
         "y": 700,
         "wires": [
             []
@@ -1360,10 +1360,10 @@
         "type": "websocket in",
         "z": "85ed27d795e6e866",
         "g": "96971e50c13ead01",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 220,
+        "x": 260,
         "y": 540,
         "wires": [
             [
@@ -1376,10 +1376,10 @@
         "type": "websocket out",
         "z": "85ed27d795e6e866",
         "g": "d64d4d2689200662",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 640,
+        "x": 600,
         "y": 60,
         "wires": []
     },
@@ -1447,10 +1447,10 @@
         "type": "websocket out",
         "z": "85ed27d795e6e866",
         "g": "0fb8e43c903b3506",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 920,
+        "x": 880,
         "y": 240,
         "wires": []
     },
@@ -1459,10 +1459,10 @@
         "type": "websocket out",
         "z": "85ed27d795e6e866",
         "g": "96971e50c13ead01",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1220,
+        "x": 1180,
         "y": 360,
         "wires": []
     },
@@ -1471,10 +1471,10 @@
         "type": "websocket out",
         "z": "85ed27d795e6e866",
         "g": "96971e50c13ead01",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1220,
+        "x": 1180,
         "y": 480,
         "wires": []
     },
@@ -1483,10 +1483,10 @@
         "type": "websocket out",
         "z": "85ed27d795e6e866",
         "g": "4893dd6a2321040d",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 820,
+        "x": 780,
         "y": 660,
         "wires": []
     },
@@ -1874,10 +1874,10 @@
         "id": "cae7ad773f3664cb",
         "type": "websocket out",
         "z": "450f4de3c4f73b40",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 360,
+        "x": 320,
         "y": 60,
         "wires": []
     },
@@ -1999,7 +1999,7 @@
         "g": "5be845dd7de1f9ed",
         "name": "assumes a file-system backed context store named \"file\"",
         "info": "",
-        "x": 240,
+        "x": 320,
         "y": 120,
         "wires": []
     },
@@ -2025,8 +2025,8 @@
         "topic": "now",
         "payload": "",
         "payloadType": "date",
-        "x": 340,
-        "y": 100,
+        "x": 260,
+        "y": 80,
         "wires": [
             [
                 "2172861d6eca2d1c"
@@ -2055,8 +2055,8 @@
         "topic": "now",
         "payload": "",
         "payloadType": "date",
-        "x": 600,
-        "y": 300,
+        "x": 520,
+        "y": 280,
         "wires": [
             [
                 "de9d9eb71b136375"
@@ -2084,13 +2084,13 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 510,
-        "y": 140,
+        "x": 430,
+        "y": 120,
         "wires": [
             [
                 "ec4c72ab0b8b53ad",
-                "cbcdf85a73052db5",
-                "b42f1fba69cb70e0"
+                "b42f1fba69cb70e0",
+                "cbcdf85a73052db5"
             ]
         ],
         "info": "Synchronize receipt of `daily/timestamp` and `settings/bedtime`\nmessages."
@@ -2107,8 +2107,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 670,
-        "y": 80,
+        "x": 590,
+        "y": 60,
         "wires": [
             [
                 "46ac71815281ccea"
@@ -2123,42 +2123,6 @@
         "info": "Set `msg.payload` to one of the _theme_ values, described below, and\n`msg.topic` to `daily/theme`.\n\n_Note that this `function` node is placed downstream of a `join` in\norder to delay sending MQTT messages until after the connection to the\nbroker has been established; the only input data on which this function\nactually relies comes from the `inject` node which fires once when\nflows start and then every morning at 1AM._\n\n# Input\n\n- timestamp in `msg.payload.daily`\n- all other `msg` properties are ignored\n\n# Output\n\n- `msg.topic` set to `daily/theme`\n- `msg.payload` set to one of the following strings, based on the\n  the timestamp from the input:\n\n| `msg.payload` | Description         |\n|---------------|---------------------|\n| `tribal`      | July 1 - 4          |\n| `spooky`      | Any day in October  |\n| `jolly`       | Any day in December |\n| `standard`    | Any other day       |"
     },
     {
-        "id": "cbcdf85a73052db5",
-        "type": "function",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "sunrise | sunset",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = Number.parseFloat(env.get('LATITUDE'))\nconst LONGITUDE = Number.parseFloat(env.get('LONGITUDE'))\n\nconst now = new Date(msg.payload.now)\nconst sunrise = {}\nconst sunset = {}\n\nconst times = suncalc.getTimes(\n    // work around bug in suncalc\n    new Date(\n        now.getFullYear(),\n        now.getMonth(),\n        now.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nsunrise.payload = times.sunrise.getTime()\nsunrise.topic = 'daily/sunrise'\nsunrise.retain = true\n\nsunset.payload = times.sunset.getTime()\nsunset.topic = 'daily/sunset'\nsunset.retain = true\n\nconst status =\n    new Date(sunrise.payload).toLocaleTimeString() +\n    ' | ' +\n    new Date(sunset.payload).toLocaleTimeString()\n\nnode.status({\n    text: status,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn [sunrise, sunset]",
-        "outputs": 2,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "suncalc",
-                "module": "suncalc"
-            }
-        ],
-        "x": 700,
-        "y": 140,
-        "wires": [
-            [
-                "46ac71815281ccea"
-            ],
-            [
-                "46ac71815281ccea"
-            ]
-        ],
-        "inputLabels": [
-            "daily"
-        ],
-        "outputLabels": [
-            "sunrise",
-            "sunset"
-        ],
-        "info": "Use the [suncalc](https://www.npmjs.com/package/suncalc) package to\nobtain the times at which the sun rises and sets on a given day.\n\n_Note that this `function` node is placed downstream of a `join` in\norder to delay sending MQTT messages until after the connection to the\nbroker has been established; the only input data on which this function\nactually relies comes from the `inject` node which fires once when\nflows start and then every morning at 1AM._\n\n_Note also that this assumes:_\n\n_- `function` nodes are allowed to dynamically load the_ suncalc\n   _package_\n\n_- `${LATITUDE}` and `${LONGITUDE}` environment variables contain the\n  georgraphical coordinates to pass to `suncalc.getTimes()`_\n\n# Input\n\n- timestamp in `msg.payload.daily`\n- all other `msg` properties are ignored\n\n# Output\n\n1. sunrise\n   - `msg.payload` is the timestamp for sunrise as reported by _suncalc_\n   - `msg.topic` is `daily/sunrise`\n2. sunset\n   - `msg.payload` is the timestamp for sunset as reported by _suncalc_\n   - `msg.topic` is `daily/sunset`\n"
-    },
-    {
         "id": "b42f1fba69cb70e0",
         "type": "function",
         "z": "1f224d5f7092fb57",
@@ -2170,8 +2134,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 680,
-        "y": 200,
+        "x": 600,
+        "y": 180,
         "wires": [
             [
                 "46ac71815281ccea"
@@ -2195,8 +2159,8 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 930,
-        "y": 140,
+        "x": 850,
+        "y": 120,
         "wires": [
             [
                 "4b3a06bb3281f1c5"
@@ -2225,8 +2189,8 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 890,
-        "y": 340,
+        "x": 810,
+        "y": 320,
         "wires": [
             [
                 "76bbc731fb4262bd"
@@ -2250,8 +2214,8 @@
                 "module": "suncalc"
             }
         ],
-        "x": 1010,
-        "y": 340,
+        "x": 930,
+        "y": 320,
         "wires": [
             [
                 "9a9fbaf721bdfb20"
@@ -2271,8 +2235,8 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 1130,
-        "y": 340,
+        "x": 1050,
+        "y": 320,
         "wires": [
             [
                 "46c44e33f918af63"
@@ -2292,35 +2256,11 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 770,
-        "y": 340,
+        "x": 690,
+        "y": 320,
         "wires": [
             [
                 "d9f51cf712535848"
-            ]
-        ]
-    },
-    {
-        "id": "154766c193057414",
-        "type": "switch",
-        "z": "1f224d5f7092fb57",
-        "g": "0b0da0b6b3a2a19d",
-        "name": "not retained",
-        "property": "retain",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 610,
-        "y": 380,
-        "wires": [
-            [
-                "de9d9eb71b136375"
             ]
         ]
     },
@@ -2342,8 +2282,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 340,
-        "y": 180,
+        "x": 260,
+        "y": 160,
         "wires": [
             [
                 "2172861d6eca2d1c"
@@ -2369,24 +2309,13 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 390,
-        "y": 380,
+        "x": 310,
+        "y": 360,
         "wires": [
             [
                 "154766c193057414"
             ]
         ]
-    },
-    {
-        "id": "a4e1a5b908d33066",
-        "type": "comment",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
-        "info": "",
-        "x": 240,
-        "y": 60,
-        "wires": []
     },
     {
         "id": "903dfd8686a14a20",
@@ -2395,8 +2324,8 @@
         "g": "0b0da0b6b3a2a19d",
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
-        "x": 240,
-        "y": 300,
+        "x": 1040,
+        "y": 280,
         "wires": []
     },
     {
@@ -2404,11 +2333,11 @@
         "type": "websocket out",
         "z": "1f224d5f7092fb57",
         "g": "a21835234a7481fe",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1100,
-        "y": 140,
+        "x": 980,
+        "y": 120,
         "wires": []
     },
     {
@@ -2416,11 +2345,11 @@
         "type": "websocket in",
         "z": "1f224d5f7092fb57",
         "g": "a21835234a7481fe",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 140,
-        "y": 180,
+        "x": 100,
+        "y": 160,
         "wires": [
             [
                 "1182570b961cb1b0"
@@ -2432,11 +2361,11 @@
         "type": "websocket in",
         "z": "1f224d5f7092fb57",
         "g": "0b0da0b6b3a2a19d",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 140,
-        "y": 380,
+        "x": 100,
+        "y": 360,
         "wires": [
             [
                 "48582d354b6b0fda"
@@ -2448,12 +2377,83 @@
         "type": "websocket out",
         "z": "1f224d5f7092fb57",
         "g": "0b0da0b6b3a2a19d",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1300,
-        "y": 340,
+        "x": 1180,
+        "y": 320,
         "wires": []
+    },
+    {
+        "id": "a4e1a5b908d33066",
+        "type": "comment",
+        "z": "1f224d5f7092fb57",
+        "g": "a21835234a7481fe",
+        "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
+        "info": "",
+        "x": 1040,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "cbcdf85a73052db5",
+        "type": "function",
+        "z": "1f224d5f7092fb57",
+        "g": "a21835234a7481fe",
+        "name": "sunrise | sunset",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = Number.parseFloat(env.get('LATITUDE'))\nconst LONGITUDE = Number.parseFloat(env.get('LONGITUDE'))\n\nconst now = new Date(msg.payload.now)\nconst sunrise = {}\nconst sunset = {}\n\nconst times = suncalc.getTimes(\n    // work around bug in suncalc\n    new Date(\n        now.getFullYear(),\n        now.getMonth(),\n        now.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nsunrise.payload = times.sunrise.getTime()\nsunrise.topic = 'daily/sunrise'\nsunrise.retain = true\n\nsunset.payload = times.sunset.getTime()\nsunset.topic = 'daily/sunset'\nsunset.retain = true\n\nconst status =\n    new Date(sunrise.payload).toLocaleTimeString() +\n    ' | ' +\n    new Date(sunset.payload).toLocaleTimeString()\n\nnode.status({\n    text: status,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn [sunrise, sunset]",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "suncalc",
+                "module": "suncalc"
+            }
+        ],
+        "x": 620,
+        "y": 120,
+        "wires": [
+            [
+                "46ac71815281ccea"
+            ],
+            [
+                "46ac71815281ccea"
+            ]
+        ],
+        "inputLabels": [
+            "daily"
+        ],
+        "outputLabels": [
+            "sunrise",
+            "sunset"
+        ],
+        "info": "Use the [suncalc](https://www.npmjs.com/package/suncalc) package to\nobtain the times at which the sun rises and sets on a given day.\n\n_Note that this `function` node is placed downstream of a `join` in\norder to delay sending MQTT messages until after the connection to the\nbroker has been established; the only input data on which this function\nactually relies comes from the `inject` node which fires once when\nflows start and then every morning at 1AM._\n\n_Note also that this assumes:_\n\n_- `function` nodes are allowed to dynamically load the_ suncalc\n   _package_\n\n_- `${LATITUDE}` and `${LONGITUDE}` environment variables contain the\n  georgraphical coordinates to pass to `suncalc.getTimes()`_\n\n# Input\n\n- timestamp in `msg.payload.daily`\n- all other `msg` properties are ignored\n\n# Output\n\n1. sunrise\n   - `msg.payload` is the timestamp for sunrise as reported by _suncalc_\n   - `msg.topic` is `daily/sunrise`\n2. sunset\n   - `msg.payload` is the timestamp for sunset as reported by _suncalc_\n   - `msg.topic` is `daily/sunset`\n"
+    },
+    {
+        "id": "154766c193057414",
+        "type": "switch",
+        "z": "1f224d5f7092fb57",
+        "g": "0b0da0b6b3a2a19d",
+        "name": "not retained",
+        "property": "retain",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 530,
+        "y": 360,
+        "wires": [
+            [
+                "de9d9eb71b136375"
+            ]
+        ]
     },
     {
         "id": "6a9ac472018c38ea",
@@ -2475,7 +2475,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 640,
+        "x": 560,
         "y": 260,
         "wires": [
             [
@@ -2504,7 +2504,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 630,
+        "x": 550,
         "y": 300,
         "wires": [
             [
@@ -2533,7 +2533,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 630,
+        "x": 550,
         "y": 340,
         "wires": [
             [
@@ -2562,7 +2562,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 630,
+        "x": 550,
         "y": 380,
         "wires": [
             [
@@ -2584,7 +2584,7 @@
                 "type": "json"
             }
         ],
-        "x": 620,
+        "x": 540,
         "y": 500,
         "wires": []
     },
@@ -2619,7 +2619,7 @@
         "checkall": "false",
         "repair": false,
         "outputs": 4,
-        "x": 630,
+        "x": 550,
         "y": 600,
         "wires": [
             [
@@ -2650,7 +2650,7 @@
                 "type": "json"
             }
         ],
-        "x": 610,
+        "x": 530,
         "y": 700,
         "wires": []
     },
@@ -2667,7 +2667,7 @@
                 "type": "json"
             }
         ],
-        "x": 830,
+        "x": 750,
         "y": 480,
         "wires": []
     },
@@ -2684,7 +2684,7 @@
                 "type": "json"
             }
         ],
-        "x": 840,
+        "x": 760,
         "y": 560,
         "wires": []
     },
@@ -2701,7 +2701,7 @@
                 "type": "json"
             }
         ],
-        "x": 830,
+        "x": 750,
         "y": 640,
         "wires": []
     },
@@ -2718,7 +2718,7 @@
                 "type": "json"
             }
         ],
-        "x": 840,
+        "x": 760,
         "y": 720,
         "wires": []
     },
@@ -2749,7 +2749,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 860,
+        "x": 780,
         "y": 320,
         "wires": [
             [
@@ -2770,7 +2770,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 790,
+        "x": 350,
         "y": 160,
         "wires": [
             [
@@ -2799,7 +2799,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 910,
+        "x": 470,
         "y": 160,
         "wires": [
             [
@@ -2820,7 +2820,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 1230,
+        "x": 790,
         "y": 160,
         "wires": [
             [
@@ -2833,7 +2833,7 @@
         "type": "switch",
         "z": "bfdb5183ea783e85",
         "g": "9f074aa55117ee9d",
-        "name": "^settings/shades$|^settings/lighting$|^timer/time$|^daily/theme$",
+        "name": "topic",
         "property": "topic",
         "propertyType": "msg",
         "rules": [
@@ -2847,7 +2847,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 490,
+        "x": 230,
         "y": 160,
         "wires": [
             [
@@ -2867,7 +2867,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 290,
         "y": 320,
         "wires": [
             [
@@ -2902,7 +2902,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 290,
         "y": 600,
         "wires": [
             [
@@ -2926,10 +2926,10 @@
         "type": "websocket in",
         "z": "bfdb5183ea783e85",
         "g": "9f074aa55117ee9d",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 140,
+        "x": 100,
         "y": 160,
         "wires": [
             [
@@ -2942,10 +2942,10 @@
         "type": "websocket out",
         "z": "bfdb5183ea783e85",
         "g": "9f074aa55117ee9d",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1660,
+        "x": 1180,
         "y": 160,
         "wires": []
     },
@@ -2954,10 +2954,10 @@
         "type": "websocket out",
         "z": "bfdb5183ea783e85",
         "g": "3a0077281d6eefee",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 680,
+        "x": 640,
         "y": 60,
         "wires": []
     },
@@ -3051,10 +3051,10 @@
         "type": "websocket out",
         "z": "bfdb5183ea783e85",
         "g": "8326ae1a15518f8f",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1060,
+        "x": 940,
         "y": 320,
         "wires": []
     },
@@ -3063,10 +3063,10 @@
         "type": "websocket in",
         "z": "bfdb5183ea783e85",
         "g": "8326ae1a15518f8f",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 140,
+        "x": 100,
         "y": 320,
         "wires": [
             [
@@ -3079,10 +3079,10 @@
         "type": "websocket in",
         "z": "bfdb5183ea783e85",
         "g": "c2e3e9d2c97df2d0",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 140,
+        "x": 100,
         "y": 600,
         "wires": [
             [
@@ -3102,7 +3102,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1070,
+        "x": 630,
         "y": 160,
         "wires": [
             [
@@ -3130,7 +3130,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1420,
+        "x": 980,
         "y": 160,
         "wires": [
             [
@@ -3144,7 +3144,7 @@
         "z": "40413194443e96c6",
         "name": "https://motorisation.hde.nl/hd/powerview/general-guides/API/",
         "info": "",
-        "x": 340,
+        "x": 260,
         "y": 40,
         "wires": []
     },
@@ -3159,8 +3159,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 830,
-        "y": 300,
+        "x": 670,
+        "y": 260,
         "wires": [
             []
         ]
@@ -3172,7 +3172,7 @@
         "g": "cb106476337f4d38",
         "name": "send to powerview",
         "links": [],
-        "x": 210,
+        "x": 130,
         "y": 140,
         "wires": [
             [
@@ -3199,7 +3199,7 @@
         "drop": false,
         "allowrate": true,
         "outputs": 1,
-        "x": 390,
+        "x": 310,
         "y": 140,
         "wires": [
             [
@@ -3225,7 +3225,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 550,
+        "x": 470,
         "y": 140,
         "wires": [
             [
@@ -3247,7 +3247,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 700,
+        "x": 620,
         "y": 160,
         "wires": [
             [
@@ -3267,7 +3267,7 @@
         "name": "powerview response",
         "mode": "return",
         "links": [],
-        "x": 740,
+        "x": 660,
         "y": 120,
         "wires": [],
         "l": true
@@ -3284,8 +3284,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 850,
-        "y": 440,
+        "x": 690,
+        "y": 380,
         "wires": [
             [
                 "4e40e2700edff9ec"
@@ -3313,8 +3313,8 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 730,
-        "y": 440,
+        "x": 570,
+        "y": 380,
         "wires": [
             [
                 "7fb1bd1acb1ca5f7"
@@ -3355,8 +3355,8 @@
                 "type": "str"
             }
         ],
-        "x": 590,
-        "y": 420,
+        "x": 430,
+        "y": 360,
         "wires": [
             [
                 "eb7123132bce19c7"
@@ -3396,8 +3396,8 @@
                 "type": "str"
             }
         ],
-        "x": 590,
-        "y": 460,
+        "x": 430,
+        "y": 400,
         "wires": [
             [
                 "eb7123132bce19c7"
@@ -3422,8 +3422,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 440,
-        "y": 300,
+        "x": 280,
+        "y": 260,
         "wires": [
             [
                 "8d706565bc654112"
@@ -3448,8 +3448,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 420,
-        "y": 440,
+        "x": 260,
+        "y": 380,
         "wires": [
             [
                 "02eec7feccc1567d",
@@ -3464,7 +3464,7 @@
         "g": "9cf0457b813ca743",
         "name": "assumes ${POWERVIEW_ADDRESS} is defined",
         "info": "",
-        "x": 300,
+        "x": 1080,
         "y": 260,
         "wires": []
     },
@@ -3475,8 +3475,8 @@
         "g": "9823c620ddf3d6e0",
         "name": "assumes ${POWERVIEW_ADDRESS} is defined",
         "info": "",
-        "x": 300,
-        "y": 400,
+        "x": 1080,
+        "y": 380,
         "wires": []
     },
     {
@@ -3484,11 +3484,11 @@
         "type": "websocket in",
         "z": "40413194443e96c6",
         "g": "9cf0457b813ca743",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 220,
-        "y": 300,
+        "x": 100,
+        "y": 260,
         "wires": [
             [
                 "0710d650a741b921"
@@ -3500,11 +3500,11 @@
         "type": "websocket in",
         "z": "40413194443e96c6",
         "g": "9823c620ddf3d6e0",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 220,
-        "y": 440,
+        "x": 100,
+        "y": 380,
         "wires": [
             [
                 "99ab390e30a9d634"
@@ -3516,10 +3516,10 @@
         "type": "websocket out",
         "z": "40413194443e96c6",
         "g": "cb106476337f4d38",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 880,
+        "x": 760,
         "y": 160,
         "wires": []
     },
@@ -3528,11 +3528,11 @@
         "type": "websocket out",
         "z": "40413194443e96c6",
         "g": "9823c620ddf3d6e0",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1020,
-        "y": 440,
+        "x": 820,
+        "y": 380,
         "wires": []
     },
     {
@@ -3547,8 +3547,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 640,
-        "y": 300,
+        "x": 480,
+        "y": 260,
         "wires": [
             [
                 "2bf099ec37e84bbc"
@@ -3658,7 +3658,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 670,
+        "x": 590,
         "y": 320,
         "wires": [
             [
@@ -3679,7 +3679,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
+        "x": 740,
         "y": 320,
         "wires": [
             [
@@ -3694,7 +3694,7 @@
         "g": "23bf1f9635c44cc8",
         "name": "https://developers.meethue.com/develop/hue-api-v2/getting-started/",
         "info": "",
-        "x": 360,
+        "x": 700,
         "y": 280,
         "wires": []
     },
@@ -3722,7 +3722,7 @@
             }
         ],
         "x": 130,
-        "y": 460,
+        "y": 420,
         "wires": []
     },
     {
@@ -3732,7 +3732,7 @@
         "g": "0fd970345919b420",
         "name": "https://developers.meethue.com/develop/application-design-guidance/hue-bridge-discovery/",
         "info": "",
-        "x": 350,
+        "x": 910,
         "y": 60,
         "wires": []
     },
@@ -3743,7 +3743,7 @@
         "g": "f1e1b4bb5ddac24f",
         "name": "assumes ${GROUND_FLOOR_HUE_ADDRESS} and ${GROUND_FLOOR_HUE_KEY} are defined",
         "info": "",
-        "x": 380,
+        "x": 600,
         "y": 420,
         "wires": []
     },
@@ -3869,7 +3869,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 350,
+        "x": 270,
         "y": 320,
         "wires": [
             [
@@ -3882,10 +3882,10 @@
         "type": "websocket in",
         "z": "d3b34304591c64d7",
         "g": "0fd970345919b420",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 440,
+        "x": 480,
         "y": 180,
         "wires": [
             [
@@ -3898,10 +3898,10 @@
         "type": "websocket in",
         "z": "d3b34304591c64d7",
         "g": "23bf1f9635c44cc8",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 140,
+        "x": 100,
         "y": 320,
         "wires": [
             [
@@ -3914,10 +3914,10 @@
         "type": "websocket out",
         "z": "d3b34304591c64d7",
         "g": "0fd970345919b420",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1120,
+        "x": 1080,
         "y": 140,
         "wires": []
     },
@@ -3926,10 +3926,10 @@
         "type": "websocket out",
         "z": "d3b34304591c64d7",
         "g": "23bf1f9635c44cc8",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1000,
+        "x": 880,
         "y": 320,
         "wires": []
     },
@@ -3957,7 +3957,7 @@
             }
         ],
         "x": 120,
-        "y": 600,
+        "y": 520,
         "wires": []
     },
     {
@@ -3967,8 +3967,8 @@
         "g": "b3c2354a4072ebba",
         "name": "assumes ${BASEMENT_HUE_ADDRESS} and ${BASEMENT_HUE_KEY} are defined",
         "info": "",
-        "x": 340,
-        "y": 560,
+        "x": 640,
+        "y": 520,
         "wires": []
     },
     {
@@ -3983,7 +3983,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 520,
+        "x": 440,
         "y": 320,
         "wires": [
             [
