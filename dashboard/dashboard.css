@@ -31,124 +31,154 @@ a:visited {
 
 }
 
+/*
+insert space before any paragraph
+that appears within a fieldset
+*/
 fieldset p {
 
     margin-top: 1em;
     margin-bottom: 0;
 }
 
-.centered {
+/*
+insert space around commonly
+used controls that are often
+intermixed with text and
+one another
+*/
+button,
+input,
+select,
+#hue-bridges>* {
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin: 0.25em;
 
 }
 
-.wrapped {
+/*
+define a container whose child
+elements flow horizontally
+across the page rather than
+from top to bottom
+ */
+.horizontal-panel {
 
     display: flex;
     flex-flow: row wrap;
 
 }
 
-.wrapped>* {
+/*
+make each direct child of a
+horizontal panel consume
+the same amount of
+horizontal space by default
+*/
+.horizontal-panel>* {
 
     flex: 1;
 
 }
 
-.not-wrapped {
-
-    display: flex;
-    flex-flow: row nowrap;
-
-}
-
-.column {
-
-    display: flex;
-    flex-flow: column nowrap;
-
-}
-
-.padded {
-
-    margin: 0.25em;
-    padding: 0.25em;
-
-}
-
-input,
-button,
-select,
-table,
-th,
-td {
-
-    margin: 0.25em;
-
-}
-
-#manage-container>* {
+/*
+override the flex: setting
+for elements marked as being
+dynamically generated controls
+*/
+.control,
+#hue-bridges-fieldset {
 
     flex: unset;
 
 }
 
+/*
+styling for websocket in
+the 'connecting' state
+*/
 .ws-connecting {
 
     color: black;
     background-color: yellow;
+    padding: 0.25em;
 
 }
 
+/*
+styling for websocket in
+the 'connected' state
+*/
 .ws-connected {
 
     color: white;
     background-color: green;
+    padding: 0.25em;
 
 }
 
+/*
+styling for websocket in
+the 'disconnecting' or
+'disconnected' states
+*/
 .ws-disconnecting,
 .ws-disconnected {
 
     color: white;
     background-color: red;
+    padding: 0.25em;
 
 }
 
-.hue-status {
-
-    display: inline-block;
-    text-align: center;
-
-}
-
+/*
+styling for eventsource in
+the 'unitialized' state
+*/
 .hue-uninitialized {
 
+    display: inline-block;
     color: white;
     background-color: gray;
+    padding: 0.25em;
 
 }
 
+/*
+styling for eventsource in
+the 'connecting' state
+*/
 .hue-connecting {
 
+    display: inline-block;
     color: black;
     background-color: yellow;
+    padding: 0.25em;
 
 }
 
+/*
+styling for eventsource in
+the 'connected' state
+*/
 .hue-connected {
 
+    display: inline-block;
     color: white;
     background-color: green;
+    padding: 0.25em;
 
 }
 
+/*
+styling for eventsource in
+the 'disconnected' state
+*/
 .hue-disconnected {
 
+    display: inline-block;
     color: white;
     background-color: red;
+    padding: 0.25em;
 
 }
