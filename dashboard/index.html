@@ -1,240 +1,46 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
 
-    <title>Home Automation Dashboard</title>
+    <meta charset="UTF-8" />
 
-    <link href="dashboard.css" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico" />
 
-    <script src="dashboard.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Dashboard</title>
+
+    <style>
+        .wrapped {
+            display: flex;
+            flex-flow: row wrap;
+        }
+
+        .wrapped>* {
+            flex: 1;
+            margin: 0 0.5em 0 0.5em;
+        }
+
+        fieldset>* {
+            margin: 0.25em;
+            padding: 0.25em;
+        }
+
+        fieldset>p {
+            margin: 1em 0 0 0.25em;
+            padding: 1em 0 0 0.25em;
+        }
+    </style>
 
 </head>
 
 <body>
 
-    <header>
+    <div id="app"></div>
 
-        <h1>Home Automation Dashboard</h1>
-
-        <div class="horizontal-panel">
-
-            <p>
-                Home automation dashboard and device controls implemented as a single-page web application, using
-                <a href="https://nodered.org" target="_blank">Node-RED</a> for its back end
-            </p>
-
-            <ul>
-                <li>
-                    <a id="editor-link" target="_blank">
-                        Editor
-                    </a>
-                </li>
-                <li>
-                    <a href="https://github.com/parasaurolophus/home-automation/" target="_blank">
-                        GitHub
-                    </a>
-                </li>
-                <li>
-                    <a href="https://nodered.org/" target="_blank">
-                        Node-RED
-                    </a>
-                </li>
-                <li>
-                    <a href="https://flows.nodered.org/node/node-red-node-discovery/" target="_blank">
-                        node-red-node-discovery
-                    </a>
-                </li>
-                <li>
-                    <a href="https://flows.nodered.org/node/@parasaurolophus/node-red-eventsource/" target="_blank">
-                        @parasaurolophus/node-red-eventsource
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.npmjs.com/package/suncalc/" target="_blank">
-                        suncalc
-                    </a>
-                </li>
-            </ul>
-
-            <ul>
-                <li>
-                    <a href="https://developers.meethue.com/develop/hue-api-v2/" target="_blank">
-                        Hue Bridge API V2
-                    </a>
-                </li>
-                <li>
-                    <a href="https://developers.meethue.com/develop/hue-api-v2/core-concepts/#events" target="_blank">
-                        Hue Bridge Server-Sent Events
-                    </a>
-                </li>
-                <li>
-                    <a href="https://developers.meethue.com/develop/application-design-guidance/hue-bridge-discovery/"
-                        target="_blank">
-                        Hue Bridge Discovery
-                    </a>
-                </li>
-            </ul>
-
-            <ul>
-                <li>
-                    <a href="https://motorisation.hde.nl/hd/powerview/general-guides/API/" target="_blank">
-                        PowerView API
-                    </a>
-                </li>
-            </ul>
-
-        </div>
-
-    </header>
-
-    <hr>
-
-    <div id="controls-container" class="horizontal-panel">
-
-        <section>
-
-            <h2>Dashboard</h2>
-
-            <fieldset id="settings" disabled="true">
-
-                <legend>Settings</legend>
-
-                <div>
-
-                    <p>
-                        Enable automation:
-                    </p>
-
-                    <div>
-                        <label>
-                            <input type="checkbox" id="settings-shades" onchange="settingsCheckboxChanged(event)">
-                            Window shades
-                        </label>
-                    </div>
-
-                    <div>
-                        <label>
-                            <input type="checkbox" id="settings-lighting" onchange="settingsCheckboxChanged(event)">
-                            Lighting
-                        </label>
-                    </div>
-
-                </div>
-
-                <div>
-
-                    <p>
-                        Bedtime will be at the time selected here plus or minus a randomly chosen offset of up to 30
-                        minutes that changes each day:
-                    </p>
-
-                    <select id="settings-bedtime" onchange="bedtimeChanged(event)">
-                        <option id="9PM" value="21"> 9PM</option>
-                        <option id="10PM" value="22">10PM</option>
-                        <option id="11PM" value="23">11PM</option>
-                    </select>
-
-                </div>
-
-                <div>
-
-                    <p>
-                        Instruct the back end to recreate all dynamically generated controls:
-                    </p>
-
-                    <button id="controls-refresh" onclick="refreshControlsClicked(event)">
-                        Refresh Controls
-                    </button>
-
-                </div>
-
-            </fieldset>
-
-            <fieldset>
-
-                <legend>Message Broker</legend>
-
-                <p>
-                    Monitor and control the connection to the back end:
-                </p>
-
-                <div>
-
-                    <label for="ws-url">URL</label>
-                    <input id="ws-url">
-                </div>
-
-                <div>
-
-                    <button id="reconnect-ws" onclick="connectWS(event)">
-                        Connect
-                    </button>
-
-                    <span id="ws-status"></span>
-
-                    <button id="reconnect-ws" onclick="disconnectWS(event)">
-                        Disconnect
-                    </button>
-
-                </div>
-
-            </fieldset>
-
-            <fieldset>
-
-                <legend>Status</legend>
-
-                <p>
-                    Sunrise:
-                    <span id="daily-sunrise"></span>
-                </p>
-
-                <p>
-                    Sunset:
-                    <span id="daily-sunset"></span>
-                </p>
-
-                <p>
-                    Bedtime:
-                    <span id="daily-bedtime"></span>
-                </p>
-
-                <p>
-                    Theme:
-                    <span id="daily-theme"></span>
-                </p>
-
-                <p>
-                    Time:
-                    <span id="timer-time"></span>
-                </p>
-
-                <p id="automation-trigger"></p>
-
-            </fieldset>
-
-        </section>
-
-    </div>
-
-    <section>
-
-        <h2>Manage</h2>
-
-        <div id="manage-container" class="horizontal-panel">
-
-            <fieldset id="hue-bridges-fieldset" disabled="true">
-
-                <legend>Hue Bridges</legend>
-
-                <div id="hue-bridges" class="horizontal-panel">
-                    <p>none</p>
-                </div>
-
-            </fieldset>
-
-        </div>
-
-    </section>
+    <script type="module" src="/src/main.js"></script>
 
 </body>
+
+</html>

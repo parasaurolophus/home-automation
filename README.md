@@ -16,6 +16,50 @@ date. They also drive window shade automation based on the sun's
 position over the course of a day based on the geographic location
 of the home and the day of the year.
 
+## Installation
+
+0. (Optional) Install your desired version of _Node_, e.g. using the
+   [nodesource](https://nodesource.com/) repository for your host platform
+   (make sure to choose a version that is compatible with Node-RED 3.x)
+
+1. Install Node-RED 3.0 or later as per <https://nodered.org/docs/getting-started/>
+   (if you skipped step 0 then the standard install script for Debian based
+   hosts will attempt to install or upgrade _Node_ if no compatible version is
+   found but then you may be left with a version of _Node_ that is behind the
+   current LTS)
+
+2. Enable "projects" in Node-RED's _settings.js_
+
+3. Install the dependencies described below (_node-red-node-discovery_, which has its own
+   dependencies, and _@parasaurolophus/node-red-eventsource_)
+
+4. Add the environment variables described below to _~/.node-red/<user>/environment_
+
+5. Restart the Node-RED process
+
+6. Create a fork of <https://github.com/parasaurolophus/home-automation> so that you
+   easily customize your configuration and used Git to safely manage it
+
+7. Use Node-RED's "open project" feature to clone your forked repository into
+   your local project folder
+
+8. Edit the value for `httpStatic` in _~/.node-red/<user>/settings.js_ so that the
+   _/dashboard/_ URI points to the _.../dashboard/dist_ subdirectory under your
+   cloned project's directory within _~/.node-red/<user>/projects/_
+
+9. In a terminal, `cd ~/node-red/<user>/projects/home-automation/dashboard` and
+   then `npm run build` to create the _dashboard/dist_ directory
+
+10. Re-start Node-RED again
+
+If all goes well, opening the Node-RED editor will allow you to examine and
+modify these flows. Browsing to your Node-RED instance's URL with .../dashboard_
+added to the end of the URL will open the _Vuetify_ based dashboard. Note
+that you will have to edit the contents of _Automation_ and _Hue_ flows to match
+your hardware setup and scene configuration in order for the Hue controls to
+be generated on the dashboard and the time and date based lighting automations
+to have the intended effect.
+
 ## Dependencies
 
 The following node packages must be installed before loading these
@@ -58,7 +102,7 @@ flows from GitHub:
 ```
 httpStatic: [
 //    {path: '/home/nol/pics/',    root: "/img/"}, 
-    {path: '/home/<user>/.node-red/projects/automation/dashboard/', root: "/dashboard/"}, 
+    {path: '/home/<user>/.node-red/projects/automation/dashboard/dist/', root: "/dashboard/"}, 
 ],
 ```
 
@@ -145,13 +189,28 @@ more interested in extending their surveillance and control over their
 
 ## User interface
 
-These Node-RED flows do not directly implement any user interface within.
+> **Warning!** There is a build step required after cloning the
+> repository for these flows in order for the dashboard to be
+> available at `https://<nodered-host>:1880/dashboard`
+
+```
+cd ~/.node-red/projects/home-automation/dashboard
+npm run build
+```
+
+> This invokes the Vue / Vuetify tooling to create the contents
+> of the _dist_ directory referenced by the `httpStatic` setting
+> described above.
+
+These Node-RED flows do not directly implement any user interface.
 Instead, they asynchronously send event messages and receive
 command messages using WebSocket nodes configured to "listen to" the
 URI `/broker`. In addition to and separate from _flows.json_, the GitHub
-repository for these flows includes a file, _dashboard/index.html_,
+repository for these flows includes a subdirectory, _dashboard_,
 which implements a "single page web application" that connects to
-the `/broker` WebSocket listener in Node-RED using embedded JavaScript.
+the `/broker` WebSocket listener in Node-RED using
+[Vuetify 3](https://next.vuetifyjs.com/).
+
 This allows for a complete separation between the _view_ implemented in
 _index.html_, the _model_ transmitted as message payloads using WebSockets
 and Node-RED as the _controller_ in the so-called MVC (Model, View,
@@ -189,7 +248,7 @@ intermittent and ephemeral. That is why these flows are designed
 to rely on as few add-on components as possible. They use core nodes
 such as `http request` to access the various device API's directly
 rather than using node packages that wrap them because this
-reduces exposure to defects and deficiencies in the third-party
+reduces exposure to defects and deficiencies in third-party
 components. The one critical bit of functionality that is implemented
 as a community supplied node package was created by the same author
 for the specific needs of accessing the Philips Hue Bridge API from
@@ -199,14 +258,20 @@ to himself, while having no illusions nor unreasonable expectations
 regarding the priority such issues would be given by someone else
 who created some similar package for their own purposes.
 
-The implementation in _dashboard/index.html_ follows similar
-principles, for similar reasons. It relies only on features of HTML,
-CSS and JavaScript built into modern web browsers while eschewing
-any "web component" toolkits like Vue, Angular etc. While such
-platforms can provide a good deal of benefit to large scale web
-applications, they are simply overkill for an application as simple
-as this one. The unfortunate condition of _node-red-dashboard_
-(whose own authors refer to as being "on life support" in its
-_README_ at the time of this writing due to deep dependencies on
-an outdated version of AngularJS) is a perfect example of why this
-author has taken this approach throughout these flows.
+Note that once built, the _dist_ directory contains only HTML,
+JavaScript, CSS and similar standard web content files. It does not
+require any special code on the web server. It uses only the native
+WebSocket support built into modern web browsers to communicate
+with the Node-RED back end and all dynamic rendering is done on
+the client side using JavaScript and the DOM API also built into
+web browsers. In fact, there is no need to host the web content
+in _dist_ from the Node-RED web server except as a convenience
+when deducing the WebSocket server URL.
+
+> To emphasize this point, an early version of this repository
+> had a version of the dashboard implemented without the use of
+> any client-side tooling but, rather, hand-crafted HTML,
+> CSS and JavaScript. Frameworks like _Vue / Vuetify_ provide
+> only "nice to have" features that enhance maintainability and
+> readability of the HTML, not essential features required for
+> the core functionality.
