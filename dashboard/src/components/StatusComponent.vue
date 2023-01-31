@@ -6,10 +6,9 @@
 
         <fieldset>
 
-            <legend>Connection</legend>
+            <legend>Back End</legend>
 
-            <v-text-field :class="wsStatusClass(websocketStatus)" readonly label="Connection"
-                :model-value="wsStatusText(websocketStatus)"></v-text-field>
+            <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
 
             <v-btn @click="refreshControls">Refresh Controls</v-btn>
 
@@ -21,22 +20,36 @@
 
             <div class="wrapped">
 
-                <dl v-for="bridge in hueBridges" :key="bridge.id">
-                    <dt>address</dt>
-                    <dd>{{ bridge.address }}</dd>
-                    <dt>port</dt>
-                    <dd>{{ bridge.port }}</dd>
-                    <dt>id</dt>
-                    <dd>{{ bridge.id }}</dd>
-                    <dt>model</dt>
-                    <dd>{{ bridge.model }}</dd>
-                    <dt>name</dt>
-                    <dd>{{ bridge.name }}</dd>
-                    <dt>host</dt>
-                    <dd>{{ bridge.host }}</dd>
-                    <dt>status</dt>
-                    <dd :class="esStatusClass(bridge.status)">{{ esStatusText(bridge.status) }}</dd>
-                </dl>
+                <v-table v-for="bridge in hueBridges" :key="bridge.id">
+                    <tr>
+                        <th>address</th>
+                        <td>{{ bridge.address }}</td>
+                    </tr>
+                    <tr>
+                        <th>port</th>
+                        <td>{{ bridge.port }}</td>
+                    </tr>
+                    <tr>
+                        <th>id</th>
+                        <td>{{ bridge.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>model</th>
+                        <td>{{ bridge.model }}</td>
+                    </tr>
+                    <tr>
+                        <th>name</th>
+                        <td>{{ bridge.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>host</th>
+                        <td>{{ bridge.host }}</td>
+                    </tr>
+                    <tr>
+                        <th>status</th>
+                        <td :class="esStatusClass(bridge.status)">{{ esStatusText(bridge.status) }}</td>
+                    </tr>
+                </v-table>
 
             </div>
 
