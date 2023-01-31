@@ -6,7 +6,7 @@
 
             <p class="controls-label">Settings</p>
 
-            <fieldset>
+            <fieldset :disabled="websocketStatus != 1">
 
                 <legend>Automation</legend>
 
@@ -41,7 +41,7 @@
 
             <p class="controls-label">Window Shades</p>
 
-            <fieldset v-for="room in powerviewModel" :key="room.id">
+            <fieldset v-for="room in powerviewModel" :key="room.id" :disabled="websocketStatus != 1">
 
                 <legend>{{ room.name }}</legend>
 
@@ -58,7 +58,7 @@
 
             <p class="controls-label">{{ bridge.title }}</p>
 
-            <fieldset v-for="group in bridge.groups" :key="group.grouped_light.id">
+            <fieldset v-for="group in bridge.groups" :key="group.grouped_light.id" :disabled="websocketStatus != 1">
 
                 <legend>{{ group.name }}</legend>
 
@@ -98,6 +98,7 @@
 
 import { inject, watch } from 'vue'
 
+const websocketStatus = inject('websocketStatus')
 const websocketPublish = inject('websocketPublish')
 const settingsLighting = inject('settingsLighting')
 const settingsShades = inject('settingsShades')

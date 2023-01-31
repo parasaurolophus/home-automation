@@ -12,7 +12,7 @@
 
         </fieldset>
 
-        <fieldset>
+        <fieldset :disabled="websocketStatus != 1">
 
             <legend>Hue Bridges</legend>
 
@@ -96,7 +96,6 @@
 </template>
 
 <style scoped>
-
 th,
 td {
     margin: 1px;
