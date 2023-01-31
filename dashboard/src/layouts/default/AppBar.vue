@@ -1,9 +1,7 @@
 <template>
     <v-app-bar class="split" flat>
-            <v-app-bar-title>
-                Dashboard
-            </v-app-bar-title>
-            <v-btn @click="toggleTheme">{{ theme.global.current.value.dark ? 'light' : 'dark' }}</v-btn>
+        <v-app-bar-title>Dashboard </v-app-bar-title>
+        <v-btn @click="toggleTheme">{{ theme.global.current.value.dark ? 'light' : 'dark' }}</v-btn>
     </v-app-bar>
 </template>
 

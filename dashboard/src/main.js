@@ -35,7 +35,12 @@ const settingsLighting = ref(false)
 const settingsShades = ref(false)
 const websocketStatus = ref(-1)
 const automationTrigger = ref(null)
-const alertText = ref('')
+const dailySunrise = ref(null)
+const dailySunset = ref(null)
+const dailyBedtime = ref(null)
+const dailyTheme = ref(null)
+const timerTime = ref(null)
+const alertText = ref(null)
 const hueKeys = ref({})
 const hueBridges = ref({})
 const hueModels = ref([])
@@ -50,6 +55,11 @@ app.provide('powerviewModel', powerviewModel)
 app.provide('hueModels', hueModels)
 app.provide('hueBridges', hueBridges)
 app.provide('automationTrigger', automationTrigger)
+app.provide('dailySunrise', dailySunrise)
+app.provide('dailySunset', dailySunset)
+app.provide('dailyBedtime', dailyBedtime)
+app.provide('dailyTheme', dailyTheme)
+app.provide('timerTime', timerTime)
 
 // TODO: nothing currently injects these:
 app.provide('alertText', alertText)
@@ -167,6 +177,41 @@ function connectWS() {
 
         const msg = JSON.parse(event.data)
 
+        if (msg.topic == 'daily/sunrise') {
+
+            dailySunrise.value = msg.payload
+            return
+
+        }
+
+        if (msg.topic == 'daily/sunset') {
+
+            dailySunset.value = msg.payload
+            return
+
+        }
+
+        if (msg.topic == 'daily/bedtime') {
+
+            dailyBedtime.value = msg.payload
+            return
+
+        }
+
+        if (msg.topic == 'daily/theme') {
+
+            dailyTheme.value = msg.payload
+            return
+
+        }
+
+        if (msg.topic == 'timer/time') {
+
+            timerTime.value = msg.payload
+            return
+
+        }
+
         if (msg.topic == 'automation/trigger') {
 
             automationTrigger.value = msg.payload
@@ -201,13 +246,6 @@ function connectWS() {
             }
 
             console.log('no bedtime option found matching ' + JSON.stringify(msg.payload, undefined, 1))
-            return
-
-        }
-
-        if (msg.topic == 'automation/trigger') {
-
-            automationTrigger.value = msg.payload
             return
 
         }
