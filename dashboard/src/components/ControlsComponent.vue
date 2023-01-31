@@ -12,17 +12,17 @@
 
                 <legend>Automation</legend>
 
-                <v-switch v-model="settingsLighting" inset hide-details>
+                <v-switch v-model="settingsLighting" color='primary' inset hide-details>
                     <template v-slot:label>
                         Lighting automation
-                        {{ settingsLighting ? 'enabled' : 'disabled' }}
+                        {{ settingsLighting? 'enabled': 'disabled' }}
                     </template>
                 </v-switch>
 
-                <v-switch v-model="settingsShades" inset hide-details>
+                <v-switch v-model="settingsShades" color='primary' inset hide-details>
                     <template v-slot:label>
                         Window shades automation
-                        {{ settingsShades ? 'enabled' : 'disabled' }}
+                        {{ settingsShades? 'enabled': 'disabled' }}
                     </template>
                 </v-switch>
 
@@ -66,7 +66,7 @@
 
                 <v-switch v-model="group.grouped_light.on.on"
                     @change="websocketPublish({ payload: { on: { on: group.grouped_light.on.on } }, topic: group.value, method: 'PUT' })"
-                    inset hide-details>
+                    color='primary' inset hide-details>
                     <template v-slot:label>
                         <span v-if="group.grouped_light.on.on">On</span>
                         <span v-else>Off</span>
@@ -85,10 +85,6 @@
     </div>
 
 </template>
-
-<style scoped>
-/* */
-</style>
 
 <script setup>
 

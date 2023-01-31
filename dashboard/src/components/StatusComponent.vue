@@ -12,7 +12,9 @@
 
             <v-btn @click="refreshControls">Refresh Controls</v-btn>
 
-            <pre class="boxed" v-if="automationTrigger">{{ formatAutomationTrigger(automationTrigger) }}</pre>
+            <v-sheet color="tertiary" theme="light">
+                <pre v-if="automationTrigger">{{ formatAutomationTrigger(automationTrigger) }}</pre>
+            </v-sheet>
 
         </fieldset>
 
@@ -48,10 +50,7 @@
 </template>
 
 <style scoped>
-.boxed {
-    border-width: 1px;
-    border-style: solid;
-}
+/* */
 </style>
 
 <script setup>
