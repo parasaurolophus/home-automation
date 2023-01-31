@@ -8,7 +8,8 @@
 
             <legend>Connection</legend>
 
-            <v-text-field readonly label="Connection" v-model="websocketStatus"></v-text-field>
+            <v-text-field :class="wsStatusClass(websocketStatus)" readonly label="Connection"
+                :model-value="wsStatusText(websocketStatus)"></v-text-field>
 
             <v-btn @click="refreshControls">Refresh Controls</v-btn>
 
@@ -34,7 +35,7 @@
                     <dt>host</dt>
                     <dd>{{ bridge.host }}</dd>
                     <dt>status</dt>
-                    <dd>{{ bridge.status }}</dd>
+                    <dd :class="esStatusClass(bridge.status)">{{ esStatusText(bridge.status) }}</dd>
                 </dl>
 
             </div>
@@ -88,6 +89,25 @@ td {
 th {
     text-align: right;
 }
+
+.ws-disconnected,
+.es-disconnected {
+    color: white;
+    background-color: darkred;
+}
+
+.ws-connecting,
+.ws-closing,
+.es-connecting {
+    color: black;
+    background-color: yellow;
+}
+
+.ws-connected,
+.es-connected {
+    color: white;
+    background-color: darkgreen;
+}
 </style>
 
 <script setup>
@@ -121,7 +141,7 @@ function formatAutomationTrigger(automationTrigger) {
     }
 
     trigger.timestamp = new Date(trigger.timestamp).toLocaleString()
-    return JSON.stringify(trigger, undefined, 1)
+    return trigger
 
 }
 
@@ -159,6 +179,72 @@ function showTime() {
 
     return false
 
+}
+
+function esStatusText(status) {
+
+    switch (status) {
+
+        case 0:
+            return 'connecting'
+
+        case 1:
+            return 'connected'
+
+        default:
+            return 'disconnected'
+    }
+}
+
+function esStatusClass(status) {
+
+    switch (status) {
+
+        case 0:
+            return 'es-connecting'
+
+        case 1:
+            return 'es-connected'
+
+        default:
+            return 'es-disconnected'
+    }
+}
+
+function wsStatusText(status) {
+
+    switch (status) {
+
+        case 0:
+            return 'connecting'
+
+        case 1:
+            return 'connected'
+
+        case 2:
+            return 'disconnecting'
+
+        default:
+            return 'disconnected'
+    }
+}
+
+function wsStatusClass(status) {
+
+    switch (status) {
+
+        case 0:
+            return 'ws-connecting'
+
+        case 1:
+            return 'ws-connected'
+
+        case 2:
+            return 'ws-disconnecting'
+
+        default:
+            return 'ws-disconnected'
+    }
 }
 
 </script>
