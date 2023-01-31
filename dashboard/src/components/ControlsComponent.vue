@@ -1,6 +1,6 @@
 <template>
 
-    <div class="wrapped">
+    <div id="controls-container" class="wrapped">
 
         <div>
 
@@ -85,6 +85,10 @@
 </template>
 
 <style scoped>
+#controls-container>* {
+    flex: 1;
+}
+
 .controls-label {
     font-weight: bold;
 }

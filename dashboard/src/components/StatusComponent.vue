@@ -1,6 +1,6 @@
 <template>
 
-    <div id="status-container" class="wrapped">
+    <div class="wrapped">
 
         <fieldset>
 
@@ -96,9 +96,6 @@
 </template>
 
 <style scoped>
-#status-container>* {
-    flex: unset;
-}
 
 th,
 td {
