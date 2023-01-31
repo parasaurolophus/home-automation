@@ -40,7 +40,9 @@ const dailySunset = ref(null)
 const dailyBedtime = ref(null)
 const dailyTheme = ref(null)
 const timerTime = ref(null)
+const alertTitle = ref(null)
 const alertText = ref(null)
+const showAlert = ref(false)
 const hueKeys = ref({})
 const hueBridges = ref({})
 const hueModels = ref([])
@@ -60,9 +62,11 @@ app.provide('dailySunset', dailySunset)
 app.provide('dailyBedtime', dailyBedtime)
 app.provide('dailyTheme', dailyTheme)
 app.provide('timerTime', timerTime)
+app.provide('alertTitle', alertTitle)
+app.provide('alertText', alertText)
+app.provide('showAlert', showAlert)
 
 // TODO: nothing currently injects these:
-app.provide('alertText', alertText)
 app.provide('hueKeys', hueKeys)
 
 //////////////////////////////////////////////////////////////////////////////
@@ -260,7 +264,15 @@ function connectWS() {
         if (/^.+\/error$/.exec(msg.topic)) {
 
             console.log(msg)
-            alertText.value = JSON.stringify(msg.payload, undefined, 1)
+
+            if (msg.payload !== '') {
+
+                alertTitle.value = msg.topic
+                alertText.value = JSON.stringify(msg.payload, undefined, 1)
+                showAlert.value = true
+
+            }
+
             return
 
         }
