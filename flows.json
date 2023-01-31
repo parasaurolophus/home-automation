@@ -543,9 +543,7 @@
             "cbcdf85a73052db5"
         ],
         "x": 14,
-        "y": 19,
-        "w": 1252,
-        "h": 202
+        "y": 19
     },
     {
         "id": "0b0da0b6b3a2a19d",
@@ -572,9 +570,7 @@
             "154766c193057414"
         ],
         "x": 14,
-        "y": 239,
-        "w": 1252,
-        "h": 162
+        "y": 239
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -600,9 +596,7 @@
             "244e029d9a276e82"
         ],
         "x": 14,
-        "y": 439,
-        "w": 832,
-        "h": 322
+        "y": 439
     },
     {
         "id": "8326ae1a15518f8f",
@@ -627,9 +621,7 @@
             "839872dec0a80cfa"
         ],
         "x": 14,
-        "y": 219,
-        "w": 1012,
-        "h": 202
+        "y": 219
     },
     {
         "id": "9f074aa55117ee9d",
@@ -654,9 +646,7 @@
             "85d575b4c5bfe117"
         ],
         "x": 14,
-        "y": 119,
-        "w": 1252,
-        "h": 82
+        "y": 119
     },
     {
         "id": "4893dd6a2321040d",
@@ -702,9 +692,7 @@
             "189c38230a6eb7a0"
         ],
         "x": 14,
-        "y": 19,
-        "w": 712,
-        "h": 82
+        "y": 19
     },
     {
         "id": "d64d4d2689200662",
@@ -854,7 +842,7 @@
         "z": "85ed27d795e6e866",
         "g": "0fb8e43c903b3506",
         "name": "validate",
-        "func": "const message = {\n    payload: RED.util.cloneMessage(msg),\n    topic: 'hue/' + env.get('ADDRESS') + '/error'\n}\n\nif (!Number.isInteger(msg.statusCode)) {\n\n    return message\n\n}\n\n// ignore 207 due to frequent, spurious use by the Philips developers\nif ((msg.statusCode != 200) && (msg.statusCode != 207)) {\n\n    return message\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'data')) {\n\n    return message\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'errors')) {\n\n    return message\n\n}\n\nif ((msg.statusCode != 207) && (msg.payload.errors.length > 0)) {\n\n    return message\n\n}\n\nreturn null",
+        "func": "function cloneMessage() {\n\n    return {\n        payload: RED.util.cloneMessage(msg),\n        topic: 'hue/' + env.get('ADDRESS') + '/error',\n        retain: true\n    }\n}\n\nif (!Number.isInteger(msg.statusCode)) {\n\n    return cloneMessage()\n\n}\n\nif (msg.statusCode != 200) {\n\n    return cloneMessage()\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'data')) {\n\n    return cloneMessage()\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'errors')) {\n\n    return cloneMessage()\n\n}\n\nif (msg.payload.errors.length > 0) {\n\n    return cloneMessage()\n\n}\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3241,7 +3229,7 @@
         "z": "40413194443e96c6",
         "g": "cb106476337f4d38",
         "name": "validate",
-        "func": "const message = {\n    topic: 'powerview/error',\n    payload: RED.util.cloneMessage(msg)\n}\n\nlet fill = 'green'\n\ntry {\n\n    if ((typeof msg.statusCode) != 'number') {\n\n        fill = 'red'\n        return message\n\n    }\n\n    if ((msg.statusCode < 200) || (msg.statusCode >= 300)) {\n\n        fill = 'red'\n        return message\n\n    }\n\n    if (msg.statusCode != 200) {\n\n        fill = 'yellow'\n        return message\n\n    }\n\n    return null\n\n} finally {\n\n    node.status({\n        text: msg.statusCode,\n        shape: 'dot',\n        fill: fill\n    })\n}",
+        "func": "function cloneMessage() {\n\n    return {\n        topic: 'powerview/error',\n        payload: RED.util.cloneMessage(msg),\n        retain: true\n    }\n}\n\nlet fill = 'green'\n\ntry {\n\n    if ((typeof msg.statusCode) != 'number') {\n\n        fill = 'red'\n        return cloneMessage()\n\n    }\n\n    if ((msg.statusCode < 200) || (msg.statusCode >= 300)) {\n\n        fill = 'red'\n        return cloneMessage()\n\n    }\n\n    if (msg.statusCode != 200) {\n\n        fill = 'yellow'\n        return cloneMessage()\n\n    }\n\n    return null\n\n} finally {\n\n    node.status({\n        text: msg.statusCode,\n        shape: 'dot',\n        fill: fill\n    })\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
