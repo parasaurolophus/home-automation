@@ -1,12 +1,10 @@
 <template>
 
-    <h2>Controls</h2>
-
     <div class="wrapped">
 
         <div>
 
-            <h3>Settings</h3>
+            <p class="controls-label">Settings</p>
 
             <fieldset>
 
@@ -41,7 +39,7 @@
 
         <div v-if="powerviewModel.length > 0">
 
-            <h3>Window Shades</h3>
+            <p class="controls-label">Window Shades</p>
 
             <fieldset v-for="room in powerviewModel" :key="room.id">
 
@@ -58,7 +56,7 @@
 
         <div v-for="bridge in hueModels" :key="bridge.title">
 
-            <h3>{{ bridge.title }}</h3>
+            <p class="controls-label">{{ bridge.title }}</p>
 
             <fieldset v-for="group in bridge.groups" :key="group.grouped_light.id">
 
@@ -85,6 +83,12 @@
     </div>
 
 </template>
+
+<style scoped>
+.controls-label {
+    font-weight: bold;
+}
+</style>
 
 <script setup>
 

@@ -65,8 +65,6 @@ app.provide('timerTime', timerTime)
 app.provide('alertTitle', alertTitle)
 app.provide('alertText', alertText)
 app.provide('showAlert', showAlert)
-
-// TODO: nothing currently injects these:
 app.provide('hueKeys', hueKeys)
 
 //////////////////////////////////////////////////////////////////////////////

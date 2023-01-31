@@ -1,8 +1,6 @@
 <template>
 
-    <h2>Status</h2>
-
-    <div class="wrapped">
+    <div id="status-container" class="wrapped">
 
         <fieldset>
 
@@ -44,6 +42,11 @@
                     <tr>
                         <th>host</th>
                         <td>{{ bridge.host }}</td>
+                    </tr>
+                    <tr>
+                        <th>key</th>
+                        <td v-if="hueKeys[bridge.address]">{{ hueKeys[bridge.address] }}</td>
+                        <td v-else><v-btn @click="createHueKey(bridge.address)">create key</v-btn></td>
                     </tr>
                     <tr>
                         <th>status</th>
@@ -93,6 +96,10 @@
 </template>
 
 <style scoped>
+#status-container>* {
+    flex: unset;
+}
+
 th,
 td {
     margin: 1px;
@@ -134,6 +141,7 @@ const dailyTheme = inject('dailyTheme')
 const timerTime = inject('timerTime')
 const websocketStatus = inject('websocketStatus')
 const hueBridges = inject('hueBridges')
+const hueKeys = inject('hueKeys')
 const websocketPublish = inject('websocketPublish')
 const automationTrigger = inject('automationTrigger')
 
@@ -258,6 +266,15 @@ function wsStatusClass(status) {
         default:
             return 'ws-disconnected'
     }
+}
+
+function createHueKey(address) {
+
+    websocketPublish({
+        payload: address,
+        topic: 'put/hue/create-key'
+    })
+
 }
 
 </script>
