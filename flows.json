@@ -323,9 +323,7 @@
             "7756c6eb9522da59"
         ],
         "x": 14,
-        "y": 19,
-        "w": 1232,
-        "h": 202
+        "y": 19
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -349,9 +347,7 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 239,
-        "w": 952,
-        "h": 122
+        "y": 239
     },
     {
         "id": "0fb8e43c903b3506",
@@ -377,9 +373,7 @@
             "93a323937c189b13"
         ],
         "x": 14,
-        "y": 119,
-        "w": 1052,
-        "h": 162
+        "y": 119
     },
     {
         "id": "96971e50c13ead01",
@@ -416,9 +410,7 @@
             "531fbb9eb4631e85"
         ],
         "x": 14,
-        "y": 299,
-        "w": 1252,
-        "h": 302
+        "y": 299
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -437,9 +429,7 @@
             "d046e6267c76dfe1"
         ],
         "x": 14,
-        "y": 379,
-        "w": 952,
-        "h": 82
+        "y": 379
     },
     {
         "id": "9cf0457b813ca743",
@@ -462,8 +452,6 @@
         ],
         "x": 14,
         "y": 219,
-        "w": 1272,
-        "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -487,9 +475,7 @@
             "9154f7fa8b08933f"
         ],
         "x": 14,
-        "y": 79,
-        "w": 832,
-        "h": 122
+        "y": 79
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -514,9 +500,7 @@
             "4e40e2700edff9ec"
         ],
         "x": 14,
-        "y": 319,
-        "w": 1272,
-        "h": 122
+        "y": 319
     },
     {
         "id": "a21835234a7481fe",
@@ -596,7 +580,9 @@
             "244e029d9a276e82"
         ],
         "x": 14,
-        "y": 439
+        "y": 439,
+        "w": 832,
+        "h": 322
     },
     {
         "id": "8326ae1a15518f8f",
@@ -621,7 +607,9 @@
             "839872dec0a80cfa"
         ],
         "x": 14,
-        "y": 219
+        "y": 219,
+        "w": 1012,
+        "h": 202
     },
     {
         "id": "9f074aa55117ee9d",
@@ -646,7 +634,9 @@
             "85d575b4c5bfe117"
         ],
         "x": 14,
-        "y": 119
+        "y": 119,
+        "w": 1252,
+        "h": 82
     },
     {
         "id": "4893dd6a2321040d",
@@ -669,9 +659,7 @@
             "0b223f6872d96c8f"
         ],
         "x": 14,
-        "y": 619,
-        "w": 852,
-        "h": 122
+        "y": 619
     },
     {
         "id": "3a0077281d6eefee",
@@ -692,7 +680,9 @@
             "189c38230a6eb7a0"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 712,
+        "h": 82
     },
     {
         "id": "d64d4d2689200662",
@@ -713,9 +703,7 @@
             "6006768d0e45ea91"
         ],
         "x": 14,
-        "y": 19,
-        "w": 672,
-        "h": 82
+        "y": 19
     },
     {
         "id": "b3c2354a4072ebba",
@@ -734,9 +722,7 @@
             "048ec8eb41be82ae"
         ],
         "x": 14,
-        "y": 479,
-        "w": 952,
-        "h": 82
+        "y": 479
     },
     {
         "id": "431414ce08ebb3c0",
@@ -3084,7 +3070,7 @@
         "z": "bfdb5183ea783e85",
         "g": "9f074aa55117ee9d",
         "name": "trigger automation",
-        "func": "const payload = {}\n\npayload['settings/shades'] = msg.payload['settings/shades']\npayload['settings/lighting'] = msg.payload['settings/lighting']\npayload['daily/theme'] = msg.payload['daily/theme']\npayload['timer/time'] = msg.payload['timer/time']\n\nreturn {\n    payload: payload,\n    topic: 'automation/trigger',\n    retain: false\n}",
+        "func": "const payload = {}\n\npayload['settings/shades'] = msg.payload['settings/shades']\npayload['settings/lighting'] = msg.payload['settings/lighting']\npayload['daily/theme'] = msg.payload['daily/theme']\npayload['timer/time'] = msg.payload['timer/time']\n\nreturn {\n    payload: payload,\n    topic: 'automation/trigger',\n    retain: true\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
