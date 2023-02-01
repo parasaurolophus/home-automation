@@ -6,9 +6,9 @@
 
             <legend>Back End</legend>
 
-            <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
-
             <v-btn @click="refreshControls">Refresh Controls</v-btn>
+
+            <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
 
         </fieldset>
 
@@ -16,56 +16,60 @@
 
             <legend>Hue Bridges</legend>
 
-            <div class="wrapped">
-
-                <v-table v-for="bridge in hueBridges" :key="bridge.id">
-                    <tr>
-                        <th>address</th>
-                        <td>{{ bridge.address }}</td>
-                    </tr>
-                    <tr>
-                        <th>port</th>
-                        <td>{{ bridge.port }}</td>
-                    </tr>
-                    <tr>
-                        <th>id</th>
-                        <td>{{ bridge.id }}</td>
-                    </tr>
-                    <tr>
-                        <th>model</th>
-                        <td>{{ bridge.model }}</td>
-                    </tr>
-                    <tr>
-                        <th>name</th>
-                        <td>{{ bridge.name }}</td>
-                    </tr>
-                    <tr>
-                        <th>host</th>
-                        <td>{{ bridge.host }}</td>
-                    </tr>
-                    <tr>
-                        <th>key</th>
-                        <td v-if="hueKeys[bridge.address]">{{ hueKeys[bridge.address] }}</td>
-                        <td v-else><v-btn @click="createHueKey(bridge.address)">create key</v-btn></td>
-                    </tr>
-                    <tr>
-                        <th>status</th>
-                        <td :class="esStatusClass(bridge.status)">{{ esStatusText(bridge.status) }}</td>
-                    </tr>
-                </v-table>
-
-            </div>
+            <v-table v-for="bridge in hueBridges" :key="bridge.id">
+                <tr>
+                    <th>address</th>
+                    <td>{{ bridge.address }}</td>
+                </tr>
+                <tr>
+                    <th>port</th>
+                    <td>{{ bridge.port }}</td>
+                </tr>
+                <tr>
+                    <th>id</th>
+                    <td>{{ bridge.id }}</td>
+                </tr>
+                <tr>
+                    <th>model</th>
+                    <td>{{ bridge.model }}</td>
+                </tr>
+                <tr>
+                    <th>name</th>
+                    <td>{{ bridge.name }}</td>
+                </tr>
+                <tr>
+                    <th>host</th>
+                    <td>{{ bridge.host }}</td>
+                </tr>
+                <tr>
+                    <th>key</th>
+                    <td v-if="hueKeys[bridge.address]">{{ hueKeys[bridge.address] }}</td>
+                    <td v-else><v-btn @click="createHueKey(bridge.address)">create key</v-btn></td>
+                </tr>
+                <tr>
+                    <th>status</th>
+                    <td :class="esStatusClass(bridge.status)">{{ esStatusText(bridge.status) }}</td>
+                </tr>
+            </v-table>
 
         </fieldset>
 
-        <fieldset v-if="showTime">
+        <fieldset>
 
             <legend>Timer</legend>
 
             <v-table>
+                <tr v-if="time !== null">
+                    <th>Now</th>
+                    <td>{{ time }}</td>
+                </tr>
                 <tr v-if="dailySunrise !== null">
                     <th>Sunrise</th>
                     <td>{{ new Date(dailySunrise).toLocaleString() }}</td>
+                </tr>
+                <tr v-if="noon !== null">
+                    <th>Noon</th>
+                    <td>{{ noon }}</td>
                 </tr>
                 <tr v-if="dailySunset !== null">
                     <th>Sunset</th>
@@ -82,6 +86,14 @@
                 <tr v-if="timerTime !== null">
                     <th>Time</th>
                     <td>{{ timerTime }}</td>
+                </tr>
+                <tr v-if="altitude !== null">
+                    <th>Altitude</th>
+                    <td>{{ altitude }}</td>
+                </tr>
+                <tr v-if="azimuth !== null">
+                    <th>Azimuth</th>
+                    <td>{{ azimuth }}</td>
                 </tr>
             </v-table>
 
@@ -128,7 +140,11 @@ th {
 
 <script setup>
 
-import { inject } from 'vue'
+import { ref, inject } from 'vue'
+import suncalc from 'suncalc'
+
+const LATITUDE = 43.019670
+const LONGITUDE = -89.303820
 
 const dailySunrise = inject('dailySunrise')
 const dailySunset = inject('dailySunset')
@@ -140,6 +156,33 @@ const hueBridges = inject('hueBridges')
 const hueKeys = inject('hueKeys')
 const websocketPublish = inject('websocketPublish')
 const automationTrigger = inject('automationTrigger')
+
+const time = ref(null)
+const noon = ref(null)
+const altitude = ref(null)
+const azimuth = ref(null)
+
+function updateTimes() {
+
+    const now = new Date()
+
+    const oneAM = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(), 1)
+
+    const times = suncalc.getTimes(oneAM, LATITUDE, LONGITUDE)
+    const position = suncalc.getPosition(now, LATITUDE, LONGITUDE)
+
+    time.value = now.toLocaleString()
+    noon.value = times.solarNoon.toLocaleString()
+    altitude.value = position.altitude
+    azimuth.value = position.azimuth
+
+}
+
+setInterval(updateTimes, 60000)
+updateTimes()
 
 function refreshControls() {
 
@@ -159,42 +202,6 @@ function formatAutomationTrigger(automationTrigger) {
 
     trigger.timestamp = new Date(trigger.timestamp).toLocaleString()
     return trigger
-
-}
-
-function showTime() {
-
-    if (dailySunrise !== null) {
-
-        return true
-
-    }
-
-    if (dailySunset !== null) {
-
-        return true
-
-    }
-
-    if (dailyBedtime !== null) {
-
-        return true
-
-    }
-
-    if (dailyTheme !== null) {
-
-        return true
-
-    }
-
-    if (timerTime !== null) {
-
-        return true
-
-    }
-
-    return false
 
 }
 
