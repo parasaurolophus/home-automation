@@ -836,7 +836,7 @@
         "z": "85ed27d795e6e866",
         "g": "0fb8e43c903b3506",
         "name": "validate",
-        "func": "function cloneMessage() {\n\n    return {\n        payload: RED.util.cloneMessage(msg),\n        topic: 'hue/' + env.get('ADDRESS') + '/error',\n        retain: true\n    }\n}\n\nif (!Number.isInteger(msg.statusCode)) {\n\n    return cloneMessage()\n\n}\n\nif (!(msg.statusCode == 200) || (msg.statusCode == 207)) {\n\n    return cloneMessage()\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'data')) {\n\n    return cloneMessage()\n\n}\n\nif (msg.payload.errors.length == 0) {\n\n    return cloneMessage()\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'errors')) {\n\n    return cloneMessage()\n\n}\n\nfor (let error of msg.payload.errors) {\n\n    node.warn(error)\n\n}\n\nreturn null",
+        "func": "function cloneMessage(topic) {\n\n    return {\n        payload: RED.util.cloneMessage(msg),\n        topic: 'hue/' + env.get('ADDRESS') + '/' + topic,\n        retain: true\n    }\n}\n\nif (!Number.isInteger(msg.statusCode)) {\n\n    return cloneMessage('error')\n\n}\n\nif ((msg.statusCode != 200) && (msg.statusCode != 207)) {\n\n    return cloneMessage('error')\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'data')) {\n\n    return cloneMessage('error')\n\n}\n\nif (msg.payload.data.length == 0) {\n\n    return cloneMessage('error')\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'errors')) {\n\n    return cloneMessage('error')\n\n}\n\nfor (let error of msg.payload.errors) {\n\n    node.warn(error)\n\n}\n\nif (msg.payload.errors.length != 0) {\n\n    return cloneMessage('warning')\n\n}\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
