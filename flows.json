@@ -323,7 +323,9 @@
             "7756c6eb9522da59"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 1232,
+        "h": 202
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -347,7 +349,9 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 239
+        "y": 239,
+        "w": 952,
+        "h": 122
     },
     {
         "id": "0fb8e43c903b3506",
@@ -373,7 +377,9 @@
             "93a323937c189b13"
         ],
         "x": 14,
-        "y": 119
+        "y": 119,
+        "w": 1052,
+        "h": 162
     },
     {
         "id": "96971e50c13ead01",
@@ -410,7 +416,9 @@
             "531fbb9eb4631e85"
         ],
         "x": 14,
-        "y": 299
+        "y": 299,
+        "w": 1252,
+        "h": 302
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -429,7 +437,9 @@
             "d046e6267c76dfe1"
         ],
         "x": 14,
-        "y": 379
+        "y": 379,
+        "w": 952,
+        "h": 82
     },
     {
         "id": "9cf0457b813ca743",
@@ -580,9 +590,7 @@
             "244e029d9a276e82"
         ],
         "x": 14,
-        "y": 439,
-        "w": 832,
-        "h": 322
+        "y": 439
     },
     {
         "id": "8326ae1a15518f8f",
@@ -607,9 +615,7 @@
             "839872dec0a80cfa"
         ],
         "x": 14,
-        "y": 219,
-        "w": 1012,
-        "h": 202
+        "y": 219
     },
     {
         "id": "9f074aa55117ee9d",
@@ -634,9 +640,7 @@
             "85d575b4c5bfe117"
         ],
         "x": 14,
-        "y": 119,
-        "w": 1252,
-        "h": 82
+        "y": 119
     },
     {
         "id": "4893dd6a2321040d",
@@ -659,7 +663,9 @@
             "0b223f6872d96c8f"
         ],
         "x": 14,
-        "y": 619
+        "y": 619,
+        "w": 852,
+        "h": 122
     },
     {
         "id": "3a0077281d6eefee",
@@ -680,9 +686,7 @@
             "189c38230a6eb7a0"
         ],
         "x": 14,
-        "y": 19,
-        "w": 712,
-        "h": 82
+        "y": 19
     },
     {
         "id": "d64d4d2689200662",
@@ -703,7 +707,9 @@
             "6006768d0e45ea91"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 672,
+        "h": 82
     },
     {
         "id": "b3c2354a4072ebba",
@@ -722,7 +728,9 @@
             "048ec8eb41be82ae"
         ],
         "x": 14,
-        "y": 479
+        "y": 479,
+        "w": 952,
+        "h": 82
     },
     {
         "id": "431414ce08ebb3c0",
@@ -828,7 +836,7 @@
         "z": "85ed27d795e6e866",
         "g": "0fb8e43c903b3506",
         "name": "validate",
-        "func": "function cloneMessage() {\n\n    return {\n        payload: RED.util.cloneMessage(msg),\n        topic: 'hue/' + env.get('ADDRESS') + '/error',\n        retain: true\n    }\n}\n\nif (!Number.isInteger(msg.statusCode)) {\n\n    return cloneMessage()\n\n}\n\nif (msg.statusCode != 200) {\n\n    return cloneMessage()\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'data')) {\n\n    return cloneMessage()\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'errors')) {\n\n    return cloneMessage()\n\n}\n\nif (msg.payload.errors.length > 0) {\n\n    return cloneMessage()\n\n}\n\nreturn null",
+        "func": "function cloneMessage() {\n\n    return {\n        payload: RED.util.cloneMessage(msg),\n        topic: 'hue/' + env.get('ADDRESS') + '/error',\n        retain: true\n    }\n}\n\nif (!Number.isInteger(msg.statusCode)) {\n\n    return cloneMessage()\n\n}\n\nif (!(msg.statusCode == 200) || (msg.statusCode == 207)) {\n\n    return cloneMessage()\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'data')) {\n\n    return cloneMessage()\n\n}\n\nif (msg.payload.errors.length == 0) {\n\n    return cloneMessage()\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'errors')) {\n\n    return cloneMessage()\n\n}\n\nfor (let error of msg.payload.errors) {\n\n    node.warn(error)\n\n}\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
