@@ -10,6 +10,10 @@
 
             <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
 
+            <v-btn @click="sendError">Send Error</v-btn>
+
+            <v-btn @click="sendWarning">Send Warning</v-btn>
+
         </fieldset>
 
         <fieldset :disabled="websocketStatus != 1">
@@ -276,6 +280,26 @@ function createHueKey(address) {
     websocketPublish({
         payload: address,
         topic: 'put/hue/create-key'
+    })
+
+}
+
+function sendError() {
+
+    websocketPublish({
+        payload: new Date().toLocaleString(),
+        topic: 'test/error',
+        retain: true
+    })
+
+}
+
+function sendWarning() {
+
+    websocketPublish({
+        payload: new Date().toLocaleString(),
+        topic: 'test/warning',
+        retain: true
     })
 
 }

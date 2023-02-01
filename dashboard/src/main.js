@@ -40,9 +40,12 @@ const dailySunset = ref(null)
 const dailyBedtime = ref(null)
 const dailyTheme = ref(null)
 const timerTime = ref(null)
-const alertTitle = ref(null)
-const alertText = ref(null)
-const showAlert = ref(false)
+const errorTitle = ref(null)
+const errorText = ref(null)
+const showError = ref(false)
+const warningTitle = ref(null)
+const warningText = ref(null)
+const showWarning = ref(false)
 const hueKeys = ref({})
 const hueBridges = ref({})
 const hueModels = ref([])
@@ -62,9 +65,12 @@ app.provide('dailySunset', dailySunset)
 app.provide('dailyBedtime', dailyBedtime)
 app.provide('dailyTheme', dailyTheme)
 app.provide('timerTime', timerTime)
-app.provide('alertTitle', alertTitle)
-app.provide('alertText', alertText)
-app.provide('showAlert', showAlert)
+app.provide('errorTitle', errorTitle)
+app.provide('errorText', errorText)
+app.provide('warningTitle', warningTitle)
+app.provide('warningText', warningText)
+app.provide('showError', showError)
+app.provide('showWarning', showWarning)
 app.provide('hueKeys', hueKeys)
 
 //////////////////////////////////////////////////////////////////////////////
@@ -265,9 +271,25 @@ function connectWS() {
 
             if (msg.payload !== '') {
 
-                alertTitle.value = msg.topic
-                alertText.value = JSON.stringify(msg.payload, undefined, 1)
-                showAlert.value = true
+                errorTitle.value = msg.topic
+                errorText.value = JSON.stringify(msg.payload, undefined, 1)
+                showError.value = true
+
+            }
+
+            return
+
+        }
+
+        if (/^.+\/warning$/.exec(msg.topic)) {
+
+            console.log(msg)
+
+            if (msg.payload !== '') {
+
+                warningTitle.value = msg.topic
+                warningText.value = JSON.stringify(msg.payload, undefined, 1)
+                showWarning.value = true
 
             }
 
