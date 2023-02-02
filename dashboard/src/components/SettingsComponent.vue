@@ -1,6 +1,6 @@
 <template>
 
-    <div class="wrapped-item">
+    <div>
 
         <p class="controls-label">Settings</p>
 
@@ -38,25 +38,7 @@
 </template>
 
 <style scoped>
-.wrapped-item {
-    margin: 0.25em;
-    padding: 0.25em;
-    flex: 1;
-}
-
-fieldset>* {
-    margin: 0.25em;
-    padding: 0.25em;
-}
-
-fieldset>p {
-    margin: 1em 0.25em 0.25em 0.25em;
-    padding: 1em 0.25em 0.25em 0.25em;
-}
-
-.controls-label {
-    font-weight: bold;
-}
+/*  */
 </style>
 
 <script setup>

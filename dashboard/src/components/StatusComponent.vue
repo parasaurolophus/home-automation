@@ -11,10 +11,7 @@
 </template>
 
 <style scoped>
-.wrapped {
-    display: flex;
-    flex-flow: row wrap;
-}
+/*  */
 </style>
 
 <script setup>

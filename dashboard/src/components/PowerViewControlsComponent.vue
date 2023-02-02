@@ -1,6 +1,6 @@
 <template>
 
-    <div v-if="powerviewModel.length > 0" class="wrapped-item">
+    <div v-if="powerviewModel.length > 0">
 
         <p class="controls-label">Window Shades</p>
 
@@ -20,20 +20,7 @@
 </template>
 
 <style scoped>
-.wrapped-item {
-    margin: 0.25em;
-    padding: 0.25em;
-    flex: 1;
-}
-
-fieldset>* {
-    margin: 0.25em;
-    padding: 0.25em;
-}
-
-.controls-label {
-    font-weight: bold;
-}
+/*  */
 </style>
 
 <script setup>

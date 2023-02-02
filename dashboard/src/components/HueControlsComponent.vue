@@ -1,6 +1,6 @@
 <template>
 
-    <div v-for="bridge in hueModels" :key="bridge.title" class="wrapped-item">
+    <div v-for="bridge in hueModels" :key="bridge.title">
 
         <p class="controls-label">{{ bridge.title }}</p>
 
@@ -29,20 +29,7 @@
 </template>
 
 <style scoped>
-.wrapped-item {
-    margin: 0.25em;
-    padding: 0.25em;
-    flex: 1;
-}
-
-fieldset>* {
-    margin: 0.25em;
-    padding: 0.25em;
-}
-
-.controls-label {
-    font-weight: bold;
-}
+/*  */
 </style>
 
 <script setup>
