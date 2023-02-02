@@ -52,6 +52,11 @@
 </template>
 
 <style scoped>
+fieldset {
+    margin: 0.25em;
+    padding: 0.25em;
+}
+
 fieldset>* {
     margin: 0.25em;
     padding: 0.25em;

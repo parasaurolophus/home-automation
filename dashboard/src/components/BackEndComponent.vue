@@ -1,22 +1,37 @@
 <template>
 
-    <fieldset>
+    <div>
 
-        <legend>Back End</legend>
+        <fieldset>
 
-        <v-btn @click="refreshControls">Refresh Controls</v-btn>
+            <legend>Back End</legend>
 
-        <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
+            <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
 
-        <v-btn @click="sendError">Send Error</v-btn>
+            <v-btn @click="refreshControls">Refresh Controls</v-btn>
 
-        <v-btn @click="sendWarning">Send Warning</v-btn>
+        </fieldset>
 
-    </fieldset>
+        <fieldset>
+
+            <legend>Test</legend>
+
+            <v-btn @click="sendError">Send Error</v-btn>
+
+            <v-btn @click="sendWarning">Send Warning</v-btn>
+
+        </fieldset>
+
+    </div>
 
 </template>
 
 <style scoped>
+fieldset {
+    margin: 0.25em;
+    padding: 0.25em;
+}
+
 fieldset>* {
     margin: 0.25em;
     padding: 0.25em;
@@ -31,6 +46,7 @@ td {
 th {
     text-align: right;
 }
+
 .ws-disconnected {
     color: white;
     background-color: darkred;

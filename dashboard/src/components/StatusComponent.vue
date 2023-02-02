@@ -15,11 +15,6 @@
     display: flex;
     flex-flow: row wrap;
 }
-
-.wrapped>* {
-    margin: 0.25em;
-    padding: 0.25em;
-}
 </style>
 
 <script setup>
