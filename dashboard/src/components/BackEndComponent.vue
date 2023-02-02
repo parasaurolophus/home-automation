@@ -17,7 +17,21 @@
 </template>
 
 <style scoped>
-/*  */
+.ws-disconnected {
+    color: white;
+    background-color: darkred;
+}
+
+.ws-connecting,
+.ws-closing {
+    color: black;
+    background-color: yellow;
+}
+
+.ws-connected {
+    color: white;
+    background-color: darkgreen;
+}
 </style>
 
 <script setup>
