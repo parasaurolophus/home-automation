@@ -2,19 +2,7 @@
 
     <div class="wrapped">
 
-        <fieldset>
-
-            <legend>Back End</legend>
-
-            <v-btn @click="refreshControls">Refresh Controls</v-btn>
-
-            <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
-
-            <v-btn @click="sendError">Send Error</v-btn>
-
-            <v-btn @click="sendWarning">Send Warning</v-btn>
-
-        </fieldset>
+        <BackEndComponent />
 
         <fieldset :disabled="websocketStatus != 1">
 
@@ -121,31 +109,13 @@ td {
 th {
     text-align: right;
 }
-
-.ws-disconnected,
-.es-disconnected {
-    color: white;
-    background-color: darkred;
-}
-
-.ws-connecting,
-.ws-closing,
-.es-connecting {
-    color: black;
-    background-color: yellow;
-}
-
-.ws-connected,
-.es-connected {
-    color: white;
-    background-color: darkgreen;
-}
 </style>
 
 <script setup>
 
 import { ref, inject } from 'vue'
 import suncalc from 'suncalc'
+import BackEndComponent from '@/components/BackEndComponent.vue'
 
 const LATITUDE = 43.019670
 const LONGITUDE = -89.303820
@@ -187,12 +157,6 @@ function updateTimes() {
 
 setInterval(updateTimes, 60000)
 updateTimes()
-
-function refreshControls() {
-
-    websocketPublish({ payload: new Date().getTime(), topic: 'controls/refresh' })
-
-}
 
 function formatAutomationTrigger(automationTrigger) {
 
@@ -239,67 +203,11 @@ function esStatusClass(status) {
     }
 }
 
-function wsStatusText(status) {
-
-    switch (status) {
-
-        case 0:
-            return 'connecting'
-
-        case 1:
-            return 'connected'
-
-        case 2:
-            return 'disconnecting'
-
-        default:
-            return 'disconnected'
-    }
-}
-
-function wsStatusClass(status) {
-
-    switch (status) {
-
-        case 0:
-            return 'ws-connecting'
-
-        case 1:
-            return 'ws-connected'
-
-        case 2:
-            return 'ws-disconnecting'
-
-        default:
-            return 'ws-disconnected'
-    }
-}
-
 function createHueKey(address) {
 
     websocketPublish({
         payload: address,
         topic: 'put/hue/create-key'
-    })
-
-}
-
-function sendError() {
-
-    websocketPublish({
-        payload: new Date().toLocaleString(),
-        topic: 'test/error',
-        retain: true
-    })
-
-}
-
-function sendWarning() {
-
-    websocketPublish({
-        payload: new Date().toLocaleString(),
-        topic: 'test/warning',
-        retain: true
     })
 
 }
