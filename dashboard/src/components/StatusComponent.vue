@@ -11,14 +11,14 @@
 </template>
 
 <style scoped>
-th,
-td {
-    margin: 1px;
-    padding: 1px 0.5em 1px 0.5em;
+.wrapped {
+    display: flex;
+    flex-flow: row wrap;
 }
 
-th {
-    text-align: right;
+.wrapped>* {
+    margin: 0.25em;
+    padding: 0.25em;
 }
 </style>
 

@@ -45,6 +45,20 @@
 </template>
 
 <style scoped>
+fieldset>* {
+    margin: 0.25em;
+    padding: 0.25em;
+}
+
+th,
+td {
+    margin: 1px;
+    padding: 1px 0.5em 1px 0.5em;
+}
+
+th {
+    text-align: right;
+}
 .es-disconnected {
     color: white;
     background-color: darkred;
