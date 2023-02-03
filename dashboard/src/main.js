@@ -22,56 +22,120 @@ registerPlugins(app)
 // back end using a websocket
 //////////////////////////////////////////////////////////////////////////////
 
-var models = {}
+// cached payloads of hue/{address}/model messages as they arrive
+// (see hueModels)
+let cachedHueModels = {}
 
+// items for v-select corresponding to settings/bedtime messages
+// in SettingsComponent.vue (see settingsBedtime)
 const bedtimeOptions = ref([
     { label: '9PM', hour: 21 },
     { label: '10PM', hour: 22 },
     { label: '11PM', hour: 23 },
 ])
-
-const settingsBedtime = ref(bedtimeOptions.value[0])
-const settingsLighting = ref(false)
-const settingsShades = ref(false)
-const websocketStatus = ref(-1)
-const automationTrigger = ref(null)
-const dailySunrise = ref(null)
-const dailySunset = ref(null)
-const dailyBedtime = ref(null)
-const dailyTheme = ref(null)
-const timerTime = ref(null)
-const errorTitle = ref(null)
-const errorText = ref(null)
-const showError = ref(false)
-const warningTitle = ref(null)
-const warningText = ref(null)
-const showWarning = ref(false)
-const hueKeys = ref({})
-const hueBridges = ref({})
-const hueModels = ref([])
-const powerviewModel = ref([])
-
 app.provide('bedtimeOptions', bedtimeOptions)
+
+// model for settings/bedtime messages
+// (the value of this must match the .hour of
+// one of the bedtimeOptions)
+const settingsBedtime = ref(bedtimeOptions.value[0])
 app.provide('settingsBedtime', settingsBedtime)
+
+// model for settings/lighting messages
+const settingsLighting = ref(false)
 app.provide('settingsLighting', settingsLighting)
+
+// model for settings/shades messages
+const settingsShades = ref(false)
 app.provide('settingsShades', settingsShades)
-app.provide('websocketStatus', websocketStatus)
-app.provide('powerviewModel', powerviewModel)
-app.provide('hueModels', hueModels)
-app.provide('hueBridges', hueBridges)
+
+// model for automation/trigger event messages
+const automationTrigger = ref(null)
 app.provide('automationTrigger', automationTrigger)
+
+// model for daily/sunrise event messages
+const dailySunrise = ref(null)
 app.provide('dailySunrise', dailySunrise)
+
+// model for daily/sunset event messages
+const dailySunset = ref(null)
 app.provide('dailySunset', dailySunset)
+
+// model for daily/bedtime event messages
+const dailyBedtime = ref(null)
 app.provide('dailyBedtime', dailyBedtime)
+
+// model for daily/theme event messages
+const dailyTheme = ref(null)
 app.provide('dailyTheme', dailyTheme)
+
+// model for timer/time event messages
+const timerTime = ref(null)
 app.provide('timerTime', timerTime)
+
+// value for title slot of a v-alert
+// used to display error messages
+// in AlertComponent.vue
+const errorTitle = ref(null)
 app.provide('errorTitle', errorTitle)
+
+// text to display in a v-alert
+// used to display error messages
+// in AlertComponent.vue
+const errorText = ref(null)
 app.provide('errorText', errorText)
-app.provide('warningTitle', warningTitle)
-app.provide('warningText', warningText)
+
+// model for a v-alert used to display
+// error messages in AlertComponent.vue
+const showError = ref(false)
 app.provide('showError', showError)
+
+// value for title slot of a v-alert
+// used to display warning messages
+// in AlertComponent.vue
+const warningTitle = ref(null)
+app.provide('warningTitle', warningTitle)
+
+// text to display in a v-alert
+// used to display warning messages
+// in AlertComponent.vue
+const warningText = ref(null)
+app.provide('warningText', warningText)
+
+// model for a v-alert used to display
+// warning messages in AlertComponent.vue
+const showWarning = ref(false)
 app.provide('showWarning', showWarning)
+
+// model for hue/{address}/key messages
+const hueKeys = ref({})
 app.provide('hueKeys', hueKeys)
+
+// model for HueBridgesComponent.vue
+const hueBridges = ref({})
+app.provide('hueBridges', hueBridges)
+
+// model for HueControlsComponent.vue, based
+// on contents of cachedHueModels, updated
+// each time a hue/{address}/model event
+// message is received
+const hueModels = ref([])
+app.provide('hueModels', hueModels)
+
+// model for PowerViewControls.vue, updated
+// each time a powerview/model event message
+// is received
+const powerviewModel = ref([])
+app.provide('powerviewModel', powerviewModel)
+
+//////////////////////////////////////////////////////////////////////////////
+// monitor websocket readyState
+//////////////////////////////////////////////////////////////////////////////
+
+// model to display websocket connection
+// status in BackEndComponent.vue
+const websocketStatus = ref(-1)
+app.provide('websocketStatus', websocketStatus)
 
 //////////////////////////////////////////////////////////////////////////////
 // provide the function for ui components to send messages to the back end
@@ -99,15 +163,15 @@ app.provide('websocketPublish', websocketPublish)
 ///////////////////////////////////////////////////////////////////////////////
 
 // websocket connection to the back end
-var ws = null
+let ws = null
 
 // timer used to periodically update
 // the websocket status display
-var wsReadyStateTimer = null
+let wsReadyStateTimer = null
 
 // timer used to maintain the websocket
 // connection to the back end
-var wsReconnectTimer = null
+let wsReconnectTimer = null
 
 // create the ws connection to the back end
 function connectWS() {
@@ -183,6 +247,8 @@ function connectWS() {
     // update models based on messages received from the back end
     ws.onmessage = (event) => {
 
+        // node-red's msg object is received as a JSON
+        // string in event.data
         const msg = JSON.parse(event.data)
 
         if (msg.topic == 'daily/sunrise') {
@@ -254,6 +320,9 @@ function connectWS() {
             }
 
             console.log('no bedtime option found matching ' + JSON.stringify(msg.payload, undefined, 1))
+            errorTitle.value = 'Invalid settings/bedtime payload'
+            errorText.value = msg.payload
+            showError.value = true
             return
 
         }
@@ -317,12 +386,12 @@ function connectWS() {
 
         if (Array.isArray(matches) && (matches.length == 2)) {
 
-            models[matches[1]] = msg.payload
+            cachedHueModels[matches[1]] = msg.payload
             const sorted = []
 
-            for (let label in models) {
+            for (let label in cachedHueModels) {
 
-                sorted.push(models[label])
+                sorted.push(cachedHueModels[label])
 
             }
 
@@ -333,8 +402,6 @@ function connectWS() {
         }
     }
 }
-
-wsReconnectTimer = setInterval(connectWS, 5000)
 
 connectWS()
 
