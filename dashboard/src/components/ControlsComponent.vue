@@ -16,8 +16,8 @@
 
 <script setup>
 
-import SettingsComponent from '@/components/SettingsComponent.vue'
-import PowerViewControlsComponent from '@/components/PowerViewControlsComponent.vue'
-import HueControlsComponent from '@/components/HueControlsComponent.vue'
+import SettingsComponent from '@/components/controls/SettingsComponent.vue'
+import PowerViewControlsComponent from '@/components/controls/PowerViewControlsComponent.vue'
+import HueControlsComponent from '@/components/controls/HueControlsComponent.vue'
 
 </script>

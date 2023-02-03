@@ -16,8 +16,8 @@
 
 <script setup>
 
-import BackEndComponent from '@/components/BackEndComponent.vue'
-import HueBridgesComponent from '@/components/HueBridgesComponent.vue'
-import TimerComponent from '@/components/TimerComponent.vue'
+import BackEndComponent from '@/components/status/BackEndComponent.vue'
+import HueBridgesComponent from '@/components/status/HueBridgesComponent.vue'
+import TimerComponent from '@/components/status/TimerComponent.vue'
 
 </script>
