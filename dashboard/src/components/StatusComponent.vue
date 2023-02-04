@@ -4,7 +4,6 @@
 
         <BackEndComponent />
         <HueBridgesComponent />
-        <TimerComponent />
 
     </div>
 
@@ -18,6 +17,5 @@
 
 import BackEndComponent from '@/components/status/BackEndComponent.vue'
 import HueBridgesComponent from '@/components/status/HueBridgesComponent.vue'
-import TimerComponent from '@/components/status/TimerComponent.vue'
 
 </script>

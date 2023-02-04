@@ -49,63 +49,17 @@ app.provide('settingsLighting', settingsLighting)
 const settingsShades = ref(false)
 app.provide('settingsShades', settingsShades)
 
-// model for automation/trigger event messages
-const automationTrigger = ref(null)
-app.provide('automationTrigger', automationTrigger)
+// models for error alerts
+const errors = ref([])
+app.provide('errors', errors)
 
-// model for daily/sunrise event messages
-const dailySunrise = ref(null)
-app.provide('dailySunrise', dailySunrise)
+// models for warning alerts
+const warnings = ref([])
+app.provide('warnings', warnings)
 
-// model for daily/sunset event messages
-const dailySunset = ref(null)
-app.provide('dailySunset', dailySunset)
-
-// model for daily/bedtime event messages
-const dailyBedtime = ref(null)
-app.provide('dailyBedtime', dailyBedtime)
-
-// model for daily/theme event messages
-const dailyTheme = ref(null)
-app.provide('dailyTheme', dailyTheme)
-
-// model for timer/time event messages
-const timerTime = ref(null)
-app.provide('timerTime', timerTime)
-
-// value for title slot of a v-alert
-// used to display error messages
-// in AlertComponent.vue
-const errorTitle = ref(null)
-app.provide('errorTitle', errorTitle)
-
-// text to display in a v-alert
-// used to display error messages
-// in AlertComponent.vue
-const errorText = ref(null)
-app.provide('errorText', errorText)
-
-// model for a v-alert used to display
-// error messages in AlertComponent.vue
-const showError = ref(false)
-app.provide('showError', showError)
-
-// value for title slot of a v-alert
-// used to display warning messages
-// in AlertComponent.vue
-const warningTitle = ref(null)
-app.provide('warningTitle', warningTitle)
-
-// text to display in a v-alert
-// used to display warning messages
-// in AlertComponent.vue
-const warningText = ref(null)
-app.provide('warningText', warningText)
-
-// model for a v-alert used to display
-// warning messages in AlertComponent.vue
-const showWarning = ref(false)
-app.provide('showWarning', showWarning)
+// models for info alerts
+const infos = ref([])
+app.provide('infos', infos)
 
 // model for hue/{address}/key messages
 const hueKeys = ref({})
@@ -251,44 +205,16 @@ function connectWS() {
         // string in event.data
         const msg = JSON.parse(event.data)
 
-        if (msg.topic == 'daily/sunrise') {
-
-            dailySunrise.value = msg.payload
-            return
-
-        }
-
-        if (msg.topic == 'daily/sunset') {
-
-            dailySunset.value = msg.payload
-            return
-
-        }
-
-        if (msg.topic == 'daily/bedtime') {
-
-            dailyBedtime.value = msg.payload
-            return
-
-        }
-
-        if (msg.topic == 'daily/theme') {
-
-            dailyTheme.value = msg.payload
-            return
-
-        }
-
-        if (msg.topic == 'timer/time') {
-
-            timerTime.value = msg.payload
-            return
-
-        }
-
         if (msg.topic == 'automation/trigger') {
 
-            automationTrigger.value = msg.payload
+            infos.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg.payload, undefined, 1) })
+            return
+
+        }
+
+        if (/^timer\/[^/]+$/.exec(msg.topic)) {
+
+            infos.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg.payload, undefined, 1) })
             return
 
         }
@@ -320,9 +246,7 @@ function connectWS() {
             }
 
             console.log('no bedtime option found matching ' + JSON.stringify(msg.payload, undefined, 1))
-            errorTitle.value = 'Invalid settings/bedtime payload'
-            errorText.value = msg.payload
-            showError.value = true
+            errors.value.push({ show: true, title: 'Invalid settings/bedtime payload', text: msg.payload })
             return
 
         }
@@ -340,9 +264,7 @@ function connectWS() {
 
             if (msg.payload !== '') {
 
-                errorTitle.value = msg.topic
-                errorText.value = JSON.stringify(msg.payload, undefined, 1)
-                showError.value = true
+                errors.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg.payload, undefined, 1) })
 
             }
 
@@ -356,9 +278,21 @@ function connectWS() {
 
             if (msg.payload !== '') {
 
-                warningTitle.value = msg.topic
-                warningText.value = JSON.stringify(msg.payload, undefined, 1)
-                showWarning.value = true
+                warnings.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg.payload, undefined, 1) })
+
+            }
+
+            return
+
+        }
+
+        if (/^.+\/info$/.exec(msg.topic)) {
+
+            console.log(msg)
+
+            if (msg.payload !== '') {
+
+                infos.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg.payload, undefined, 1) })
 
             }
 

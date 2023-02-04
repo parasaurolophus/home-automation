@@ -1,20 +1,26 @@
 <template>
-    <v-alert v-model="showError" type="error" tonal closable>
-        <template v-slot:title>{{ errorTitle }}</template>
-        <pre>{{ errorText }}</pre>
-    </v-alert>
-    <v-sheet class="buttons" v-if="!showError && (errorTitle != null)">
-        <v-btn @click="toggleShowError">Show {{ errorTitle }}</v-btn>
-        <v-btn @click="clearError">Clear {{ errorTitle }}</v-btn>
-    </v-sheet>
-    <v-alert v-model="showWarning" type="warning" tonal closable>
-        <template v-slot:title>{{ warningTitle }}</template>
-        <pre>{{ warningText }}</pre>
-    </v-alert>
-    <v-sheet class="buttons" v-if="!showWarning && (warningTitle != null)">
-        <v-btn @click="toggleShowWarning">Show {{ warningTitle }}</v-btn>
-        <v-btn @click="clearWarning">Clear {{ warningTitle }}</v-btn>
-    </v-sheet>
+
+    <div v-for="error in errors" :key="error.title">
+        <v-alert v-model="error.show" type="error" tonal closable @update:modelValue="dismissError">
+            <template v-slot:title>{{ error.title }}</template>
+            <pre>{{ error.text }}</pre>
+        </v-alert>
+    </div>
+
+    <div v-for="warning in warnings" :key="warning.title">
+        <v-alert v-model="warning.show" type="warning" tonal closable @update:modelValue="dismissWarning">
+            <template v-slot:title>{{ warning.title }}</template>
+            <pre>{{ warning.text }}</pre>
+        </v-alert>
+    </div>
+
+    <div v-for="info in infos" :key="info.title">
+        <v-alert v-model="info.show" type="info" tonal closable @update:modelValue="dismissInfo">
+            <template v-slot:title>{{ info.title }}</template>
+            <pre>{{ info.text }}</pre>
+        </v-alert>
+    </div>
+
 </template>
 
 <style scoped>
@@ -28,39 +34,25 @@
 
 import { inject } from 'vue'
 
-const errorTitle = inject('errorTitle')
-const errorText = inject('errorText')
-const showError = inject('showError')
-const warningTitle = inject('warningTitle')
-const warningText = inject('warningText')
-const showWarning = inject('showWarning')
-const websocketPublish = inject('websocketPublish')
+const errors = inject('errors')
+const warnings = inject('warnings')
+const infos = inject('infos')
 
-function clearError() {
+function dismissError() {
 
-    websocketPublish({ payload: '', topic: errorTitle.value, retain: true })
-    errorText.value = null
-    errorTitle.value = null
+    errors.value = errors.value.filter(error => error.show)
 
 }
 
-function toggleShowError() {
+function dismissWarning() {
 
-    showError.value = !showError.value
-
-}
-
-function toggleShowWarning() {
-
-    showWarning.value = !showWarning.value
+    warnings.value = warnings.value.filter(warning => warning.show)
 
 }
 
-function clearWarning() {
+function dismissInfo() {
 
-websocketPublish({ payload: '', topic: warningTitle.value, retain: true })
-warningText.value = null
-warningTitle.value = null
+    infos.value = infos.value.filter(warning => warning.show)
 
 }
 

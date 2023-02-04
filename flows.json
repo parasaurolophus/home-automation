@@ -8,14 +8,6 @@
         "env": []
     },
     {
-        "id": "1f224d5f7092fb57",
-        "type": "tab",
-        "label": "Timer",
-        "disabled": false,
-        "info": "Publish event messages, with `msg.topic` and `msg.payload` as described\nbelow, each time the corresponding conditions occur.\n\nThese messages are sent each time flows start and then once per day\nwhile the flow is running:\n\n- `msg.topic` set to `daily/theme` with `msg.payload` set to one of\n  the _theme_ values described below\n\n- `msg.topic` set to `daily/sunrise` with `msg.payload` set to the\n  timestamp for the time at which the sun rises on the current day\n\n- `msg.topic` set to `daily/sunset` with `msg.payload` set to the\n  timestamp for the time at which the sun sets on the current day\n\nThis message is sent at the same time the preceding daily events\nand also each time a user changes the _bedtime_ setting:\n\n- `msg.topic` set to `daily/bedtime` with `msg.payload` set to a\n  randomly chosen timestamp as described below\n\nThis message is sent each time flows start and then up to five times\nper day while the flow is running:\n\n- `msg.topic` set to `timer/time` with `msg.payload` set to one of the\n_time_ values described below\n\n### Bedtime\n\nThe dashboard provides a means for a user to select a given hour\nfor \"bedtime.\" The actual value for `daily/bedtime` event payloads\nvaries each day by adding a ranomly chosen offset of up to 30 minutes\nbefore or after the hour selected by a user.\n\n### Themes\n\nThe `msg.payload` for `daily/theme` is set to one of the following\nstrings based on the current date:\n\n- `tribal` - July 1 - 4 (US Independence Day)\n- `spooky` - any day in October\n- `jolly` - any day in December\n- `standard` - any other day\n\n### Times\n\nAn event message with `msg.topic` set to `timer/time` is published\neach time flows start and then at the start of each time range\ncorresponding to the following values for `msg.payload`. Note\nthat the rules are based on the sun's position each minute of each\nday:\n\n- `morning` - published when the sun's azimuth is from the east and\n  its altitude is below the threshold for `midday` described below\n\n- `midday` - published when the sun first reaches a particular altitude\n  each day; note that `midday` events do not occur on certain days\n  at certain latitudes\n\n- `afternoon` - published when the sun's azimuth is from the west\n  and its altitude is above the horizon but below the threshold for\n  `midday`\n\n- `evening` - published when the sun's altitude is below the horizon\n  and the current time is earlier than the randomly chosen _bedtime_\n\n- `night` - published when the sun's altitude is below the horizon\n  and the current time is later than the randomly chosen _bedtime_\n",
-        "env": []
-    },
-    {
         "id": "bfdb5183ea783e85",
         "type": "tab",
         "label": "Automation",
@@ -272,6 +264,80 @@
         }
     },
     {
+        "id": "b25cd0bae6f69760",
+        "type": "subflow",
+        "name": "Delay Until",
+        "info": "Delay each `msg` until an absolute time specified either by `msg.until`\nor `${UNTIL}`. If both are set, the value of `msg.until` will be\nused (i.e. `msg.until` overrides `${UNTIL}`). It is an error if\nneither `msg.until` nor `${UNTIL}` is set.\n\nIn either case, the \"delay until\" time can be set either as a timestamp\n(i.e. an integer number of milliseconds since midnight,\nJanuary 1, 1970 UTC) or using a string in the format supported by\nJavaScript's `Date(string)` constructor.\n\nThis node is asynchronous. I.e. the incoming messages will be emitted\nin the order implied by their respective \"delay until\" values, not\nin the order they were received. Similarly, if the \"delay until\" time\nhas already been reached when a new message arrives, it is sent\nimmediately.\n\nThis implies that the use cases for specifying the \"delay until\"\nvalue using `${UNTIL}` are few, if any. The capability is included\nbecause it is trivial to implement, adds no noticeable overhead and\njust in case a use for it arises (hard as that may be to imagine).\n\nThe set of messages currently waiting for their \"delay until\" time\ncan be cleared by passing a message with `msg.clear` set to `true`.\nIn this case, the delayed messages are canceled and will never be\nemitted.",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 60,
+                "wires": [
+                    {
+                        "id": "8f1c5b33034f49ae"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 300,
+                "y": 60,
+                "wires": [
+                    {
+                        "id": "8f1c5b33034f49ae",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "UNTIL",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "num",
+                            "env"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {
+            "module": "@parasaurolophus/node-red-delay-until",
+            "type": "delay-until",
+            "version": "1.0.0",
+            "author": "parasaurolophus <apps@rader.us>",
+            "desc": "Delay each message until a specified absolute time",
+            "keywords": "node-red",
+            "license": "MIT"
+        },
+        "color": "#DDAA99",
+        "inputLabels": [
+            "msg"
+        ],
+        "outputLabels": [
+            "delayed"
+        ],
+        "icon": "node-red/timer.svg",
+        "status": {
+            "x": 260,
+            "y": 140,
+            "wires": [
+                {
+                    "id": "82a0e3a89bc1cec2",
+                    "port": 0
+                }
+            ]
+        }
+    },
+    {
         "id": "5be845dd7de1f9ed",
         "type": "group",
         "z": "e1d7dd3bdd3cf24a",
@@ -323,9 +389,7 @@
             "7756c6eb9522da59"
         ],
         "x": 14,
-        "y": 19,
-        "w": 1232,
-        "h": 202
+        "y": 19
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -349,9 +413,7 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 239,
-        "w": 952,
-        "h": 122
+        "y": 239
     },
     {
         "id": "0fb8e43c903b3506",
@@ -377,9 +439,7 @@
             "93a323937c189b13"
         ],
         "x": 14,
-        "y": 119,
-        "w": 1052,
-        "h": 162
+        "y": 119
     },
     {
         "id": "96971e50c13ead01",
@@ -416,9 +476,7 @@
             "531fbb9eb4631e85"
         ],
         "x": 14,
-        "y": 299,
-        "w": 1252,
-        "h": 302
+        "y": 299
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -437,9 +495,7 @@
             "d046e6267c76dfe1"
         ],
         "x": 14,
-        "y": 379,
-        "w": 952,
-        "h": 82
+        "y": 379
     },
     {
         "id": "9cf0457b813ca743",
@@ -513,60 +569,6 @@
         "y": 319
     },
     {
-        "id": "a21835234a7481fe",
-        "type": "group",
-        "z": "1f224d5f7092fb57",
-        "name": "send daily events",
-        "style": {
-            "stroke": "none",
-            "fill": "#ffffff",
-            "fill-opacity": "0.1",
-            "label": true,
-            "color": "#ffffff"
-        },
-        "nodes": [
-            "fd931d60371497cc",
-            "2172861d6eca2d1c",
-            "ec4c72ab0b8b53ad",
-            "b42f1fba69cb70e0",
-            "46ac71815281ccea",
-            "1182570b961cb1b0",
-            "4b3a06bb3281f1c5",
-            "0fa595499d40a3fd",
-            "a4e1a5b908d33066",
-            "cbcdf85a73052db5"
-        ],
-        "x": 14,
-        "y": 19
-    },
-    {
-        "id": "0b0da0b6b3a2a19d",
-        "type": "group",
-        "z": "1f224d5f7092fb57",
-        "name": "send timer events",
-        "style": {
-            "stroke": "none",
-            "fill": "#ffffff",
-            "fill-opacity": "0.1",
-            "label": true,
-            "color": "#ffffff"
-        },
-        "nodes": [
-            "67396769faf05d99",
-            "d9f51cf712535848",
-            "76bbc731fb4262bd",
-            "9a9fbaf721bdfb20",
-            "de9d9eb71b136375",
-            "48582d354b6b0fda",
-            "903dfd8686a14a20",
-            "386e624f284112c8",
-            "46c44e33f918af63",
-            "154766c193057414"
-        ],
-        "x": 14,
-        "y": 239
-    },
-    {
         "id": "c2e3e9d2c97df2d0",
         "type": "group",
         "z": "bfdb5183ea783e85",
@@ -590,7 +592,9 @@
             "244e029d9a276e82"
         ],
         "x": 14,
-        "y": 439
+        "y": 519,
+        "w": 832,
+        "h": 262
     },
     {
         "id": "8326ae1a15518f8f",
@@ -615,32 +619,9 @@
             "839872dec0a80cfa"
         ],
         "x": 14,
-        "y": 219
-    },
-    {
-        "id": "9f074aa55117ee9d",
-        "type": "group",
-        "z": "bfdb5183ea783e85",
-        "name": "subscribe to automation trigger events",
-        "style": {
-            "stroke": "none",
-            "fill": "#ffffff",
-            "fill-opacity": "0.1",
-            "label": true,
-            "color": "#ffffff"
-        },
-        "nodes": [
-            "a19b812821bec622",
-            "477b281b3f87fc89",
-            "aa9143d910c74bec",
-            "2d18a9e3a7fd198a",
-            "90ecd878733cb225",
-            "636d33f7c05cc8df",
-            "d4cab7825ba8bf11",
-            "85d575b4c5bfe117"
-        ],
-        "x": 14,
-        "y": 119
+        "y": 299,
+        "w": 1012,
+        "h": 202
     },
     {
         "id": "4893dd6a2321040d",
@@ -663,30 +644,7 @@
             "0b223f6872d96c8f"
         ],
         "x": 14,
-        "y": 619,
-        "w": 852,
-        "h": 122
-    },
-    {
-        "id": "3a0077281d6eefee",
-        "type": "group",
-        "z": "bfdb5183ea783e85",
-        "name": "refresh controls when flows start",
-        "style": {
-            "stroke": "none",
-            "fill": "#ffffff",
-            "fill-opacity": "0.1",
-            "label": true,
-            "color": "#ffffff"
-        },
-        "nodes": [
-            "499f234a478a41e7",
-            "c3cac0049cccb7e7",
-            "c79b769649c2b419",
-            "189c38230a6eb7a0"
-        ],
-        "x": 14,
-        "y": 19
+        "y": 619
     },
     {
         "id": "d64d4d2689200662",
@@ -707,9 +665,7 @@
             "6006768d0e45ea91"
         ],
         "x": 14,
-        "y": 19,
-        "w": 672,
-        "h": 82
+        "y": 19
     },
     {
         "id": "b3c2354a4072ebba",
@@ -728,9 +684,91 @@
             "048ec8eb41be82ae"
         ],
         "x": 14,
-        "y": 479,
-        "w": 952,
+        "y": 479
+    },
+    {
+        "id": "3a0077281d6eefee",
+        "type": "group",
+        "z": "e1d7dd3bdd3cf24a",
+        "name": "refresh controls when flows start",
+        "style": {
+            "stroke": "none",
+            "fill": "#ffffff",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#ffffff"
+        },
+        "nodes": [
+            "499f234a478a41e7",
+            "c3cac0049cccb7e7",
+            "c79b769649c2b419",
+            "189c38230a6eb7a0"
+        ],
+        "x": 14,
+        "y": 239,
+        "w": 712,
         "h": 82
+    },
+    {
+        "id": "114e4bc3e2504c40",
+        "type": "group",
+        "z": "bfdb5183ea783e85",
+        "name": "Send automation/trigger events",
+        "style": {
+            "stroke": "none",
+            "fill": "#ffffff",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#ffffff"
+        },
+        "nodes": [
+            "0497e0ed333e8f23",
+            "8624deaf4bee22fa",
+            "60d6c5b7d0db140a",
+            "47acab248c4d8501",
+            "8ec45bbfd0b4fb4c",
+            "0816fe94f5858846",
+            "21c4dba2bb5d0e54",
+            "8e84162e92296698",
+            "9977146ce026810e",
+            "b044e7bab42607f8",
+            "0c57cb4bce44a11a",
+            "7cf8caea790c9792",
+            "106ee66b66de58ab",
+            "39d8a5aeec9834da",
+            "06bc3f0c72a3b81b"
+        ],
+        "x": 14,
+        "y": 19,
+        "w": 1372,
+        "h": 262
+    },
+    {
+        "id": "ea6243759720241b",
+        "type": "group",
+        "z": "e1d7dd3bdd3cf24a",
+        "name": "debug timer function node",
+        "style": {
+            "label": true,
+            "stroke": "none",
+            "fill": "#92d04f",
+            "fill-opacity": "0.1",
+            "color": "#92d04f"
+        },
+        "nodes": [
+            "2abdd09cee6d1cb9",
+            "3841e7a6dcc70492",
+            "9d4aa9961f7a8ffb",
+            "d33aebc6b1bb8c12",
+            "65a1c3b2b2958aa6",
+            "c8155f947ead2c80",
+            "3dc4461aaf886e94",
+            "e17697bec8a4f882"
+        ],
+        "x": 14,
+        "y": 339,
+        "w": 552,
+        "h": 382
     },
     {
         "id": "431414ce08ebb3c0",
@@ -1864,6 +1902,37 @@
         "wires": []
     },
     {
+        "id": "8f1c5b33034f49ae",
+        "type": "function",
+        "z": "b25cd0bae6f69760",
+        "name": "delay until",
+        "func": "const timers = context.get('timers')\n\nif (msg.clear) {\n\n    timers.forEach((id) => { clearTimeout(id) })\n    context.set('timers', [])\n\n    node.status({\n        text: 0,\n        shape: 'ring',\n        fill: 'green'\n    })\n\n    return null\n\n}\n\nconst until = new Date((msg.until === undefined) ? env.get('UNTIL') : msg.until)\nconst now = new Date()\nconst delay = until.getTime() - now.getTime()\n\nif (delay <= 0) {\n\n    return msg\n\n}\n\nconst id = setTimeout(() => {\n\n    let timers = context.get('timers')\n\n    timers = timers.filter((timer) => {\n\n        return timer != id\n\n    })\n\n    context.set('timers', timers)\n\n    node.status({\n        text: timers.length,\n        shape: 'dot',\n        fill: 'green'\n    })\n\n    node.send(msg)\n\n}, delay)\n\ntimers.push(id)\ncontext.set('timers', timers)\n\nnode.status({\n    text: timers.length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn null",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "context.set('timers', [])\n\nnode.status({\n    text: 0,\n    shape: 'ring',\n    fill: 'green'\n})",
+        "finalize": "",
+        "libs": [],
+        "x": 160,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "82a0e3a89bc1cec2",
+        "type": "status",
+        "z": "b25cd0bae6f69760",
+        "name": "status: delay until",
+        "scope": [
+            "8f1c5b33034f49ae"
+        ],
+        "x": 140,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
         "id": "b48f13f63fadba17",
         "type": "websocket in",
         "z": "e1d7dd3bdd3cf24a",
@@ -1960,7 +2029,7 @@
         "z": "e1d7dd3bdd3cf24a",
         "g": "5be845dd7de1f9ed",
         "name": "retain",
-        "func": "if (msg.retain) {\n\n    const retained = flow.get('retained', 'file') || {}\n\n    if (msg.payload === undefined || msg.payload === '') {\n\n        delete retained[msg.topic]\n\n    } else {\n\n        retained[msg.topic] = msg\n\n    }\n\n    flow.set('retained', retained, 'file')\n\n    node.status({\n        text: Object.keys(retained).length,\n        shape: 'dot',\n        fill: 'blue'\n    })\n}\n\nconst message = RED.util.cloneMessage(msg)\n\ndelete message._session\nmessage.retain = false\nreturn message",
+        "func": "delete msg._session\n\nif (msg.retain) {\n\n    const retained = flow.get('retained', 'file') || {}\n\n    if (msg.payload === undefined || msg.payload === '') {\n\n        delete retained[msg.topic]\n\n    } else {\n\n        retained[msg.topic] = msg\n\n    }\n\n    flow.set('retained', retained, 'file')\n\n    node.status({\n        text: Object.keys(retained).length,\n        shape: 'dot',\n        fill: 'blue'\n    })\n}\n\nconst message = RED.util.cloneMessage(msg)\n\nmessage.retain = false\nreturn message",
         "outputs": 1,
         "noerr": 0,
         "initialize": "const retained = flow.get('retained', 'file') || {}\n\nnode.status({\n    text: Object.keys(retained).length,\n    shape: 'ring',\n    fill: 'blue'\n})",
@@ -1986,967 +2055,21 @@
         "wires": []
     },
     {
-        "id": "fd931d60371497cc",
-        "type": "inject",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "00 01 * * *",
-        "once": true,
-        "onceDelay": "1",
-        "topic": "now",
-        "payload": "",
-        "payloadType": "date",
-        "x": 260,
-        "y": 80,
-        "wires": [
-            [
-                "2172861d6eca2d1c"
-            ]
-        ]
-    },
-    {
-        "id": "67396769faf05d99",
-        "type": "inject",
-        "z": "1f224d5f7092fb57",
-        "g": "0b0da0b6b3a2a19d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "60",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "1",
-        "topic": "now",
-        "payload": "",
-        "payloadType": "date",
-        "x": 520,
-        "y": 280,
-        "wires": [
-            [
-                "de9d9eb71b136375"
-            ]
-        ]
-    },
-    {
-        "id": "2172861d6eca2d1c",
-        "type": "join",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "",
-        "mode": "custom",
-        "build": "object",
-        "property": "payload",
-        "propertyType": "msg",
-        "key": "topic",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "accumulate": true,
-        "timeout": "",
-        "count": "2",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "",
-        "reduceFixup": "",
-        "x": 430,
-        "y": 120,
-        "wires": [
-            [
-                "ec4c72ab0b8b53ad",
-                "b42f1fba69cb70e0",
-                "cbcdf85a73052db5"
-            ]
-        ],
-        "info": "Synchronize receipt of `daily/timestamp` and `settings/bedtime`\nmessages."
-    },
-    {
-        "id": "ec4c72ab0b8b53ad",
-        "type": "function",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "theme",
-        "func": "const date = new Date(msg.payload.daily)\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nconst message = {}\n\nif ((month == 7) && (day <= 4)) {\n\n    message.payload = 'tribal'\n\n} else if (month == 10) {\n\n    message.payload = 'spooky'\n\n} else if (month == 12) {\n\n    message.payload = 'jolly'\n\n} else {\n\n    message.payload = 'standard'\n\n}\n\nnode.status({\n    text: message.payload,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nmessage.topic = 'daily/theme'\nmessage.retain = true\nreturn message",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 590,
-        "y": 60,
-        "wires": [
-            [
-                "46ac71815281ccea"
-            ]
-        ],
-        "inputLabels": [
-            "daily"
-        ],
-        "outputLabels": [
-            "theme"
-        ],
-        "info": "Set `msg.payload` to one of the _theme_ values, described below, and\n`msg.topic` to `daily/theme`.\n\n_Note that this `function` node is placed downstream of a `join` in\norder to delay sending MQTT messages until after the connection to the\nbroker has been established; the only input data on which this function\nactually relies comes from the `inject` node which fires once when\nflows start and then every morning at 1AM._\n\n# Input\n\n- timestamp in `msg.payload.daily`\n- all other `msg` properties are ignored\n\n# Output\n\n- `msg.topic` set to `daily/theme`\n- `msg.payload` set to one of the following strings, based on the\n  the timestamp from the input:\n\n| `msg.payload` | Description         |\n|---------------|---------------------|\n| `tribal`      | July 1 - 4          |\n| `spooky`      | Any day in October  |\n| `jolly`       | Any day in December |\n| `standard`    | Any other day       |"
-    },
-    {
-        "id": "b42f1fba69cb70e0",
-        "type": "function",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "bedtime",
-        "func": "const MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = new Date(msg.payload.now)\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\nconst time = new Date(\n    now.getFullYear(),\n    now.getMonth(),\n    now.getDate(),\n    msg.payload['settings/bedtime']\n).getTime()\n\nconst message = {}\n\nmessage.payload = time + offset,\nmessage.topic = 'daily/bedtime'\nmessage.retain = true\n\nnode.status({\n    text: new Date(message.payload).toLocaleTimeString(),\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn message",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 600,
-        "y": 180,
-        "wires": [
-            [
-                "46ac71815281ccea"
-            ]
-        ],
-        "outputLabels": [
-            "bedtime"
-        ],
-        "info": "Calculate a slightly randomized timestamp based on the values of\n`msg.payload.daily` and `msg.payload.settings/bedtime` as described\nbelow.\n\n# Input\n \n - timestamp for the current day in `msg.payload.daily`\n - value from the `Bedtime` dashboard control in\n   `msg.payload.settings/bedtime`\n- all other `msg` properties are ignored\n\n# Output\n\n- `msg.topic` set to `daily/bedtime`\n- `msg.payload` set to a timestamp as described below\n\n# Details\n\nThis `function` node receives input from a `join` node that combines the\ntimestamp for a given day with a value selected by use of a dropdown\ncontrol on the dashboard. It calculates a random offset of plus or minus\n30 minutes, adds that to the hour specified by the received value in\n`msg.payload.settings/bedtime` and calculates the timestamp for that\nhour on the day specified by the value received in `msg.payload.daily`,\nplacing it in `msg.payload` in the output message.\n"
-    },
-    {
-        "id": "46ac71815281ccea",
-        "type": "rbe",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 850,
-        "y": 120,
-        "wires": [
-            [
-                "4b3a06bb3281f1c5"
-            ]
-        ],
-        "info": "Block messages unless `msg.payload` changes, treating each `msg.topic`\nindependently."
-    },
-    {
-        "id": "d9f51cf712535848",
-        "type": "join",
-        "z": "1f224d5f7092fb57",
-        "g": "0b0da0b6b3a2a19d",
-        "name": "",
-        "mode": "custom",
-        "build": "object",
-        "property": "payload",
-        "propertyType": "msg",
-        "key": "topic",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "accumulate": true,
-        "timeout": "",
-        "count": "4",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "",
-        "reduceFixup": "",
-        "x": 810,
-        "y": 320,
-        "wires": [
-            [
-                "76bbc731fb4262bd"
-            ]
-        ]
-    },
-    {
-        "id": "76bbc731fb4262bd",
-        "type": "function",
-        "z": "1f224d5f7092fb57",
-        "g": "0b0da0b6b3a2a19d",
-        "name": "time",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = Number.parseFloat(env.get('LATITUDE'))\nconst LONGITUDE = Number.parseFloat(env.get('LONGITUDE'))\n\nconst now = msg.payload.now\nconst sunrise = msg.payload['daily/sunrise']\nconst sunset = msg.payload['daily/sunset']\nconst bedtime = msg.payload['daily/bedtime']\n\nconst position = suncalc.getPosition(\n    new Date(now),\n    LATITUDE,\n    LONGITUDE)\n\nconst message = {}\n\nif ((now <= sunrise) || (now >= bedtime)) {\n\n    message.payload = 'night'\n\n} else if (now >= sunset) {\n\n    message.payload = 'evening'\n\n} else if (position.altitude > 0.8) {\n\n    message.payload = 'midday'\n\n} else if (position.azimuth > 0) {\n\n    message.payload = 'afternoon'\n\n} else {\n\n    message.payload = 'morning'\n\n}\n\nnode.status({\n    text: message.payload,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nmessage.topic = 'timer/time'\nmessage.retain = true\nreturn message",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "suncalc",
-                "module": "suncalc"
-            }
-        ],
-        "x": 930,
-        "y": 320,
-        "wires": [
-            [
-                "9a9fbaf721bdfb20"
-            ]
-        ]
-    },
-    {
-        "id": "9a9fbaf721bdfb20",
-        "type": "rbe",
-        "z": "1f224d5f7092fb57",
-        "g": "0b0da0b6b3a2a19d",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 1050,
-        "y": 320,
-        "wires": [
-            [
-                "46c44e33f918af63"
-            ]
-        ]
-    },
-    {
-        "id": "de9d9eb71b136375",
-        "type": "rbe",
-        "z": "1f224d5f7092fb57",
-        "g": "0b0da0b6b3a2a19d",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 690,
-        "y": 320,
-        "wires": [
-            [
-                "d9f51cf712535848"
-            ]
-        ]
-    },
-    {
-        "id": "1182570b961cb1b0",
-        "type": "switch",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "settings/bedtime",
-        "property": "topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "settings/bedtime",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 260,
-        "y": 160,
-        "wires": [
-            [
-                "2172861d6eca2d1c"
-            ]
-        ]
-    },
-    {
-        "id": "48582d354b6b0fda",
-        "type": "switch",
-        "z": "1f224d5f7092fb57",
-        "g": "0b0da0b6b3a2a19d",
-        "name": "^daily/(sunrise|sunset|bedtime)$",
-        "property": "topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "regex",
-                "v": "^daily/(sunrise|sunset|bedtime)$",
-                "vt": "str",
-                "case": false
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 310,
-        "y": 360,
-        "wires": [
-            [
-                "154766c193057414"
-            ]
-        ]
-    },
-    {
-        "id": "903dfd8686a14a20",
-        "type": "comment",
-        "z": "1f224d5f7092fb57",
-        "g": "0b0da0b6b3a2a19d",
-        "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
-        "info": "",
-        "x": 1040,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "4b3a06bb3281f1c5",
-        "type": "websocket out",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "publish",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 980,
-        "y": 120,
-        "wires": []
-    },
-    {
-        "id": "0fa595499d40a3fd",
-        "type": "websocket in",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "subscribe",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 100,
-        "y": 160,
-        "wires": [
-            [
-                "1182570b961cb1b0"
-            ]
-        ]
-    },
-    {
-        "id": "386e624f284112c8",
-        "type": "websocket in",
-        "z": "1f224d5f7092fb57",
-        "g": "0b0da0b6b3a2a19d",
-        "name": "subscribe",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 100,
-        "y": 360,
-        "wires": [
-            [
-                "48582d354b6b0fda"
-            ]
-        ]
-    },
-    {
-        "id": "46c44e33f918af63",
-        "type": "websocket out",
-        "z": "1f224d5f7092fb57",
-        "g": "0b0da0b6b3a2a19d",
-        "name": "publish",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 1180,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "a4e1a5b908d33066",
-        "type": "comment",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
-        "info": "",
-        "x": 1040,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "cbcdf85a73052db5",
-        "type": "function",
-        "z": "1f224d5f7092fb57",
-        "g": "a21835234a7481fe",
-        "name": "sunrise | sunset",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = Number.parseFloat(env.get('LATITUDE'))\nconst LONGITUDE = Number.parseFloat(env.get('LONGITUDE'))\n\nconst now = new Date(msg.payload.now)\nconst sunrise = {}\nconst sunset = {}\n\nconst times = suncalc.getTimes(\n    // work around bug in suncalc\n    new Date(\n        now.getFullYear(),\n        now.getMonth(),\n        now.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nsunrise.payload = times.sunrise.getTime()\nsunrise.topic = 'daily/sunrise'\nsunrise.retain = true\n\nsunset.payload = times.sunset.getTime()\nsunset.topic = 'daily/sunset'\nsunset.retain = true\n\nconst status =\n    new Date(sunrise.payload).toLocaleTimeString() +\n    ' | ' +\n    new Date(sunset.payload).toLocaleTimeString()\n\nnode.status({\n    text: status,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn [sunrise, sunset]",
-        "outputs": 2,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "suncalc",
-                "module": "suncalc"
-            }
-        ],
-        "x": 620,
-        "y": 120,
-        "wires": [
-            [
-                "46ac71815281ccea"
-            ],
-            [
-                "46ac71815281ccea"
-            ]
-        ],
-        "inputLabels": [
-            "daily"
-        ],
-        "outputLabels": [
-            "sunrise",
-            "sunset"
-        ],
-        "info": "Use the [suncalc](https://www.npmjs.com/package/suncalc) package to\nobtain the times at which the sun rises and sets on a given day.\n\n_Note that this `function` node is placed downstream of a `join` in\norder to delay sending MQTT messages until after the connection to the\nbroker has been established; the only input data on which this function\nactually relies comes from the `inject` node which fires once when\nflows start and then every morning at 1AM._\n\n_Note also that this assumes:_\n\n_- `function` nodes are allowed to dynamically load the_ suncalc\n   _package_\n\n_- `${LATITUDE}` and `${LONGITUDE}` environment variables contain the\n  georgraphical coordinates to pass to `suncalc.getTimes()`_\n\n# Input\n\n- timestamp in `msg.payload.daily`\n- all other `msg` properties are ignored\n\n# Output\n\n1. sunrise\n   - `msg.payload` is the timestamp for sunrise as reported by _suncalc_\n   - `msg.topic` is `daily/sunrise`\n2. sunset\n   - `msg.payload` is the timestamp for sunset as reported by _suncalc_\n   - `msg.topic` is `daily/sunset`\n"
-    },
-    {
-        "id": "154766c193057414",
-        "type": "switch",
-        "z": "1f224d5f7092fb57",
-        "g": "0b0da0b6b3a2a19d",
-        "name": "not retained",
-        "property": "retain",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "false"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 530,
-        "y": 360,
-        "wires": [
-            [
-                "de9d9eb71b136375"
-            ]
-        ]
-    },
-    {
-        "id": "6a9ac472018c38ea",
-        "type": "change",
-        "z": "bfdb5183ea783e85",
-        "g": "8326ae1a15518f8f",
-        "name": "Morning Shades",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "56393",
-                "tot": "num"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 560,
-        "y": 260,
-        "wires": [
-            [
-                "7adca925e9011e2f"
-            ]
-        ],
-        "info": "Set `msg.payload` to the scene id for _Morning Shades_."
-    },
-    {
-        "id": "c8c9c1f0d8b62902",
-        "type": "change",
-        "z": "bfdb5183ea783e85",
-        "g": "8326ae1a15518f8f",
-        "name": "Open All Shades",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "7307",
-                "tot": "num"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 550,
-        "y": 300,
-        "wires": [
-            [
-                "7adca925e9011e2f"
-            ]
-        ],
-        "info": "Set `msg.payload` to the scene id for _Open All Shades_."
-    },
-    {
-        "id": "9e961b1409432775",
-        "type": "change",
-        "z": "bfdb5183ea783e85",
-        "g": "8326ae1a15518f8f",
-        "name": "Afternoon Shades",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "42686",
-                "tot": "num"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 550,
-        "y": 340,
-        "wires": [
-            [
-                "7adca925e9011e2f"
-            ]
-        ],
-        "info": "Set `msg.payload` to the scene id for _Afternoon Shades_."
-    },
-    {
-        "id": "db4f7c2c93cd8f30",
-        "type": "change",
-        "z": "bfdb5183ea783e85",
-        "g": "8326ae1a15518f8f",
-        "name": "Close All Shades",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "15208",
-                "tot": "num"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 550,
-        "y": 380,
-        "wires": [
-            [
-                "7adca925e9011e2f"
-            ]
-        ],
-        "info": "Set `msg.payload` to the scene id for _Close All Shades_."
-    },
-    {
-        "id": "870608ff910feb60",
-        "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
-        "g": "c2e3e9d2c97df2d0",
-        "name": "Morning",
-        "env": [
-            {
-                "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/bad8480b-b404-42d1-a9e7-a4a69f400971\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/9c1c7975-2f47-4552-bac8-c19b643cd678\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/aea74e74-d544-4d08-ad71-3b6665045256\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\"}]",
-                "type": "json"
-            }
-        ],
-        "x": 540,
-        "y": 500,
-        "wires": []
-    },
-    {
-        "id": "0e592700939a92aa",
-        "type": "switch",
-        "z": "bfdb5183ea783e85",
-        "g": "c2e3e9d2c97df2d0",
-        "name": "daily/theme",
-        "property": "payload.daily/theme",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "tribal",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "spooky",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "jolly",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "false",
-        "repair": false,
-        "outputs": 4,
-        "x": 550,
-        "y": 600,
-        "wires": [
-            [
-                "1cb0a0826e19ac25"
-            ],
-            [
-                "8b2870e325e61ea1"
-            ],
-            [
-                "541a0eff9f0235b7"
-            ],
-            [
-                "4c3ffaa9eed2fd35"
-            ]
-        ],
-        "info": "Trigger evening lighting automation for the specified _theme_."
-    },
-    {
-        "id": "353cfc8157d414e1",
-        "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
-        "g": "c2e3e9d2c97df2d0",
-        "name": "Night",
-        "env": [
-            {
-                "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/bad8480b-b404-42d1-a9e7-a4a69f400971\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/48c39b9f-1599-4a5c-b7f6-bad6cad4029a\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\"}]",
-                "type": "json"
-            }
-        ],
-        "x": 530,
-        "y": 700,
-        "wires": []
-    },
-    {
-        "id": "1cb0a0826e19ac25",
-        "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
-        "g": "c2e3e9d2c97df2d0",
-        "name": "Tribal",
-        "env": [
-            {
-                "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/c4681d32-3368-43cd-9cf1-436132521068\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"},{\"topic\":\"resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"}]",
-                "type": "json"
-            }
-        ],
-        "x": 750,
-        "y": 480,
-        "wires": []
-    },
-    {
-        "id": "8b2870e325e61ea1",
-        "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
-        "g": "c2e3e9d2c97df2d0",
-        "name": "Spooky",
-        "env": [
-            {
-                "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/70a0a8a6-b4b7-4b24-a9cf-0ecea0f359cc\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"},{\"topic\":\"resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"}]",
-                "type": "json"
-            }
-        ],
-        "x": 760,
-        "y": 560,
-        "wires": []
-    },
-    {
-        "id": "541a0eff9f0235b7",
-        "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
-        "g": "c2e3e9d2c97df2d0",
-        "name": "Jolly",
-        "env": [
-            {
-                "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/3ac45cbb-21c0-4c2f-8037-c40345537ce2\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/12571f23-7714-4b47-8e75-a3040389b788\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\"}]",
-                "type": "json"
-            }
-        ],
-        "x": 750,
-        "y": 640,
-        "wires": []
-    },
-    {
-        "id": "4c3ffaa9eed2fd35",
-        "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
-        "g": "c2e3e9d2c97df2d0",
-        "name": "Standard",
-        "env": [
-            {
-                "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/9b6935e2-f8ed-4f91-83a2-2bff1850da99\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\"}]",
-                "type": "json"
-            }
-        ],
-        "x": 760,
-        "y": 720,
-        "wires": []
-    },
-    {
-        "id": "7adca925e9011e2f",
-        "type": "change",
-        "z": "bfdb5183ea783e85",
-        "g": "8326ae1a15518f8f",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "put/powerview/scene",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "retain",
-                "pt": "msg",
-                "to": "false",
-                "tot": "bool"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 780,
-        "y": 320,
-        "wires": [
-            [
-                "c8fb3c01f10259ca"
-            ]
-        ]
-    },
-    {
-        "id": "a19b812821bec622",
-        "type": "rbe",
-        "z": "bfdb5183ea783e85",
-        "g": "9f074aa55117ee9d",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 350,
-        "y": 160,
-        "wires": [
-            [
-                "477b281b3f87fc89"
-            ]
-        ]
-    },
-    {
-        "id": "477b281b3f87fc89",
-        "type": "join",
-        "z": "bfdb5183ea783e85",
-        "g": "9f074aa55117ee9d",
-        "name": "",
-        "mode": "custom",
-        "build": "object",
-        "property": "payload",
-        "propertyType": "msg",
-        "key": "topic",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "accumulate": true,
-        "timeout": "",
-        "count": "4",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "",
-        "reduceFixup": "",
-        "x": 470,
-        "y": 160,
-        "wires": [
-            [
-                "d4cab7825ba8bf11"
-            ]
-        ]
-    },
-    {
-        "id": "aa9143d910c74bec",
-        "type": "rbe",
-        "z": "bfdb5183ea783e85",
-        "g": "9f074aa55117ee9d",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 790,
-        "y": 160,
-        "wires": [
-            [
-                "85d575b4c5bfe117"
-            ]
-        ]
-    },
-    {
-        "id": "2d18a9e3a7fd198a",
-        "type": "switch",
-        "z": "bfdb5183ea783e85",
-        "g": "9f074aa55117ee9d",
-        "name": "topic",
-        "property": "topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "regex",
-                "v": "^settings/shades$|^settings/lighting$|^timer/time$|^daily/theme$",
-                "vt": "str",
-                "case": false
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 230,
-        "y": 160,
-        "wires": [
-            [
-                "a19b812821bec622"
-            ]
-        ]
-    },
-    {
-        "id": "679d6a0d2002bcb7",
-        "type": "function",
-        "z": "bfdb5183ea783e85",
-        "g": "8326ae1a15518f8f",
-        "name": "shades automation event",
-        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    return null\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    return null\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    return null\n\n}\n\nswitch (msg.payload[\"timer/time\"]) {\n\n    case 'morning':\n\n        return [copyMsg(), null, null, null]\n\n    case 'midday':\n\n        return [null, copyMsg(), null, null]\n\n    case 'afternoon':\n\n        return [null, null, copyMsg(), null]\n\n    case 'night':\n\n        return [null, null, null, copyMsg()]\n\n    default:\n\n        return null\n\n}\n",
-        "outputs": 4,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 290,
-        "y": 320,
-        "wires": [
-            [
-                "6a9ac472018c38ea"
-            ],
-            [
-                "c8c9c1f0d8b62902"
-            ],
-            [
-                "9e961b1409432775"
-            ],
-            [
-                "db4f7c2c93cd8f30"
-            ]
-        ],
-        "outputLabels": [
-            "morning",
-            "midday",
-            "afternoon",
-            "night"
-        ]
-    },
-    {
-        "id": "5e838b011b496bb4",
-        "type": "function",
-        "z": "bfdb5183ea783e85",
-        "g": "c2e3e9d2c97df2d0",
-        "name": "lighting automation event",
-        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    return null\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    return null\n\n}\n\nif (!msg.payload['settings/lighting']) {\n\n    return null\n\n}\n\nswitch (msg.payload[\"timer/time\"]) {\n\n    case 'morning':\n\n        return [copyMsg(), null, null, null]\n\n    case 'evening':\n\n        return [null, copyMsg(), null, null]\n\n    case 'night':\n\n        return [null, null, copyMsg(), null]\n\n    default:\n\n        return null\n\n}",
-        "outputs": 3,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 290,
-        "y": 600,
-        "wires": [
-            [
-                "870608ff910feb60"
-            ],
-            [
-                "0e592700939a92aa"
-            ],
-            [
-                "353cfc8157d414e1"
-            ]
-        ],
-        "outputLabels": [
-            "morning",
-            "evening",
-            "night"
-        ]
-    },
-    {
-        "id": "90ecd878733cb225",
-        "type": "websocket in",
-        "z": "bfdb5183ea783e85",
-        "g": "9f074aa55117ee9d",
-        "name": "subscribe",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 100,
-        "y": 160,
-        "wires": [
-            [
-                "2d18a9e3a7fd198a"
-            ]
-        ]
-    },
-    {
-        "id": "636d33f7c05cc8df",
-        "type": "websocket out",
-        "z": "bfdb5183ea783e85",
-        "g": "9f074aa55117ee9d",
-        "name": "publish",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 1180,
-        "y": 160,
-        "wires": []
-    },
-    {
         "id": "499f234a478a41e7",
         "type": "websocket out",
-        "z": "bfdb5183ea783e85",
+        "z": "e1d7dd3bdd3cf24a",
         "g": "3a0077281d6eefee",
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 640,
-        "y": 60,
+        "y": 280,
         "wires": []
     },
     {
         "id": "c3cac0049cccb7e7",
         "type": "change",
-        "z": "bfdb5183ea783e85",
+        "z": "e1d7dd3bdd3cf24a",
         "g": "3a0077281d6eefee",
         "name": "controls/refresh",
         "rules": [
@@ -2978,7 +2101,7 @@
         "to": "",
         "reg": false,
         "x": 480,
-        "y": 60,
+        "y": 280,
         "wires": [
             [
                 "499f234a478a41e7"
@@ -2988,14 +2111,14 @@
     {
         "id": "c79b769649c2b419",
         "type": "status",
-        "z": "bfdb5183ea783e85",
+        "z": "e1d7dd3bdd3cf24a",
         "g": "3a0077281d6eefee",
         "name": "status: websocket out",
         "scope": [
             "499f234a478a41e7"
         ],
         "x": 140,
-        "y": 60,
+        "y": 280,
         "wires": [
             [
                 "189c38230a6eb7a0"
@@ -3005,7 +2128,7 @@
     {
         "id": "189c38230a6eb7a0",
         "type": "switch",
-        "z": "bfdb5183ea783e85",
+        "z": "e1d7dd3bdd3cf24a",
         "g": "3a0077281d6eefee",
         "name": "connect",
         "property": "status.event",
@@ -3021,11 +2144,569 @@
         "repair": false,
         "outputs": 1,
         "x": 320,
-        "y": 60,
+        "y": 280,
         "wires": [
             [
                 "c3cac0049cccb7e7"
             ]
+        ]
+    },
+    {
+        "id": "2abdd09cee6d1cb9",
+        "type": "debug",
+        "z": "e1d7dd3bdd3cf24a",
+        "g": "ea6243759720241b",
+        "name": "sunrise",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "payload",
+        "statusType": "msg",
+        "x": 460,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "3841e7a6dcc70492",
+        "type": "switch",
+        "z": "e1d7dd3bdd3cf24a",
+        "g": "ea6243759720241b",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "timer/sunrise",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "timer/midday",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "timer/afternoon",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "timer/sunset",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "timer/bedtime",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "timer/theme",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 6,
+        "x": 230,
+        "y": 520,
+        "wires": [
+            [
+                "2abdd09cee6d1cb9"
+            ],
+            [
+                "9d4aa9961f7a8ffb"
+            ],
+            [
+                "d33aebc6b1bb8c12"
+            ],
+            [
+                "65a1c3b2b2958aa6"
+            ],
+            [
+                "c8155f947ead2c80"
+            ],
+            [
+                "3dc4461aaf886e94"
+            ]
+        ]
+    },
+    {
+        "id": "9d4aa9961f7a8ffb",
+        "type": "debug",
+        "z": "e1d7dd3bdd3cf24a",
+        "g": "ea6243759720241b",
+        "name": "midday",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "payload",
+        "statusType": "msg",
+        "x": 460,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "d33aebc6b1bb8c12",
+        "type": "debug",
+        "z": "e1d7dd3bdd3cf24a",
+        "g": "ea6243759720241b",
+        "name": "afternoon",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "payload",
+        "statusType": "msg",
+        "x": 460,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "65a1c3b2b2958aa6",
+        "type": "debug",
+        "z": "e1d7dd3bdd3cf24a",
+        "g": "ea6243759720241b",
+        "name": "sunset",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "payload",
+        "statusType": "msg",
+        "x": 450,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "c8155f947ead2c80",
+        "type": "debug",
+        "z": "e1d7dd3bdd3cf24a",
+        "g": "ea6243759720241b",
+        "name": "bedtime",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "payload",
+        "statusType": "msg",
+        "x": 460,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "3dc4461aaf886e94",
+        "type": "debug",
+        "z": "e1d7dd3bdd3cf24a",
+        "g": "ea6243759720241b",
+        "name": "theme",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "payload",
+        "statusType": "msg",
+        "x": 450,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "e17697bec8a4f882",
+        "type": "websocket in",
+        "z": "e1d7dd3bdd3cf24a",
+        "g": "ea6243759720241b",
+        "name": "subscribe",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 100,
+        "y": 520,
+        "wires": [
+            [
+                "3841e7a6dcc70492"
+            ]
+        ]
+    },
+    {
+        "id": "6a9ac472018c38ea",
+        "type": "change",
+        "z": "bfdb5183ea783e85",
+        "g": "8326ae1a15518f8f",
+        "name": "Morning Shades",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "56393",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 340,
+        "wires": [
+            [
+                "7adca925e9011e2f"
+            ]
+        ],
+        "info": "Set `msg.payload` to the scene id for _Morning Shades_."
+    },
+    {
+        "id": "c8c9c1f0d8b62902",
+        "type": "change",
+        "z": "bfdb5183ea783e85",
+        "g": "8326ae1a15518f8f",
+        "name": "Open All Shades",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "7307",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 550,
+        "y": 380,
+        "wires": [
+            [
+                "7adca925e9011e2f"
+            ]
+        ],
+        "info": "Set `msg.payload` to the scene id for _Open All Shades_."
+    },
+    {
+        "id": "9e961b1409432775",
+        "type": "change",
+        "z": "bfdb5183ea783e85",
+        "g": "8326ae1a15518f8f",
+        "name": "Afternoon Shades",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "42686",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 550,
+        "y": 420,
+        "wires": [
+            [
+                "7adca925e9011e2f"
+            ]
+        ],
+        "info": "Set `msg.payload` to the scene id for _Afternoon Shades_."
+    },
+    {
+        "id": "db4f7c2c93cd8f30",
+        "type": "change",
+        "z": "bfdb5183ea783e85",
+        "g": "8326ae1a15518f8f",
+        "name": "Close All Shades",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "15208",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 550,
+        "y": 460,
+        "wires": [
+            [
+                "7adca925e9011e2f"
+            ]
+        ],
+        "info": "Set `msg.payload` to the scene id for _Close All Shades_."
+    },
+    {
+        "id": "870608ff910feb60",
+        "type": "subflow:450f4de3c4f73b40",
+        "z": "bfdb5183ea783e85",
+        "g": "c2e3e9d2c97df2d0",
+        "name": "Morning",
+        "env": [
+            {
+                "name": "COMMANDS",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/bad8480b-b404-42d1-a9e7-a4a69f400971\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/9c1c7975-2f47-4552-bac8-c19b643cd678\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/aea74e74-d544-4d08-ad71-3b6665045256\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\"}]",
+                "type": "json"
+            }
+        ],
+        "x": 540,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "0e592700939a92aa",
+        "type": "switch",
+        "z": "bfdb5183ea783e85",
+        "g": "c2e3e9d2c97df2d0",
+        "name": "timer/theme",
+        "property": "payload.timer/theme",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "tribal",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "spooky",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "jolly",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 4,
+        "x": 550,
+        "y": 640,
+        "wires": [
+            [
+                "1cb0a0826e19ac25"
+            ],
+            [
+                "8b2870e325e61ea1"
+            ],
+            [
+                "541a0eff9f0235b7"
+            ],
+            [
+                "4c3ffaa9eed2fd35"
+            ]
+        ],
+        "info": "Trigger evening lighting automation for the specified _theme_."
+    },
+    {
+        "id": "353cfc8157d414e1",
+        "type": "subflow:450f4de3c4f73b40",
+        "z": "bfdb5183ea783e85",
+        "g": "c2e3e9d2c97df2d0",
+        "name": "Night",
+        "env": [
+            {
+                "name": "COMMANDS",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/bad8480b-b404-42d1-a9e7-a4a69f400971\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/48c39b9f-1599-4a5c-b7f6-bad6cad4029a\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\"}]",
+                "type": "json"
+            }
+        ],
+        "x": 530,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "1cb0a0826e19ac25",
+        "type": "subflow:450f4de3c4f73b40",
+        "z": "bfdb5183ea783e85",
+        "g": "c2e3e9d2c97df2d0",
+        "name": "Tribal",
+        "env": [
+            {
+                "name": "COMMANDS",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/c4681d32-3368-43cd-9cf1-436132521068\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"},{\"topic\":\"resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"}]",
+                "type": "json"
+            }
+        ],
+        "x": 750,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "8b2870e325e61ea1",
+        "type": "subflow:450f4de3c4f73b40",
+        "z": "bfdb5183ea783e85",
+        "g": "c2e3e9d2c97df2d0",
+        "name": "Spooky",
+        "env": [
+            {
+                "name": "COMMANDS",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/70a0a8a6-b4b7-4b24-a9cf-0ecea0f359cc\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"},{\"topic\":\"resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"}]",
+                "type": "json"
+            }
+        ],
+        "x": 760,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "541a0eff9f0235b7",
+        "type": "subflow:450f4de3c4f73b40",
+        "z": "bfdb5183ea783e85",
+        "g": "c2e3e9d2c97df2d0",
+        "name": "Jolly",
+        "env": [
+            {
+                "name": "COMMANDS",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/3ac45cbb-21c0-4c2f-8037-c40345537ce2\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/12571f23-7714-4b47-8e75-a3040389b788\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\"}]",
+                "type": "json"
+            }
+        ],
+        "x": 750,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "4c3ffaa9eed2fd35",
+        "type": "subflow:450f4de3c4f73b40",
+        "z": "bfdb5183ea783e85",
+        "g": "c2e3e9d2c97df2d0",
+        "name": "Standard",
+        "env": [
+            {
+                "name": "COMMANDS",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/9b6935e2-f8ed-4f91-83a2-2bff1850da99\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\"}]",
+                "type": "json"
+            }
+        ],
+        "x": 760,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "7adca925e9011e2f",
+        "type": "change",
+        "z": "bfdb5183ea783e85",
+        "g": "8326ae1a15518f8f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "put/powerview/scene",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "retain",
+                "pt": "msg",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 780,
+        "y": 400,
+        "wires": [
+            [
+                "c8fb3c01f10259ca"
+            ]
+        ]
+    },
+    {
+        "id": "679d6a0d2002bcb7",
+        "type": "function",
+        "z": "bfdb5183ea783e85",
+        "g": "8326ae1a15518f8f",
+        "name": "shades automation event",
+        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    return null\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    return null\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    return null\n\n}\n\nswitch (msg.payload[\"timer/time\"]) {\n\n    case 'sunrise':\n\n        return [copyMsg(), null, null, null]\n\n    case 'midday':\n\n        return [null, copyMsg(), null, null]\n\n    case 'afternoon':\n\n        return [null, null, copyMsg(), null]\n\n    case 'bedtime':\n\n        return [null, null, null, copyMsg()]\n\n    default:\n\n        return null\n\n}\n",
+        "outputs": 4,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 400,
+        "wires": [
+            [
+                "6a9ac472018c38ea"
+            ],
+            [
+                "c8c9c1f0d8b62902"
+            ],
+            [
+                "9e961b1409432775"
+            ],
+            [
+                "db4f7c2c93cd8f30"
+            ]
+        ],
+        "outputLabels": [
+            "sunrise",
+            "midday",
+            "afternoon",
+            "bedtime"
+        ]
+    },
+    {
+        "id": "5e838b011b496bb4",
+        "type": "function",
+        "z": "bfdb5183ea783e85",
+        "g": "c2e3e9d2c97df2d0",
+        "name": "lighting automation event",
+        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    return null\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    return null\n\n}\n\nif (!msg.payload['settings/lighting']) {\n\n    return null\n\n}\n\nswitch (msg.payload[\"timer/time\"]) {\n\n    case 'sunrise':\n\n        return [copyMsg(), null, null, null]\n\n    case 'evening':\n\n        return [null, copyMsg(), null, null]\n\n    case 'bedtime':\n\n        return [null, null, copyMsg(), null]\n\n    default:\n\n        return null\n\n}",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 640,
+        "wires": [
+            [
+                "870608ff910feb60"
+            ],
+            [
+                "0e592700939a92aa"
+            ],
+            [
+                "353cfc8157d414e1"
+            ]
+        ],
+        "outputLabels": [
+            "morning",
+            "evening",
+            "night"
         ]
     },
     {
@@ -3037,7 +2718,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 940,
-        "y": 320,
+        "y": 400,
         "wires": []
     },
     {
@@ -3049,7 +2730,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 320,
+        "y": 400,
         "wires": [
             [
                 "679d6a0d2002bcb7"
@@ -3065,7 +2746,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 600,
+        "y": 640,
         "wires": [
             [
                 "5e838b011b496bb4"
@@ -3073,38 +2754,263 @@
         ]
     },
     {
-        "id": "d4cab7825ba8bf11",
-        "type": "function",
+        "id": "0497e0ed333e8f23",
+        "type": "join",
         "z": "bfdb5183ea783e85",
-        "g": "9f074aa55117ee9d",
-        "name": "trigger automation",
-        "func": "const payload = {}\n\npayload['settings/shades'] = msg.payload['settings/shades']\npayload['settings/lighting'] = msg.payload['settings/lighting']\npayload['daily/theme'] = msg.payload['daily/theme']\npayload['timer/time'] = msg.payload['timer/time']\n\nreturn {\n    payload: payload,\n    topic: 'automation/trigger',\n    retain: true\n}",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 630,
+        "g": "114e4bc3e2504c40",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 430,
+        "y": 200,
+        "wires": [
+            [
+                "47acab248c4d8501"
+            ]
+        ],
+        "info": "Synchronize receipt of `daily/timestamp` and `settings/bedtime`\nmessages."
+    },
+    {
+        "id": "8624deaf4bee22fa",
+        "type": "inject",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 01 * * *",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "now",
+        "payload": "",
+        "payloadType": "date",
+        "x": 260,
         "y": 160,
         "wires": [
             [
-                "aa9143d910c74bec"
+                "0497e0ed333e8f23"
             ]
         ]
     },
     {
-        "id": "85d575b4c5bfe117",
+        "id": "60d6c5b7d0db140a",
+        "type": "switch",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "settings/bedtime",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "settings/bedtime",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 260,
+        "y": 240,
+        "wires": [
+            [
+                "0497e0ed333e8f23"
+            ]
+        ]
+    },
+    {
+        "id": "47acab248c4d8501",
+        "type": "function",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "timer",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = []\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nconst sunrise = times.sunrise.getTime()\nconst sunset = times.sunset.getTime()\nlet midday = null\nlet afternoon = null\n\nif (sunrise > now) {\n\n    messages.push({\n        payload: 'sunrise',\n        topic: 'timer/time',\n        until: sunrise\n    })\n}\n\nfor (let time = sunrise; time < sunset; time += 60000) {\n\n    const position = suncalc.getPosition(new Date(time), LATITUDE, LONGITUDE)\n\n    if ((midday === null) && (position.altitude > 0.8)) {\n\n        midday = time\n\n        if (midday > now) {\n            messages.push({\n                payload: 'midday',\n                topic: 'timer/time',\n                until: midday\n            })\n        }\n    }\n\n    if ((afternoon == null) && (position.azimuth > 0) && (position.altitude < 0.8)) {\n\n        afternoon = time\n\n        if (afternoon > now) {\n\n            messages.push({\n                payload: 'afternoon',\n                topic: 'timer/time',\n                until: afternoon\n            })\n        }\n\n        break\n\n    }\n}\n\nif (sunset > now) {\n\n    messages.push({\n        payload: 'sunset',\n        topic: 'timer/time',\n        until: sunset\n    })\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        until: bedtime\n    })\n}\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme',\n    until: now\n})\n\nreturn [messages]",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "suncalc",
+                "module": "suncalc"
+            }
+        ],
+        "x": 550,
+        "y": 200,
+        "wires": [
+            [
+                "106ee66b66de58ab",
+                "06bc3f0c72a3b81b"
+            ]
+        ]
+    },
+    {
+        "id": "8ec45bbfd0b4fb4c",
+        "type": "websocket in",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "subscribe",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 100,
+        "y": 240,
+        "wires": [
+            [
+                "60d6c5b7d0db140a"
+            ]
+        ]
+    },
+    {
+        "id": "0816fe94f5858846",
+        "type": "rbe",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 850,
+        "y": 120,
+        "wires": [
+            [
+                "21c4dba2bb5d0e54",
+                "0f4453210d28fc71"
+            ]
+        ]
+    },
+    {
+        "id": "21c4dba2bb5d0e54",
+        "type": "join",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "4",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 970,
+        "y": 120,
+        "wires": [
+            [
+                "7cf8caea790c9792"
+            ]
+        ]
+    },
+    {
+        "id": "8e84162e92296698",
+        "type": "switch",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "^settings/shades$|^settings/lighting$",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "regex",
+                "v": "^settings/shades$|^settings/lighting$",
+                "vt": "str",
+                "case": false
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 610,
+        "y": 80,
+        "wires": [
+            [
+                "0816fe94f5858846"
+            ]
+        ]
+    },
+    {
+        "id": "9977146ce026810e",
+        "type": "websocket in",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "subscribe",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 380,
+        "y": 80,
+        "wires": [
+            [
+                "8e84162e92296698"
+            ]
+        ]
+    },
+    {
+        "id": "b044e7bab42607f8",
+        "type": "comment",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
+        "info": "",
+        "x": 1160,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "0c57cb4bce44a11a",
+        "type": "websocket out",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "publish",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 1300,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "7cf8caea790c9792",
         "type": "change",
         "z": "bfdb5183ea783e85",
-        "g": "9f074aa55117ee9d",
-        "name": "",
+        "g": "114e4bc3e2504c40",
+        "name": "automation/trigger",
         "rules": [
             {
                 "t": "set",
-                "p": "payload.timestamp",
+                "p": "topic",
                 "pt": "msg",
-                "to": "",
-                "tot": "date"
+                "to": "automation/trigger",
+                "tot": "str"
             }
         ],
         "action": "",
@@ -3112,11 +3018,102 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 980,
+        "x": 1130,
+        "y": 120,
+        "wires": [
+            [
+                "0c57cb4bce44a11a",
+                "f43e12e2fc318044"
+            ]
+        ]
+    },
+    {
+        "id": "0f4453210d28fc71",
+        "type": "debug",
+        "z": "bfdb5183ea783e85",
+        "name": "events",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1210,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "106ee66b66de58ab",
+        "type": "function",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "delay until",
+        "func": "const timers = context.get('timers')\n\nif (msg.clear) {\n\n    timers.forEach((id) => { clearTimeout(id) })\n    context.set('timers', [])\n\n    node.status({\n        text: 0,\n        shape: 'ring',\n        fill: 'green'\n    })\n\n    return null\n\n}\n\nconst until = new Date(msg.until)\nconst now = new Date()\nconst delay = until.getTime() - now.getTime()\n\nif (delay <= 0) {\n\n    return msg\n\n}\n\nconst id = setTimeout(() => {\n\n    let timers = context.get('timers')\n\n    timers = timers.filter(timer => timer != id)\n    context.set('timers', timers)\n\n    node.status({\n        text: timers.length,\n        shape: 'dot',\n        fill: 'green'\n    })\n\n    node.send(msg)\n\n}, delay)\n\ntimers.push(id)\ncontext.set('timers', timers)\n\nnode.status({\n    text: timers.length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn null",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "context.set('timers', [])\n\nnode.status({\n    text: 0,\n    shape: 'ring',\n    fill: 'green'\n})",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
         "y": 160,
         "wires": [
             [
-                "636d33f7c05cc8df"
+                "0816fe94f5858846"
+            ]
+        ],
+        "outputLabels": [
+            "delayed",
+            "immediate"
+        ]
+    },
+    {
+        "id": "f43e12e2fc318044",
+        "type": "debug",
+        "z": "bfdb5183ea783e85",
+        "name": "trigger",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1210,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "39d8a5aeec9834da",
+        "type": "websocket out",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "publish",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 860,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "06bc3f0c72a3b81b",
+        "type": "function",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "locale string",
+        "func": "const message = RED.util.cloneMessage(msg)\n\nmessage.until = new Date(message.until).toLocaleString()\nreturn message",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 240,
+        "wires": [
+            [
+                "39d8a5aeec9834da"
             ]
         ]
     },

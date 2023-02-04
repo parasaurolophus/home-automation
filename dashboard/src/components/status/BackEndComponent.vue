@@ -20,6 +20,8 @@
 
             <v-btn @click="sendWarning">Send Warning</v-btn>
 
+            <v-btn @click="sendInfo">Send Info</v-btn>
+
         </fieldset>
 
     </div>
@@ -97,8 +99,7 @@ function sendError() {
 
     websocketPublish({
         payload: new Date().toLocaleString(),
-        topic: 'test/error',
-        retain: true
+        topic: 'test/error'
     })
 
 }
@@ -107,8 +108,16 @@ function sendWarning() {
 
     websocketPublish({
         payload: new Date().toLocaleString(),
-        topic: 'test/warning',
-        retain: true
+        topic: 'test/warning'
+    })
+
+}
+
+function sendInfo() {
+
+    websocketPublish({
+        payload: new Date().toLocaleString(),
+        topic: 'test/info'
     })
 
 }
