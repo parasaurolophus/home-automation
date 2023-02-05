@@ -101,7 +101,10 @@ function websocketPublish(msg) {
 
     if (ws === null) {
 
-        console.log('websocket closed when attempting to send:\n' + JSON.stringify(msg, undefined, 1))
+        const text = JSON.stringify(msg, undefined, 1)
+
+        console.log('websocket closed when attempting to send:\n' + text)
+        errors.value.push({ show: true, title: 'websocket closed', text: text })
         return
 
     }
@@ -194,7 +197,10 @@ function connectWS() {
     // log errors
     ws.onerror = (event) => {
 
-        console.log(JSON.stringify(event, undefined, 1))
+        const text = JSON.stringify(event, undefined, 1)
+
+        console.log(text)
+        errors.value.push({ show: true, title: 'ws.onerror', text: text })
 
     }
 
@@ -209,14 +215,13 @@ function connectWS() {
 
             msg.localeString = new Date(msg.timestamp).toLocaleString()
             console.log(msg)
-            infos.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg, undefined, 1) })
             return
 
         }
 
         if (/^timer\/[^/]+$/.exec(msg.topic)) {
 
-            infos.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg, undefined, 1) })
+            console.log(JSON.stringify(msg, undefined, 1))
             return
 
         }
@@ -247,8 +252,10 @@ function connectWS() {
                 }
             }
 
-            console.log('no bedtime option found matching ' + JSON.stringify(msg.payload, undefined, 1))
-            errors.value.push({ show: true, title: 'Invalid settings/bedtime payload', text: msg.payload })
+            const text = JSON.stringify(msg.payload, undefined, 1)
+
+            console.log('no bedtime option found matching ' + text)
+            errors.value.push({ show: true, title: 'Invalid settings/bedtime payload', text: text })
             return
 
         }
