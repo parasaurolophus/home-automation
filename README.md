@@ -117,20 +117,25 @@ These flows rely on some sensitive configuration data provided via
 environment variables, e.g. by adding them to
 `~/.node-red/environment`:
 
-| Environment Variable       | Description                                                                      |
-|----------------------------|----------------------------------------------------------------------------------|
-| `LATITUDE`                 | Coordinate for use with [suncalc](https://www.npmjs.com/package/suncalc)         |
-| `LONGITUDE`                | Coordinate for use with [suncalc](https://www.npmjs.com/package/suncalc)         |
-| `GROUND_FLOOR_HUE_ADDRESS` | IP address of the Hue Bridge controlling devices on the ground floor             |
-| `GROUND_FLOOR_HUE_KEY`     | API access token for the ground floor Hue Bridge                                 |
-| `BASEMENT_HUE_ADDRESS`     | IP address of the Hue Bridge controlling devices in the basement                 |
-| `BASEMENT_HUE_KEY`         | API access token for the basement Hue Bridge                                     |
-| `POWERVIEW_ADDRESS`        | IP address of the PowerView hub                                                  |
+| Environment Variable       | Description                                                                          |
+|----------------------------|--------------------------------------------------------------------------------------|
+| `LATITUDE`                 | Coordinate for use with [suncalc](https://www.npmjs.com/package/suncalc)             |
+| `LONGITUDE`                | Coordinate for use with [suncalc](https://www.npmjs.com/package/suncalc)             |
+| `GROUND_FLOOR_HUE_ADDRESS` | IP address of the Hue Bridge controlling devices on the ground floor                 |
+| `GROUND_FLOOR_HUE_KEY`     | API access token for the ground floor Hue Bridge                                     |
+| `BASEMENT_HUE_ADDRESS`     | IP address of the Hue Bridge controlling devices in the basement                     |
+| `BASEMENT_HUE_KEY`         | API access token for the basement Hue Bridge                                         |
+| `POWERVIEW_ADDRESS`        | IP address of the PowerView hub                                                      |
+| `BROKER_URL`               | The URL to use to when connecting as a client to the WebSocket served by these flows |
 
 There are two configuraton properties per Hue bridge: its address and
 access token for use by Node-RED. These flows include a browser-based user
 interface for creating such access tokens where they are referred to as
 "keys."
+
+`${BROKER_URL}` is used to enable the possibility of extracting the
+flow which hosts the `/broker` WebSocket server from these home
+automation flows and running it on a separate instance of Node-RED.
 
 ## Features
 
