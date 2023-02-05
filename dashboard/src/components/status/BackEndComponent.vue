@@ -3,25 +3,16 @@
     <div>
 
         <fieldset>
-
             <legend>Back End</legend>
-
             <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
-
             <v-btn @click="refreshControls">Refresh Controls</v-btn>
-
         </fieldset>
 
         <fieldset>
-
             <legend>Test</legend>
-
             <v-btn @click="sendError">Send Error</v-btn>
-
             <v-btn @click="sendWarning">Send Warning</v-btn>
-
             <v-btn @click="sendInfo">Send Info</v-btn>
-
         </fieldset>
 
     </div>
@@ -97,29 +88,29 @@ function wsStatusClass(status) {
 
 function sendError() {
 
-    websocketPublish({
-        payload: new Date().toLocaleString(),
-        topic: 'test/error'
-    })
+    sendEvent(new Date().toLocaleString(), 'test/error')
 
 }
 
 function sendWarning() {
 
-    websocketPublish({
-        payload: new Date().toLocaleString(),
-        topic: 'test/warning'
-    })
+    sendEvent(new Date().toLocaleString(), 'test/warning')
 
 }
 
 function sendInfo() {
 
-    websocketPublish({
-        payload: new Date().toLocaleString(),
-        topic: 'test/info'
-    })
+    sendEvent(new Date().toLocaleString(), 'test/info')
 
+}
+
+function sendEvent(payload, topic, retain) {
+
+    websocketPublish({
+        payload: payload,
+        topic: topic,
+        retain: retain
+    })
 }
 
 </script>

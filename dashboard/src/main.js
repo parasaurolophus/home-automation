@@ -207,14 +207,16 @@ function connectWS() {
 
         if (msg.topic == 'automation/trigger') {
 
-            infos.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg.payload, undefined, 1) })
+            msg.localeString = new Date(msg.timestamp).toLocaleString()
+            console.log(msg)
+            infos.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg, undefined, 1) })
             return
 
         }
 
         if (/^timer\/[^/]+$/.exec(msg.topic)) {
 
-            infos.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg.payload, undefined, 1) })
+            infos.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg, undefined, 1) })
             return
 
         }

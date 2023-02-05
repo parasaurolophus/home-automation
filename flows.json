@@ -389,7 +389,9 @@
             "7756c6eb9522da59"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 1232,
+        "h": 202
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -413,7 +415,9 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 239
+        "y": 239,
+        "w": 952,
+        "h": 122
     },
     {
         "id": "0fb8e43c903b3506",
@@ -495,7 +499,9 @@
             "d046e6267c76dfe1"
         ],
         "x": 14,
-        "y": 379
+        "y": 379,
+        "w": 952,
+        "h": 82
     },
     {
         "id": "9cf0457b813ca743",
@@ -518,6 +524,8 @@
         ],
         "x": 14,
         "y": 219,
+        "w": 1272,
+        "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -541,7 +549,9 @@
             "9154f7fa8b08933f"
         ],
         "x": 14,
-        "y": 79
+        "y": 79,
+        "w": 832,
+        "h": 122
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -566,7 +576,9 @@
             "4e40e2700edff9ec"
         ],
         "x": 14,
-        "y": 319
+        "y": 319,
+        "w": 1272,
+        "h": 122
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -592,9 +604,9 @@
             "244e029d9a276e82"
         ],
         "x": 14,
-        "y": 519,
+        "y": 439,
         "w": 832,
-        "h": 262
+        "h": 322
     },
     {
         "id": "8326ae1a15518f8f",
@@ -619,7 +631,7 @@
             "839872dec0a80cfa"
         ],
         "x": 14,
-        "y": 299,
+        "y": 219,
         "w": 1012,
         "h": 202
     },
@@ -684,7 +696,9 @@
             "048ec8eb41be82ae"
         ],
         "x": 14,
-        "y": 479
+        "y": 479,
+        "w": 952,
+        "h": 82
     },
     {
         "id": "3a0077281d6eefee",
@@ -735,13 +749,12 @@
             "0c57cb4bce44a11a",
             "7cf8caea790c9792",
             "106ee66b66de58ab",
-            "39d8a5aeec9834da",
-            "06bc3f0c72a3b81b"
+            "07e518eda1fa776b"
         ],
         "x": 14,
         "y": 19,
-        "w": 1372,
-        "h": 262
+        "w": 1332,
+        "h": 182
     },
     {
         "id": "ea6243759720241b",
@@ -765,10 +778,38 @@
             "3dc4461aaf886e94",
             "e17697bec8a4f882"
         ],
-        "x": 14,
-        "y": 339,
+        "x": 774,
+        "y": 19,
         "w": 552,
-        "h": 382
+        "h": 482
+    },
+    {
+        "id": "ebc1143cd96ae67d",
+        "type": "group",
+        "z": "bfdb5183ea783e85",
+        "name": "debug automation",
+        "style": {
+            "stroke": "none",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#92d04f",
+            "fill": "#92d04f"
+        },
+        "nodes": [
+            "39d8a5aeec9834da",
+            "3d16babc8f356ea1",
+            "51b8fbaba65a94c6",
+            "51263b280aaca388",
+            "c715a0b0bcb89d36",
+            "f99f716a357c6942",
+            "b2d3b76f7603b655",
+            "9d33cddb29d581ec",
+            "394967b3ec96ef1f"
+        ],
+        "x": 854,
+        "y": 439,
+        "w": 532,
+        "h": 302
     },
     {
         "id": "431414ce08ebb3c0",
@@ -2165,8 +2206,8 @@
         "targetType": "full",
         "statusVal": "payload",
         "statusType": "msg",
-        "x": 460,
-        "y": 380,
+        "x": 1220,
+        "y": 60,
         "wires": []
     },
     {
@@ -2212,8 +2253,8 @@
         "checkall": "false",
         "repair": false,
         "outputs": 6,
-        "x": 230,
-        "y": 520,
+        "x": 990,
+        "y": 260,
         "wires": [
             [
                 "2abdd09cee6d1cb9"
@@ -2249,8 +2290,8 @@
         "targetType": "full",
         "statusVal": "payload",
         "statusType": "msg",
-        "x": 460,
-        "y": 440,
+        "x": 1220,
+        "y": 140,
         "wires": []
     },
     {
@@ -2267,8 +2308,8 @@
         "targetType": "full",
         "statusVal": "payload",
         "statusType": "msg",
-        "x": 460,
-        "y": 500,
+        "x": 1220,
+        "y": 220,
         "wires": []
     },
     {
@@ -2285,8 +2326,8 @@
         "targetType": "full",
         "statusVal": "payload",
         "statusType": "msg",
-        "x": 450,
-        "y": 560,
+        "x": 1210,
+        "y": 300,
         "wires": []
     },
     {
@@ -2303,8 +2344,8 @@
         "targetType": "full",
         "statusVal": "payload",
         "statusType": "msg",
-        "x": 460,
-        "y": 620,
+        "x": 1220,
+        "y": 380,
         "wires": []
     },
     {
@@ -2321,8 +2362,8 @@
         "targetType": "full",
         "statusVal": "payload",
         "statusType": "msg",
-        "x": 450,
-        "y": 680,
+        "x": 1210,
+        "y": 460,
         "wires": []
     },
     {
@@ -2333,8 +2374,8 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 100,
-        "y": 520,
+        "x": 860,
+        "y": 260,
         "wires": [
             [
                 "3841e7a6dcc70492"
@@ -2362,7 +2403,7 @@
         "to": "",
         "reg": false,
         "x": 560,
-        "y": 340,
+        "y": 260,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2391,7 +2432,7 @@
         "to": "",
         "reg": false,
         "x": 550,
-        "y": 380,
+        "y": 300,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2420,7 +2461,7 @@
         "to": "",
         "reg": false,
         "x": 550,
-        "y": 420,
+        "y": 340,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2449,7 +2490,7 @@
         "to": "",
         "reg": false,
         "x": 550,
-        "y": 460,
+        "y": 380,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2471,7 +2512,7 @@
             }
         ],
         "x": 540,
-        "y": 560,
+        "y": 520,
         "wires": []
     },
     {
@@ -2506,7 +2547,7 @@
         "repair": false,
         "outputs": 4,
         "x": 550,
-        "y": 640,
+        "y": 600,
         "wires": [
             [
                 "1cb0a0826e19ac25"
@@ -2537,7 +2578,7 @@
             }
         ],
         "x": 530,
-        "y": 720,
+        "y": 680,
         "wires": []
     },
     {
@@ -2554,7 +2595,7 @@
             }
         ],
         "x": 750,
-        "y": 560,
+        "y": 480,
         "wires": []
     },
     {
@@ -2571,7 +2612,7 @@
             }
         ],
         "x": 760,
-        "y": 620,
+        "y": 560,
         "wires": []
     },
     {
@@ -2588,7 +2629,7 @@
             }
         ],
         "x": 750,
-        "y": 680,
+        "y": 640,
         "wires": []
     },
     {
@@ -2605,7 +2646,7 @@
             }
         ],
         "x": 760,
-        "y": 740,
+        "y": 720,
         "wires": []
     },
     {
@@ -2636,7 +2677,7 @@
         "to": "",
         "reg": false,
         "x": 780,
-        "y": 400,
+        "y": 320,
         "wires": [
             [
                 "c8fb3c01f10259ca"
@@ -2649,14 +2690,14 @@
         "z": "bfdb5183ea783e85",
         "g": "8326ae1a15518f8f",
         "name": "shades automation event",
-        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    return null\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    return null\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    return null\n\n}\n\nswitch (msg.payload[\"timer/time\"]) {\n\n    case 'sunrise':\n\n        return [copyMsg(), null, null, null]\n\n    case 'midday':\n\n        return [null, copyMsg(), null, null]\n\n    case 'afternoon':\n\n        return [null, null, copyMsg(), null]\n\n    case 'bedtime':\n\n        return [null, null, null, copyMsg()]\n\n    default:\n\n        return null\n\n}\n",
+        "func": "function copyMsg() {\n\n    node.status({\n        text: new Date(msg.timestamp).toLocaleString(),\n        shape: 'dot',\n        fill: 'blue'\n    })\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    return [null, null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    return [null, null, null, null]\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    return null\n\n}\n\nswitch (msg.payload[\"timer/time\"]) {\n\n    case 'sunrise':\n\n        return [copyMsg(), null, null, null]\n\n    case 'midday':\n\n        return [null, copyMsg(), null, null]\n\n    case 'afternoon':\n\n        return [null, null, copyMsg(), null]\n\n    case 'bedtime':\n\n        return [null, null, null, copyMsg()]\n\n    default:\n\n        return [null, null, null, null]\n\n}\n",
         "outputs": 4,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 400,
+        "y": 320,
         "wires": [
             [
                 "6a9ac472018c38ea"
@@ -2684,14 +2725,14 @@
         "z": "bfdb5183ea783e85",
         "g": "c2e3e9d2c97df2d0",
         "name": "lighting automation event",
-        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    return null\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    return null\n\n}\n\nif (!msg.payload['settings/lighting']) {\n\n    return null\n\n}\n\nswitch (msg.payload[\"timer/time\"]) {\n\n    case 'sunrise':\n\n        return [copyMsg(), null, null, null]\n\n    case 'evening':\n\n        return [null, copyMsg(), null, null]\n\n    case 'bedtime':\n\n        return [null, null, copyMsg(), null]\n\n    default:\n\n        return null\n\n}",
+        "func": "function copyMsg() {\n\n    node.status({\n        text: new Date(msg.timestamp).toLocaleString(),\n        shape: 'dot',\n        fill: 'blue'\n    })\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    return [null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    return [null, null, null]\n\n}\n\nif (!msg.payload['settings/lighting']) {\n\n    return [null, null, null]\n\n}\n\nswitch (msg.payload[\"timer/time\"]) {\n\n    case 'sunrise':\n\n        return [copyMsg(), null, null]\n\n    case 'sunset':\n\n        return [null, copyMsg(), null]\n\n    case 'bedtime':\n\n        return [null, null, copyMsg()]\n\n    default:\n\n        return [null, null, null]\n\n}",
         "outputs": 3,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 640,
+        "y": 600,
         "wires": [
             [
                 "870608ff910feb60"
@@ -2704,9 +2745,9 @@
             ]
         ],
         "outputLabels": [
-            "morning",
-            "evening",
-            "night"
+            "sunrise",
+            "sunset",
+            "bedtime"
         ]
     },
     {
@@ -2718,7 +2759,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 940,
-        "y": 400,
+        "y": 320,
         "wires": []
     },
     {
@@ -2730,7 +2771,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 400,
+        "y": 320,
         "wires": [
             [
                 "679d6a0d2002bcb7"
@@ -2746,7 +2787,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 640,
+        "y": 600,
         "wires": [
             [
                 "5e838b011b496bb4"
@@ -2774,8 +2815,8 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 430,
-        "y": 200,
+        "x": 410,
+        "y": 140,
         "wires": [
             [
                 "47acab248c4d8501"
@@ -2806,7 +2847,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 260,
-        "y": 160,
+        "y": 120,
         "wires": [
             [
                 "0497e0ed333e8f23"
@@ -2832,7 +2873,7 @@
         "repair": false,
         "outputs": 1,
         "x": 260,
-        "y": 240,
+        "y": 160,
         "wires": [
             [
                 "0497e0ed333e8f23"
@@ -2845,7 +2886,7 @@
         "z": "bfdb5183ea783e85",
         "g": "114e4bc3e2504c40",
         "name": "timer",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = []\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nconst sunrise = times.sunrise.getTime()\nconst sunset = times.sunset.getTime()\nlet midday = null\nlet afternoon = null\n\nif (sunrise > now) {\n\n    messages.push({\n        payload: 'sunrise',\n        topic: 'timer/time',\n        until: sunrise\n    })\n}\n\nfor (let time = sunrise; time < sunset; time += 60000) {\n\n    const position = suncalc.getPosition(new Date(time), LATITUDE, LONGITUDE)\n\n    if ((midday === null) && (position.altitude > 0.8)) {\n\n        midday = time\n\n        if (midday > now) {\n            messages.push({\n                payload: 'midday',\n                topic: 'timer/time',\n                until: midday\n            })\n        }\n    }\n\n    if ((afternoon == null) && (position.azimuth > 0) && (position.altitude < 0.8)) {\n\n        afternoon = time\n\n        if (afternoon > now) {\n\n            messages.push({\n                payload: 'afternoon',\n                topic: 'timer/time',\n                until: afternoon\n            })\n        }\n\n        break\n\n    }\n}\n\nif (sunset > now) {\n\n    messages.push({\n        payload: 'sunset',\n        topic: 'timer/time',\n        until: sunset\n    })\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        until: bedtime\n    })\n}\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme',\n    until: now\n})\n\nreturn [messages]",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = []\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nconst sunrise = times.sunrise.getTime()\nconst sunset = times.sunset.getTime()\nlet midday = null\nlet afternoon = null\n\nnode.status('sunrise: ' + times.sunrise.toLocaleString())\n\nif (sunrise > now) {\n\n    messages.push({\n        payload: 'sunrise',\n        topic: 'timer/time',\n        until: sunrise\n    })\n}\n\nfor (let time = sunrise; time < sunset; time += 60000) {\n\n    const position = suncalc.getPosition(new Date(time), LATITUDE, LONGITUDE)\n\n    if ((midday === null) && (position.altitude > 0.8)) {\n\n        midday = time\n        node.status('midday: ' + new Date(time).toLocaleString())\n\n        if (midday > now) {\n            messages.push({\n                payload: 'midday',\n                topic: 'timer/time',\n                until: midday\n            })\n        }\n    }\n\n    if ((afternoon == null) && (position.azimuth > 0) && (position.altitude < 0.8)) {\n\n        afternoon = time\n        node.status('afternoon: ' + new Date(time).toLocaleString())\n\n        if (afternoon > now) {\n\n            messages.push({\n                payload: 'afternoon',\n                topic: 'timer/time',\n                until: afternoon\n            })\n        }\n\n        break\n\n    }\n}\n\nnode.status('sunset: ' + times.sunset.toLocaleString())\n\nif (sunset > now) {\n\n    messages.push({\n        payload: 'sunset',\n        topic: 'timer/time',\n        until: sunset\n    })\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nnode.status('bedtime: ' + new Date(bedtime).toLocaleString())\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        until: bedtime\n    })\n}\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nnode.status('theme: ' + theme)\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme',\n    until: now\n})\n\nreturn [messages]",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -2856,12 +2897,11 @@
                 "module": "suncalc"
             }
         ],
-        "x": 550,
-        "y": 200,
+        "x": 530,
+        "y": 140,
         "wires": [
             [
-                "106ee66b66de58ab",
-                "06bc3f0c72a3b81b"
+                "106ee66b66de58ab"
             ]
         ]
     },
@@ -2874,7 +2914,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 240,
+        "y": 160,
         "wires": [
             [
                 "60d6c5b7d0db140a"
@@ -2894,12 +2934,11 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 850,
-        "y": 120,
+        "x": 810,
+        "y": 100,
         "wires": [
             [
-                "21c4dba2bb5d0e54",
-                "0f4453210d28fc71"
+                "21c4dba2bb5d0e54"
             ]
         ]
     },
@@ -2924,7 +2963,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 970,
+        "x": 930,
         "y": 120,
         "wires": [
             [
@@ -2951,8 +2990,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 610,
-        "y": 80,
+        "x": 570,
+        "y": 60,
         "wires": [
             [
                 "0816fe94f5858846"
@@ -2967,8 +3006,8 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 380,
-        "y": 80,
+        "x": 340,
+        "y": 60,
         "wires": [
             [
                 "8e84162e92296698"
@@ -2982,7 +3021,7 @@
         "g": "114e4bc3e2504c40",
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
-        "x": 1160,
+        "x": 1120,
         "y": 60,
         "wires": []
     },
@@ -2994,7 +3033,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1300,
+        "x": 1260,
         "y": 120,
         "wires": []
     },
@@ -3011,6 +3050,25 @@
                 "pt": "msg",
                 "to": "automation/trigger",
                 "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "retain",
+                "pt": "msg",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "set",
+                "p": "timestamp",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "delete",
+                "p": "_session",
+                "pt": "msg"
             }
         ],
         "action": "",
@@ -3018,31 +3076,13 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1130,
+        "x": 1090,
         "y": 120,
         "wires": [
             [
-                "0c57cb4bce44a11a",
-                "f43e12e2fc318044"
+                "0c57cb4bce44a11a"
             ]
         ]
-    },
-    {
-        "id": "0f4453210d28fc71",
-        "type": "debug",
-        "z": "bfdb5183ea783e85",
-        "name": "events",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1210,
-        "y": 560,
-        "wires": []
     },
     {
         "id": "106ee66b66de58ab",
@@ -3050,70 +3090,277 @@
         "z": "bfdb5183ea783e85",
         "g": "114e4bc3e2504c40",
         "name": "delay until",
-        "func": "const timers = context.get('timers')\n\nif (msg.clear) {\n\n    timers.forEach((id) => { clearTimeout(id) })\n    context.set('timers', [])\n\n    node.status({\n        text: 0,\n        shape: 'ring',\n        fill: 'green'\n    })\n\n    return null\n\n}\n\nconst until = new Date(msg.until)\nconst now = new Date()\nconst delay = until.getTime() - now.getTime()\n\nif (delay <= 0) {\n\n    return msg\n\n}\n\nconst id = setTimeout(() => {\n\n    let timers = context.get('timers')\n\n    timers = timers.filter(timer => timer != id)\n    context.set('timers', timers)\n\n    node.status({\n        text: timers.length,\n        shape: 'dot',\n        fill: 'green'\n    })\n\n    node.send(msg)\n\n}, delay)\n\ntimers.push(id)\ncontext.set('timers', timers)\n\nnode.status({\n    text: timers.length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn null",
+        "func": "const timers = context.get('timers')\n\nif (msg.clear) {\n\n    timers.forEach((id) => { clearTimeout(id) })\n    context.set('timers', [])\n\n    node.status({\n        text: 0,\n        shape: 'ring',\n        fill: 'green'\n    })\n\n    return null\n\n}\n\nconst until = (msg.until ? new Date(msg.until) : new Date())\nconst now = new Date()\nconst delay = until.getTime() - now.getTime()\n\nif (delay <= 0) {\n\n    return msg\n\n}\n\nconst id = setTimeout(() => {\n\n    let timers = context.get('timers')\n\n    timers = timers.filter(timer => timer != id)\n    context.set('timers', timers)\n\n    node.status({\n        text: timers.length,\n        shape: 'dot',\n        fill: 'green'\n    })\n\n    node.send(msg)\n\n}, delay)\n\ntimers.push(id)\ncontext.set('timers', timers)\n\nnode.status({\n    text: timers.length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "context.set('timers', [])\n\nnode.status({\n    text: 0,\n    shape: 'ring',\n    fill: 'green'\n})",
         "finalize": "",
         "libs": [],
-        "x": 700,
-        "y": 160,
+        "x": 660,
+        "y": 140,
         "wires": [
             [
                 "0816fe94f5858846"
             ]
         ],
         "outputLabels": [
-            "delayed",
-            "immediate"
+            "delayed"
         ]
-    },
-    {
-        "id": "f43e12e2fc318044",
-        "type": "debug",
-        "z": "bfdb5183ea783e85",
-        "name": "trigger",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1210,
-        "y": 660,
-        "wires": []
     },
     {
         "id": "39d8a5aeec9834da",
         "type": "websocket out",
         "z": "bfdb5183ea783e85",
-        "g": "114e4bc3e2504c40",
+        "g": "ebc1143cd96ae67d",
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 860,
-        "y": 240,
+        "x": 1300,
+        "y": 480,
         "wires": []
     },
     {
-        "id": "06bc3f0c72a3b81b",
+        "id": "3d16babc8f356ea1",
+        "type": "status",
+        "z": "bfdb5183ea783e85",
+        "g": "ebc1143cd96ae67d",
+        "name": "status: timer",
+        "scope": [
+            "47acab248c4d8501"
+        ],
+        "x": 950,
+        "y": 480,
+        "wires": [
+            [
+                "51b8fbaba65a94c6"
+            ]
+        ]
+    },
+    {
+        "id": "51b8fbaba65a94c6",
         "type": "function",
         "z": "bfdb5183ea783e85",
-        "g": "114e4bc3e2504c40",
-        "name": "locale string",
-        "func": "const message = RED.util.cloneMessage(msg)\n\nmessage.until = new Date(message.until).toLocaleString()\nreturn message",
+        "g": "ebc1143cd96ae67d",
+        "name": "time of day event",
+        "func": "const parts = msg.status.text.split(': ', 2)\n\nif (parts.length > 1) {\n\n    return {\n        payload: parts[1],\n        topic: 'timer/' + parts[0]\n    }\n}\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 710,
-        "y": 240,
+        "x": 1130,
+        "y": 480,
         "wires": [
             [
                 "39d8a5aeec9834da"
+            ]
+        ]
+    },
+    {
+        "id": "51263b280aaca388",
+        "type": "inject",
+        "z": "bfdb5183ea783e85",
+        "g": "ebc1143cd96ae67d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "until",
+                "v": "",
+                "vt": "date"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "timer/time",
+        "payload": "sunrise",
+        "payloadType": "str",
+        "x": 1000,
+        "y": 540,
+        "wires": [
+            [
+                "c715a0b0bcb89d36"
+            ]
+        ]
+    },
+    {
+        "id": "c715a0b0bcb89d36",
+        "type": "link out",
+        "z": "bfdb5183ea783e85",
+        "g": "ebc1143cd96ae67d",
+        "name": "trigger",
+        "mode": "link",
+        "links": [
+            "07e518eda1fa776b"
+        ],
+        "x": 1210,
+        "y": 620,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "07e518eda1fa776b",
+        "type": "link in",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "trigger",
+        "links": [
+            "c715a0b0bcb89d36"
+        ],
+        "x": 810,
+        "y": 140,
+        "wires": [
+            [
+                "21c4dba2bb5d0e54"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "f99f716a357c6942",
+        "type": "inject",
+        "z": "bfdb5183ea783e85",
+        "g": "ebc1143cd96ae67d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "until",
+                "v": "",
+                "vt": "date"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "timer/time",
+        "payload": "midday",
+        "payloadType": "str",
+        "x": 1000,
+        "y": 580,
+        "wires": [
+            [
+                "c715a0b0bcb89d36"
+            ]
+        ]
+    },
+    {
+        "id": "b2d3b76f7603b655",
+        "type": "inject",
+        "z": "bfdb5183ea783e85",
+        "g": "ebc1143cd96ae67d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "until",
+                "v": "",
+                "vt": "date"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "timer/time",
+        "payload": "afternoon",
+        "payloadType": "str",
+        "x": 990,
+        "y": 620,
+        "wires": [
+            [
+                "c715a0b0bcb89d36"
+            ]
+        ]
+    },
+    {
+        "id": "9d33cddb29d581ec",
+        "type": "inject",
+        "z": "bfdb5183ea783e85",
+        "g": "ebc1143cd96ae67d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "until",
+                "v": "",
+                "vt": "date"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "timer/time",
+        "payload": "sunset",
+        "payloadType": "str",
+        "x": 1000,
+        "y": 660,
+        "wires": [
+            [
+                "c715a0b0bcb89d36"
+            ]
+        ]
+    },
+    {
+        "id": "394967b3ec96ef1f",
+        "type": "inject",
+        "z": "bfdb5183ea783e85",
+        "g": "ebc1143cd96ae67d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "until",
+                "v": "",
+                "vt": "date"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "timer/time",
+        "payload": "bedtime",
+        "payloadType": "str",
+        "x": 990,
+        "y": 700,
+        "wires": [
+            [
+                "c715a0b0bcb89d36"
             ]
         ]
     },
