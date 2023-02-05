@@ -95,7 +95,7 @@
         "color": "#D8BFD8",
         "icon": "font-awesome/fa-lightbulb-o",
         "status": {
-            "x": 1020,
+            "x": 1220,
             "y": 700,
             "wires": [
                 {
@@ -443,7 +443,9 @@
             "93a323937c189b13"
         ],
         "x": 14,
-        "y": 119
+        "y": 119,
+        "w": 1052,
+        "h": 162
     },
     {
         "id": "96971e50c13ead01",
@@ -480,7 +482,9 @@
             "531fbb9eb4631e85"
         ],
         "x": 14,
-        "y": 299
+        "y": 299,
+        "w": 1252,
+        "h": 302
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -601,7 +605,8 @@
             "541a0eff9f0235b7",
             "4c3ffaa9eed2fd35",
             "5e838b011b496bb4",
-            "244e029d9a276e82"
+            "244e029d9a276e82",
+            "40d32c56d50a791d"
         ],
         "x": 14,
         "y": 439,
@@ -628,11 +633,12 @@
             "7adca925e9011e2f",
             "679d6a0d2002bcb7",
             "c8fb3c01f10259ca",
-            "839872dec0a80cfa"
+            "839872dec0a80cfa",
+            "bb7c962d04498ed7"
         ],
         "x": 14,
         "y": 219,
-        "w": 1012,
+        "w": 1332,
         "h": 202
     },
     {
@@ -656,7 +662,9 @@
             "0b223f6872d96c8f"
         ],
         "x": 14,
-        "y": 619
+        "y": 619,
+        "w": 852,
+        "h": 122
     },
     {
         "id": "d64d4d2689200662",
@@ -677,7 +685,9 @@
             "6006768d0e45ea91"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 672,
+        "h": 82
     },
     {
         "id": "b3c2354a4072ebba",
@@ -809,7 +819,7 @@
         "x": 854,
         "y": 439,
         "w": 532,
-        "h": 302
+        "h": 322
     },
     {
         "id": "431414ce08ebb3c0",
@@ -915,7 +925,7 @@
         "z": "85ed27d795e6e866",
         "g": "0fb8e43c903b3506",
         "name": "validate",
-        "func": "function cloneMessage(topic) {\n\n    return {\n        payload: RED.util.cloneMessage(msg),\n        topic: 'hue/' + env.get('ADDRESS') + '/' + topic,\n        retain: true\n    }\n}\n\nif (!Number.isInteger(msg.statusCode)) {\n\n    return cloneMessage('error')\n\n}\n\nif ((msg.statusCode != 200) && (msg.statusCode != 207)) {\n\n    return cloneMessage('error')\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'data')) {\n\n    return cloneMessage('error')\n\n}\n\nif (msg.payload.data.length == 0) {\n\n    return cloneMessage('error')\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'errors')) {\n\n    return cloneMessage('error')\n\n}\n\nfor (let error of msg.payload.errors) {\n\n    node.warn(error)\n\n}\n\nif (msg.payload.errors.length != 0) {\n\n    return cloneMessage('warning')\n\n}\n\nreturn null",
+        "func": "function copyMessage(topic) {\n\n    return {\n        payload: RED.util.cloneMessage(msg),\n        topic: 'hue/' + env.get('ADDRESS') + '/' + topic\n    }\n}\n\nif (!Number.isInteger(msg.statusCode)) {\n\n    return copyMessage('error')\n\n}\n\nif ((msg.statusCode < 200) || (msg.statusCode >= 300)) {\n\n    return copyMessage('error')\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'data')) {\n\n    return copyMessage('error')\n\n}\n\nif (msg.payload.data.length == 0) {\n\n    return copyMessage('error')\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'errors')) {\n\n    return copyMessage('error')\n\n}\n\nfor (let error of msg.payload.errors) {\n\n    node.warn(error)\n\n}\n\nif (msg.payload.errors.length != 0) {\n\n    // work-around for frequent spurious \"error\" results from hue bridge\n    for (let error of msg.payload.errors) {\n\n        if (!/^device \\(.+\\) is \".+\", command \\(.+\\) may not have effect$/.exec(error.description)) {\n\n            return copyMessage('warning')\n\n        }\n    }\n\n}\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1336,7 +1346,7 @@
         "links": [
             "fdc1f995f016ddba"
         ],
-        "x": 930,
+        "x": 1130,
         "y": 700,
         "wires": [
             []
@@ -3184,7 +3194,7 @@
         "payload": "sunrise",
         "payloadType": "str",
         "x": 1000,
-        "y": 540,
+        "y": 560,
         "wires": [
             [
                 "c715a0b0bcb89d36"
@@ -3202,7 +3212,7 @@
             "07e518eda1fa776b"
         ],
         "x": 1210,
-        "y": 620,
+        "y": 640,
         "wires": [],
         "l": true
     },
@@ -3252,7 +3262,7 @@
         "payload": "midday",
         "payloadType": "str",
         "x": 1000,
-        "y": 580,
+        "y": 600,
         "wires": [
             [
                 "c715a0b0bcb89d36"
@@ -3287,7 +3297,7 @@
         "payload": "afternoon",
         "payloadType": "str",
         "x": 990,
-        "y": 620,
+        "y": 640,
         "wires": [
             [
                 "c715a0b0bcb89d36"
@@ -3322,7 +3332,7 @@
         "payload": "sunset",
         "payloadType": "str",
         "x": 1000,
-        "y": 660,
+        "y": 680,
         "wires": [
             [
                 "c715a0b0bcb89d36"
@@ -3357,12 +3367,34 @@
         "payload": "bedtime",
         "payloadType": "str",
         "x": 990,
-        "y": 700,
+        "y": 720,
         "wires": [
             [
                 "c715a0b0bcb89d36"
             ]
         ]
+    },
+    {
+        "id": "bb7c962d04498ed7",
+        "type": "comment",
+        "z": "bfdb5183ea783e85",
+        "g": "8326ae1a15518f8f",
+        "name": "contains hard-coded references to particular scene id's",
+        "info": "",
+        "x": 1120,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "40d32c56d50a791d",
+        "type": "comment",
+        "z": "bfdb5183ea783e85",
+        "g": "c2e3e9d2c97df2d0",
+        "name": "contains hard-coded references to particular group and scene id's",
+        "info": "",
+        "x": 270,
+        "y": 480,
+        "wires": []
     },
     {
         "id": "9b22e1e38e67938b",
