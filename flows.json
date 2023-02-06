@@ -96,7 +96,7 @@
         "icon": "font-awesome/fa-lightbulb-o",
         "status": {
             "x": 1220,
-            "y": 700,
+            "y": 600,
             "wires": [
                 {
                     "id": "ce519b683b6e6767",
@@ -443,7 +443,7 @@
             "93a323937c189b13"
         ],
         "x": 14,
-        "y": 119,
+        "y": 19,
         "w": 1052,
         "h": 162
     },
@@ -482,7 +482,7 @@
             "531fbb9eb4631e85"
         ],
         "x": 14,
-        "y": 299,
+        "y": 199,
         "w": 1252,
         "h": 302
     },
@@ -503,7 +503,7 @@
             "d046e6267c76dfe1"
         ],
         "x": 14,
-        "y": 379,
+        "y": 479,
         "w": 952,
         "h": 82
     },
@@ -528,8 +528,6 @@
         ],
         "x": 14,
         "y": 219,
-        "w": 1272,
-        "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -553,9 +551,7 @@
             "9154f7fa8b08933f"
         ],
         "x": 14,
-        "y": 79,
-        "w": 832,
-        "h": 122
+        "y": 79
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -580,9 +576,7 @@
             "4e40e2700edff9ec"
         ],
         "x": 14,
-        "y": 319,
-        "w": 1272,
-        "h": 122
+        "y": 319
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -609,9 +603,7 @@
             "40d32c56d50a791d"
         ],
         "x": 14,
-        "y": 439,
-        "w": 832,
-        "h": 322
+        "y": 439
     },
     {
         "id": "8326ae1a15518f8f",
@@ -637,9 +629,7 @@
             "bb7c962d04498ed7"
         ],
         "x": 14,
-        "y": 219,
-        "w": 1332,
-        "h": 202
+        "y": 219
     },
     {
         "id": "4893dd6a2321040d",
@@ -662,32 +652,9 @@
             "0b223f6872d96c8f"
         ],
         "x": 14,
-        "y": 619,
+        "y": 519,
         "w": 852,
         "h": 122
-    },
-    {
-        "id": "d64d4d2689200662",
-        "type": "group",
-        "z": "85ed27d795e6e866",
-        "name": "send client application key when flow starts",
-        "style": {
-            "stroke": "none",
-            "fill": "#ffffff",
-            "fill-opacity": "0.1",
-            "label": true,
-            "color": "#ffffff"
-        },
-        "nodes": [
-            "c028b2fa6fa17888",
-            "edeeaf776290c2ca",
-            "6a043b7f70247cf8",
-            "6006768d0e45ea91"
-        ],
-        "x": 14,
-        "y": 19,
-        "w": 672,
-        "h": 82
     },
     {
         "id": "b3c2354a4072ebba",
@@ -706,7 +673,7 @@
             "048ec8eb41be82ae"
         ],
         "x": 14,
-        "y": 479,
+        "y": 579,
         "w": 952,
         "h": 82
     },
@@ -762,9 +729,7 @@
             "07e518eda1fa776b"
         ],
         "x": 14,
-        "y": 19,
-        "w": 1332,
-        "h": 182
+        "y": 19
     },
     {
         "id": "ea6243759720241b",
@@ -817,9 +782,29 @@
             "394967b3ec96ef1f"
         ],
         "x": 854,
-        "y": 439,
-        "w": 532,
-        "h": 322
+        "y": 439
+    },
+    {
+        "id": "fa261bdde51028d4",
+        "type": "group",
+        "z": "d3b34304591c64d7",
+        "name": "get hue keys",
+        "style": {
+            "stroke": "none",
+            "fill": "#ffffff",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#ffffff"
+        },
+        "nodes": [
+            "19b662d5ee4b5a2f",
+            "16e21e0afb427d76",
+            "ce505f3a3d6ec359"
+        ],
+        "x": 14,
+        "y": 379,
+        "w": 472,
+        "h": 82
     },
     {
         "id": "431414ce08ebb3c0",
@@ -886,7 +871,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 270,
-        "y": 200,
+        "y": 100,
         "wires": [
             [
                 "93a323937c189b13"
@@ -911,7 +896,7 @@
         "senderr": false,
         "headers": [],
         "x": 570,
-        "y": 200,
+        "y": 100,
         "wires": [
             [
                 "a1a4ef6fbcea1cd4",
@@ -932,7 +917,7 @@
         "finalize": "",
         "libs": [],
         "x": 740,
-        "y": 240,
+        "y": 140,
         "wires": [
             [
                 "7bf3a0d5f7ee216b"
@@ -960,7 +945,7 @@
         "to": "",
         "reg": false,
         "x": 790,
-        "y": 160,
+        "y": 60,
         "wires": [
             [
                 "7189e8414abb8abf"
@@ -986,7 +971,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 220,
-        "y": 380,
+        "y": 280,
         "wires": [
             [
                 "12f058cdadbb39ce"
@@ -1028,7 +1013,7 @@
         "to": "",
         "reg": false,
         "x": 360,
-        "y": 380,
+        "y": 280,
         "wires": [
             [
                 "80bbf467c351320f"
@@ -1047,7 +1032,7 @@
         "linkType": "static",
         "timeout": "30",
         "x": 520,
-        "y": 380,
+        "y": 280,
         "wires": [
             [
                 "d3e5044fe363855b"
@@ -1067,7 +1052,7 @@
         "finalize": "",
         "libs": [],
         "x": 690,
-        "y": 380,
+        "y": 280,
         "wires": [
             [
                 "5e338d73bb5c33fb"
@@ -1090,7 +1075,7 @@
         "finalize": "",
         "libs": [],
         "x": 870,
-        "y": 420,
+        "y": 320,
         "wires": [
             [
                 "f7841898977deb1b"
@@ -1111,7 +1096,7 @@
         "g": "96971e50c13ead01",
         "name": "",
         "x": 690,
-        "y": 480,
+        "y": 380,
         "wires": [
             [
                 "5e338d73bb5c33fb"
@@ -1138,7 +1123,7 @@
         "property": "payload",
         "topi": "topic",
         "x": 1050,
-        "y": 480,
+        "y": 380,
         "wires": [
             [
                 "4f5d5c8a6961a27c"
@@ -1166,7 +1151,7 @@
         "to": "",
         "reg": false,
         "x": 870,
-        "y": 480,
+        "y": 380,
         "wires": [
             [
                 "964ed66cfe05da8b"
@@ -1194,7 +1179,7 @@
         "to": "",
         "reg": false,
         "x": 870,
-        "y": 540,
+        "y": 440,
         "wires": [
             [
                 "964ed66cfe05da8b"
@@ -1212,7 +1197,7 @@
         ],
         "uncaught": false,
         "x": 390,
-        "y": 440,
+        "y": 340,
         "wires": [
             [
                 "9055d5f42e64e6d0"
@@ -1230,7 +1215,7 @@
         ],
         "uncaught": false,
         "x": 90,
-        "y": 380,
+        "y": 280,
         "wires": [
             [
                 "5a1b87c5d08fa5d4"
@@ -1250,7 +1235,7 @@
         "finalize": "",
         "libs": [],
         "x": 1050,
-        "y": 360,
+        "y": 260,
         "wires": [
             [
                 "7e1652c67f07cb3c"
@@ -1265,7 +1250,7 @@
         "name": "https://www.npmjs.com/package/@parasaurolophus/node-red-eventsource",
         "info": "",
         "x": 300,
-        "y": 340,
+        "y": 240,
         "wires": []
     },
     {
@@ -1276,7 +1261,7 @@
         "name": "https://developers.meethue.com/develop/hue-api-v2/",
         "info": "",
         "x": 230,
-        "y": 160,
+        "y": 60,
         "wires": []
     },
     {
@@ -1291,7 +1276,7 @@
         "linkType": "static",
         "timeout": "30",
         "x": 560,
-        "y": 560,
+        "y": 460,
         "wires": [
             []
         ]
@@ -1309,7 +1294,7 @@
         "finalize": "",
         "libs": [],
         "x": 400,
-        "y": 540,
+        "y": 440,
         "wires": [
             [
                 "531fbb9eb4631e85"
@@ -1334,7 +1319,7 @@
             "ce519b683b6e6767"
         ],
         "x": 290,
-        "y": 700,
+        "y": 600,
         "wires": [],
         "l": true
     },
@@ -1347,7 +1332,7 @@
             "fdc1f995f016ddba"
         ],
         "x": 1130,
-        "y": 700,
+        "y": 600,
         "wires": [
             []
         ],
@@ -1363,7 +1348,7 @@
             "153449edfaf38a67"
         ],
         "x": 130,
-        "y": 680,
+        "y": 580,
         "wires": [
             [
                 "fdc1f995f016ddba",
@@ -1399,30 +1384,10 @@
         "to": "",
         "reg": false,
         "x": 620,
-        "y": 660,
+        "y": 560,
         "wires": [
             [
                 "a45d7fdb0d022401"
-            ]
-        ]
-    },
-    {
-        "id": "c028b2fa6fa17888",
-        "type": "function",
-        "z": "85ed27d795e6e866",
-        "g": "d64d4d2689200662",
-        "name": "send key",
-        "func": "const KEY = env.get('KEY')\nconst ADDRESS = env.get('ADDRESS')\n\nreturn {\n    payload: KEY,\n    topic: 'hue/' + ADDRESS + '/key',\n    retain: true,\n    bridgeAddress: ADDRESS\n}",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 460,
-        "y": 60,
-        "wires": [
-            [
-                "edeeaf776290c2ca"
             ]
         ]
     },
@@ -1435,65 +1400,10 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 260,
-        "y": 540,
+        "y": 440,
         "wires": [
             [
                 "c3f7e150dea7e636"
-            ]
-        ]
-    },
-    {
-        "id": "edeeaf776290c2ca",
-        "type": "websocket out",
-        "z": "85ed27d795e6e866",
-        "g": "d64d4d2689200662",
-        "name": "publish",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 600,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "6a043b7f70247cf8",
-        "type": "status",
-        "z": "85ed27d795e6e866",
-        "g": "d64d4d2689200662",
-        "name": "status: websocket out",
-        "scope": [
-            "edeeaf776290c2ca"
-        ],
-        "x": 140,
-        "y": 60,
-        "wires": [
-            [
-                "6006768d0e45ea91"
-            ]
-        ]
-    },
-    {
-        "id": "6006768d0e45ea91",
-        "type": "switch",
-        "z": "85ed27d795e6e866",
-        "g": "d64d4d2689200662",
-        "name": "connect",
-        "property": "status.event",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "connect",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 320,
-        "y": 60,
-        "wires": [
-            [
-                "c028b2fa6fa17888"
             ]
         ]
     },
@@ -1505,7 +1415,7 @@
         "name": "send to bridge",
         "links": [],
         "x": 110,
-        "y": 200,
+        "y": 100,
         "wires": [
             [
                 "07d61ea24d59a251"
@@ -1522,7 +1432,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 880,
-        "y": 240,
+        "y": 140,
         "wires": []
     },
     {
@@ -1534,7 +1444,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 1180,
-        "y": 360,
+        "y": 260,
         "wires": []
     },
     {
@@ -1546,7 +1456,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 1180,
-        "y": 480,
+        "y": 380,
         "wires": []
     },
     {
@@ -1558,7 +1468,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 780,
-        "y": 660,
+        "y": 560,
         "wires": []
     },
     {
@@ -1570,7 +1480,7 @@
         "mode": "return",
         "links": [],
         "x": 980,
-        "y": 160,
+        "y": 60,
         "wires": [],
         "l": true
     },
@@ -1600,7 +1510,7 @@
         "to": "",
         "reg": false,
         "x": 320,
-        "y": 660,
+        "y": 560,
         "wires": [
             [
                 "0b223f6872d96c8f"
@@ -1621,7 +1531,7 @@
         "property": "payload",
         "topi": "topic",
         "x": 470,
-        "y": 660,
+        "y": 560,
         "wires": [
             [
                 "83f1cdfad9fc4846"
@@ -1641,7 +1551,7 @@
         "finalize": "",
         "libs": [],
         "x": 530,
-        "y": 440,
+        "y": 340,
         "wires": [
             [
                 "153449edfaf38a67"
@@ -1661,7 +1571,7 @@
         "finalize": "",
         "libs": [],
         "x": 420,
-        "y": 200,
+        "y": 100,
         "wires": [
             [
                 "ccb8f8c4fd3333af"
@@ -1689,7 +1599,7 @@
         "to": "",
         "reg": false,
         "x": 530,
-        "y": 520,
+        "y": 420,
         "wires": [
             [
                 "153449edfaf38a67"
@@ -3980,7 +3890,7 @@
             }
         ],
         "x": 130,
-        "y": 420,
+        "y": 520,
         "wires": []
     },
     {
@@ -4002,7 +3912,7 @@
         "name": "assumes ${GROUND_FLOOR_HUE_ADDRESS} and ${GROUND_FLOOR_HUE_KEY} are defined",
         "info": "",
         "x": 600,
-        "y": 420,
+        "y": 520,
         "wires": []
     },
     {
@@ -4215,7 +4125,7 @@
             }
         ],
         "x": 120,
-        "y": 520,
+        "y": 620,
         "wires": []
     },
     {
@@ -4226,7 +4136,7 @@
         "name": "assumes ${BASEMENT_HUE_ADDRESS} and ${BASEMENT_HUE_KEY} are defined",
         "info": "",
         "x": 640,
-        "y": 520,
+        "y": 620,
         "wires": []
     },
     {
@@ -4246,6 +4156,64 @@
         "wires": [
             [
                 "0ed14c935a7933e8"
+            ]
+        ]
+    },
+    {
+        "id": "19b662d5ee4b5a2f",
+        "type": "http in",
+        "z": "d3b34304591c64d7",
+        "g": "fa261bdde51028d4",
+        "name": "",
+        "url": "/hue-keys",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 420,
+        "wires": [
+            [
+                "ce505f3a3d6ec359"
+            ]
+        ]
+    },
+    {
+        "id": "16e21e0afb427d76",
+        "type": "http response",
+        "z": "d3b34304591c64d7",
+        "g": "fa261bdde51028d4",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 410,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "ce505f3a3d6ec359",
+        "type": "change",
+        "z": "d3b34304591c64d7",
+        "g": "fa261bdde51028d4",
+        "name": "hue keys",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\t   $env('GROUND_FLOOR_HUE_ADDRESS'): $env('GROUND_FLOOR_HUE_KEY'),\t   $env('BASEMENT_HUE_ADDRESS'): $env('BASEMENT_HUE_KEY')\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 280,
+        "y": 420,
+        "wires": [
+            [
+                "16e21e0afb427d76"
             ]
         ]
     }

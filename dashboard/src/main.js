@@ -61,10 +61,6 @@ app.provide('warnings', warnings)
 const infos = ref([])
 app.provide('infos', infos)
 
-// model for hue/{address}/key messages
-const hueKeys = ref({})
-app.provide('hueKeys', hueKeys)
-
 // model for HueBridgesComponent.vue
 const hueBridges = ref({})
 app.provide('hueBridges', hueBridges)
@@ -81,6 +77,60 @@ app.provide('hueModels', hueModels)
 // is received
 const powerviewModel = ref([])
 app.provide('powerviewModel', powerviewModel)
+
+//////////////////////////////////////////////////////////////////////////////
+// get hue keys then invoke after()
+//////////////////////////////////////////////////////////////////////////////
+
+// model for hue/{address}/key messages
+const hueKeys = ref({})
+app.provide('hueKeys', hueKeys)
+
+function getHueKeys(after) {
+
+    const matches = /^([^:]+):\/\/([^:]+).*$/.exec(window.location)
+    let url = 'http://127.0.0.1:1880/hue-keys'
+
+    if (Array.isArray(matches) && (matches.length == 3)) {
+
+        url = matches[1] + '://' + matches[2] + ':1880/hue-keys'
+
+    }
+
+    const request = new Request(url)
+
+    fetch(request)
+
+        .then((response) => {
+
+            if (!response.ok) {
+
+                console.log(response)
+                errors.value.push({ show: true, title: 'error getting hue keys', text: JSON.stringify(response, undefined, 1) })
+                return null
+
+            }
+
+            return response.blob()
+
+        })
+
+        .then(async (blob) => {
+
+            if (blob) {
+
+                hueKeys.value = JSON.parse(await blob.text())
+
+            } else {
+
+                console.log('hue-keys blob is null')
+
+            }
+
+            after()
+
+        })
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // monitor websocket readyState
@@ -346,7 +396,7 @@ function connectWS() {
     }
 }
 
-connectWS()
+getHueKeys(connectWS)
 
 //////////////////////////////////////////////////////////////////////////////
 
