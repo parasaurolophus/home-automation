@@ -390,7 +390,7 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 1232,
+        "w": 1242,
         "h": 202
     },
     {
@@ -443,9 +443,7 @@
             "93a323937c189b13"
         ],
         "x": 14,
-        "y": 19,
-        "w": 1052,
-        "h": 162
+        "y": 19
     },
     {
         "id": "96971e50c13ead01",
@@ -482,9 +480,7 @@
             "531fbb9eb4631e85"
         ],
         "x": 14,
-        "y": 199,
-        "w": 1252,
-        "h": 302
+        "y": 199
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -504,7 +500,7 @@
         ],
         "x": 14,
         "y": 479,
-        "w": 952,
+        "w": 932,
         "h": 82
     },
     {
@@ -528,6 +524,8 @@
         ],
         "x": 14,
         "y": 219,
+        "w": 1272,
+        "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -551,7 +549,9 @@
             "9154f7fa8b08933f"
         ],
         "x": 14,
-        "y": 79
+        "y": 79,
+        "w": 832,
+        "h": 122
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -576,7 +576,9 @@
             "4e40e2700edff9ec"
         ],
         "x": 14,
-        "y": 319
+        "y": 319,
+        "w": 1272,
+        "h": 122
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -603,7 +605,9 @@
             "40d32c56d50a791d"
         ],
         "x": 14,
-        "y": 439
+        "y": 439,
+        "w": 832,
+        "h": 322
     },
     {
         "id": "8326ae1a15518f8f",
@@ -629,7 +633,9 @@
             "bb7c962d04498ed7"
         ],
         "x": 14,
-        "y": 219
+        "y": 219,
+        "w": 1332,
+        "h": 202
     },
     {
         "id": "4893dd6a2321040d",
@@ -652,9 +658,7 @@
             "0b223f6872d96c8f"
         ],
         "x": 14,
-        "y": 519,
-        "w": 852,
-        "h": 122
+        "y": 519
     },
     {
         "id": "b3c2354a4072ebba",
@@ -674,7 +678,7 @@
         ],
         "x": 14,
         "y": 579,
-        "w": 952,
+        "w": 932,
         "h": 82
     },
     {
@@ -729,7 +733,9 @@
             "07e518eda1fa776b"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 1372,
+        "h": 182
     },
     {
         "id": "ea6243759720241b",
@@ -782,7 +788,9 @@
             "394967b3ec96ef1f"
         ],
         "x": 854,
-        "y": 439
+        "y": 439,
+        "w": 532,
+        "h": 322
     },
     {
         "id": "fa261bdde51028d4",
@@ -2011,7 +2019,7 @@
         "g": "5be845dd7de1f9ed",
         "name": "assumes a file-system backed context store named \"file\"",
         "info": "",
-        "x": 320,
+        "x": 310,
         "y": 120,
         "wires": []
     },
@@ -2735,7 +2743,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 410,
+        "x": 430,
         "y": 140,
         "wires": [
             [
@@ -2766,7 +2774,7 @@
         "topic": "now",
         "payload": "",
         "payloadType": "date",
-        "x": 260,
+        "x": 280,
         "y": 120,
         "wires": [
             [
@@ -2792,7 +2800,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 260,
+        "x": 270,
         "y": 160,
         "wires": [
             [
@@ -2817,7 +2825,7 @@
                 "module": "suncalc"
             }
         ],
-        "x": 530,
+        "x": 550,
         "y": 140,
         "wires": [
             [
@@ -2854,7 +2862,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 810,
+        "x": 850,
         "y": 100,
         "wires": [
             [
@@ -2883,7 +2891,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 930,
+        "x": 970,
         "y": 120,
         "wires": [
             [
@@ -2910,7 +2918,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 570,
+        "x": 610,
         "y": 60,
         "wires": [
             [
@@ -2926,7 +2934,7 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 340,
+        "x": 380,
         "y": 60,
         "wires": [
             [
@@ -2941,7 +2949,7 @@
         "g": "114e4bc3e2504c40",
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
-        "x": 1120,
+        "x": 1160,
         "y": 60,
         "wires": []
     },
@@ -2953,7 +2961,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1260,
+        "x": 1300,
         "y": 120,
         "wires": []
     },
@@ -2996,7 +3004,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1090,
+        "x": 1130,
         "y": 120,
         "wires": [
             [
@@ -3016,7 +3024,7 @@
         "initialize": "context.set('timers', [])\n\nnode.status({\n    text: 0,\n    shape: 'ring',\n    fill: 'green'\n})",
         "finalize": "",
         "libs": [],
-        "x": 660,
+        "x": 690,
         "y": 140,
         "wires": [
             [
@@ -3103,7 +3111,7 @@
         "topic": "timer/time",
         "payload": "sunrise",
         "payloadType": "str",
-        "x": 1000,
+        "x": 990,
         "y": 560,
         "wires": [
             [
@@ -3135,7 +3143,7 @@
         "links": [
             "c715a0b0bcb89d36"
         ],
-        "x": 810,
+        "x": 850,
         "y": 140,
         "wires": [
             [
@@ -3171,7 +3179,7 @@
         "topic": "timer/time",
         "payload": "midday",
         "payloadType": "str",
-        "x": 1000,
+        "x": 990,
         "y": 600,
         "wires": [
             [
@@ -3302,7 +3310,7 @@
         "g": "c2e3e9d2c97df2d0",
         "name": "contains hard-coded references to particular group and scene id's",
         "info": "",
-        "x": 270,
+        "x": 280,
         "y": 480,
         "wires": []
     },
@@ -3815,7 +3823,7 @@
         "z": "d3b34304591c64d7",
         "g": "23bf1f9635c44cc8",
         "name": "",
-        "method": "POST",
+        "method": "use",
         "ret": "obj",
         "paytoqs": "ignore",
         "url": "",
@@ -3841,7 +3849,7 @@
         "z": "d3b34304591c64d7",
         "g": "23bf1f9635c44cc8",
         "name": "response",
-        "func": "const messages = []\n\nfunction errorMessage(payload) {\n\n    return {\n        payload: payload,\n        topic: 'hue/' + msg.bridgeAddress + '/error',\n        retain: false\n    }\n}\n\nfunction successMessage(payload) {\n\n    return {\n        payload: payload,\n        topic: 'hue/' + msg.bridgeAddress + '/key',\n        retain: true\n    }\n}\n\nif (Array.isArray(msg.payload)) {\n\n    for (let result of msg.payload) {\n\n        if (Object.prototype.hasOwnProperty.call(result, 'success')) {\n\n            messages.push(successMessage(result.success.username))\n\n        }\n\n        if (Object.prototype.hasOwnProperty.call(result, 'error')) {\n\n            messages.push(errorMessage(result.error.description))\n\n        }\n    }\n\n} else {\n\n    messages.push(errorMessage(msg.payload))\n\n}\n\nnode.status({\n    text: Object.keys(messages).length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn [messages]",
+        "func": "const messages = []\n\nfunction errorMessage(payload) {\n\n    return {\n        payload: payload,\n        topic: 'hue/' + msg.bridgeAddress + '/error',\n        retain: false\n    }\n}\n\nfunction successMessage(payload) {\n\n    return {\n        payload: payload,\n        topic: 'hue/' + msg.bridgeAddress + '/key',\n        retain: false\n    }\n}\n\nif (Array.isArray(msg.payload)) {\n\n    for (let result of msg.payload) {\n\n        if (Object.prototype.hasOwnProperty.call(result, 'success')) {\n\n            messages.push(successMessage(result.success.username))\n\n        }\n\n        if (Object.prototype.hasOwnProperty.call(result, 'error')) {\n\n            messages.push(errorMessage(result.error.description))\n\n        }\n    }\n\n} else {\n\n    messages.push(errorMessage(msg.payload))\n\n}\n\nnode.status({\n    text: Object.keys(messages).length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn [messages]",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3862,7 +3870,7 @@
         "g": "23bf1f9635c44cc8",
         "name": "https://developers.meethue.com/develop/hue-api-v2/getting-started/",
         "info": "",
-        "x": 700,
+        "x": 690,
         "y": 280,
         "wires": []
     },
@@ -3911,7 +3919,7 @@
         "g": "f1e1b4bb5ddac24f",
         "name": "assumes ${GROUND_FLOOR_HUE_ADDRESS} and ${GROUND_FLOOR_HUE_KEY} are defined",
         "info": "",
-        "x": 600,
+        "x": 590,
         "y": 520,
         "wires": []
     },
@@ -4135,7 +4143,7 @@
         "g": "b3c2354a4072ebba",
         "name": "assumes ${BASEMENT_HUE_ADDRESS} and ${BASEMENT_HUE_KEY} are defined",
         "info": "",
-        "x": 640,
+        "x": 630,
         "y": 620,
         "wires": []
     },
