@@ -95,7 +95,7 @@
         "color": "#D8BFD8",
         "icon": "font-awesome/fa-lightbulb-o",
         "status": {
-            "x": 1220,
+            "x": 1020,
             "y": 600,
             "wires": [
                 {
@@ -124,7 +124,7 @@
         ],
         "out": [
             {
-                "x": 1280,
+                "x": 1300,
                 "y": 100,
                 "wires": [
                     {
@@ -282,7 +282,7 @@
         ],
         "out": [
             {
-                "x": 300,
+                "x": 320,
                 "y": 60,
                 "wires": [
                     {
@@ -390,7 +390,7 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 1242,
+        "w": 1152,
         "h": 202
     },
     {
@@ -878,7 +878,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 270,
+        "x": 290,
         "y": 100,
         "wires": [
             [
@@ -903,7 +903,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 570,
+        "x": 590,
         "y": 100,
         "wires": [
             [
@@ -924,7 +924,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
+        "x": 760,
         "y": 140,
         "wires": [
             [
@@ -952,7 +952,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 790,
+        "x": 810,
         "y": 60,
         "wires": [
             [
@@ -1082,7 +1082,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 870,
+        "x": 890,
         "y": 320,
         "wires": [
             [
@@ -1130,7 +1130,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 1050,
+        "x": 1070,
         "y": 380,
         "wires": [
             [
@@ -1158,7 +1158,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 870,
+        "x": 880,
         "y": 380,
         "wires": [
             [
@@ -1186,7 +1186,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 870,
+        "x": 880,
         "y": 440,
         "wires": [
             [
@@ -1242,7 +1242,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1050,
+        "x": 1070,
         "y": 260,
         "wires": [
             [
@@ -1257,7 +1257,7 @@
         "g": "96971e50c13ead01",
         "name": "https://www.npmjs.com/package/@parasaurolophus/node-red-eventsource",
         "info": "",
-        "x": 300,
+        "x": 310,
         "y": 240,
         "wires": []
     },
@@ -1268,7 +1268,7 @@
         "g": "0fb8e43c903b3506",
         "name": "https://developers.meethue.com/develop/hue-api-v2/",
         "info": "",
-        "x": 230,
+        "x": 240,
         "y": 60,
         "wires": []
     },
@@ -1339,7 +1339,7 @@
         "links": [
             "fdc1f995f016ddba"
         ],
-        "x": 1130,
+        "x": 930,
         "y": 600,
         "wires": [
             []
@@ -1422,7 +1422,7 @@
         "g": "0fb8e43c903b3506",
         "name": "send to bridge",
         "links": [],
-        "x": 110,
+        "x": 120,
         "y": 100,
         "wires": [
             [
@@ -1439,7 +1439,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 880,
+        "x": 900,
         "y": 140,
         "wires": []
     },
@@ -1451,7 +1451,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1180,
+        "x": 1200,
         "y": 260,
         "wires": []
     },
@@ -1463,7 +1463,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1180,
+        "x": 1200,
         "y": 380,
         "wires": []
     },
@@ -1487,7 +1487,7 @@
         "name": "response",
         "mode": "return",
         "links": [],
-        "x": 980,
+        "x": 1000,
         "y": 60,
         "wires": [],
         "l": true
@@ -1578,7 +1578,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
+        "x": 440,
         "y": 100,
         "wires": [
             [
@@ -1790,7 +1790,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1130,
+        "x": 1140,
         "y": 100,
         "wires": [
             []
@@ -1881,7 +1881,7 @@
         "initialize": "context.set('timers', [])\n\nnode.status({\n    text: 0,\n    shape: 'ring',\n    fill: 'green'\n})",
         "finalize": "",
         "libs": [],
-        "x": 160,
+        "x": 170,
         "y": 60,
         "wires": [
             []
@@ -3753,7 +3753,7 @@
         "z": "d3b34304591c64d7",
         "g": "0fd970345919b420",
         "name": "split by address",
-        "func": "const messages = []\n\nfor (let address of msg.payload.addresses) {\n\n    const message = RED.util.cloneMessage(msg)\n\n    delete message.payload.addresses\n    message.topic = address\n    messages.push(message)\n\n}\n\nreturn [messages]",
+        "func": "const messages = []\n\nif (Object.prototype.hasOwnProperty.call(msg.payload, 'addresses') && Array.isArray(msg.payload.addresses)) {\n\n    for (let address of msg.payload.addresses) {\n\n        const message = RED.util.cloneMessage(msg)\n\n        delete message.payload.addresses\n        message.topic = address\n        messages.push(message)\n\n    }\n}\n\nreturn [messages]",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3908,7 +3908,7 @@
         "g": "0fd970345919b420",
         "name": "https://developers.meethue.com/develop/application-design-guidance/hue-bridge-discovery/",
         "info": "",
-        "x": 910,
+        "x": 820,
         "y": 60,
         "wires": []
     },
