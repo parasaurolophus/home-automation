@@ -537,7 +537,7 @@
         "x": 14,
         "y": 499,
         "w": 832,
-        "h": 282
+        "h": 262
     },
     {
         "id": "8326ae1a15518f8f",
@@ -564,7 +564,7 @@
         ],
         "x": 14,
         "y": 279,
-        "w": 1332,
+        "w": 1112,
         "h": 202
     },
     {
@@ -2342,7 +2342,7 @@
             }
         ],
         "x": 540,
-        "y": 580,
+        "y": 560,
         "wires": []
     },
     {
@@ -2377,7 +2377,7 @@
         "repair": false,
         "outputs": 4,
         "x": 550,
-        "y": 660,
+        "y": 640,
         "wires": [
             [
                 "1cb0a0826e19ac25"
@@ -2408,7 +2408,7 @@
             }
         ],
         "x": 530,
-        "y": 740,
+        "y": 720,
         "wires": []
     },
     {
@@ -2562,7 +2562,7 @@
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 660,
+        "y": 640,
         "wires": [
             [
                 "870608ff910feb60"
@@ -2617,7 +2617,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 660,
+        "y": 640,
         "wires": [
             [
                 "5e838b011b496bb4"
@@ -3201,7 +3201,7 @@
         "g": "8326ae1a15518f8f",
         "name": "contains hard-coded references to particular scene id's",
         "info": "",
-        "x": 1120,
+        "x": 900,
         "y": 320,
         "wires": []
     },
@@ -3210,10 +3210,10 @@
         "type": "comment",
         "z": "bfdb5183ea783e85",
         "g": "c2e3e9d2c97df2d0",
-        "name": "contains hard-coded references to particular group and scene id's",
+        "name": "contains hard-coded references to group and scene id's",
         "info": "",
-        "x": 270,
-        "y": 540,
+        "x": 240,
+        "y": 560,
         "wires": []
     },
     {
