@@ -35,8 +35,7 @@ of the year.
 3. Install the [dependencies described below](#dependencies)
 
 4. Adjust [_settings.js_](#settings) and add the
-  [environment variables](#environment) described below to
-   _~/.node-red/<user>/environment_
+  [environment variables](#environment) described below
 
 5. Restart the Node-RED process
 
@@ -91,8 +90,7 @@ _settings.js_
 
 ```
 contextStorage: {
-      default: "memoryOnly",
-      memoryOnly: { module: 'memory' },
+      default: { module: 'memory' },
       file: { module: 'localfilesystem' }
   },
 ```
@@ -104,7 +102,6 @@ flows from GitHub:
 
 ```
 httpStatic: [
-//    {path: '/home/nol/pics/',    root: "/img/"}, 
     {path: '/home/<user>/.node-red/projects/automation/dashboard/dist/', root: "/dashboard/"}, 
 ],
 ```
@@ -113,9 +110,40 @@ where `<user>` is the name of the user as whom the Node-RED service is running.
 
 ### Environment
 
+> _**Note:** There are a number of ways to set environment variables for
+> the Node-RED process, none of which are very well documented. The most
+> straightforward way is to add lines in_ settings.js _above
+> `module.exports` of the form:_
+>
+> ```
+> process.env.MY_VAR = 'my value'
+> process.env.MY_OTHER_VAR = 'my other value'
+>
+> module.exports = {
+> ```
+>
+> _To make it easier to share environments across Node-RED instances,
+> you could put the environment variable definitions in their own
+> module which is then imported into_ settings.js _using `require`:_
+>
+> ```
+> var environment = require('./environment')
+>
+> module.exports = {
+> ```
+>
+> _in which case there should also be an_ environment.js _file in
+> the same directory as_ settings.js _which contains something like:_
+>
+> ```
+> module.exports = {
+>     my_var: process.env.MY_VAR = 'my value',
+>     my_other_var: process.env.MY_OTHER_VAR = 'my other value'
+> }
+> ```
+
 These flows rely on some sensitive configuration data provided via
-environment variables, e.g. by adding them to
-`~/.node-red/environment`:
+environment variables:
 
 | Environment Variable       | Description                                                                          |
 |----------------------------|--------------------------------------------------------------------------------------|
