@@ -261,21 +261,6 @@ function connectWS() {
         // string in event.data
         const msg = JSON.parse(event.data)
 
-        if (msg.topic == 'automation/trigger') {
-
-            msg.localeString = new Date(msg.timestamp).toLocaleString()
-            console.log(msg)
-            return
-
-        }
-
-        if (/^timer\/[^/]+$/.exec(msg.topic)) {
-
-            console.log(JSON.stringify(msg, undefined, 1))
-            return
-
-        }
-
         if (msg.topic == 'settings/lighting') {
 
             settingsLighting.value = msg.payload
@@ -359,18 +344,18 @@ function connectWS() {
 
         }
 
+        if (msg.topic == 'powerview/model') {
+
+            powerviewModel.value = msg.payload
+            return
+
+        }
+
         let matches = /^hue\/(.+)\/key$/.exec(msg.topic)
 
         if (Array.isArray(matches) && (matches.length == 2)) {
 
             hueKeys.value[matches[1]] = msg.payload
-            return
-
-        }
-
-        if (msg.topic == 'powerview/model') {
-
-            powerviewModel.value = msg.payload
             return
 
         }
