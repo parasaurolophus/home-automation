@@ -1,22 +1,9 @@
 <template>
-
-    <div>
-
-        <fieldset>
-            <legend>Back End</legend>
-            <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
-            <v-btn @click="refreshControls">Refresh Controls</v-btn>
-        </fieldset>
-
-        <fieldset>
-            <legend>Test</legend>
-            <v-btn @click="sendError">Send Error</v-btn>
-            <v-btn @click="sendWarning">Send Warning</v-btn>
-            <v-btn @click="sendInfo">Send Info</v-btn>
-        </fieldset>
-
-    </div>
-
+    <fieldset>
+        <legend>Back End</legend>
+        <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
+        <v-btn @click="refreshControls">Refresh Controls</v-btn>
+</fieldset>
 </template>
 
 <style scoped>
