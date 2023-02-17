@@ -359,7 +359,16 @@ function connectWS() {
 
         if (Array.isArray(matches) && (matches.length == 2)) {
 
-            timer.value[matches[1]] = msg.payload
+            if (msg.payload === '') {
+
+                delete timer.value[matches[1]]
+
+            } else {
+
+                timer.value[matches[1]] = msg.payload
+
+            }
+
             return
 
         }
