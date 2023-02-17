@@ -315,7 +315,9 @@
             "7756c6eb9522da59"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 1152,
+        "h": 202
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -339,7 +341,9 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 239
+        "y": 239,
+        "w": 952,
+        "h": 122
     },
     {
         "id": "0fb8e43c903b3506",
@@ -365,7 +369,9 @@
             "93a323937c189b13"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 1052,
+        "h": 162
     },
     {
         "id": "96971e50c13ead01",
@@ -402,7 +408,9 @@
             "531fbb9eb4631e85"
         ],
         "x": 14,
-        "y": 199
+        "y": 199,
+        "w": 1272,
+        "h": 302
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -421,7 +429,9 @@
             "d046e6267c76dfe1"
         ],
         "x": 14,
-        "y": 479
+        "y": 479,
+        "w": 932,
+        "h": 82
     },
     {
         "id": "9cf0457b813ca743",
@@ -444,6 +454,8 @@
         ],
         "x": 14,
         "y": 219,
+        "w": 1272,
+        "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -467,7 +479,9 @@
             "9154f7fa8b08933f"
         ],
         "x": 14,
-        "y": 79
+        "y": 79,
+        "w": 832,
+        "h": 122
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -492,7 +506,9 @@
             "4e40e2700edff9ec"
         ],
         "x": 14,
-        "y": 319
+        "y": 319,
+        "w": 1272,
+        "h": 122
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -519,9 +535,7 @@
             "40d32c56d50a791d"
         ],
         "x": 14,
-        "y": 459,
-        "w": 832,
-        "h": 322
+        "y": 459
     },
     {
         "id": "8326ae1a15518f8f",
@@ -547,9 +561,7 @@
             "bb7c962d04498ed7"
         ],
         "x": 14,
-        "y": 239,
-        "w": 1052,
-        "h": 202
+        "y": 239
     },
     {
         "id": "4893dd6a2321040d",
@@ -572,7 +584,9 @@
             "0b223f6872d96c8f"
         ],
         "x": 14,
-        "y": 519
+        "y": 519,
+        "w": 852,
+        "h": 122
     },
     {
         "id": "b3c2354a4072ebba",
@@ -591,7 +605,9 @@
             "048ec8eb41be82ae"
         ],
         "x": 14,
-        "y": 579
+        "y": 579,
+        "w": 932,
+        "h": 82
     },
     {
         "id": "3a0077281d6eefee",
@@ -645,9 +661,7 @@
             "07e518eda1fa776b"
         ],
         "x": 34,
-        "y": 19,
-        "w": 1332,
-        "h": 202
+        "y": 19
     },
     {
         "id": "ea6243759720241b",
@@ -700,9 +714,7 @@
             "394967b3ec96ef1f"
         ],
         "x": 854,
-        "y": 459,
-        "w": 532,
-        "h": 302
+        "y": 459
     },
     {
         "id": "fa261bdde51028d4",
@@ -722,7 +734,9 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 379
+        "y": 379,
+        "w": 472,
+        "h": 82
     },
     {
         "id": "431414ce08ebb3c0",
@@ -3296,7 +3310,7 @@
         "z": "40413194443e96c6",
         "g": "cb106476337f4d38",
         "name": "validate",
-        "func": "function cloneMessage() {\n\n    return {\n        topic: 'powerview/error',\n        payload: RED.util.cloneMessage(msg),\n        retain: true\n    }\n}\n\nlet fill = 'green'\n\ntry {\n\n    if ((typeof msg.statusCode) != 'number') {\n\n        fill = 'red'\n        return cloneMessage()\n\n    }\n\n    if ((msg.statusCode < 200) || (msg.statusCode >= 300)) {\n\n        fill = 'red'\n        return cloneMessage()\n\n    }\n\n    if (msg.statusCode != 200) {\n\n        fill = 'yellow'\n        return cloneMessage()\n\n    }\n\n    return null\n\n} finally {\n\n    node.status({\n        text: msg.statusCode,\n        shape: 'dot',\n        fill: fill\n    })\n}",
+        "func": "function cloneMessage() {\n\n    return {\n        topic: 'powerview/error',\n        payload: RED.util.cloneMessage(msg)\n    }\n}\n\nlet fill = 'green'\n\ntry {\n\n    if ((typeof msg.statusCode) != 'number') {\n\n        fill = 'red'\n        return cloneMessage()\n\n    }\n\n    if ((msg.statusCode < 200) || (msg.statusCode >= 300)) {\n\n        fill = 'red'\n        return cloneMessage()\n\n    }\n\n    if (msg.statusCode != 200) {\n\n        fill = 'yellow'\n        return cloneMessage()\n\n    }\n\n    return null\n\n} finally {\n\n    node.status({\n        text: msg.statusCode,\n        shape: 'dot',\n        fill: fill\n    })\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
