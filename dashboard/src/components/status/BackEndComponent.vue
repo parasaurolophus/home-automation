@@ -3,7 +3,13 @@
         <legend>Back End</legend>
         <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
         <v-btn @click="refreshControls">Refresh Controls</v-btn>
-</fieldset>
+        <v-table>
+            <tr v-for="(value, name) in timer">
+                <th>{{ name }}</th>
+                <td>{{ value }}</td>
+            </tr>
+        </v-table>
+    </fieldset>
 </template>
 
 <style scoped>
@@ -30,6 +36,7 @@ import { inject } from 'vue'
 
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
+const timer = inject('timer')
 
 function refreshControls() {
 

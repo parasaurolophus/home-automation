@@ -78,6 +78,10 @@ app.provide('hueModels', hueModels)
 const powerviewModel = ref([])
 app.provide('powerviewModel', powerviewModel)
 
+// model for timer event debugging output
+const timer = ref({})
+app.provide('timer', timer)
+
 //////////////////////////////////////////////////////////////////////////////
 // get hue keys then invoke after()
 //////////////////////////////////////////////////////////////////////////////
@@ -351,7 +355,16 @@ function connectWS() {
 
         }
 
-        let matches = /^hue\/(.+)\/key$/.exec(msg.topic)
+        let matches = /^timer\/([^/]+)$/.exec(msg.topic)
+
+        if (Array.isArray(matches) && (matches.length == 2)) {
+
+            timer.value[matches[1]] = msg.payload
+            return
+
+        }
+
+        matches = /^hue\/(.+)\/key$/.exec(msg.topic)
 
         if (Array.isArray(matches) && (matches.length == 2)) {
 

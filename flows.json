@@ -535,7 +535,9 @@
             "40d32c56d50a791d"
         ],
         "x": 14,
-        "y": 459
+        "y": 499,
+        "w": 832,
+        "h": 262
     },
     {
         "id": "8326ae1a15518f8f",
@@ -561,7 +563,9 @@
             "bb7c962d04498ed7"
         ],
         "x": 14,
-        "y": 239
+        "y": 279,
+        "w": 1052,
+        "h": 202
     },
     {
         "id": "4893dd6a2321040d",
@@ -658,10 +662,14 @@
             "0c57cb4bce44a11a",
             "7cf8caea790c9792",
             "106ee66b66de58ab",
-            "07e518eda1fa776b"
+            "07e518eda1fa776b",
+            "3aca8c803a9eb037",
+            "5e265ec7c6a69a56"
         ],
-        "x": 34,
-        "y": 19
+        "x": 14,
+        "y": 19,
+        "w": 1352,
+        "h": 242
     },
     {
         "id": "ea6243759720241b",
@@ -714,7 +722,9 @@
             "394967b3ec96ef1f"
         ],
         "x": 854,
-        "y": 459
+        "y": 499,
+        "w": 532,
+        "h": 302
     },
     {
         "id": "fa261bdde51028d4",
@@ -2224,7 +2234,7 @@
         "to": "",
         "reg": false,
         "x": 560,
-        "y": 280,
+        "y": 320,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2253,7 +2263,7 @@
         "to": "",
         "reg": false,
         "x": 550,
-        "y": 320,
+        "y": 360,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2282,7 +2292,7 @@
         "to": "",
         "reg": false,
         "x": 550,
-        "y": 360,
+        "y": 400,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2311,7 +2321,7 @@
         "to": "",
         "reg": false,
         "x": 550,
-        "y": 400,
+        "y": 440,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2416,7 +2426,7 @@
             }
         ],
         "x": 750,
-        "y": 500,
+        "y": 540,
         "wires": []
     },
     {
@@ -2433,7 +2443,7 @@
             }
         ],
         "x": 760,
-        "y": 580,
+        "y": 600,
         "wires": []
     },
     {
@@ -2467,7 +2477,7 @@
             }
         ],
         "x": 760,
-        "y": 740,
+        "y": 720,
         "wires": []
     },
     {
@@ -2498,7 +2508,7 @@
         "to": "",
         "reg": false,
         "x": 780,
-        "y": 340,
+        "y": 380,
         "wires": [
             [
                 "c8fb3c01f10259ca"
@@ -2518,7 +2528,7 @@
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 340,
+        "y": 380,
         "wires": [
             [
                 "6a9ac472018c38ea"
@@ -2580,7 +2590,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 940,
-        "y": 340,
+        "y": 380,
         "wires": []
     },
     {
@@ -2592,7 +2602,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 340,
+        "y": 380,
         "wires": [
             [
                 "679d6a0d2002bcb7"
@@ -2636,11 +2646,12 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 430,
-        "y": 160,
+        "x": 410,
+        "y": 180,
         "wires": [
             [
-                "47acab248c4d8501"
+                "47acab248c4d8501",
+                "5e265ec7c6a69a56"
             ]
         ],
         "info": "Synchronize receipt of `daily/timestamp` and `settings/bedtime`\nmessages."
@@ -2667,8 +2678,8 @@
         "topic": "now",
         "payload": "",
         "payloadType": "date",
-        "x": 280,
-        "y": 140,
+        "x": 260,
+        "y": 160,
         "wires": [
             [
                 "0497e0ed333e8f23"
@@ -2693,8 +2704,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 280,
-        "y": 180,
+        "x": 260,
+        "y": 200,
         "wires": [
             [
                 "0497e0ed333e8f23"
@@ -2707,7 +2718,7 @@
         "z": "bfdb5183ea783e85",
         "g": "114e4bc3e2504c40",
         "name": "timer",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = [{ clear: true }]\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nconst sunrise = times.sunrise.getTime()\nconst sunset = times.sunset.getTime()\nlet midday = null\nlet afternoon = null\n\nnode.status('sunrise: ' + times.sunrise.toLocaleString())\n\nif (sunrise > now) {\n\n    messages.push({\n        payload: 'sunrise',\n        topic: 'timer/time',\n        at: sunrise\n    })\n}\n\nfor (let time = sunrise; time < sunset; time += 60000) {\n\n    const position = suncalc.getPosition(new Date(time), LATITUDE, LONGITUDE)\n\n    if ((midday === null) && (position.altitude > 0.8)) {\n\n        midday = time\n        node.status('midday: ' + new Date(time).toLocaleString())\n\n        if (midday > now) {\n            messages.push({\n                payload: 'midday',\n                topic: 'timer/time',\n                at: midday\n            })\n        }\n    }\n\n    if ((afternoon == null) && (position.azimuth > 0) && (position.altitude < 0.8)) {\n\n        afternoon = time\n        node.status('afternoon: ' + new Date(time).toLocaleString())\n\n        if (afternoon > now) {\n\n            messages.push({\n                payload: 'afternoon',\n                topic: 'timer/time',\n                at: afternoon\n            })\n        }\n\n        break\n\n    }\n}\n\nnode.status('sunset: ' + times.sunset.toLocaleString())\n\nif (sunset > now) {\n\n    messages.push({\n        payload: 'sunset',\n        topic: 'timer/time',\n        at: sunset\n    })\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nnode.status('bedtime: ' + new Date(bedtime).toLocaleString())\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime\n    })\n}\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nnode.status('theme: ' + theme)\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [messages]",
+        "func": "/*global suncalc*/\n\n// delay execution for 1 second in order to\n// give the 'delete retained timer events'\n// function node time to send its messages\n// ahead of this one's\nawait new Promise(resolve => setTimeout(resolve, 1000))\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = [{ clear: true }]\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nconst sunrise = times.sunrise.getTime()\nconst sunset = times.sunset.getTime()\nlet midday = null\nlet afternoon = null\n\nnode.status('sunrise: ' + times.sunrise.toLocaleString())\n\nif (sunrise > now) {\n\n    messages.push({\n        payload: 'sunrise',\n        topic: 'timer/time',\n        at: sunrise\n    })\n}\n\nfor (let time = sunrise; time < sunset; time += 60000) {\n\n    const position = suncalc.getPosition(new Date(time), LATITUDE, LONGITUDE)\n\n    if ((midday === null) && (position.altitude > 0.8)) {\n\n        midday = time\n        node.status('midday: ' + new Date(time).toLocaleString())\n\n        if (midday > now) {\n            messages.push({\n                payload: 'midday',\n                topic: 'timer/time',\n                at: midday\n            })\n        }\n    }\n\n    if ((afternoon == null) && (position.azimuth > 0) && (position.altitude < 0.8)) {\n\n        afternoon = time\n        node.status('afternoon: ' + new Date(time).toLocaleString())\n\n        if (afternoon > now) {\n\n            messages.push({\n                payload: 'afternoon',\n                topic: 'timer/time',\n                at: afternoon\n            })\n        }\n\n        break\n\n    }\n}\n\nnode.status('sunset: ' + times.sunset.toLocaleString())\n\nif (sunset > now) {\n\n    messages.push({\n        payload: 'sunset',\n        topic: 'timer/time',\n        at: sunset\n    })\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nnode.status('bedtime: ' + new Date(bedtime).toLocaleString())\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime\n    })\n}\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nnode.status('theme: ' + theme)\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [messages]",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -2719,7 +2730,7 @@
             }
         ],
         "x": 550,
-        "y": 160,
+        "y": 140,
         "wires": [
             [
                 "106ee66b66de58ab"
@@ -2734,8 +2745,8 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 120,
-        "y": 180,
+        "x": 100,
+        "y": 200,
         "wires": [
             [
                 "60d6c5b7d0db140a"
@@ -2756,7 +2767,7 @@
         "property": "payload",
         "topi": "topic",
         "x": 830,
-        "y": 120,
+        "y": 100,
         "wires": [
             [
                 "21c4dba2bb5d0e54"
@@ -2785,7 +2796,7 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 950,
-        "y": 140,
+        "y": 120,
         "wires": [
             [
                 "7cf8caea790c9792"
@@ -2812,7 +2823,7 @@
         "repair": false,
         "outputs": 1,
         "x": 590,
-        "y": 80,
+        "y": 60,
         "wires": [
             [
                 "0816fe94f5858846"
@@ -2828,7 +2839,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 360,
-        "y": 80,
+        "y": 60,
         "wires": [
             [
                 "8e84162e92296698"
@@ -2843,7 +2854,7 @@
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
         "x": 1140,
-        "y": 60,
+        "y": 80,
         "wires": []
     },
     {
@@ -2855,7 +2866,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 1280,
-        "y": 140,
+        "y": 120,
         "wires": []
     },
     {
@@ -2898,7 +2909,7 @@
         "to": "",
         "reg": false,
         "x": 1110,
-        "y": 140,
+        "y": 120,
         "wires": [
             [
                 "0c57cb4bce44a11a"
@@ -2918,7 +2929,7 @@
         "finalize": "",
         "libs": [],
         "x": 680,
-        "y": 160,
+        "y": 140,
         "wires": [
             [
                 "0816fe94f5858846"
@@ -2937,7 +2948,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 1300,
-        "y": 500,
+        "y": 540,
         "wires": []
     },
     {
@@ -2950,7 +2961,7 @@
             "47acab248c4d8501"
         ],
         "x": 950,
-        "y": 500,
+        "y": 540,
         "wires": [
             [
                 "51b8fbaba65a94c6"
@@ -2963,14 +2974,14 @@
         "z": "bfdb5183ea783e85",
         "g": "ebc1143cd96ae67d",
         "name": "time of day event",
-        "func": "const parts = msg.status.text.split(': ', 2)\n\nif (parts.length > 1) {\n\n    return {\n        payload: parts[1],\n        topic: 'timer/' + parts[0]\n    }\n}\n\nreturn null",
+        "func": "const parts = msg.status.text.split(': ', 2)\n\nif (parts.length > 1) {\n\n    return {\n        payload: parts[1],\n        topic: 'timer/' + parts[0],\n        retain: true\n    }\n}\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 1130,
-        "y": 500,
+        "y": 540,
         "wires": [
             [
                 "39d8a5aeec9834da"
@@ -3005,7 +3016,7 @@
         "payload": "sunrise",
         "payloadType": "str",
         "x": 1000,
-        "y": 560,
+        "y": 600,
         "wires": [
             [
                 "c715a0b0bcb89d36"
@@ -3023,7 +3034,7 @@
             "07e518eda1fa776b"
         ],
         "x": 1210,
-        "y": 640,
+        "y": 680,
         "wires": [],
         "l": true
     },
@@ -3037,7 +3048,7 @@
             "c715a0b0bcb89d36"
         ],
         "x": 830,
-        "y": 160,
+        "y": 140,
         "wires": [
             [
                 "21c4dba2bb5d0e54"
@@ -3073,7 +3084,7 @@
         "payload": "midday",
         "payloadType": "str",
         "x": 1000,
-        "y": 600,
+        "y": 640,
         "wires": [
             [
                 "c715a0b0bcb89d36"
@@ -3108,7 +3119,7 @@
         "payload": "afternoon",
         "payloadType": "str",
         "x": 990,
-        "y": 640,
+        "y": 680,
         "wires": [
             [
                 "c715a0b0bcb89d36"
@@ -3143,7 +3154,7 @@
         "payload": "sunset",
         "payloadType": "str",
         "x": 1000,
-        "y": 680,
+        "y": 720,
         "wires": [
             [
                 "c715a0b0bcb89d36"
@@ -3178,7 +3189,7 @@
         "payload": "bedtime",
         "payloadType": "str",
         "x": 990,
-        "y": 720,
+        "y": 760,
         "wires": [
             [
                 "c715a0b0bcb89d36"
@@ -3193,7 +3204,7 @@
         "name": "contains hard-coded references to scene id's",
         "info": "",
         "x": 870,
-        "y": 280,
+        "y": 320,
         "wires": []
     },
     {
@@ -3204,8 +3215,40 @@
         "name": "contains hard-coded references to group and scene id's",
         "info": "",
         "x": 240,
-        "y": 500,
+        "y": 540,
         "wires": []
+    },
+    {
+        "id": "3aca8c803a9eb037",
+        "type": "websocket out",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "publish",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 820,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "5e265ec7c6a69a56",
+        "type": "function",
+        "z": "bfdb5183ea783e85",
+        "g": "114e4bc3e2504c40",
+        "name": "delete retained timer events",
+        "func": "const messages = []\n\nfunction deleteTimerEvent(suffix) {\n\n    messages.push({\n        payload: '',\n        topic: 'timer/' + suffix,\n        retain: true\n    })\n}\n\ndeleteTimerEvent('sunrise')\ndeleteTimerEvent('midday')\ndeleteTimerEvent('afternoon')\ndeleteTimerEvent('sunset')\ndeleteTimerEvent('bedtime')\ndeleteTimerEvent('theme')\n\nreturn [messages]",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 220,
+        "wires": [
+            [
+                "3aca8c803a9eb037"
+            ]
+        ]
     },
     {
         "id": "9b22e1e38e67938b",
