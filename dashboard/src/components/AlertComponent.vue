@@ -23,13 +23,6 @@
 
 </template>
 
-<style scoped>
-.buttons>* {
-    margin: 0.25em;
-    padding: 0.25em;
-}
-</style>
-
 <script setup>
 
 import { inject } from 'vue'

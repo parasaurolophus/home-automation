@@ -9,13 +9,7 @@
 
 </template>
 
-<style scoped>
-/*  */
-</style>
-
 <script setup>
-
 import BackEndComponent from '@/components/status/BackEndComponent.vue'
 import HueBridgesComponent from '@/components/status/HueBridgesComponent.vue'
-
 </script>

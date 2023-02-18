@@ -1,9 +1,6 @@
 <template>
-
     <fieldset :disabled="websocketStatus != 1">
-
         <legend>Hue Bridges</legend>
-
         <v-table v-for="bridge in hueBridges" :key="bridge.id">
             <tr>
                 <th>address</th>
@@ -39,9 +36,7 @@
                 <td :class="esStatusClass(bridge.status)">{{ esStatusText(bridge.status) }}</td>
             </tr>
         </v-table>
-
     </fieldset>
-
 </template>
 
 <style scoped>
