@@ -1,21 +1,21 @@
 <template>
 
     <div v-for="error in errors" :key="error.title">
-        <v-alert v-model="error.show" type="error" tonal closable @update:modelValue="dismissError">
+        <v-alert v-model="error.show" type="error" tonal closable @update:modelValue="closeError">
             <template v-slot:title>{{ error.title }}</template>
             <pre>{{ error.text }}</pre>
         </v-alert>
     </div>
 
     <div v-for="warning in warnings" :key="warning.title">
-        <v-alert v-model="warning.show" type="warning" tonal closable @update:modelValue="dismissWarning">
+        <v-alert v-model="warning.show" type="warning" tonal closable @update:modelValue="closeWarning">
             <template v-slot:title>{{ warning.title }}</template>
             <pre>{{ warning.text }}</pre>
         </v-alert>
     </div>
 
     <div v-for="info in infos" :key="info.title">
-        <v-alert v-model="info.show" type="info" tonal closable @update:modelValue="dismissInfo">
+        <v-alert v-model="info.show" type="info" tonal closable @update:modelValue="closeInfo">
             <template v-slot:title>{{ info.title }}</template>
             <pre>{{ info.text }}</pre>
         </v-alert>
@@ -38,19 +38,19 @@ const errors = inject('errors')
 const warnings = inject('warnings')
 const infos = inject('infos')
 
-function dismissError() {
+function closeError() {
 
     errors.value = errors.value.filter(error => error.show)
 
 }
 
-function dismissWarning() {
+function closeWarning() {
 
     warnings.value = warnings.value.filter(warning => warning.show)
 
 }
 
-function dismissInfo() {
+function closeInfo() {
 
     infos.value = infos.value.filter(warning => warning.show)
 
