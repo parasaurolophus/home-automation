@@ -4,11 +4,13 @@
         <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
         <v-btn @click="refreshControls">Refresh Controls</v-btn>
         <v-table>
-            <tr v-for="(value, name) in timer">
+            <caption>timer</caption>
+            <tr v-for="(value, name) in timer" :key="name">
                 <th>{{ name }}</th>
                 <td>{{ value }}</td>
             </tr>
         </v-table>
+        <v-alert v-model="trigger.show" tonal closable @update:modelValue="dismissTrigger"><pre>{{ trigger.payload }}</pre></v-alert>
     </fieldset>
 </template>
 
@@ -37,6 +39,13 @@ import { inject } from 'vue'
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
 const timer = inject('timer')
+const trigger = inject('trigger')
+
+function dismissTrigger() {
+
+    trigger.value.show = false
+
+}
 
 function refreshControls() {
 
@@ -59,6 +68,7 @@ function wsStatusText(status) {
 
         default:
             return 'disconnected'
+
     }
 }
 
@@ -78,33 +88,6 @@ function wsStatusClass(status) {
         default:
             return 'ws-disconnected'
     }
-}
-
-function sendError() {
-
-    sendEvent(new Date().toLocaleString(), 'test/error')
-
-}
-
-function sendWarning() {
-
-    sendEvent(new Date().toLocaleString(), 'test/warning')
-
-}
-
-function sendInfo() {
-
-    sendEvent(new Date().toLocaleString(), 'test/info')
-
-}
-
-function sendEvent(payload, topic, retain) {
-
-    websocketPublish({
-        payload: payload,
-        topic: topic,
-        retain: retain
-    })
 }
 
 </script>

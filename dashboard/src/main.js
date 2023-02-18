@@ -82,6 +82,10 @@ app.provide('powerviewModel', powerviewModel)
 const timer = ref({})
 app.provide('timer', timer)
 
+// model for trigger event debugging output
+const trigger = ref({ show: false, payload: '' })
+app.provide('trigger', trigger)
+
 //////////////////////////////////////////////////////////////////////////////
 // get hue keys then invoke after()
 //////////////////////////////////////////////////////////////////////////////
@@ -302,6 +306,15 @@ function connectWS() {
         if (msg.topic == 'hue/bridges') {
 
             hueBridges.value = msg.payload
+            return
+
+        }
+
+        if (msg.topic == 'automation/trigger') {
+
+            msg.payload.timestamp = new Date(msg.timestamp).toLocaleString()
+            trigger.value.payload = JSON.stringify(msg.payload, undefined, 1)
+            trigger.value.show = true
             return
 
         }
