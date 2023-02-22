@@ -399,14 +399,14 @@
         ],
         "x": 14,
         "y": 199,
-        "w": 1272,
+        "w": 1252,
         "h": 302
     },
     {
         "id": "f1e1b4bb5ddac24f",
         "type": "group",
         "z": "d3b34304591c64d7",
-        "name": "ground floor hue bridge",
+        "name": "hue bridges",
         "style": {
             "stroke": "none",
             "fill": "#ffffff",
@@ -415,11 +415,12 @@
             "color": "#ffffff"
         },
         "nodes": [
-            "d3686879543e1951"
+            "d3686879543e1951",
+            "0f699ed605fadf59"
         ],
         "x": 494,
         "y": 519,
-        "w": 232,
+        "w": 412,
         "h": 82
     },
     {
@@ -523,30 +524,10 @@
         "h": 122
     },
     {
-        "id": "b3c2354a4072ebba",
-        "type": "group",
-        "z": "d3b34304591c64d7",
-        "name": "basement hue bridge",
-        "style": {
-            "stroke": "none",
-            "fill": "#ffffff",
-            "fill-opacity": "0.1",
-            "label": true,
-            "color": "#ffffff"
-        },
-        "nodes": [
-            "0f699ed605fadf59"
-        ],
-        "x": 734,
-        "y": 519,
-        "w": 212,
-        "h": 82
-    },
-    {
         "id": "fa261bdde51028d4",
         "type": "group",
         "z": "d3b34304591c64d7",
-        "name": "get hue keys",
+        "name": "hue keys",
         "style": {
             "stroke": "none",
             "fill": "#ffffff",
@@ -892,7 +873,7 @@
         "z": "85ed27d795e6e866",
         "g": "0fb8e43c903b3506",
         "name": "validate",
-        "func": "function copyMessage(topic) {\n\n    return {\n        payload: RED.util.cloneMessage(msg),\n        topic: 'hue/' + env.get('ADDRESS') + '/' + topic\n    }\n}\n\nif (!Number.isInteger(msg.statusCode)) {\n\n    return copyMessage('error')\n\n}\n\nif ((msg.statusCode < 200) || (msg.statusCode >= 300)) {\n\n    return copyMessage('error')\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'data')) {\n\n    return copyMessage('error')\n\n}\n\nif (msg.payload.data.length == 0) {\n\n    return copyMessage('error')\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'errors')) {\n\n    return copyMessage('error')\n\n}\n\nfor (let error of msg.payload.errors) {\n\n    node.warn(error)\n\n}\n\nif (msg.payload.errors.length != 0) {\n\n    // work-around for frequent spurious \"error\" results from hue bridge\n    for (let error of msg.payload.errors) {\n\n        if (!/^device \\(.+\\) is \".+\", command \\(.+\\) may not have effect$/.exec(error.description)) {\n\n            return copyMessage('warning')\n\n        }\n    }\n\n}\n\nreturn null",
+        "func": "function setTopic(topic) {\n\n    msg.topic = 'hue/' + env.get('ADDRESS') + '/' + topic\n    return msg\n\n}\n\nif (!Number.isInteger(msg.statusCode)) {\n\n    return setTopic('error')\n\n}\n\nif ((msg.statusCode < 200) || (msg.statusCode >= 300)) {\n\n    return setTopic('error')\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'data')) {\n\n    return setTopic('error')\n\n}\n\nif (msg.payload.data.length == 0) {\n\n    return setTopic('error')\n\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload, 'errors')) {\n\n    return setTopic('error')\n\n}\n\nfor (let error of msg.payload.errors) {\n\n    node.warn(error)\n\n}\n\nif (msg.payload.errors.length != 0) {\n\n    // work-around for frequent spurious \"error\" results from hue bridge\n    for (let error of msg.payload.errors) {\n\n        if (!/^device \\(.+\\) is \".+\", command \\(.+\\) may not have effect$/.exec(error.description)) {\n\n            return setTopic('warning')\n\n        }\n    }\n}\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1056,7 +1037,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
+        "x": 870,
         "y": 320,
         "wires": [
             [
@@ -1077,7 +1058,7 @@
         "z": "85ed27d795e6e866",
         "g": "96971e50c13ead01",
         "name": "",
-        "x": 690,
+        "x": 590,
         "y": 380,
         "wires": [
             [
@@ -1104,7 +1085,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 1070,
+        "x": 1050,
         "y": 380,
         "wires": [
             [
@@ -1117,7 +1098,7 @@
         "type": "change",
         "z": "85ed27d795e6e866",
         "g": "96971e50c13ead01",
-        "name": "",
+        "name": "hue/${ADDRESS}/onopen",
         "rules": [
             {
                 "t": "set",
@@ -1132,7 +1113,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 890,
+        "x": 830,
         "y": 380,
         "wires": [
             [
@@ -1145,7 +1126,7 @@
         "type": "change",
         "z": "85ed27d795e6e866",
         "g": "96971e50c13ead01",
-        "name": "",
+        "name": "hue/${ADDRESS}/onerror",
         "rules": [
             {
                 "t": "set",
@@ -1160,7 +1141,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 890,
+        "x": 830,
         "y": 440,
         "wires": [
             [
@@ -1178,7 +1159,7 @@
             "d3e5044fe363855b"
         ],
         "uncaught": false,
-        "x": 390,
+        "x": 290,
         "y": 340,
         "wires": [
             [
@@ -1216,7 +1197,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1070,
+        "x": 1050,
         "y": 260,
         "wires": [
             [
@@ -1257,7 +1238,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 560,
+        "x": 460,
         "y": 460,
         "wires": [
             []
@@ -1275,7 +1256,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
+        "x": 300,
         "y": 440,
         "wires": [
             [
@@ -1381,7 +1362,7 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 260,
+        "x": 160,
         "y": 440,
         "wires": [
             [
@@ -1425,7 +1406,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1200,
+        "x": 1180,
         "y": 260,
         "wires": []
     },
@@ -1437,7 +1418,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1200,
+        "x": 1180,
         "y": 380,
         "wires": []
     },
@@ -1532,7 +1513,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 530,
+        "x": 430,
         "y": 340,
         "wires": [
             [
@@ -1580,7 +1561,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 530,
+        "x": 430,
         "y": 420,
         "wires": [
             [
@@ -3709,7 +3690,7 @@
         "id": "0f699ed605fadf59",
         "type": "subflow:85ed27d795e6e866",
         "z": "d3b34304591c64d7",
-        "g": "b3c2354a4072ebba",
+        "g": "f1e1b4bb5ddac24f",
         "name": "Basement Hue",
         "env": [
             {
@@ -3728,7 +3709,7 @@
                 "type": "str"
             }
         ],
-        "x": 840,
+        "x": 800,
         "y": 560,
         "wires": []
     },
