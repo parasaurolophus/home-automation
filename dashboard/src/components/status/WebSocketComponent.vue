@@ -1,9 +1,13 @@
 <template>
-    <fieldset>
-        <legend>Back End</legend>
-        <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
-        <v-btn @click="refreshControls">Refresh Controls</v-btn>
-    </fieldset>
+    <v-card>
+        <v-card-title>Back End</v-card-title>
+        <v-card-text>
+            <div :class="wsStatusClass(websocketStatus)">{{ wsStatusText(websocketStatus) }}</div>
+        </v-card-text>
+        <v-card-actions>
+            <v-btn @click="refreshControls">Refresh Controls</v-btn>
+        </v-card-actions>
+    </v-card>
 </template>
 
 <style scoped>

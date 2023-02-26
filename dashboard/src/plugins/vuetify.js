@@ -18,4 +18,15 @@ export default createVuetify({
     theme: {
         defaultTheme: 'dark'
     },
+    defaults: {
+        VCard: {
+            flat: true,
+            rounded: false
+        },
+        VSwitch: {
+            color: 'primary',
+            inset: true,
+            'hide-details': true
+        }
+    }
 })

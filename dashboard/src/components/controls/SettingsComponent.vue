@@ -1,40 +1,31 @@
 <template>
-
-    <div>
-
-        <p class="controls-label">Settings</p>
-
-        <fieldset :disabled="websocketStatus != 1">
-
-            <legend>Automation</legend>
-
-            <v-switch v-model="settingsLighting" color='primary' inset hide-details>
-                <template v-slot:label>
-                    Lighting automation
-                    {{ settingsLighting? 'enabled': 'disabled' }}
-                </template>
-            </v-switch>
-
-            <v-switch v-model="settingsShades" color='primary' inset hide-details>
-                <template v-slot:label>
-                    Window shades automation
-                    {{ settingsShades? 'enabled': 'disabled' }}
-                </template>
-            </v-switch>
-
-            <p>
-                Bedtime automation will be triggered at a time randomly chosen each day that is up to 30 minutes
-                before
-                or after the hour selected here:
-            </p>
-
-            <v-select v-model="settingsBedtime" :items="bedtimeOptions" item-title="label" item-value="hour"
-                label="Bedtime" return-object single-line></v-select>
-
-        </fieldset>
-
-    </div>
-
+    <v-card :disabled="websocketStatus != 1">
+        <v-card-title>Settings</v-card-title>
+        <v-card-text>
+            <fieldset>
+                <legend>Automation</legend>
+                <v-switch v-model="settingsLighting">
+                    <template v-slot:label>
+                        Lighting automation
+                        {{ settingsLighting ? 'enabled' : 'disabled' }}
+                    </template>
+                </v-switch>
+                <v-switch v-model="settingsShades">
+                    <template v-slot:label>
+                        Window shades automation
+                        {{ settingsShades ? 'enabled' : 'disabled' }}
+                    </template>
+                </v-switch>
+                <p>
+                    Bedtime automation will be triggered at a time randomly chosen each day that is up to 30 minutes
+                    before
+                    or after the hour selected here:
+                </p>
+                <v-select v-model="settingsBedtime" :items="bedtimeOptions" item-title="label" item-value="hour"
+                    label="Bedtime" return-object single-line></v-select>
+            </fieldset>
+        </v-card-text>
+    </v-card>
 </template>
 
 <style scoped>

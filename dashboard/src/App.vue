@@ -8,10 +8,8 @@ body {
 
 }
 
-fieldset,
 fieldset>* {
-    margin: 0.25em;
-    padding: 0.25em;
+    margin: 0.5em;
 }
 
 th,
@@ -31,11 +29,6 @@ th {
 
 .wrapped>* {
     flex: 1;
-}
-
-.controls-label {
-    margin-top: 1em;
-    font-weight: bold;
 }
 </style>
 
