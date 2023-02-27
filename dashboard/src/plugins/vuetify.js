@@ -21,12 +21,15 @@ export default createVuetify({
     defaults: {
         VCard: {
             flat: true,
-            rounded: false
+            rounded: 0
         },
         VSwitch: {
             color: 'primary',
             inset: true,
             'hide-details': true
+        },
+        VAlert: {
+            variant: 'tonal'
         }
     }
 })

@@ -297,9 +297,7 @@
             "7756c6eb9522da59"
         ],
         "x": 14,
-        "y": 159,
-        "w": 1152,
-        "h": 202
+        "y": 159
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -323,9 +321,7 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 379,
-        "w": 952,
-        "h": 122
+        "y": 379
     },
     {
         "id": "0fb8e43c903b3506",
@@ -407,9 +403,7 @@
             "0f699ed605fadf59"
         ],
         "x": 494,
-        "y": 519,
-        "w": 412,
-        "h": 82
+        "y": 519
     },
     {
         "id": "9cf0457b813ca743",
@@ -521,9 +515,7 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 519,
-        "w": 472,
-        "h": 82
+        "y": 519
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -551,8 +543,6 @@
         ],
         "x": 14,
         "y": 379,
-        "w": 832,
-        "h": 302,
         "info": "Control the corresponding Philips Hue light groups and scenes upon\nreceipt of each `automation/trigger` event"
     },
     {
@@ -580,8 +570,6 @@
         ],
         "x": 14,
         "y": 119,
-        "w": 1012,
-        "h": 242,
         "info": "Activate the corresponding PowerView scene upon receipt of of each\n`automation/trigger` event"
     },
     {
@@ -604,8 +592,6 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 712,
-        "h": 82,
         "info": "Send a `controls/refresh` command message when this flow first connects\nas a client to the publish / subscribe message broker"
     },
     {
@@ -2162,7 +2148,7 @@
                 "t": "set",
                 "p": "retain",
                 "pt": "msg",
-                "to": "false",
+                "to": "true",
                 "tot": "bool"
             },
             {

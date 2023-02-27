@@ -3,7 +3,7 @@
         <v-card-title>Hue Bridges</v-card-title>
         <v-card-text>
             <div v-for="(bridge, index) in hueBridges" :key="bridge.id">
-                <hr v-if="index > 0" />
+                <hr v-if="index > 0"/>
                 <v-table>
                     <tr>
                         <th>address</th>
@@ -45,6 +45,10 @@
 </template>
 
 <style scoped>
+hr {
+    margin: 0.5em 0 0.5em 0;
+}
+
 .es-disconnected {
     color: white;
     background-color: darkred;

@@ -83,16 +83,16 @@ const timer = ref({})
 app.provide('timer', timer)
 
 // model for trigger event debugging output
-const trigger = ref({ show: false, payload: '' })
+const trigger = ref('{}')
 app.provide('trigger', trigger)
-
-//////////////////////////////////////////////////////////////////////////////
-// get hue keys then invoke after()
-//////////////////////////////////////////////////////////////////////////////
 
 // model for hue/{address}/key messages
 const hueKeys = ref({})
 app.provide('hueKeys', hueKeys)
+
+//////////////////////////////////////////////////////////////////////////////
+// get hue keys then invoke after()
+//////////////////////////////////////////////////////////////////////////////
 
 function getHueKeys(after) {
 
@@ -114,7 +114,11 @@ function getHueKeys(after) {
             if (!response.ok) {
 
                 console.log(response)
-                errors.value.push({ show: true, title: 'error getting hue keys', text: JSON.stringify(response, undefined, 1) })
+                errors.value.push({
+                    show: true,
+                    title: 'error getting hue keys',
+                    text: JSON.stringify(response, undefined, 1)
+                })
                 return null
 
             }
@@ -162,7 +166,11 @@ function websocketPublish(msg) {
         const text = JSON.stringify(msg, undefined, 1)
 
         console.log('websocket closed when attempting to send:\n' + text)
-        errors.value.push({ show: true, title: 'websocket closed', text: text })
+        errors.value.push({
+            show: true,
+            title: 'websocket closed',
+            text: text
+        })
         return
 
     }
@@ -258,7 +266,11 @@ function connectWS() {
         const text = JSON.stringify(event, undefined, 1)
 
         console.log(text)
-        errors.value.push({ show: true, title: 'ws.onerror', text: text })
+        errors.value.push({
+            show: true,
+            title: 'ws.onerror',
+            text: text
+        })
 
     }
 
@@ -298,7 +310,11 @@ function connectWS() {
             const text = JSON.stringify(msg.payload, undefined, 1)
 
             console.log('no bedtime option found matching ' + text)
-            errors.value.push({ show: true, title: 'Invalid settings/bedtime payload', text: text })
+            errors.value.push({
+                show: true,
+                title: 'Invalid settings/bedtime payload',
+                text: text
+            })
             return
 
         }
@@ -313,20 +329,23 @@ function connectWS() {
         if (msg.topic == 'automation/trigger') {
 
             msg.payload.timestamp = new Date(msg.timestamp).toLocaleString()
-            trigger.value.payload = JSON.stringify(msg.payload, undefined, 1)
-            trigger.value.show = true
+            trigger.value = JSON.stringify(msg.payload, undefined, 1)
             return
 
         }
 
         if (/^.+\/error$/.exec(msg.topic)) {
 
-            console.log(msg)
+            const text = JSON.stringify(msg.payload, undefined, 1)
+            console.log(text)
 
             if (msg.payload !== '') {
 
-                errors.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg.payload, undefined, 1) })
-
+                errors.value.push({
+                    show: true,
+                    title: msg.topic,
+                    text: text
+                })
             }
 
             return
@@ -335,12 +354,16 @@ function connectWS() {
 
         if (/^.+\/warning$/.exec(msg.topic)) {
 
-            console.log(msg)
+            const text = JSON.stringify(msg.payload, undefined, 1)
+            console.log(text)
 
             if (msg.payload !== '') {
 
-                warnings.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg.payload, undefined, 1) })
-
+                warnings.value.push({
+                    show: true,
+                    title: msg.topic,
+                    text: text
+                })
             }
 
             return
@@ -349,12 +372,16 @@ function connectWS() {
 
         if (/^.+\/info$/.exec(msg.topic)) {
 
-            console.log(msg)
+            const text = JSON.stringify(msg.payload, undefined, 1)
+            console.log(text)
 
             if (msg.payload !== '') {
 
-                infos.value.push({ show: true, title: msg.topic, text: JSON.stringify(msg.payload, undefined, 1) })
-
+                infos.value.push({
+                    show: true,
+                    title: msg.topic,
+                    text: text
+                })
             }
 
             return

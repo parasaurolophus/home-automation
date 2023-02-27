@@ -1,10 +1,8 @@
 <template>
-    <v-card v-if="trigger.show">
-        <v-card-title>Automation Trigger</v-card-title>
+    <v-card>
+        <v-card-title>Trigger</v-card-title>
         <v-card-text>
-            <v-alert v-model="trigger.show" type="info" tonal closable @update:modelValue="closeTrigger">
-                <pre>{{ trigger.payload }}</pre>
-            </v-alert>
+            <pre>{{ trigger }}</pre>
         </v-card-text>
     </v-card>
 </template>
@@ -14,11 +12,5 @@
 import { inject } from 'vue'
 
 const trigger = inject('trigger')
-
-function closeTrigger() {
-
-    trigger.value.show = false
-
-}
 
 </script>
