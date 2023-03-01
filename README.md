@@ -240,19 +240,40 @@ more interested in extending their surveillance and control over their
 
 These Node-RED flows do not directly implement any user interface.
 Instead, they asynchronously send event messages and receive
-command messages using WebSocket nodes configured to "listen to" the
+command messages using a WebSocket node configured to "listen to" the
 URI `/broker`. In addition to and separate from _flows.json_, the GitHub
 repository for these flows includes a subdirectory, _dashboard_,
 which implements a "single page web application" that connects to
 the `/broker` WebSocket listener in Node-RED and presents a user inteface
 composed of [Vuetify 3](https://next.vuetifyjs.com/) components. They
-make extensive use of [Vue 3](https://next.vuejs.com) features to implement
+make extensive use of [Vue 3](https://vuejs.org) features to implement
 a highly reactive user interface that automatically adapts to configuration
 changes made in the Hue and PowerView native apps.
 
+```mermaid
+flowchart LR
+
+  browser["Web\nBrowser"]
+  flows["Flows\n(Controller)"]
+  vue["httpStatic page\n(View)"]
+  hue["Hue\nBridge"]
+  powerview["PowerView\nHub"]
+
+  browser<-- "HTTP\nUI" -->vue
+
+  subgraph Node-RED
+    vue<-- "WebSocket\n(Model)" -->flows
+  end
+
+  hue-- "EventSource\nAPI" --->flows
+  flows-- "HTTP\nAPI" -->hue
+  flows-- "HTTP\nAPI" -->powerview
+
+```
+
 This allows for a complete separation between the _view_ implemented using
 _Vuetify_, the _model_ transmitted as message payloads using WebSockets
-and Node-RED as the _controller_ in the so-called MVC (Model, View,
+and Node-RED flows as the _controller_ in the so-called MVC (Model, View,
 Controller) architectural pattern. The result is that these flows
 display a consolidated user interface for controlling diverse devices
 from multiple vendors without having to be edited whenever those
