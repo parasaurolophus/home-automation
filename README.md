@@ -2,6 +2,25 @@
 
 Node-RED based home automation system
 
+```mermaid
+flowchart TD
+
+  flows["Flows\n(Controller)"]
+  vue["httpStatic page\n(View)"]
+  hue["Hue\nBridge"]
+  powerview["PowerView\nHub"]
+  browser["Web\nBrowser"]
+
+  subgraph Node-RED
+    flows<-- "WebSocket\n(Model)" -->vue
+  end
+
+  vue<-- "HTTP\nUI" -->browser
+  flows-- "HTTP\nAPI" --->powerview
+  flows-- "HTTP\nAPI" --->hue
+  hue-- "EventSource\nAPI" -->flows
+```
+
 > **Note:** these flows use features introduced in Node-RED version 3.0,
 > including wire junctions and dynamic links. They will not load
 > correctly into earlier versions of Node-RED.
@@ -76,10 +95,7 @@ which must be enabled in _settings.js_ (true by default).
 
 ## Configuration
 
-These flow assume a certain amount of configuration, both in
-_settings.js_ and via environment variables (e.g.
-_~/.node-red/environment_ or globally in the host operating
-system's shell).
+These flow assume a certain amount of configuration, in _settings.js_.
 
 ### Settings
 
@@ -180,7 +196,7 @@ automation flows and running it on a separate instance of Node-RED.
 
 The implementation of these  features provides practical demonstrations
 of a number of basic software-engineering concepts such as event-driven
-programming and data-driven user interfaces. It also serves as a
+programming and data-driven user interfaces (MVC). It also serves as a
 repository of examples of a number of techniques specific to Node-RED as a
 home automation platform and how it interoperates with underlying
 technologies such as WebSockets, JavaScript embedded in HTML and so on.
@@ -221,7 +237,8 @@ Node-RED can be programmed to do anything that can be accomplished in a
 general-purpose programming language, JavaScript, rather than being
 constrained by the features made available at the whim of companies
 more interested in extending their surveillance and control over their
-"walled gardens" than in providing useful products and services.
+"walled gardens" (which they regard as including their customers'
+homes) than in providing useful products and services.
 
 ### User interface
 
@@ -250,27 +267,6 @@ make extensive use of [Vue 3](https://vuejs.org) features to implement
 a highly reactive user interface that automatically adapts to configuration
 changes made in the Hue and PowerView native apps.
 
-```mermaid
-flowchart LR
-
-  browser["Web\nBrowser"]
-  flows["Flows\n(Controller)"]
-  vue["httpStatic page\n(View)"]
-  hue["Hue\nBridge"]
-  powerview["PowerView\nHub"]
-
-  browser<-- "HTTP\nUI" -->vue
-
-  subgraph Node-RED
-    vue<-- "WebSocket\n(Model)" -->flows
-  end
-
-  hue-- "EventSource\nAPI" --->flows
-  flows-- "HTTP\nAPI" -->hue
-  flows-- "HTTP\nAPI" -->powerview
-
-```
-
 This allows for a complete separation between the _view_ implemented using
 _Vuetify_, the _model_ transmitted as message payloads using WebSockets
 and Node-RED flows as the _controller_ in the so-called MVC (Model, View,
@@ -296,46 +292,48 @@ not a dogmatic adherence to theoretical purity in the domain of
 software architecture. The sad truth is that while Node-RED greatly
 benefits from the culture of an open source community project,
 it also suffers from the inevitable shortcomings of such products.
-(This is not unique to software: the many challenges of relying on
-any open source product is a specific example of [the tragedy of
-the commons](https://en.wikipedia.org/wiki/Tragedy_of_the_commons)
+(This is not unique to Node-RED nor even to open source software: the many
+challenges of relying on any open source product is a specific example of
+[the tragedy of the commons](https://en.wikipedia.org/wiki/Tragedy_of_the_commons)
 about which political and economic theorists have written for
 centuries.) The _node-red-dashboard_ component, supplied by Node-RED's
 core development team, suffers from the kind of "bit rot" that always --
-no, really, **always** -- infects open source projects' repositories while
+no, really, _always_ -- infects open source projects' repositories while
 community-supplied components vary widely in their quality. Support by
 their authors is often intermittent and ephemeral. That is why these flows
 are designed to rely on as few add-on components as possible. They use
-core nodes such as `http request` to access the various device API's
-directly rather than using node packages that wrap them because this
-reduces exposure to defects and deficiencies in third-party components.
-The one critical bit of functionality that is implemented as a community
-supplied node package was created by the same author for the specific
-needs of accessing the Philips Hue Bridge API from within these flows.
+core nodes such as `function` and `http request` to utilize the various
+device API's directly rather than using node packages that wrap them because this reduces exposure to defects and deficiencies in third-party
+components. The one critical bit of functionality that is implemented as a
+community supplied node package was created by the same author for the
+specific needs of accessing the Philips Hue Bridge SSE API from within
+these flows.
+
 (The author feels confident in sufficiently prompt and diligent responses
 to bug reports and feature requests he makes to himself, while having no
 illusions nor unreasonable expectations regarding the priority such issues
 would be given by someone else who created some similar package for their
 own purposes, who knows how long ago, and then moved on to who knows
-where.)
+what other projects and interests.)
 
-Note that once built, the _dist_ directory contains only HTML, JavaScript,
-CSS and similar standard web content files. It does not require any
-special code on the web server. It uses only the native WebSocket support
-built into modern web browsers to communicate with the Node-RED back end
-and all dynamic rendering is done on the client side using JavaScript and
-the DOM API also built into web browsers. It does use certain browser
-features that require it to be loaded with a URL beginning with `http://`
-or `https://`, but it does not actually rely directly on any "server side
-rendering" code.
+Note that once built, the _dashboard/dist_ directory contains only HTML,
+JavaScript, CSS and similar standard web content files. It does not
+require any special code on the web server. It uses only the native
+WebSocket support built into modern web browsers to communicate with the
+Node-RED back end and all dynamic rendering is done on the client side
+using JavaScript and the DOM API also built into web browsers. It does use
+certain browser features that require it to be loaded with a URL beginning
+with `http://` or `https://`, but it does not actually rely directly on
+any "server side rendering" code.
 
 > _To emphasize this point, an early version of this repository
 > had a version of the dashboard implemented without the use of
 > any client-side tooling but, rather, hand-crafted HTML,
-> CSS and JavaScript. Frameworks like_ Vue / Vuetify _provide
-> only "nice to have" features that enhance maintainability and
-> readability of the HTML, not essential features required for
-> the core functionality._
+> CSS and JavaScript. That version worked fine when opened using
+> `file://` URL, i.e. without being "served" via HTTP at all. Frameworks
+> like_ Vue / Vuetify _provide only "nice to have" features that enhance
+> maintainability and readability of the HTML, not essential features
+> required for core functionality._
 
 ## Theory of Operation
 
@@ -352,7 +350,7 @@ JavaScript object with the following properties:
 | `settings/lighting`  | A boolean value indicating whether or not lighting automation has been enabled by a user        |
 | `settings/shades`    | A boolean value indicating whether or not window covering automation has been enabled by a user |
 
-The dashboard includes controls for controlling the values for
+The dashboard includes controls for selecting the values for
 `msg.payload['settings/lighting']` and `msg.payload['settings/shades']`.
 
 ### Theme
@@ -378,6 +376,32 @@ The payload of each `automation/trigger` event has `msg.payload['timer/time']` s
 | `afternoon`                 | Sent when the sun first drops below an altitude of 0.8 after it has reached an azimuth greater than 0.0 (i.e. shining from the west) |
 | `sunset`                    | Sent at sunset                                                                                                                       |
 | `bedtime`                   | Sent at somewhat randomized time each evening<sup>3</sup>                                                                            |
+
+Obviously, the preceding times-of-day rules are designed for a location
+in the northern hemisphere, below the arctic circle. The value of 0.8
+radians for the thresholds defining `midday` and `afternoon` were
+determined empirically for a particular home, at a particular latitude,
+with eaves of a particular size over windows facing particular directions.
+The exact values will need adjustment based on the circumstances and
+preferences of the occupants of some other building at some different
+location. The whole approach would have to be different for locations
+at sufficiently extreme latitudes that the sun ever sets later than a
+desirable bedtime or where days and nights sometimes last longer than
+24 hours.
+
+Whatever the exact values, the goal is to trigger lighting and window
+covering automation so as to optimize energy usage and comfort in the
+following ways:
+
+- Have the windows uncovered as much of the day as practical
+- Have those windows covered at those times of days when the sun's
+  angle would cause it to shine too directly into the home
+- Turn on and off lighting as needed for various activities based
+  on the times at which the sun rises and sets on any given day
+  as well as a desired bedtime
+- Have the bedtime lighting and window covering automation slightly
+  randomized to provide a degree of simulated presence when the
+  home is unoccupied
 
 Notes:
 
