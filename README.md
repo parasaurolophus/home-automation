@@ -75,7 +75,7 @@ of the year.
 
 If all goes well, opening the Node-RED editor will allow you to examine and
 modify these flows. Browsing to your Node-RED instance's URL with
-.../dashboard_ added to the end of the URL will open the _Vuetify_ based
+.../dashboard_ added will open the [Vuetify](https://vuetifyjs.com/) based
 dashboard. Note that you will have to edit the contents of _Automation_
 and _Hue_ flows to match your hardware setup and scene configuration in
 order for the Hue controls to be generated on the dashboard and the time
@@ -262,27 +262,27 @@ URI `/broker`. In addition to and separate from _flows.json_, the GitHub
 repository for these flows includes a subdirectory, _dashboard_,
 which implements a "single page web application" that connects to
 the `/broker` WebSocket listener in Node-RED and presents a user inteface
-composed of [Vuetify 3](https://next.vuetifyjs.com/) components. They
+composed of [Vuetify 3](https://vuetifyjs.com/) components. They
 make extensive use of [Vue 3](https://vuejs.org) features to implement
 a highly reactive user interface that automatically adapts to configuration
 changes made in the Hue and PowerView native apps.
 
 This allows for a complete separation between the _view_ implemented using
-_Vuetify_, the _model_ transmitted as message payloads using WebSockets
-and Node-RED flows as the _controller_ in the so-called MVC (Model, View,
-Controller) architectural pattern. The result is that these flows
-display a consolidated user interface for controlling diverse devices
-from multiple vendors without having to be edited whenever those
-devices' configuration is changed in their respective native apps. They
-do this using features directly supported by modern web browsers without
-requiring the intermingling of front-end and back-end logic directly
-within the Node-RED flows. This is why these flows have no dependency
-on _node-red-dashboard_ nor any of the community supported packages
-intended to replace it. All of the functionality that would be supplied by
-any such package is entirely encapsulated within the _dashboard/dist_
-directory that must be built after downloading this repository from
-GitHub. With the appropriate configuration of _settings.js_ as
-[described above](#static-http-content), you can access
+[Vuetify](https://vuetifyjs.com/), the _model_ transmitted as message
+payloads using WebSockets and Node-RED flows as the _controller_ in the
+so-called MVC (Model, View, Controller) architectural pattern. The result
+is that these flows display a consolidated user interface for controlling
+diverse devices from multiple vendors without having to be edited whenever
+those devices' configuration is changed in their respective native apps.
+They do this using features directly supported by modern web browsers
+without requiring the intermingling of front-end and back-end logic
+directly within the Node-RED flows. This is why these flows have no
+dependency on _node-red-dashboard_ nor any of the community supplied
+packages intended to replace it. All of the functionality that would be
+supplied by any such package is entirely encapsulated within the
+_dashboard/dist_ directory that must be built after downloading this
+repository from GitHub. With the appropriate configuration of
+_settings.js_ as [described above](#static-http-content), you can access
 _dashboard/dist/index.html_ using Node-RED's built-in web server and the
 web page will automatically deduce the correct URL with which to connect
 to the `/broker` WebSocket server implemented by these flows.
