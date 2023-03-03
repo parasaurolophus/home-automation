@@ -34,6 +34,7 @@ import { inject } from 'vue'
 
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
+
 function refreshControls() {
 
     websocketPublish({ payload: new Date().getTime(), topic: 'controls/refresh' })

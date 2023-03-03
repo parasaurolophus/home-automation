@@ -1,12 +1,8 @@
 <template>
-
     <div class="wrapped">
-
         <BackEndComponent />
         <HueBridgesComponent />
-
     </div>
-
 </template>
 
 <script setup>
