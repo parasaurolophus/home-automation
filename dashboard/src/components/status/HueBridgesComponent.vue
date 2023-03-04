@@ -2,43 +2,44 @@
     <v-card :disabled="websocketStatus != 1">
         <v-card-title>Hue Bridges</v-card-title>
         <v-card-text>
-            <div v-for="(bridge, index) in hueBridges" :key="bridge.id">
-                <hr v-if="index > 0"/>
-                <v-table>
-                    <tr>
-                        <th>address</th>
-                        <td>{{ bridge.address }}</td>
-                    </tr>
-                    <tr>
-                        <th>port</th>
-                        <td>{{ bridge.port }}</td>
-                    </tr>
-                    <tr>
-                        <th>id</th>
-                        <td>{{ bridge.id }}</td>
-                    </tr>
-                    <tr>
-                        <th>model</th>
-                        <td>{{ bridge.model }}</td>
-                    </tr>
-                    <tr>
-                        <th>name</th>
-                        <td>{{ bridge.name }}</td>
-                    </tr>
-                    <tr>
-                        <th>host</th>
-                        <td>{{ bridge.host }}</td>
-                    </tr>
-                    <tr>
-                        <th>key</th>
-                        <td v-if="hueKeys[bridge.address]">{{ hueKeys[bridge.address] }}</td>
-                        <td v-else><v-btn @click="createHueKey(bridge.address)">create key</v-btn></td>
-                    </tr>
-                    <tr>
-                        <th>status</th>
-                        <td :class="esStatusClass(bridge.status)">{{ esStatusText(bridge.status) }}</td>
-                    </tr>
-                </v-table>
+            <div class="wrapped">
+                <div v-for="(bridge, index) in hueBridges" :key="bridge.id">
+                    <v-table>
+                        <tr>
+                            <th>address</th>
+                            <td>{{ bridge.address }}</td>
+                        </tr>
+                        <tr>
+                            <th>port</th>
+                            <td>{{ bridge.port }}</td>
+                        </tr>
+                        <tr>
+                            <th>id</th>
+                            <td>{{ bridge.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>model</th>
+                            <td>{{ bridge.model }}</td>
+                        </tr>
+                        <tr>
+                            <th>name</th>
+                            <td>{{ bridge.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>host</th>
+                            <td>{{ bridge.host }}</td>
+                        </tr>
+                        <tr>
+                            <th>key</th>
+                            <td v-if="hueKeys[bridge.address]">{{ hueKeys[bridge.address] }}</td>
+                            <td v-else><v-btn @click="createHueKey(bridge.address)">create key</v-btn></td>
+                        </tr>
+                        <tr>
+                            <th>status</th>
+                            <td :class="esStatusClass(bridge.status)">{{ esStatusText(bridge.status) }}</td>
+                        </tr>
+                    </v-table>
+                </div>
             </div>
         </v-card-text>
     </v-card>
