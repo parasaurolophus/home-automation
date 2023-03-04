@@ -3,22 +3,26 @@
 Node-RED based home automation system
 
 ```mermaid
-flowchart TD
+flowchart LR
 
+  browser["Web\nBrowser"]
   flows["Flows\n(Controller)"]
   vue["httpStatic page\n(View)"]
-  hue["Hue\nBridge"]
+  hue1["Hue\nBridge"]
+  hue2["Hue\nBridge"]
   powerview["PowerView\nHub"]
-  browser["Web\nBrowser"]
+
+  browser<-- "HTTP\nUI" --->vue
 
   subgraph Node-RED
     flows<-- "WebSocket\n(Model)" -->vue
   end
 
-  vue<-- "HTTP\nUI" -->browser
+  flows-- "HTTP\nAPI" --->hue1
+  hue1-- "EventSource\nAPI" --->flows
+  flows-- "HTTP\nAPI" --->hue2
+  hue2-- "EventSource\nAPI" --->flows
   flows-- "HTTP\nAPI" --->powerview
-  flows-- "HTTP\nAPI" --->hue
-  hue-- "EventSource\nAPI" -->flows
 ```
 
 > **Note:** these flows use features introduced in Node-RED version 3.0,
@@ -58,28 +62,32 @@ of the year.
 
 5. Restart the Node-RED process
 
-6. Create a fork of <https://github.com/parasaurolophus/home-automation>
+6. Create a copy of <https://github.com/parasaurolophus/home-automation>
    so that you can easily customize your configuration and use Git to
-   safely manage it
+   safely manage it (you can, of course, create a fork but pull
+   requests that include changes to the home automation configuration
+   will be declined)
 
-7. Use Node-RED's "open project" feature to clone your forked repository
+7. Use Node-RED's "open project" feature to clone your copied repository
    into your local project folder
 
 8. In a terminal,
    ```
-   cd ~/.node-red/<user>/projects/home-automation/dashboard
+   cd ~/.node-red/projects/home-automation/dashboard
+   npm install
    npm run build
    ```
    to create the
-   _~/.node-red/&lt;user&gt;/projects/home-automation/dashboard/dist_ directory
+   _~/.node-red/projects/home-automation/dashboard/dist_ directory
 
 If all goes well, opening the Node-RED editor will allow you to examine and
 modify these flows. Browsing to your Node-RED instance's URL with
-.../dashboard_ added will open the [Vuetify](https://vuetifyjs.com/) based
-dashboard. Note that you will have to edit the contents of _Automation_
-and _Hue_ flows to match your hardware setup and scene configuration in
-order for the Hue controls to be generated on the dashboard and the time
-and date based lighting automations to have the intended effect.
+_/dashboard_ added to the end will open the
+[Vuetify](https://vuetifyjs.com/) based dashboard. Note that you will have
+to edit the contents of _Automation_ and _Hue_ flows to match your
+hardware setup and scene configuration in order for the Hue controls to be
+generated on the dashboard and the time and date based lighting
+automations to have the intended effect.
 
 ## Dependencies
 
@@ -184,7 +192,7 @@ automation flows and running it on a separate instance of Node-RED.
 ## Features
 
 - Local control of Philips Hue lighting and Hunter-Douglas (PowerView)
-  window coverings using the API's published by their respective hubs
+  window coverings using the API's provided by their respective hubs
 
 - Dynamically created dashboard controls for individual device groups
   and scenes created by querying the Hue and PowerView hubs
@@ -212,8 +220,8 @@ The goals for these flows include:
 
 2. Support a consolidated user interface easily accessible by anyone
    in the home, including guests, without having to own a specific
-   make of mobile device, install specific apps, be granted explicit
-   network access or create accounts with any so-called "cloud services"
+   make of mobile device, install specific apps or create accounts with
+   any so-called "cloud services"
 
 3. Eliminate the use of third-party "clouds" to the greatest degree
    possible due to performance, reliability, security and privacy
@@ -228,8 +236,8 @@ off lights to have a specific app, with a properly configured account,
 with that account given pretty much _carte blanche_ authority to do
 anything it likes to every aspect of the "smart" home, mediated by
 "cloud services" owned and operated by third-parties with their own
-agendas that trump any consideration of their customers' security or
-privacy.
+agendas that trump any consideration of their customers' convenience,
+security or privacy.
 
 Using Node-RED allows for a fairly intuitive user interface that can be
 accessed with no more specialized an app than a web browser. Further,
@@ -248,6 +256,7 @@ homes) than in providing useful products and services.
 >
 > ```
 > cd ~/.node-red/projects/home-automation/dashboard
+> npm install
 > npm run build
 >```
 >
