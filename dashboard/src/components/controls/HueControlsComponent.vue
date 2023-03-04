@@ -2,7 +2,7 @@
     <v-card v-for="bridge in hueModels" :key="bridge.title">
         <v-card-title>{{ bridge.title }}</v-card-title>
         <v-card-text>
-            <fieldset v-for="group in bridge.groups" :key="group.grouped_light.id" :disabled="websocketStatus != 1">
+            <fieldset v-for="group in bridge.groups" :key="group.grouped_light.id" :disabled="websocketStatus != 1" class="column">
                 <legend>{{ group.name }}</legend>
                 <v-switch v-model="group.grouped_light.on.on"
                     @change="websocketPublish({ payload: { on: { on: group.grouped_light.on.on } }, topic: group.value, method: 'PUT' })">
@@ -21,7 +21,7 @@
 </template>
 
 <style scoped>
-/*  */
+/* */
 </style>
 
 <script setup>

@@ -22,13 +22,14 @@ th {
     text-align: right;
 }
 
-.wrapped {
+.row {
     display: flex;
     flex-flow: row wrap;
 }
 
-.wrapped>* {
-    flex: 1;
+.column {
+    display: flex;
+    flex-flow: column nowrap;
 }
 </style>
 

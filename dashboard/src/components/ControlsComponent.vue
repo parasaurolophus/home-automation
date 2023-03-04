@@ -1,10 +1,21 @@
 <template>
-    <div class="wrapped">
-        <SettingsComponent />
+    <div class="columns">
+        <SettingsComponent class="narrow"/>
         <PowerViewControlsComponent />
         <HueControlsComponent />
     </div>
 </template>
+
+<style scoped>
+.columns {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.narrow {
+    width: 25rem;
+}
+</style>
 
 <script setup>
 import SettingsComponent from '@/components/controls/SettingsComponent.vue'

@@ -1,5 +1,5 @@
 <template>
-    <div class="columns">
+    <div class="row">
         <ConnectionsDiagramComponent />
         <TimerComponent />
         <TriggerComponent />
@@ -7,10 +7,7 @@
 </template>
 
 <style scoped>
-.columns {
-    display: flex;
-    flex-flow: row wrap;
-}
+/* */
 </style>
 
 <script setup>
