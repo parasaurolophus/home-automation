@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title>Connections</v-card-title>
         <v-card-text>
-            <div v-html="diagram"></div>
+            <div v-html="diagram" @click.capture="diagramClicked"></div>
         </v-card-text>
         <v-card-actions>
             <v-btn @click="refreshControls" color="secondary">Refresh Controls</v-btn>
@@ -15,54 +15,108 @@
 </style>
 
 <script setup>
-import { useTheme } from 'vuetify'
 import { onMounted, ref, inject, watch } from 'vue'
+import { useTheme } from 'vuetify'
 import mermaid from 'mermaid'
 
 const theme = useTheme()
 const websocketPublish = inject('websocketPublish')
-
-const diagram = ref('')
 const websocketStatus = inject('websocketStatus')
 const hueBridges = inject('hueBridges')
+const hueKeys = inject('hueKeys')
 const powerviewModel = inject('powerviewModel')
+const diagram = ref('')
+
+const diagramClicked = (event) => {
+
+    const text = event.target.innerText
+
+    if (text !== undefined) {
+
+        const matches = /^Hue (\S+)/.exec(text)
+
+        if (matches) {
+
+            const key = hueKeys.value[matches[1]]
+
+            if (key !== undefined) {
+
+                alert(key)
+                return
+
+            }
+
+            alert("TO DO: prompt user to start key creation flow for " + matches[1])
+            return
+
+        }
+
+        console.log(text)
+
+    }
+}
 
 function renderDiagram() {
 
-    let graph = 'graph LR\n\n'
+    const themeName = (theme.global.current.value.dark ? '"dark"' : '"light"')
+    const grayColor = (theme.global.current.value.dark ? '#888888' : '#888888')
+    const redColor = (theme.global.current.value.dark ? '#880000' : '#ff0000')
+    const greenColor = (theme.global.current.value.dark ? '#008800' : '#00ff00')
+    const yellowColor = (theme.global.current.value.dark ? '#888800' : '#ffff00')
 
-    graph += '  %%%%{init: { "theme": ' + (theme.global.current.value.dark ? '"dark"' : '"light"') + ' }}%%%%\n\n'
+    let flowchart = 'flowchart LR\n\n'
 
-    graph += '  classDef red fill:#aa0000,stroke:#333,stroke-width:1px;\n'
-    graph += '  classDef green fill:#00aa00,stroke:#333,stroke-width:1px;\n'
-    graph += '  classDef yellow fill:#aaaa00,stroke:#333,stroke-width:1px;\n\n'
+    flowchart += '  %%%%{init: { '
+    flowchart += '"theme": ' + themeName + ', '
+    flowchart += '"flowchart": { "htmlLabels": true, "useMaxWidth": false }'
+    flowchart += ' } }%%%%\n\n'
 
-    graph += '  browser-- "HTTP&nbsp;" -->dashboard\n\n'
+    flowchart += '  classDef gray fill:' + grayColor + ',stroke:' + grayColor + ',stroke-width:1px\n'
+    flowchart += '  classDef red fill:' + redColor + ',stroke:' + redColor + ',stroke-width:1px\n'
+    flowchart += '  classDef green fill:' + greenColor + ',stroke:' + greenColor + ',stroke-width:1px\n'
+    flowchart += '  classDef yellow fill:' + yellowColor + ',stroke:' + yellowColor + ',stroke-width:1px\n\n'
 
-    graph += '  subgraph "Node-RED&nbsp;"\n'
-    graph += '    dashboard<-- "WebSocket&nbsp;\n(status ' + websocketStatus.value + ')&nbsp;" -->flows;\n'
-    graph += '  end\n\n'
-    graph += '  class flows ' + (websocketStatus.value == 0 ? 'yellow' : websocketStatus.value == 1 ? 'green' : 'red') + '\n\n;'
+    const flowsStatus =
+        websocketStatus.value == 0 ? 'connecting' :
+            websocketStatus.value == 1 ? 'connected' :
+                websocketStatus.value == 2 ? 'disconnected' :
+                    websocketStatus.value
+
+    const flowsClassName = websocketStatus.value == 0 ? 'yellow' : websocketStatus.value == 1 ? 'green' : 'red'
+
+    flowchart += '  browser["browser&nbsp;"]\n'
+    flowchart += '  dashboard["dashboard&nbsp;"]\n'
+    flowchart += '  flows["flows&nbsp;\n(' + flowsStatus + ')&nbsp;"]\n'
+    flowchart += '  class flows ' + flowsClassName + '\n\n'
+
+    flowchart += ' browser --- dashboard;\n\n'
+
+    flowchart += '  subgraph "Node-RED&nbsp"\n'
+    flowchart += '    dashboard --- flows\n'
+    flowchart += '  end\n\n'
 
     let count = 0
 
     for (let bridge of hueBridges.value) {
 
-        const className = bridge.status == 0 ? 'yellow' : bridge.status == 1 ? 'green' : 'red'
-        const nodeName = 'hue' + ++count
-        const label = '["Hue ' + bridge.address + '&nbsp;"]'
-        graph += '  flows<-- "EventSource&nbsp;\n(status ' + bridge.status + ')&nbsp;" --->' + nodeName + label + ';\n'
-        graph += '  class ' + nodeName + ' ' + className + '\n\n'
+        const bridgeStatus = bridge.status == -1 ? 'uninitialized' : bridge.status == 0 ? 'connecting' : bridge.status == 1 ? 'connected' : 'disconnected'
+        const bridgeClassName = bridge.status == -1 ? 'gray' : bridge.status == 0 ? 'yellow' : bridge.status == 1 ? 'green' : 'red'
+        const bridgeNodeName = 'hue' + ++count
+        const bridgeLabel = '["Hue ' + bridge.address + '&nbsp;\n(' + bridgeStatus + ')&nbsp;"]'
+
+        flowchart += bridgeNodeName + bridgeLabel + '\n'
+        flowchart += '  class ' + bridgeNodeName + ' ' + bridgeClassName + '\n\n'
+        flowchart += '  flows --- ' + bridgeNodeName + '\n\n'
 
     }
 
     if (powerviewModel.value.length > 0) {
 
-        graph += '  flows-- "HTTP&nbsp;\n(synchronous)&nbsp;" --->powerview["PowerView&nbsp;"];\n'
+        flowchart += '  flows---powerview["PowerView&nbsp;"]\n'
 
     }
 
-    return graph
+    return flowchart
 
 }
 
@@ -80,14 +134,7 @@ async function drawDiagram() {
 
 }
 
-mermaid.initialize({
-    startOnLoad: false,
-    securityLevel: 'loose',
-    flowchart: {
-        useMaxWidth: false,
-        htmlLabels: true
-    }
-})
+mermaid.initialize({ startOnLoad: false })
 
 onMounted(drawDiagram)
 watch(websocketStatus, drawDiagram)
