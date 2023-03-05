@@ -15,22 +15,15 @@
 </style>
 
 <script setup>
-
 import { useTheme } from 'vuetify'
 
 const theme = useTheme()
 
 function toggleTheme() {
 
-    if (theme.global.current.value.dark) {
+    const newTheme = theme.global.current.value.dark ? 'light' : 'dark'
 
-        theme.global.name.value = 'light'
+    theme.global.name.value = newTheme
 
-    } else {
-
-        theme.global.name.value = 'dark'
-
-    }
 }
-
 </script>
