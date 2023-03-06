@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title>Connections</v-card-title>
         <v-card-text>
-            <div v-html="diagram" @click.capture="diagramClicked"></div>
+            <div ref="diagram"></div>
         </v-card-text>
         <v-card-actions>
             <v-btn @click="refreshControls" color="secondary">Refresh Controls</v-btn>
@@ -20,40 +20,42 @@ import { useTheme } from 'vuetify'
 import mermaid from 'mermaid'
 
 const theme = useTheme()
+
+const diagram = ref(null)
+
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
 const hueBridges = inject('hueBridges')
 const hueKeys = inject('hueKeys')
 const createHueKey = inject('createHueKey')
 const powerviewModel = inject('powerviewModel')
-const diagram = ref('')
 
-const diagramClicked = (event) => {
+///////////////////////////////////////////////////////////////////////////////
+// TO DO: investigate ways to have the mermaid diagram invoke clickedHandler()
+// directly rather than using indirection through index.html
+///////////////////////////////////////////////////////////////////////////////
 
-    const text = event.target.innerText
+function clickedHandler(address) {
 
-    if (text !== undefined) {
+    const key = hueKeys.value[address]
 
-        const matches = /^Hue (\S+)/.exec(text)
+    if (key !== undefined) {
 
-        if (matches) {
+        alert(key)
+        return
 
-            const key = hueKeys.value[matches[1]]
-
-            if (key !== undefined) {
-
-                alert(key)
-                return
-
-            }
-
-            alert("Press the button on top of Hue Bridge " + matches[1])
-            createHueKey(matches[1])
-            return
-
-        }
     }
+
+    alert("Press the button on top of Hue Bridge " + address)
+    createHueKey(address)
+    return
+
 }
+
+// eslint-disable-next-line no-global-assign, no-undef
+hueBridgeNodeClicked = clickedHandler
+
+///////////////////////////////////////////////////////////////////////////////
 
 function renderDiagram() {
 
@@ -105,24 +107,18 @@ function renderDiagram() {
 
         flowchart += bridgeNodeName + bridgeLabel + '\n'
         flowchart += '  class ' + bridgeNodeName + ' ' + bridgeClassName + '\n\n'
-        flowchart += '  click ' + bridgeNodeName + ' bridgeNodeClicked "' + bridge.address + '"\n'
+        flowchart += '  click ' + bridgeNodeName + ' call hueBridgeNodeClicked("' + bridge.address + '")\n'
         flowchart += '  flows --- ' + bridgeNodeName + '\n\n'
 
     }
 
     if (powerviewModel.value.length > 0) {
 
-        flowchart += '  flows---powerview["PowerView&nbsp;"]\n'
+        flowchart += '  flows --- powerview["PowerView&nbsp;"]\n'
 
     }
 
     return flowchart
-
-}
-
-const bridgeNodeClicked = function (event) {
-
-    console.log(event)
 
 }
 
@@ -134,14 +130,14 @@ function refreshControls() {
 
 async function drawDiagram() {
 
-    const { svg } = await mermaid.render('dashboard', renderDiagram())
+    const { svg, bindFunctions } = await mermaid.render('dashboard', renderDiagram())
 
-    diagram.value = svg
+    diagram.value.innerHTML = svg
+    bindFunctions?.(diagram.value)
 
 }
 
 mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' })
-
 onMounted(drawDiagram)
 watch(websocketStatus, drawDiagram)
 watch(hueBridges, drawDiagram)
