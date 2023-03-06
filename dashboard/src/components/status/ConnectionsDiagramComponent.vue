@@ -105,6 +105,7 @@ function renderDiagram() {
 
         flowchart += bridgeNodeName + bridgeLabel + '\n'
         flowchart += '  class ' + bridgeNodeName + ' ' + bridgeClassName + '\n\n'
+        flowchart += '  click ' + bridgeNodeName + ' bridgeNodeClicked "' + bridge.address + '"\n'
         flowchart += '  flows --- ' + bridgeNodeName + '\n\n'
 
     }
@@ -116,6 +117,12 @@ function renderDiagram() {
     }
 
     return flowchart
+
+}
+
+const bridgeNodeClicked = function (event) {
+
+    console.log(event)
 
 }
 
@@ -133,7 +140,7 @@ async function drawDiagram() {
 
 }
 
-mermaid.initialize({ startOnLoad: false })
+mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' })
 
 onMounted(drawDiagram)
 watch(websocketStatus, drawDiagram)
