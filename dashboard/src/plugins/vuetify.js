@@ -30,6 +30,9 @@ export default createVuetify({
         },
         VAlert: {
             variant: 'tonal'
+        },
+        VAppBar: {
+            flat: true
         }
     }
 })

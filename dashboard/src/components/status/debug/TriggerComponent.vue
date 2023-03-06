@@ -7,10 +7,12 @@
     </v-card>
 </template>
 
-<script setup>
+<style scoped>
+/* */
+</style>
 
+<script setup>
 import { inject } from 'vue'
 
 const trigger = inject('trigger')
-
 </script>

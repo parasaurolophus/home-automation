@@ -13,9 +13,7 @@
 </template>
 
 <script setup>
-
 import { inject } from 'vue'
 
 const timer = inject('timer')
-
 </script>
