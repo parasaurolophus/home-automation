@@ -24,6 +24,7 @@ const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
 const hueBridges = inject('hueBridges')
 const hueKeys = inject('hueKeys')
+const createHueKey = inject('createHueKey')
 const powerviewModel = inject('powerviewModel')
 const diagram = ref('')
 
@@ -46,13 +47,11 @@ const diagramClicked = (event) => {
 
             }
 
-            alert("TO DO: prompt user to start key creation flow for " + matches[1])
+            alert("Press the button on top of Hue Bridge " + matches[1])
+            createHueKey(matches[1])
             return
 
         }
-
-        console.log(text)
-
     }
 }
 

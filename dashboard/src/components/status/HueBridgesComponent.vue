@@ -57,7 +57,7 @@
 
 import { inject } from 'vue'
 
-const websocketPublish = inject('websocketPublish')
+const createHueKey = inject('createHueKey')
 const websocketStatus = inject('websocketStatus')
 const hueBridges = inject('hueBridges')
 const hueKeys = inject('hueKeys')
@@ -90,15 +90,6 @@ function esStatusClass(status) {
         default:
             return 'es-disconnected'
     }
-}
-
-function createHueKey(address) {
-
-    websocketPublish({
-        payload: address,
-        topic: 'put/hue/create-key'
-    })
-
 }
 
 </script>
