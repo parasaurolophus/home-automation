@@ -75,7 +75,7 @@ const timer = ref({})
 app.provide('timer', timer)
 
 // model for trigger event debugging output
-const trigger = ref('{}')
+const trigger = ref(null)
 app.provide('trigger', trigger)
 
 // model for hue/{address}/key messages
@@ -338,8 +338,13 @@ function connectWS() {
 
         if (msg.topic == 'automation/trigger') {
 
-            msg.payload.timestamp = new Date(msg.timestamp).toLocaleString()
-            trigger.value = JSON.stringify(msg.payload, undefined, 1)
+            if (msg.payload !== '') {
+
+                msg.payload.timestamp = new Date(msg.timestamp).toLocaleString()
+                trigger.value = JSON.stringify(msg.payload, undefined, 1)
+
+            }
+
             return
 
         }

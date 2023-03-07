@@ -17,12 +17,11 @@
                     </template>
                 </v-switch>
                 <p>
-                    Bedtime automation will be triggered at a time randomly chosen each day that is up to 30 minutes
-                    before
-                    or after the hour selected here:
+                    Bedtime automation will be triggered at a randomly chosen time each day
+                    that is up to 30 minutes before or after the hour selected here:
                 </p>
                 <v-select v-model="settingsBedtime" :items="bedtimeOptions" item-title="label" item-value="hour"
-                    label="Bedtime" return-object single-line></v-select>
+                    label="Bedtime" return-object single-line />
             </fieldset>
         </v-card-text>
     </v-card>
@@ -33,7 +32,6 @@
 </style>
 
 <script setup>
-
 import { inject, watch } from 'vue'
 
 const settingsLighting = inject('settingsLighting')
@@ -60,5 +58,4 @@ watch(settingsBedtime, function bedtimeChanged(selection) {
     websocketPublish({ payload: selection.hour, topic: 'settings/bedtime', retain: true })
 
 })
-
 </script>

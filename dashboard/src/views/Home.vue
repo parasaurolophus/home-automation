@@ -17,25 +17,18 @@
             </v-col>
         </v-row>
         <v-row>
-            <!-- settings & powerview controls -->
+            <!-- controls -->
             <v-col>
                 <SettingsComponent />
             </v-col>
             <v-col>
                 <PowerViewControlsComponent />
             </v-col>
-        </v-row>
-        <v-row>
-            <!-- hue controls -->
-            <v-col>
-                <HueControlsComponent />
-            </v-col>
-        </v-row>
-        <v-row>
-            <!-- hue bridges -->
-            <v-col>
-                <HueBridgesComponent />
-            </v-col>
+            <!--
+                HueControlsComponent assumes it will
+                be inserted directly into a <v-row>
+            -->
+            <HueControlsComponent />
         </v-row>
     </v-container>
 </template>
@@ -48,5 +41,4 @@ import AlertComponent from '@/components/AlertComponent.vue'
 import SettingsComponent from '@/components/controls/SettingsComponent.vue'
 import PowerViewControlsComponent from '@/components/controls/PowerViewControlsComponent.vue'
 import HueControlsComponent from '@/components/controls/HueControlsComponent.vue'
-import HueBridgesComponent from '@/components/status/HueBridgesComponent.vue'
 </script>

@@ -35,21 +35,58 @@ const powerviewModel = inject('powerviewModel')
 // directly rather than using indirection through index.html
 ///////////////////////////////////////////////////////////////////////////////
 
+function findBridge(address) {
+
+    for (let bridge of hueBridges.value) {
+
+        if (bridge.address == address) {
+
+            return bridge
+
+        }
+    }
+
+    return null
+
+}
+
 function clickedHandler(address) {
 
-    const key = hueKeys.value[address]
+    const bridge = findBridge(address)
 
-    if (key !== undefined) {
+    if (!bridge) {
 
-        alert(key)
+        alert('no bridge found for ' + address)
         return
 
     }
 
-    alert("Press the button on top of Hue Bridge " + address)
-    createHueKey(address)
-    return
+    let message =
+        bridge.name +
+        '\nmodel: ' + bridge.model +
+        '\nid: ' + bridge.id +
+        '\nhost: ' + bridge.host +
+        '\nurl: https://' + bridge.address + ':' + bridge.port
 
+    const key = hueKeys.value[address]
+
+    if (key) {
+
+        message += '\nkey: ' + key
+
+    } else {
+
+        message += '\n\nPress the button on top of the bridge'
+
+    }
+
+    alert(message)
+
+    if (!key) {
+
+        createHueKey(address)
+
+    }
 }
 
 // eslint-disable-next-line no-global-assign, no-undef
@@ -96,14 +133,16 @@ function renderDiagram() {
     flowchart += '    dashboard --- flows\n'
     flowchart += '  end\n\n'
 
-    let count = 0
+    let index = 0
 
     for (let bridge of hueBridges.value) {
 
         const bridgeStatus = bridge.status == -1 ? 'uninitialized' : bridge.status == 0 ? 'connecting' : bridge.status == 1 ? 'connected' : 'disconnected'
         const bridgeClassName = bridge.status == -1 ? 'gray' : bridge.status == 0 ? 'yellow' : bridge.status == 1 ? 'green' : 'red'
-        const bridgeNodeName = 'hue' + ++count
-        const bridgeLabel = '["Hue ' + bridge.address + '&nbsp;\n(' + bridgeStatus + ')&nbsp;"]'
+        const bridgeNodeName = 'hue' + ++index
+        const bridgeLabel =
+            '["Hue ' + bridge.address + '&nbsp;\n' +
+            '(' + bridgeStatus + ')&nbsp;"]'
 
         flowchart += bridgeNodeName + bridgeLabel + '\n'
         flowchart += '  class ' + bridgeNodeName + ' ' + bridgeClassName + '\n\n'

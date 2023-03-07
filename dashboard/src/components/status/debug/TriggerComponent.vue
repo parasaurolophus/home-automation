@@ -1,10 +1,13 @@
 <template>
-    <v-card>
-        <v-card-title>Trigger</v-card-title>
-        <v-card-text>
-            <pre>{{ trigger }}</pre>
-        </v-card-text>
-    </v-card>
+    <div v-if="trigger">
+        <div>&nbsp;</div>
+        <v-card>
+            <v-card-title>automation/trigger</v-card-title>
+            <v-card-text>
+                <pre v-html="trigger"></pre>
+            </v-card-text>
+        </v-card>
+    </div>
 </template>
 
 <style scoped>
