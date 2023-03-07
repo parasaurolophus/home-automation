@@ -49,17 +49,9 @@ app.provide('settingsLighting', settingsLighting)
 const settingsShades = ref(false)
 app.provide('settingsShades', settingsShades)
 
-// models for error alerts
-const errors = ref([])
-app.provide('errors', errors)
-
-// models for warning alerts
-const warnings = ref([])
-app.provide('warnings', warnings)
-
-// models for info alerts
-const infos = ref([])
-app.provide('infos', infos)
+// models for alerts
+const alerts = ref([])
+app.provide('alerts', alerts)
 
 // model for HueBridgesComponent.vue
 const hueBridges = ref({})
@@ -114,9 +106,10 @@ function getHueKeys(after) {
             if (!response.ok) {
 
                 console.log(response)
-                errors.value.push({
+                alerts.value.push({
                     show: true,
                     title: 'error getting hue keys',
+                    type: 'error',
                     text: JSON.stringify(response, undefined, 1)
                 })
                 return null
@@ -180,9 +173,10 @@ function websocketPublish(msg) {
         const text = JSON.stringify(msg, undefined, 1)
 
         console.log('websocket closed when attempting to send:\n' + text)
-        errors.value.push({
+        alerts.value.push({
             show: true,
             title: 'websocket closed',
+            type: 'warning',
             text: text
         })
         return
@@ -280,9 +274,10 @@ function connectWS() {
         const text = JSON.stringify(event, undefined, 1)
 
         console.log(text)
-        errors.value.push({
+        alerts.value.push({
             show: true,
             title: 'ws.onerror',
+            type: 'error',
             text: text
         })
 
@@ -324,9 +319,10 @@ function connectWS() {
             const text = JSON.stringify(msg.payload, undefined, 1)
 
             console.log('no bedtime option found matching ' + text)
-            errors.value.push({
+            alerts.value.push({
                 show: true,
                 title: 'Invalid settings/bedtime payload',
+                type: 'error',
                 text: text
             })
             return
@@ -355,9 +351,10 @@ function connectWS() {
 
             if (msg.payload !== '') {
 
-                errors.value.push({
+                alerts.value.push({
                     show: true,
                     title: msg.topic,
+                    type: 'error',
                     text: text
                 })
             }
@@ -373,9 +370,10 @@ function connectWS() {
 
             if (msg.payload !== '') {
 
-                warnings.value.push({
+                alerts.value.push({
                     show: true,
                     title: msg.topic,
+                    type: 'warning',
                     text: text
                 })
             }
@@ -391,9 +389,10 @@ function connectWS() {
 
             if (msg.payload !== '') {
 
-                infos.value.push({
+                alerts.value.push({
                     show: true,
                     title: msg.topic,
+                    type: 'info',
                     text: text
                 })
             }
