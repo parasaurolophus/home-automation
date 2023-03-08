@@ -24,6 +24,8 @@
             <v-col>
                 <PowerViewControlsComponent />
             </v-col>
+        </v-row>
+        <v-row>
             <!--
                 HueControlsComponent assumes it will
                 be inserted directly into a <v-row>
