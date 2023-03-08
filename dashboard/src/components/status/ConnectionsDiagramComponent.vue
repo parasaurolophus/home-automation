@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title>Connections</v-card-title>
         <v-card-text>
-            <div ref="diagram"></div>
+            <pre ref="diagram"></pre>
         </v-card-text>
         <v-card-actions>
             <v-btn @click="refreshControls" color="secondary">Refresh Controls</v-btn>
@@ -106,7 +106,7 @@ function renderDiagram() {
 
     flowchart += '  %%%%{init: { '
     flowchart += '"theme": ' + themeName + ', '
-    flowchart += '"flowchart": { "htmlLabels": true, "useMaxWidth": false }'
+    flowchart += '"flowchart": { "htmlLabels": true, "useMaxWidth": true }'
     flowchart += ' } }%%%%\n\n'
 
     flowchart += '  classDef gray fill:' + grayColor + ',stroke:' + grayColor + ',stroke-width:1px\n'
@@ -176,6 +176,7 @@ async function drawDiagram() {
 
 }
 
+mermaid.flowchartConfig = { width: '100%' }
 mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' })
 onMounted(drawDiagram)
 watch(websocketStatus, drawDiagram)
