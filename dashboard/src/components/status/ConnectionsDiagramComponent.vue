@@ -53,37 +53,43 @@ function findBridge(address) {
 function clickedHandler(address) {
 
     const bridge = findBridge(address)
+    const key = hueKeys.value[address]
 
     if (!bridge) {
 
-        alert('no bridge found for ' + address)
+        websocketPublish({
+            topic: 'hue/bridge/error',
+            payload: 'No Hue Bridge found for ' + address
+        })
+
         return
 
     }
 
-    let message =
-        bridge.name +
-        '\nmodel: ' + bridge.model +
-        '\nid: ' + bridge.id +
-        '\nhost: ' + bridge.host +
-        '\nurl: https://' + bridge.address + ':' + bridge.port
+    const bridgeInfo = {}
 
-    const key = hueKeys.value[address]
+    for (let property in bridge) {
 
-    if (key) {
+        const value = bridge[property]
 
-        message += '\nkey: ' + key
-
-    } else {
-
-        message += '\n\nPress the button on top of the bridge'
+        bridgeInfo[property] = value
 
     }
 
-    alert(message)
+    if (key) {
+
+        bridgeInfo.key = key
+
+    }
+
+    websocketPublish({
+        topic: 'hue/bridge/info',
+        payload: bridgeInfo
+    })
 
     if (!key) {
 
+        alert('Press button on top of bridge ' + address + ' before proceeding...')
         createHueKey(address)
 
     }
@@ -102,7 +108,12 @@ function renderDiagram() {
     const greenColor = (theme.global.current.value.dark ? '#008800' : '#00ff00')
     const yellowColor = (theme.global.current.value.dark ? '#888800' : '#ffff00')
 
-    let flowchart = 'flowchart LR\n\n'
+    let flowchart = ''
+
+    flowchart += '---\n'
+    flowchart += 'title: Internet\n'
+    flowchart += '---\n'
+    flowchart += 'flowchart LR\n\n'
 
     flowchart += '  %%%%{init: { '
     flowchart += '"theme": ' + themeName + ', '
@@ -129,9 +140,11 @@ function renderDiagram() {
 
     flowchart += ' browser --- dashboard;\n\n'
 
-    flowchart += '  subgraph "Node-RED&nbsp"\n'
-    flowchart += '    dashboard --- flows\n'
-    flowchart += '  end\n\n'
+    flowchart += 'subgraph "LAN&nbsp;"\n\n'
+
+    flowchart += '    subgraph "Node-RED&nbsp;"\n'
+    flowchart += '      dashboard --- flows\n'
+    flowchart += '    end\n\n'
 
     let index = 0
 
@@ -145,17 +158,19 @@ function renderDiagram() {
             '(' + bridgeStatus + ')&nbsp;"]'
 
         flowchart += bridgeNodeName + bridgeLabel + '\n'
-        flowchart += '  class ' + bridgeNodeName + ' ' + bridgeClassName + '\n\n'
-        flowchart += '  click ' + bridgeNodeName + ' call hueBridgeNodeClicked("' + bridge.address + '")\n'
-        flowchart += '  flows --- ' + bridgeNodeName + '\n\n'
+        flowchart += '    class ' + bridgeNodeName + ' ' + bridgeClassName + '\n\n'
+        flowchart += '    click ' + bridgeNodeName + ' call hueBridgeNodeClicked("' + bridge.address + '")\n'
+        flowchart += '    flows --- ' + bridgeNodeName + '\n\n'
 
     }
 
     if (powerviewModel.value.length > 0) {
 
-        flowchart += '  flows --- powerview["PowerView&nbsp;"]\n'
+        flowchart += '    flows --- powerview["PowerView&nbsp;"]\n\n'
 
     }
+
+    flowchart += '  end\n'
 
     return flowchart
 
