@@ -2,8 +2,8 @@
     <v-app-bar>
         <v-app-bar-title>Dashboard</v-app-bar-title>
         <div class="app-bar-switch">
-            <v-switch v-model="selectedTheme" :label="selectedTheme" false-value="dark" true-value="light"
-                @change="setTheme" />
+            <v-switch v-model="selectedTheme" :label="selectedTheme" false-value="dark" false-icon="mdi-weather-night"
+                true-value="light" true-icon="mdi-weather-sunny" @change="setTheme" />
         </div>
     </v-app-bar>
 </template>
