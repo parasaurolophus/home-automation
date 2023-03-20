@@ -297,7 +297,9 @@
             "7756c6eb9522da59"
         ],
         "x": 14,
-        "y": 159
+        "y": 159,
+        "w": 1152,
+        "h": 202
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -321,7 +323,9 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 379
+        "y": 379,
+        "w": 952,
+        "h": 122
     },
     {
         "id": "0fb8e43c903b3506",
@@ -400,10 +404,13 @@
         },
         "nodes": [
             "d3686879543e1951",
-            "0f699ed605fadf59"
+            "0f699ed605fadf59",
+            "89c030035bb748b4"
         ],
-        "x": 494,
-        "y": 519
+        "x": 14,
+        "y": 619,
+        "w": 412,
+        "h": 122
     },
     {
         "id": "9cf0457b813ca743",
@@ -425,6 +432,8 @@
         ],
         "x": 14,
         "y": 259,
+        "w": 772,
+        "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -448,7 +457,9 @@
             "9154f7fa8b08933f"
         ],
         "x": 14,
-        "y": 119
+        "y": 119,
+        "w": 832,
+        "h": 122
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -472,7 +483,9 @@
             "4e40e2700edff9ec"
         ],
         "x": 14,
-        "y": 359
+        "y": 359,
+        "w": 892,
+        "h": 122
     },
     {
         "id": "4893dd6a2321040d",
@@ -515,7 +528,9 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 519
+        "y": 519,
+        "w": 472,
+        "h": 82
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -542,7 +557,9 @@
             "40d32c56d50a791d"
         ],
         "x": 14,
-        "y": 379,
+        "y": 339,
+        "w": 932,
+        "h": 262,
         "info": "Control the corresponding Philips Hue light groups and scenes upon\nreceipt of each `automation/trigger` event"
     },
     {
@@ -570,6 +587,8 @@
         ],
         "x": 14,
         "y": 119,
+        "w": 1012,
+        "h": 202,
         "info": "Activate the corresponding PowerView scene upon receipt of of each\n`automation/trigger` event"
     },
     {
@@ -592,6 +611,8 @@
         ],
         "x": 14,
         "y": 19,
+        "w": 712,
+        "h": 82,
         "info": "Send a `controls/refresh` command message when this flow first connects\nas a client to the publish / subscribe message broker"
     },
     {
@@ -649,35 +670,14 @@
             "7cf8caea790c9792",
             "106ee66b66de58ab",
             "3aca8c803a9eb037",
-            "5e265ec7c6a69a56"
+            "5e265ec7c6a69a56",
+            "1e388cc251e76b84"
         ],
         "x": 14,
         "y": 19,
-        "w": 1352,
-        "h": 242,
+        "w": 1392,
+        "h": 322,
         "info": "Subscribe to settings change events. Send `automation/trigger` events up\nto five times per day, at: sunrise, the start of midday, the start of\nafternoon, sunset and bedtime.\n\n- The times for sunrise and sunset are obtained directly from\n  [`suncalc.getTimes()`](https://github.com/mourner/suncalc#sunlight-times)\n\n- The times for midday and afternoon are determined using the position\n  of the sun over the course of the current day as reported by\n  [`suncalc.getPosition()`](https://github.com/mourner/suncalc#sun-position)\n\n- The time for bedtime varies randomly each day, as described below\n\nThe `${LATITUDE}` and `${LONGITUDE}` environment variables must be set\nto the home's geographic coordinates for use with `suncalc`.\n\nMidday starts when the sun first reaches an altitude of 0.8 radians. No\nmidday will be sent on a given day if the sun never reaches that\naltitude for the specified `${LATITUDE}`.\n\nAfternoon starts when the sun's azimuth is greater than 0 and its\naltitude first drops below 0.8 radians. For days on which the altitude\nnever reaches 0.8, this will be as soon after sunrise as the sun starts\nto shine more from the west than the east.\n\nBedtime is randomized each day, constrained to be within &PlusMinus;30\nminutes of the value for `settings/bedtime`.\n\nNote that the inclusion of midday and afternoon and the rules for\ndetermining when they occur on a given day were determined empirically\nfor a particular house with 4 parallel walls, aligned more or less\nexactly with the cardinal compass directions at a particular latitude.\nIt is also influenced by the size of that house's rather substantial\neaves shading the east- and west-facing windows. They might need\nadjustment or an entirely different set of events for a different\nstructure at a different location. The goal of all this is to trigger\nautomation to control lighting and motorized window coverings in such\na way that maximizes the times of day at which the view of the outside\nworld can be enjoyed while optimizing the lighting and window coverings\nfor comfort and energy efficiency during times of day when the sun\nshines too directly into the windows. "
-    },
-    {
-        "id": "ebc1143cd96ae67d",
-        "type": "group",
-        "z": "bfdb5183ea783e85",
-        "name": "debug timer function",
-        "style": {
-            "stroke": "none",
-            "fill-opacity": "0.1",
-            "label": true,
-            "color": "#92d04f",
-            "fill": "#92d04f"
-        },
-        "nodes": [
-            "39d8a5aeec9834da",
-            "51b8fbaba65a94c6",
-            "3d16babc8f356ea1"
-        ],
-        "x": 14,
-        "y": 279,
-        "w": 532,
-        "h": 82
     },
     {
         "id": "431414ce08ebb3c0",
@@ -1907,7 +1907,7 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 410,
-        "y": 180,
+        "y": 240,
         "wires": [
             [
                 "47acab248c4d8501",
@@ -1939,7 +1939,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 260,
-        "y": 160,
+        "y": 220,
         "wires": [
             [
                 "0497e0ed333e8f23"
@@ -1965,7 +1965,7 @@
         "repair": false,
         "outputs": 1,
         "x": 260,
-        "y": 200,
+        "y": 260,
         "wires": [
             [
                 "0497e0ed333e8f23"
@@ -1978,8 +1978,8 @@
         "z": "bfdb5183ea783e85",
         "g": "b10eb6ebfd377efe",
         "name": "timer",
-        "func": "/*global suncalc*/\n\n// hack! delay execution for 1 second in order to\n// give the 'delete retained timer events'\n// function node time to send its messages\n// ahead of this one's\nawait new Promise(resolve => setTimeout(resolve, 1000))\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = [{ cancel: true }]\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nconst sunrise = times.sunrise.getTime()\nconst sunset = times.sunset.getTime()\nlet midday = null\nlet afternoon = null\n\nnode.status('sunrise: ' + times.sunrise.toLocaleString())\n\nif (sunrise > now) {\n\n    messages.push({\n        payload: 'sunrise',\n        topic: 'timer/time',\n        at: sunrise\n    })\n}\n\nfor (let time = sunrise; time < sunset; time += 60000) {\n\n    const position = suncalc.getPosition(new Date(time), LATITUDE, LONGITUDE)\n\n    if ((midday === null) && (position.altitude > 0.8)) {\n\n        midday = time\n        node.status('midday: ' + new Date(time).toLocaleString())\n\n        if (midday > now) {\n            messages.push({\n                payload: 'midday',\n                topic: 'timer/time',\n                at: midday\n            })\n        }\n    }\n\n    if ((afternoon == null) && (position.azimuth > 0) && (position.altitude < 0.8)) {\n\n        afternoon = time\n        node.status('afternoon: ' + new Date(time).toLocaleString())\n\n        if (afternoon > now) {\n\n            messages.push({\n                payload: 'afternoon',\n                topic: 'timer/time',\n                at: afternoon\n            })\n        }\n\n        break\n\n    }\n}\n\nnode.status('sunset: ' + times.sunset.toLocaleString())\n\nif (sunset > now) {\n\n    messages.push({\n        payload: 'sunset',\n        topic: 'timer/time',\n        at: sunset\n    })\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nnode.status('bedtime: ' + new Date(bedtime).toLocaleString())\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime\n    })\n}\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nnode.status('theme: ' + theme)\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [messages]",
-        "outputs": 1,
+        "func": "/*global suncalc*/\n\n// hack! delay execution for 1 second in order to\n// give the 'delete retained timer events'\n// function node time to send its messages\n// ahead of this one's\nawait new Promise(resolve => setTimeout(resolve, 1000))\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = [{ cancel: true }]\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nconst sunrise = times.sunrise.getTime()\nconst sunset = times.sunset.getTime()\nlet midday = null\nlet afternoon = null\n\nfunction sendDebugMessage(topic, payload) {\n\n    node.send([\n        null,\n        {\n            topic: 'debug/timer/' + topic,\n            payload: payload,\n            retain: true\n        }\n    ])\n}\n\nsendDebugMessage('sunrise', times.sunrise.toLocaleString())\n\nif (sunrise > now) {\n\n    messages.push({\n        payload: 'sunrise',\n        topic: 'timer/time',\n        at: sunrise\n    })\n}\n\nfor (let time = sunrise; time < sunset; time += 60000) {\n\n    const position = suncalc.getPosition(new Date(time), LATITUDE, LONGITUDE)\n\n    if ((midday === null) && (position.altitude > 0.8)) {\n\n        midday = time\n        sendDebugMessage('midday', new Date(midday).toLocaleString())\n\n        if (midday > now) {\n            messages.push({\n                payload: 'midday',\n                topic: 'timer/time',\n                at: midday\n            })\n        }\n    }\n\n    if ((afternoon == null) && (position.azimuth > 0) && (position.altitude < 0.8)) {\n\n        afternoon = time\n        sendDebugMessage('afternoon', new Date(afternoon).toLocaleString())\n\n        if (afternoon > now) {\n\n            messages.push({\n                payload: 'afternoon',\n                topic: 'timer/time',\n                at: afternoon\n            })\n        }\n\n        break\n\n    }\n}\n\nsendDebugMessage('sunset', times.sunset.toLocaleString())\n\nif (sunset > now) {\n\n    messages.push({\n        payload: 'sunset',\n        topic: 'timer/time',\n        at: sunset\n    })\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nsendDebugMessage('bedtime', new Date(bedtime).toLocaleString())\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime\n    })\n}\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nsendDebugMessage('theme', theme)\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [\n    messages,\n    null\n]",
+        "outputs": 2,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -1989,11 +1989,14 @@
                 "module": "suncalc"
             }
         ],
-        "x": 550,
-        "y": 140,
+        "x": 570,
+        "y": 180,
         "wires": [
             [
                 "106ee66b66de58ab"
+            ],
+            [
+                "1e388cc251e76b84"
             ]
         ],
         "info": "# Input\n\n- `msg.payload.now` - timestamp at which flows started and again each day\n   at 1am\n\n- `msg.payload.settings/bedtime` - _bedtime_ value selected by a user\n  on the dashboard\n\n# Output\n\nUp to five 'timer/time` messages per day and one `timer/theme` message.\n\n# Details\n\n## Time\n\nWhen the output `msg.topic` is `timer/time`, `msg.payload` will be one\nof:\n\n- `sunrise`\n- `midday`\n- `afternoon`\n- `sunset`\n- `bedtime`\n\nIn addition, `msg.at` will be set to the timestamp at which the\ncorresponding event message should actually be published. See the\ndocumentation for the following `delay until` function node for\ninformation on when the `timer/time` events will actually fire based\non their values for `msg.at`.\n\n## Theme\n\nWhen the output `msg.topic` is `timer/theme`, `msg.payload` will be one\nof the following values based on the date:\n\n- `tribal`\n- `spooky`\n- `jolly`\n- `standard`"
@@ -2007,7 +2010,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 200,
+        "y": 260,
         "wires": [
             [
                 "60d6c5b7d0db140a"
@@ -2027,7 +2030,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 830,
+        "x": 870,
         "y": 100,
         "wires": [
             [
@@ -2056,7 +2059,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 950,
+        "x": 990,
         "y": 100,
         "wires": [
             [
@@ -2083,7 +2086,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 590,
+        "x": 630,
         "y": 60,
         "wires": [
             [
@@ -2099,7 +2102,7 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 360,
+        "x": 400,
         "y": 60,
         "wires": [
             [
@@ -2114,8 +2117,8 @@
         "g": "b10eb6ebfd377efe",
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
-        "x": 240,
-        "y": 120,
+        "x": 420,
+        "y": 140,
         "wires": []
     },
     {
@@ -2126,7 +2129,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1280,
+        "x": 1320,
         "y": 100,
         "wires": []
     },
@@ -2169,7 +2172,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1110,
+        "x": 1150,
         "y": 100,
         "wires": [
             [
@@ -2189,7 +2192,7 @@
         "initialize": "context.set('timers', [])\n\nnode.status({\n    text: 0,\n    shape: 'ring',\n    fill: 'green'\n})",
         "finalize": "",
         "libs": [],
-        "x": 680,
+        "x": 720,
         "y": 140,
         "wires": [
             [
@@ -2202,23 +2205,6 @@
         "info": "Delay messages until a particular time has been reached.\n\nMessages are passed through unchanged but may be delayed based on the\nvalue of `msg.at`. If `msg.at` is present, it must indicate an\nabsolute time in a format compatible with JavaScript's `new Date(time)`\nconstructor. If that time is in the future, this function will delay\nforwarding the given message until the specified time has been reached.\n\nIf `msg.at` is missing or indicates a time that is the same or earlier\nthan \"now\" (`new Date()` with no argument) then the message is passed\nthrough with no delay.\n\nIf a message arrives with `msg.cancel` set to `true`, all pending\nmessages are canceled without being sent.\n\n> **Warning:** Delays are implemented using `setTimeout()`. This means\nthat while this node will emit messages no earlier than the time\nspecified by `msg.at`, they will actually be delivered some (typically\ntiny) amount of time later based on the overhead of any computer\nprogram combined with the fact that Node-RED flows are intrinsically\nsingle-threaded. Ultra-precise timers require real-time programming\ntechniques driven by specialized hardware.\n\nNote that it would require only a bit more work to support a `msg.flush`\nthat would immediately send all pending messages rather than canceling\nthem, but there is no use case for such a feature in these flows.\n\nCanceling or flushing only a particular message without canceling or\nflushing them all would require a lot more work and a second output.\nThat is far more effort than it is worth given the probable use cases\nfor a node like this in the first place."
     },
     {
-        "id": "3d16babc8f356ea1",
-        "type": "status",
-        "z": "bfdb5183ea783e85",
-        "g": "ebc1143cd96ae67d",
-        "name": "status: timer",
-        "scope": [
-            "47acab248c4d8501"
-        ],
-        "x": 110,
-        "y": 320,
-        "wires": [
-            [
-                "51b8fbaba65a94c6"
-            ]
-        ]
-    },
-    {
         "id": "3aca8c803a9eb037",
         "type": "websocket out",
         "z": "bfdb5183ea783e85",
@@ -2226,8 +2212,8 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 820,
-        "y": 220,
+        "x": 840,
+        "y": 300,
         "wires": []
     },
     {
@@ -2242,8 +2228,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 220,
+        "x": 640,
+        "y": 300,
         "wires": [
             [
                 "3aca8c803a9eb037"
@@ -2251,36 +2237,16 @@
         ]
     },
     {
-        "id": "39d8a5aeec9834da",
+        "id": "1e388cc251e76b84",
         "type": "websocket out",
         "z": "bfdb5183ea783e85",
-        "g": "ebc1143cd96ae67d",
+        "g": "b10eb6ebfd377efe",
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 460,
-        "y": 320,
+        "x": 720,
+        "y": 220,
         "wires": []
-    },
-    {
-        "id": "51b8fbaba65a94c6",
-        "type": "function",
-        "z": "bfdb5183ea783e85",
-        "g": "ebc1143cd96ae67d",
-        "name": "time of day event",
-        "func": "const parts = msg.status.text.split(': ', 2)\n\nif (parts.length > 1) {\n\n    return {\n        payload: parts[1],\n        topic: 'timer/' + parts[0],\n        retain: true\n    }\n}\n\nreturn null",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 290,
-        "y": 320,
-        "wires": [
-            [
-                "39d8a5aeec9834da"
-            ]
-        ]
     },
     {
         "id": "870608ff910feb60",
@@ -2295,8 +2261,8 @@
                 "type": "json"
             }
         ],
-        "x": 540,
-        "y": 460,
+        "x": 640,
+        "y": 380,
         "wires": []
     },
     {
@@ -2330,8 +2296,8 @@
         "checkall": "false",
         "repair": false,
         "outputs": 4,
-        "x": 550,
-        "y": 540,
+        "x": 650,
+        "y": 460,
         "wires": [
             [
                 "1cb0a0826e19ac25"
@@ -2361,8 +2327,8 @@
                 "type": "json"
             }
         ],
-        "x": 530,
-        "y": 620,
+        "x": 630,
+        "y": 540,
         "wires": []
     },
     {
@@ -2378,8 +2344,8 @@
                 "type": "json"
             }
         ],
-        "x": 750,
-        "y": 460,
+        "x": 850,
+        "y": 380,
         "wires": []
     },
     {
@@ -2395,8 +2361,8 @@
                 "type": "json"
             }
         ],
-        "x": 760,
-        "y": 520,
+        "x": 860,
+        "y": 440,
         "wires": []
     },
     {
@@ -2412,8 +2378,8 @@
                 "type": "json"
             }
         ],
-        "x": 750,
-        "y": 580,
+        "x": 850,
+        "y": 500,
         "wires": []
     },
     {
@@ -2429,8 +2395,8 @@
                 "type": "json"
             }
         ],
-        "x": 760,
-        "y": 640,
+        "x": 860,
+        "y": 560,
         "wires": []
     },
     {
@@ -2445,8 +2411,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 290,
-        "y": 540,
+        "x": 390,
+        "y": 460,
         "wires": [
             [
                 "870608ff910feb60"
@@ -2472,8 +2438,8 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 100,
-        "y": 540,
+        "x": 200,
+        "y": 460,
         "wires": [
             [
                 "5e838b011b496bb4"
@@ -2488,7 +2454,7 @@
         "name": "contains hard-coded references to philips hue group and scene id's",
         "info": "",
         "x": 280,
-        "y": 420,
+        "y": 400,
         "wires": []
     },
     {
@@ -2512,7 +2478,7 @@
         "to": "",
         "reg": false,
         "x": 560,
-        "y": 200,
+        "y": 160,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2541,7 +2507,7 @@
         "to": "",
         "reg": false,
         "x": 550,
-        "y": 240,
+        "y": 200,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2570,7 +2536,7 @@
         "to": "",
         "reg": false,
         "x": 550,
-        "y": 280,
+        "y": 240,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2599,7 +2565,7 @@
         "to": "",
         "reg": false,
         "x": 550,
-        "y": 320,
+        "y": 280,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2635,7 +2601,7 @@
         "to": "",
         "reg": false,
         "x": 780,
-        "y": 260,
+        "y": 220,
         "wires": [
             [
                 "c8fb3c01f10259ca"
@@ -2655,7 +2621,7 @@
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 260,
+        "y": 220,
         "wires": [
             [
                 "6a9ac472018c38ea"
@@ -2686,7 +2652,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 940,
-        "y": 260,
+        "y": 220,
         "wires": []
     },
     {
@@ -2698,7 +2664,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 260,
+        "y": 220,
         "wires": [
             [
                 "679d6a0d2002bcb7"
@@ -3384,8 +3350,8 @@
                 "type": "str"
             }
         ],
-        "x": 610,
-        "y": 560,
+        "x": 130,
+        "y": 700,
         "wires": []
     },
     {
@@ -3618,8 +3584,8 @@
                 "type": "str"
             }
         ],
-        "x": 800,
-        "y": 560,
+        "x": 320,
+        "y": 700,
         "wires": []
     },
     {
@@ -3718,6 +3684,17 @@
         "info": "",
         "x": 230,
         "y": 40,
+        "wires": []
+    },
+    {
+        "id": "89c030035bb748b4",
+        "type": "comment",
+        "z": "d3b34304591c64d7",
+        "g": "f1e1b4bb5ddac24f",
+        "name": "references a particular number of hue bridges",
+        "info": "",
+        "x": 210,
+        "y": 660,
         "wires": []
     }
 ]

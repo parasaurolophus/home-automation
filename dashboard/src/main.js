@@ -413,7 +413,7 @@ function connectWS() {
 
         }
 
-        let matches = /^timer\/([^/]+)$/.exec(msg.topic)
+        let matches = /^debug\/timer\/([^/]+)$/.exec(msg.topic)
 
         if (Array.isArray(matches) && (matches.length == 2)) {
 
