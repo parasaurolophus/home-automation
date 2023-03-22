@@ -2,7 +2,7 @@
     <v-card v-if="powerviewModel.length > 0">
         <v-card-title>Window Shades</v-card-title>
         <v-card-text>
-            <fieldset v-for="room in powerviewModel" :key="room.id" :disabled="websocketStatus != 1">
+            <fieldset v-for="(room, index) in powerviewModel" :key="index" :disabled="websocketStatus != 1">
                 <legend>{{ room.name }}</legend>
                 <v-btn v-for="(scene, index) in room.scenes" :key="index"
                     @click="websocketPublish({ payload: scene.id, topic: 'put/powerview/scene' })">
