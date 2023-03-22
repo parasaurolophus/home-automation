@@ -54,7 +54,7 @@ const alerts = ref([])
 app.provide('alerts', alerts)
 
 // model for HueBridgesComponent.vue
-const hueBridges = ref({})
+const hueBridges = ref([])
 app.provide('hueBridges', hueBridges)
 
 // model for HueControlsComponent.vue, based
