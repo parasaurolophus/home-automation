@@ -106,7 +106,7 @@ effect.
 The following node packages must be installed before
 loading these flows into your environment:
 
-- [node-red-node-discovery](https://flows.nodered.org/node/node-red-node-discovery)
+- [@parasaurolophus/node-red-eventsource](https://flows.nodered.org/node/@parasaurolophus/node-red-dnssd)
 - [@parasaurolophus/node-red-eventsource](https://flows.nodered.org/node/@parasaurolophus/node-red-eventsource)
 
 In addition, some `function` nodes in these flows load the
@@ -346,16 +346,17 @@ about which political and economic theorists have written
 for centuries.) The _node-red-dashboard_ component,
 supplied by Node-RED's core development team, suffers from
 the kind of "bit rot" that always -- no, really, _always_
--- infects open source projects' repositories while community-supplied components vary widely in their quality.
+-- infects open source projects' repositories while
+community-supplied components vary widely in their quality.
 Support by their authors is often intermittent and
 ephemeral. That is why these flows are designed to rely on
 as few add-on components as possible. They use core nodes
 such as `function` and `http request` to utilize the various
 device API's directly rather than using node packages that
 wrap them because this reduces exposure to defects and
-deficiencies in third-party components. The one critical
-bit of functionality that is implemented as a community
-supplied node package was created by the same author for the
+deficiencies in third-party components. The critical
+bits of functionality that are implemented as community
+supplied node packages were created by the same author for the
 specific needs of accessing the Philips Hue Bridge SSE API
 from within these flows.
 

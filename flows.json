@@ -284,7 +284,6 @@
             "color": "#ffffff"
         },
         "nodes": [
-            "9cf28d89e0f81966",
             "14b78c9b72d385fd",
             "854fc957cc0aa798",
             "57e2d4b892263fc3",
@@ -294,12 +293,15 @@
             "8a2991eb5255cb54",
             "90c4d02d576477e1",
             "e923bea48eeed441",
-            "7756c6eb9522da59"
+            "7756c6eb9522da59",
+            "fc6b3f3a56bd414d",
+            "b0e9b513b0a450c3",
+            "d3827e92f3158b11"
         ],
         "x": 14,
         "y": 159,
-        "w": 1152,
-        "h": 202
+        "w": 1212,
+        "h": 242
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -323,7 +325,7 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 379,
+        "y": 419,
         "w": 952,
         "h": 122
     },
@@ -408,7 +410,7 @@
             "89c030035bb748b4"
         ],
         "x": 14,
-        "y": 619,
+        "y": 659,
         "w": 412,
         "h": 122
     },
@@ -432,8 +434,6 @@
         ],
         "x": 14,
         "y": 259,
-        "w": 772,
-        "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -457,9 +457,7 @@
             "9154f7fa8b08933f"
         ],
         "x": 14,
-        "y": 119,
-        "w": 832,
-        "h": 122
+        "y": 119
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -483,9 +481,7 @@
             "4e40e2700edff9ec"
         ],
         "x": 14,
-        "y": 359,
-        "w": 892,
-        "h": 122
+        "y": 359
     },
     {
         "id": "4893dd6a2321040d",
@@ -528,7 +524,7 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 519,
+        "y": 559,
         "w": 472,
         "h": 82
     },
@@ -558,8 +554,6 @@
         ],
         "x": 14,
         "y": 339,
-        "w": 932,
-        "h": 262,
         "info": "Control the corresponding Philips Hue light groups and scenes upon\nreceipt of each `automation/trigger` event"
     },
     {
@@ -587,8 +581,6 @@
         ],
         "x": 14,
         "y": 119,
-        "w": 1012,
-        "h": 202,
         "info": "Activate the corresponding PowerView scene upon receipt of of each\n`automation/trigger` event"
     },
     {
@@ -611,8 +603,6 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 712,
-        "h": 82,
         "info": "Send a `controls/refresh` command message when this flow first connects\nas a client to the publish / subscribe message broker"
     },
     {
@@ -675,8 +665,6 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 1392,
-        "h": 322,
         "info": "Subscribe to settings change events. Send `automation/trigger` events up\nto five times per day, at: sunrise, the start of midday, the start of\nafternoon, sunset and bedtime.\n\n- The times for sunrise and sunset are obtained directly from\n  [`suncalc.getTimes()`](https://github.com/mourner/suncalc#sunlight-times)\n\n- The times for midday and afternoon are determined using the position\n  of the sun over the course of the current day as reported by\n  [`suncalc.getPosition()`](https://github.com/mourner/suncalc#sun-position)\n\n- The time for bedtime varies randomly each day, as described below\n\nThe `${LATITUDE}` and `${LONGITUDE}` environment variables must be set\nto the home's geographic coordinates for use with `suncalc`.\n\nMidday starts when the sun first reaches an altitude of 0.8 radians. No\nmidday will be sent on a given day if the sun never reaches that\naltitude for the specified `${LATITUDE}`.\n\nAfternoon starts when the sun's azimuth is greater than 0 and its\naltitude first drops below 0.8 radians. For days on which the altitude\nnever reaches 0.8, this will be as soon after sunrise as the sun starts\nto shine more from the west than the east.\n\nBedtime is randomized each day, constrained to be within &PlusMinus;30\nminutes of the value for `settings/bedtime`.\n\nNote that the inclusion of midday and afternoon and the rules for\ndetermining when they occur on a given day were determined empirically\nfor a particular house with 4 parallel walls, aligned more or less\nexactly with the cardinal compass directions at a particular latitude.\nIt is also influenced by the size of that house's rather substantial\neaves shading the east- and west-facing windows. They might need\nadjustment or an entirely different set of events for a different\nstructure at a different location. The goal of all this is to trigger\nautomation to control lighting and motorized window coverings in such\na way that maximizes the times of day at which the view of the outside\nworld can be enjoyed while optimizing the lighting and window coverings\nfor comfort and energy efficiency during times of day when the sun\nshines too directly into the windows. "
     },
     {
@@ -3185,34 +3173,18 @@
         ]
     },
     {
-        "id": "9cf28d89e0f81966",
-        "type": "discovery",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "",
-        "topic": "",
-        "service": "_hue._tcp",
-        "x": 100,
-        "y": 240,
-        "wires": [
-            [
-                "14b78c9b72d385fd"
-            ]
-        ]
-    },
-    {
         "id": "14b78c9b72d385fd",
         "type": "function",
         "z": "d3b34304591c64d7",
         "g": "0fd970345919b420",
-        "name": "split by address",
-        "func": "const messages = []\n\nif (Object.prototype.hasOwnProperty.call(msg.payload, 'addresses') && Array.isArray(msg.payload.addresses)) {\n\n    for (let address of msg.payload.addresses) {\n\n        const message = RED.util.cloneMessage(msg)\n\n        delete message.payload.addresses\n        message.topic = address\n        messages.push(message)\n\n    }\n}\n\nreturn [messages]",
+        "name": "split by ipv4 address",
+        "func": "const messages = []\n\nif (Object.prototype.hasOwnProperty.call(msg.payload, 'addresses') && Array.isArray(msg.payload.addresses)) {\n\n    for (let address of msg.payload.addresses) {\n\n        if (/^\\d{1,3}(\\.\\d{1,3}){3}/.exec(address)) {\n\n            const message = RED.util.cloneMessage(msg)\n\n            delete message.payload.addresses\n            message.topic = address\n            messages.push(message)\n\n        }\n    }\n}\n\nreturn [messages]",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 260,
+        "x": 300,
         "y": 240,
         "wires": [
             [
@@ -3233,7 +3205,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 410,
+        "x": 470,
         "y": 240,
         "wires": [
             [
@@ -3262,7 +3234,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 530,
+        "x": 590,
         "y": 240,
         "wires": [
             [
@@ -3288,7 +3260,7 @@
         "senderr": false,
         "headers": [],
         "x": 590,
-        "y": 460,
+        "y": 500,
         "wires": [
             [
                 "f74128d99635d540"
@@ -3309,7 +3281,7 @@
         "finalize": "",
         "libs": [],
         "x": 740,
-        "y": 460,
+        "y": 500,
         "wires": [
             [
                 "2159eac5031ae752"
@@ -3324,7 +3296,7 @@
         "name": "https://developers.meethue.com/develop/hue-api-v2/getting-started/",
         "info": "",
         "x": 280,
-        "y": 420,
+        "y": 460,
         "wires": []
     },
     {
@@ -3351,7 +3323,7 @@
             }
         ],
         "x": 130,
-        "y": 700,
+        "y": 740,
         "wires": []
     },
     {
@@ -3396,7 +3368,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 830,
+        "x": 890,
         "y": 280,
         "wires": [
             [
@@ -3410,13 +3382,13 @@
         "z": "d3b34304591c64d7",
         "g": "0fd970345919b420",
         "name": "model",
-        "func": "const discovered = msg.payload.discovered || {}\nconst bridges = flow.get('bridges') || {}\n\nfor (let address in discovered) {\n\n    const bridge = bridges[address] || {}\n    const b = discovered[address]\n\n    for (let property in b) {\n\n        bridge[property] = b[property]\n\n    }\n\n    bridges[address] = bridge\n\n}\n\nfor (let topic in msg.payload) {\n\n    const matches = /^hue\\/([^ /]+)\\/status$/.exec(topic)\n\n    if (Array.isArray(matches) && (matches.length == 2)) {\n\n        const address = matches[1]\n        const bridge = bridges[address] || {}\n\n        bridge.status = msg.payload[topic]\n        bridges[address] = bridge\n\n    }\n}\n\nflow.set('bridges', bridges)\n\nconst model = []\n\nfor (let address in bridges) {\n\n    const bridge = bridges[address]\n\n    if (bridge.txtRecord) {\n\n        model.push({\n            id: bridge.txtRecord.bridgeid,\n            model: bridge.txtRecord.modelid,\n            name: bridge.name,\n            host: bridge.host,\n            address: address,\n            port: bridge.port,\n            status: bridge.status\n        })\n    }\n}\n\nreturn {\n    payload: model,\n    topic: 'hue/bridges',\n    retain: true\n}",
+        "func": "const discovered = msg.payload.discovered || {}\nconst bridges = flow.get('bridges') || {}\n\nfor (let address in discovered) {\n\n    const bridge = bridges[address] || {}\n    const b = discovered[address]\n\n    for (let property in b) {\n\n        bridge[property] = b[property]\n\n    }\n\n    bridges[address] = bridge\n\n}\n\nfor (let topic in msg.payload) {\n\n    const matches = /^hue\\/([^ /]+)\\/status$/.exec(topic)\n\n    if (Array.isArray(matches) && (matches.length == 2)) {\n\n        const address = matches[1]\n        const bridge = bridges[address] || {}\n\n        bridge.status = msg.payload[topic]\n        bridges[address] = bridge\n\n    }\n}\n\nflow.set('bridges', bridges)\n\nconst model = []\n\nfor (let address in bridges) {\n\n    const bridge = bridges[address]\n\n    if (bridge.txt) {\n\n        model.push({\n            id: bridge.txt.bridgeid,\n            model: bridge.txt.modelid,\n            name: bridge.name,\n            host: bridge.host,\n            address: address,\n            port: bridge.port,\n            status: bridge.status\n        })\n    }\n}\n\nreturn {\n    payload: model,\n    topic: 'hue/bridges',\n    retain: true\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 950,
+        "x": 1010,
         "y": 280,
         "wires": [
             [
@@ -3444,7 +3416,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 670,
+        "x": 730,
         "y": 240,
         "wires": [
             [
@@ -3471,7 +3443,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 650,
+        "x": 710,
         "y": 320,
         "wires": [
             [
@@ -3498,7 +3470,7 @@
         "repair": false,
         "outputs": 1,
         "x": 270,
-        "y": 460,
+        "y": 500,
         "wires": [
             [
                 "2626ba9e8d396f71"
@@ -3513,7 +3485,7 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 480,
+        "x": 540,
         "y": 320,
         "wires": [
             [
@@ -3530,7 +3502,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 460,
+        "y": 500,
         "wires": [
             [
                 "226b30949f9a903b"
@@ -3545,7 +3517,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1080,
+        "x": 1140,
         "y": 280,
         "wires": []
     },
@@ -3558,7 +3530,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 880,
-        "y": 460,
+        "y": 500,
         "wires": []
     },
     {
@@ -3585,7 +3557,7 @@
             }
         ],
         "x": 320,
-        "y": 700,
+        "y": 740,
         "wires": []
     },
     {
@@ -3611,7 +3583,7 @@
         "finalize": "",
         "libs": [],
         "x": 440,
-        "y": 460,
+        "y": 500,
         "wires": [
             [
                 "0ed14c935a7933e8"
@@ -3629,7 +3601,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 120,
-        "y": 560,
+        "y": 600,
         "wires": [
             [
                 "ce505f3a3d6ec359"
@@ -3645,7 +3617,7 @@
         "statusCode": "",
         "headers": {},
         "x": 410,
-        "y": 560,
+        "y": 600,
         "wires": []
     },
     {
@@ -3669,7 +3641,7 @@
         "to": "",
         "reg": false,
         "x": 280,
-        "y": 560,
+        "y": 600,
         "wires": [
             [
                 "16e21e0afb427d76"
@@ -3694,7 +3666,65 @@
         "name": "references a particular number of hue bridges",
         "info": "",
         "x": 210,
-        "y": 660,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "fc6b3f3a56bd414d",
+        "type": "dnssd",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "service": "_hue",
+        "udp": false,
+        "x": 90,
+        "y": 300,
+        "wires": [
+            [
+                "14b78c9b72d385fd"
+            ],
+            [
+                "b0e9b513b0a450c3"
+            ],
+            [
+                "d3827e92f3158b11"
+            ]
+        ]
+    },
+    {
+        "id": "b0e9b513b0a450c3",
+        "type": "debug",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "dnssd serviceDown",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 290,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "d3827e92f3158b11",
+        "type": "debug",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "dnssd error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 270,
+        "y": 360,
         "wires": []
     }
 ]
