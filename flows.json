@@ -294,13 +294,13 @@
             "90c4d02d576477e1",
             "e923bea48eeed441",
             "7756c6eb9522da59",
-            "fc6b3f3a56bd414d",
             "b0e9b513b0a450c3",
-            "d3827e92f3158b11"
+            "d3827e92f3158b11",
+            "cb53ddf8e4322675"
         ],
         "x": 14,
         "y": 159,
-        "w": 1212,
+        "w": 1272,
         "h": 242
     },
     {
@@ -3184,7 +3184,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 300,
+        "x": 360,
         "y": 240,
         "wires": [
             [
@@ -3205,7 +3205,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 470,
+        "x": 530,
         "y": 240,
         "wires": [
             [
@@ -3234,7 +3234,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 590,
+        "x": 650,
         "y": 240,
         "wires": [
             [
@@ -3368,7 +3368,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 890,
+        "x": 950,
         "y": 280,
         "wires": [
             [
@@ -3388,7 +3388,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1010,
+        "x": 1070,
         "y": 280,
         "wires": [
             [
@@ -3416,7 +3416,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 730,
+        "x": 790,
         "y": 240,
         "wires": [
             [
@@ -3443,7 +3443,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 710,
+        "x": 770,
         "y": 320,
         "wires": [
             [
@@ -3485,7 +3485,7 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 540,
+        "x": 600,
         "y": 320,
         "wires": [
             [
@@ -3517,7 +3517,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1140,
+        "x": 1200,
         "y": 280,
         "wires": []
     },
@@ -3670,28 +3670,6 @@
         "wires": []
     },
     {
-        "id": "fc6b3f3a56bd414d",
-        "type": "dnssd",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "",
-        "service": "_hue",
-        "udp": false,
-        "x": 90,
-        "y": 300,
-        "wires": [
-            [
-                "14b78c9b72d385fd"
-            ],
-            [
-                "b0e9b513b0a450c3"
-            ],
-            [
-                "d3827e92f3158b11"
-            ]
-        ]
-    },
-    {
         "id": "b0e9b513b0a450c3",
         "type": "debug",
         "z": "d3b34304591c64d7",
@@ -3705,7 +3683,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "counter",
-        "x": 290,
+        "x": 350,
         "y": 300,
         "wires": []
     },
@@ -3723,8 +3701,30 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "counter",
-        "x": 270,
+        "x": 330,
         "y": 360,
         "wires": []
+    },
+    {
+        "id": "cb53ddf8e4322675",
+        "type": "dnssd-browser",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "service": "_hue",
+        "udp": false,
+        "x": 120,
+        "y": 300,
+        "wires": [
+            [
+                "14b78c9b72d385fd"
+            ],
+            [
+                "b0e9b513b0a450c3"
+            ],
+            [
+                "d3827e92f3158b11"
+            ]
+        ]
     }
 ]
