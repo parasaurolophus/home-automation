@@ -3,26 +3,34 @@
 Node-RED based home automation system
 
 ```mermaid
-flowchart LR
+graph TB
 
   browser["Web\nBrowser"]
-  flows["Flows"]
   vue["httpStatic page"]
-  hue1["Hue\nBridge"]
-  hue2["Hue\nBridge"]
-  powerview["PowerView\nHub"]
+  flows["Flows"]
+  hue1["Hue\nBridge\n(Ground\nFloor\nLighting)"]
+  hue2["Hue\nBridge\n(Basement\nLighting)"]
+  powerview["PowerView\nHub\n(Window\nShades)"]
 
-  browser <-- "HTTPS" ---> vue
+  subgraph "Internet"
+
+  browser -- "HTTPS" --> vue
 
   subgraph LAN
 
-    subgraph Node-RED
-        flows <-- "WebSocket" --> vue
+    subgraph Node-RED  
+        vue <-- "WebSocket" --> flows
     end
 
-    flows <-- "HTTPS / EventSource" ---> hue1
-    flows <-- "HTTPS / EventSource" ---> hue2
-    flows-- "HTTP" --->powerview
+    flows -- "HTTPS" --> hue1
+    hue1 -- "EventSource" --> flows
+
+    flows -- "HTTPS" --> hue2
+    hue2 -- "EventSource" --> flows
+
+    flows -- "HTTP" --> powerview
+
+  end
 
   end
 ```
@@ -45,6 +53,207 @@ shade automation based on the sun's position over the
 course of a day based on the geographic location of the
 home and the day of the year.
 
+## Configuration
+
+These flows require some specific configuration in
+_settings.js_. To facilitate documenting and sharing
+these options, the following assumes that these
+secctions of _settings.js_ are defined using `require`
+rather than by directly embedded JavaScript objects:
+
+- `contextStorage`
+- `projects`
+- An entry in the `httpStatic` array
+- A set of environment variable definistions
+
+This is accomplished by defined a number of separate
+JavaScript files and referencing them from `settings.js`
+by placing the following just above (not inside)
+`module.exports`:
+
+```javascript
+var environment = require('./environment')
+var dashboardPath = require('./dashboardPath')
+var contextStorage = require('./contextStorage')
+var projects = require('./projects')
+```
+
+Each of these JavaScript files consists of its own
+`module.exports` statement, described below.
+
+### _environment.js_
+
+Placing the following line above `module.exports` in
+_settings.js_ loads the contents of _environment.js_ as
+a module:
+
+```javascript
+var environment = require('./environment')
+```
+
+The _environment.js_ file contains definitions of
+environment variables assumed by various function nodes
+and subflows. Here is an example of what it should look
+contain:
+
+```javascript
+module.exports = {
+
+    // change these to the latitude and longitude
+    // of your home
+    latitude: process.env.LATITUDE = '42.1967',
+    longitude: process.env.LONGITUDE = '-90.0382',
+
+    // change these to the IP address and access token
+    // of your Hue Bridge
+    ground_floor_hue_address: process.env.GROUND_FLOOR_HUE_ADDRESS = '192.168.1.40',
+    ground_floor_hue_key: process.env.GROUND_FLOOR_HUE_KEY = 'FiLAHkz6wMwa-3bz06K9a8MLfCaSSzR5WxSK8a-y',
+
+    // you can define multiple Hue Bridge configurations
+    basement_hue_address: process.env.BASEMENT_HUE_ADDRESS = '192.168.1.41',
+    basement_hue_key: process.env.BASEMENT_HUE_KEY = '-7bz1KHa9Lde2QV00yBYQ75bo6hlVBN2mopvXnrNa',
+
+    // change this to the IP address of your PowerView hub
+    powerview_address: process.env.POWERVIEW_ADDRESS = '192.168.1.42',
+
+    // don't use "localhost" inside Node-RED due to a bug
+    // introduced by Node.js >= 18
+    //
+    // also, if you have TLS / SSL enabled elsewhere
+    // in settings.js, use wss:// here and you will
+    // then probably have to use the DNS name in your
+    // certificate instead of an IP address
+    broker_url: process.env.BROKER_URL = 'ws://127.0.0.1:1880/broker',
+
+}
+```
+
+| Environment Variable       | Description                                                                          |
+|----------------------------|--------------------------------------------------------------------------------------|
+| `LATITUDE`                 | Coordinate for use with [suncalc](https://www.npmjs.com/package/suncalc)             |
+| `LONGITUDE`                | Coordinate for use with [suncalc](https://www.npmjs.com/package/suncalc)             |
+| `GROUND_FLOOR_HUE_ADDRESS` | IP address of the Hue Bridge controlling devices on the ground floor                 |
+| `GROUND_FLOOR_HUE_KEY`     | API access token for the ground floor Hue Bridge                                     |
+| `BASEMENT_HUE_ADDRESS`     | IP address of the Hue Bridge controlling devices in the basement                     |
+| `BASEMENT_HUE_KEY`         | API access token for the basement Hue Bridge                                         |
+| `POWERVIEW_ADDRESS`        | IP address of the PowerView hub                                                      |
+| `BROKER_URL`               | The URL to use to when connecting as a client to the WebSocket served by these flows |
+
+### _contextStorage.js_
+
+Placing the following above `module.exports` in
+_settings.js_ set the value of a variable named
+`contextStorage` to the JavaScript object defined by a
+module in _contextStorage.js_:
+
+```javascript
+var contextStorage = require('./contextStorage')
+```
+
+That file contains:
+
+```javascript
+module.exports = {
+
+    default: { module: 'memory' },
+    file: { module: 'localfilesystem' }
+
+}
+```
+
+To be effective, the corresponding `contextStorage:`
+section in _settings.js_ must be reference the global
+variable:
+
+```javascript
+/** Context Storage
+ * The following property can be used to enable context storage. The configuration
+ * provided here will enable file-based context that flushes to disk every 30 seconds.
+ * Refer to the documentation for further options: https://nodered.org/docs/api/context/
+ */
+contextStorage: contextStorage,
+```
+
+The preceding adds a file-system backed context store
+named `file` to the default in-memory context store.
+
+### _projects.js_
+
+Placing the following above `module.exports` in
+_settings.js_ set the value of a variable named
+`projects` to the JavaScript object defined by a
+module in _projects.js_:
+
+```javascript
+var projects = require('./projects')
+```
+
+That file contains:
+
+```javascript
+module.exports = {
+    /** To enable the Projects feature, set this value to true */
+    enabled: true,
+    workflow: {
+        /** Set the default projects workflow mode.
+         *  - manual - you must manually commit changes
+         *  - auto - changes are automatically committed
+         * This can be overridden per-user from the 'Git config'
+         * section of 'User Settings' within the editor
+         */
+        mode: "manual"
+    }
+}
+```
+
+To be effective, the corresponding `projects:`
+subsection inside the `editorTheme` section in
+_settings.js_ must be reference the global variable:
+
+```javascript
+projects: projects,
+```
+
+The preceding enables the `git` based projects features
+in the Node-RED editor and sets the workflow option to
+"manual" (the default).
+
+### _dashboardPath.js_
+
+Placing the following above `module.exports` in
+_settings.js_ set the value of a variable named
+`dashboardPath` to the JavaScript object defined by a
+module in _dashboardPath.js_:
+
+```javascript
+var dashboardPath = require('./dashboardPath')
+```
+
+That file contains:
+
+```javascript
+module.exports = {
+    // change "nodereduser" to the name of the user
+    // as which the Node-RED service runs
+    path: '/home/nodereduser/.node-red/projects/home-automation/dashboard/dist/',
+    root: "/dashboard/"
+}
+```
+
+This module definitions assumes that the value of the
+`httpStatic:` section of _settings.js_ will be an array,
+and that the value of the global `dashboardPath` variable
+will be one of its values:
+
+```javascript
+//httpStatic: '/home/nol/node-red-static/', //single static source
+/* OR multiple static sources can be created using an array of objects... */
+httpStatic: [
+    dashboardPath,
+    // additional static paths, if desired...
+],
+```
+
 ## Installation
 
 0. (Optional) Install your desired version of _Node_,
@@ -62,27 +271,26 @@ home and the day of the year.
    you may be left with a version of _Node_ that is behind
    the current LTS)
 
-2. Enable "projects" in Node-RED's _settings.js_
+2. Install the [dependencies described below](#dependencies)
 
-3. Install the [dependencies described below](#dependencies)
+3. Create the settings module files and modify _settings.js_
+   as described above; modify the contents of the settings
+   module files as appropriate for your local environment
 
-4. Adjust [_settings.js_](#settings) and add the
-  [environment variables](#environment) described below
+4. Restart the Node-RED process
 
-5. Restart the Node-RED process
-
-6. Create a copy of
+5. Create a copy of
    <https://github.com/parasaurolophus/home-automation>
    so that you can easily customize your configuration and
    use Git to safely manage it (you can, of course, create
    a fork but pull requests that include changes to the
    home automation configuration will be rejected)
 
-7. Use Node-RED's "open project" feature to clone your
+6. Use Node-RED's "open project" feature to clone your
    copied repository into your local project folder
 
-8. In a terminal,
-   ```
+7. In a terminal,
+   ```bash
    cd ~/.node-red/projects/home-automation/dashboard
    npm install
    npm run build
@@ -106,105 +314,13 @@ effect.
 The following node packages must be installed before
 loading these flows into your environment:
 
-- [@parasaurolophus/node-red-eventsource](https://flows.nodered.org/node/@parasaurolophus/node-red-dnssd)
+- [@parasaurolophus/node-red-dnssd](https://flows.nodered.org/node/@parasaurolophus/node-red-dnssd)
 - [@parasaurolophus/node-red-eventsource](https://flows.nodered.org/node/@parasaurolophus/node-red-eventsource)
 
 In addition, some `function` nodes in these flows load the
 [suncalc](https://www.npmjs.com/package/suncalc) package
 dynamically, which must be enabled in _settings.js_
 (true by default).
-
-## Configuration
-
-These flow assume a certain amount of configuration, in
-_settings.js_.
-
-### Settings
-
-Some non-default options must be configured by editing
-Node-RED's _settings.js_
-
-#### File System Context Store Named "file"
-
-```
-contextStorage: {
-      default: { module: 'memory' },
-      file: { module: 'localfilesystem' }
-  },
-```
-
-#### Static HTTP Content
-
-```
-httpStatic: [
-    {path: '/home/<user>/.node-red/projects/automation/dashboard/dist/', root: "/dashboard/"}, 
-],
-```
-
-where `<user>` is the name of the user as whom the Node-RED service is running.
-
-### Environment
-
-> _**Note:** There are a number of ways to set environment
-> variables for the Node-RED process, none of which are
-> very well documented. The most straightforward way is to
-> add lines in_ settings.js _above `module.exports` of the
-> form:_
->
-> ```
-> process.env.MY_VAR = 'my value'
-> process.env.MY_OTHER_VAR = 'my other value'
->
-> module.exports = {
-> ```
->
-> _To make it easier to share environments across Node-RED
-> instances, you could put the environment variable
-> definitions in their own module which is then imported
-> into_ settings.js _using `require`:_
->
-> ```
-> var environment = require('./environment')
->
-> module.exports = {
-> ```
->
-> _in which case there should also be an_ environment.js
-> _file in the same directory as_ settings.js _which
-> contains something like:_
->
-> ```
-> module.exports = {
->     my_var: process.env.MY_VAR = 'my value',
->     my_other_var: process.env.MY_OTHER_VAR = 'my other value'
-> }
-> ```
-
-These flows rely on some sensitive configuration data
-provided via environment variables:
-
-| Environment Variable       | Description                                                                          |
-|----------------------------|--------------------------------------------------------------------------------------|
-| `LATITUDE`                 | Coordinate for use with [suncalc](https://www.npmjs.com/package/suncalc)             |
-| `LONGITUDE`                | Coordinate for use with [suncalc](https://www.npmjs.com/package/suncalc)             |
-| `GROUND_FLOOR_HUE_ADDRESS` | IP address of the Hue Bridge controlling devices on the ground floor                 |
-| `GROUND_FLOOR_HUE_KEY`     | API access token for the ground floor Hue Bridge                                     |
-| `BASEMENT_HUE_ADDRESS`     | IP address of the Hue Bridge controlling devices in the basement                     |
-| `BASEMENT_HUE_KEY`         | API access token for the basement Hue Bridge                                         |
-| `POWERVIEW_ADDRESS`        | IP address of the PowerView hub                                                      |
-| `BROKER_URL`               | The URL to use to when connecting as a client to the WebSocket served by these flows |
-
-There are two configuraton properties per Hue bridge: its
-address and access token for use by Node-RED. These flows
-include a browser-based user interface for creating such
-access tokens where they are referred to as "keys," in
-keeping with much of the Hue API documentation provied
-by Philips.
-
-`${BROKER_URL}` is used to enable the possibility of
-extracting the flow which hosts the `/broker` WebSocket
-server from these home automation flows and running it on a
-separate instance of Node-RED.
 
 ## Features
 
@@ -309,8 +425,8 @@ Hue and PowerView native apps.
 
 This allows for a nearly complete separation between the
 _view_ implemented using [Vuetify](https://vuetifyjs.com/),
-the _model_ transmitted as message payloads using
-WebSockets and Node-RED flows as the _controller_ in the
+the _model_ transmitted as JSON message payloads using
+WebSockets, and Node-RED flows as the _controller_ in the
 so-called MVC (Model, View, Controller) architectural
 pattern. The result is that these flows display a
 consolidated user interface for controlling diverse devices
@@ -326,22 +442,22 @@ that would be supplied by any such package is entirely
 encapsulated within the _dashboard/dist_ directory that
 must be built after downloading this repository from
 GitHub. With the appropriate configuration of _settings.js_
-as [described above](#static-http-content), you can access
+as [described above](#dashboardPath.js), you can access
 _dashboard/dist/index.html_ using Node-RED's built-in web
 server and the web page will automatically deduce the
 correct URL with which to connect to the `/broker`
 WebSocket server implemented by these flows.
 
 The reason for this strict separation between view and
-control is not a dogmatic adherence to theoretical purity
+controller is not a dogmatic adherence to theoretical purity
 in the domain of software architecture. The sad truth is
 that while Node-RED greatly benefits from the culture of an
 open source community project, it also suffers from the
 inevitable shortcomings of such products. (This is not
 unique to Node-RED nor even to open source software: the
 many challenges of relying on any open source product is a
-specific example of
-[the tragedy of the commons](https://en.wikipedia.org/wiki/Tragedy_of_the_commons)
+specific example of the general
+[tragedy of the commons](https://en.wikipedia.org/wiki/Tragedy_of_the_commons)
 about which political and economic theorists have written
 for centuries.) The _node-red-dashboard_ component,
 supplied by Node-RED's core development team, suffers from
@@ -356,9 +472,9 @@ device API's directly rather than using node packages that
 wrap them because this reduces exposure to defects and
 deficiencies in third-party components. The critical
 bits of functionality that are implemented as community
-supplied node packages were created by the same author for the
-specific needs of accessing the Philips Hue Bridge SSE API
-from within these flows.
+supplied node packages were created by the same author for
+the specific needs of accessing the Philips Hue Bridge SSE
+API from within these flows.
 
 (The author feels confident in sufficiently prompt and
 diligent responses to bug reports and feature requests he
@@ -374,12 +490,13 @@ contains only HTML, JavaScript, CSS and similar standard
 web content files. It does not require any special code on
 the web server. It uses only the native WebSocket support
 built into modern web browsers to communicate with the
-Node-RED back end and all dynamic rendering is done on the
-client side using JavaScript and the DOM API also built
-into web browsers. It does use certain browser features
-that require it to be loaded with a URL beginning with
-`http://` or `https://`, but it does not actually rely
-directly on any "server side rendering" code.
+Node-RED back end rather than using a package like
+_socket.io_. All dynamic rendering is done on the client
+side using JavaScript and the DOM API also built into web
+browsers. _Vue_ does use certain browser features that
+require it to be loaded with a URL beginning with `http://`
+or `https://`, but it does not actually rely on any "server
+side rendering" code.
 
 > _To emphasize this point, an early version of this
 > repository had a version of the dashboard implemented
@@ -478,7 +595,7 @@ Notes:
 obtained using
 [suncalc](https://www.npmjs.com/package/suncalc) and require that the `${LATITUDE}` and `${LONGITUDE}`
 environment variables be set as
-[described above](#environment)
+[described above](#environment.js)
 
 <sup>2</sup> No `midday` event will be sent on days on
 which the sun never reaches an altitude of 0.8 radians
