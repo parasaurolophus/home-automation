@@ -3,42 +3,38 @@
 Node-RED based home automation system
 
 ```mermaid
-graph TB
+flowchart TB
 
-  browser["Web\nBrowser"]
-  vue["httpStatic page"]
-  flows["Flows"]
-  hue1["Hue\nBridge\n(Ground\nFloor\nLighting)"]
-  hue2["Hue\nBridge\n(Basement\nLighting)"]
-  powerview["PowerView\nHub\n(Window\nShades)"]
+    browser["Web\nBrowser"]
 
-  subgraph "Internet"
+    browser -- "HTTPS" --- vue
 
-  browser -- "HTTPS" --> vue
+    subgraph lan [LAN]
 
-  subgraph LAN
+        hue1["Hue\nBridge\n(Ground\nFloor\nLighting)"]
+        powerview["PowerView\nHub\n(Window\nShades)"]
+        hue2["Hue\nBridge\n(Basement\nLighting)"]
 
-    subgraph Node-RED  
-        vue <-- "WebSocket" --> flows
+        subgraph nodered [Node-RED]
+
+            vue["httpStatic page"]
+            flows["Flows"]
+            vue -- "WebSocket" --- flows
+
+        end
+
+        flows -- "HTTPS" --- hue1
+        flows -- "HTTP" --- powerview
+        flows -- "HTTPS" --- hue2
+        hue1 -- "EventSource" --> flows
+        hue2 -- "EventSource" --> flows
+
     end
-
-    flows -- "HTTPS" --> hue1
-    hue1 -- "EventSource" --> flows
-
-    flows -- "HTTPS" --> hue2
-    hue2 -- "EventSource" --> flows
-
-    flows -- "HTTP" --> powerview
-
-  end
-
-  end
 ```
 
 > **Note:** these flows use features introduced in Node-RED
-> version 3.0, including wire junctions and dynamic links.
-> They will not load correctly into earlier versions of
-> Node-RED.
+> version 3.0. They will not load correctly into earlier
+> versions of Node-RED.
 
 ## About
 
