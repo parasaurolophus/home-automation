@@ -62,7 +62,7 @@ rather than by directly embedded JavaScript objects:
 - An entry in the `httpStatic` array
 - A set of environment variable definistions
 
-This is accomplished by defined a number of separate
+This is accomplished by creating a number of separate
 JavaScript files and referencing them from `settings.js`
 by placing the following just above (not inside)
 `module.exports`:
