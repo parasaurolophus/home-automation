@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <v-container>
         <v-row>
@@ -32,6 +33,13 @@
             -->
             <HueControlsComponent />
         </v-row>
+        <v-row>
+            <!--
+                HueMetaDataComponent assumes it will
+                be inserted into a <v-row>
+            -->
+            <HueMetaDataComponent />
+        </v-row>
     </v-container>
 </template>
 
@@ -43,4 +51,5 @@ import AlertComponent from '@/components/AlertComponent.vue'
 import SettingsComponent from '@/components/controls/SettingsComponent.vue'
 import PowerViewControlsComponent from '@/components/controls/PowerViewControlsComponent.vue'
 import HueControlsComponent from '@/components/controls/HueControlsComponent.vue'
+import HueMetaDataComponent from '@/components/status/HueMetaDataComponent.vue'
 </script>
