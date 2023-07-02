@@ -20,7 +20,7 @@
         "type": "tab",
         "label": "Automation",
         "disabled": false,
-        "info": "Handle automation trigger events",
+        "info": "",
         "env": []
     },
     {
@@ -299,9 +299,7 @@
             "cb53ddf8e4322675"
         ],
         "x": 14,
-        "y": 199,
-        "w": 1272,
-        "h": 242
+        "y": 199
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -325,9 +323,7 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 459,
-        "w": 952,
-        "h": 122
+        "y": 459
     },
     {
         "id": "0fb8e43c903b3506",
@@ -412,9 +408,7 @@
             "3479fc4d500c7fa3"
         ],
         "x": 14,
-        "y": 19,
-        "w": 1352,
-        "h": 162
+        "y": 19
     },
     {
         "id": "9cf0457b813ca743",
@@ -436,8 +430,6 @@
         ],
         "x": 14,
         "y": 259,
-        "w": 772,
-        "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -461,9 +453,7 @@
             "9154f7fa8b08933f"
         ],
         "x": 14,
-        "y": 119,
-        "w": 832,
-        "h": 122
+        "y": 119
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -487,9 +477,7 @@
             "4e40e2700edff9ec"
         ],
         "x": 14,
-        "y": 359,
-        "w": 892,
-        "h": 122
+        "y": 359
     },
     {
         "id": "4893dd6a2321040d",
@@ -532,9 +520,7 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 599,
-        "w": 472,
-        "h": 82
+        "y": 599
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -564,7 +550,7 @@
         "y": 239,
         "w": 832,
         "h": 302,
-        "info": "Control the corresponding Philips Hue light groups and scenes upon\nreceipt of each `automation/trigger` event"
+        "info": "Handle lighting automation trigger events\n\n| Bridge | Address |\n|-|-|\n| Basement | 192.168.1.34 |\n| Ground Floor | 192.168.1.12 |\n\n| Room / Zone   | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n\nTo turn off the _Exterior_ zone and activate the _Nightlight_ scene in each of the _Main Bathroom_ and _Main Floor_:\n\n```json\n[\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\n        \"payload\": {\n            \"on\": {\n                \"on\": false\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/48c39b9f-1599-4a5c-b7f6-bad6cad4029a\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    }\n]\n```"
     },
     {
         "id": "8326ae1a15518f8f",
@@ -653,8 +639,6 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 1372,
-        "h": 242,
         "info": "Subscribe to settings change events. Send `automation/trigger` events up\nto five times per day, at: sunrise, the start of midday, the start of\nafternoon, sunset and bedtime.\n\n- The times for sunrise and sunset are obtained directly from\n  [`suncalc.getTimes()`](https://github.com/mourner/suncalc#sunlight-times)\n\n- The times for midday and afternoon are determined using the position\n  of the sun over the course of the current day as reported by\n  [`suncalc.getPosition()`](https://github.com/mourner/suncalc#sun-position)\n\n- The time for bedtime varies randomly each day, as described below\n\nThe `${LATITUDE}` and `${LONGITUDE}` environment variables must be set\nto the home's geographic coordinates for use with `suncalc`.\n\nMidday starts when the sun first reaches an altitude of 0.8 radians. No\nmidday will be sent on a given day if the sun never reaches that\naltitude for the specified `${LATITUDE}`.\n\nAfternoon starts when the sun's azimuth is greater than 0 and its\naltitude first drops below 0.8 radians. For days on which the altitude\nnever reaches 0.8, this will be as soon after sunrise as the sun starts\nto shine more from the west than the east.\n\nBedtime is randomized each day, constrained to be within &PlusMinus;30\nminutes of the value for `settings/bedtime`.\n\nNote that the inclusion of midday and afternoon and the rules for\ndetermining when they occur on a given day were determined empirically\nfor a particular house with 4 parallel walls, aligned more or less\nexactly with the cardinal compass directions at a particular latitude.\nIt is also influenced by the size of that house's rather substantial\neaves shading the east- and west-facing windows. They might need\nadjustment or an entirely different set of events for a different\nstructure at a different location. The goal of all this is to trigger\nautomation to control lighting and motorized window coverings in such\na way that maximizes the times of day at which the view of the outside\nworld can be enjoyed while optimizing the lighting and window coverings\nfor comfort and energy efficiency during times of day when the sun\nshines too directly into the windows. "
     },
     {
@@ -677,8 +661,6 @@
         ],
         "x": 14,
         "y": 279,
-        "w": 712,
-        "h": 82,
         "info": "Send a `controls/refresh` command message when this flow first connects\nas a client to the publish / subscribe message broker"
     },
     {
@@ -2333,8 +2315,7 @@
         ],
         "x": 540,
         "y": 320,
-        "wires": [],
-        "info": "| Group         | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |"
+        "wires": []
     },
     {
         "id": "0e592700939a92aa",
@@ -2400,8 +2381,7 @@
         ],
         "x": 530,
         "y": 480,
-        "wires": [],
-        "info": "| Group         | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |"
+        "wires": []
     },
     {
         "id": "1cb0a0826e19ac25",
@@ -2418,8 +2398,7 @@
         ],
         "x": 750,
         "y": 320,
-        "wires": [],
-        "info": "| Group         | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |"
+        "wires": []
     },
     {
         "id": "8b2870e325e61ea1",
@@ -2436,8 +2415,7 @@
         ],
         "x": 760,
         "y": 380,
-        "wires": [],
-        "info": "| Group         | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |"
+        "wires": []
     },
     {
         "id": "541a0eff9f0235b7",
@@ -2454,8 +2432,7 @@
         ],
         "x": 750,
         "y": 440,
-        "wires": [],
-        "info": "| Group         | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |"
+        "wires": []
     },
     {
         "id": "4c3ffaa9eed2fd35",
@@ -2472,8 +2449,7 @@
         ],
         "x": 760,
         "y": 500,
-        "wires": [],
-        "info": "| Group         | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |"
+        "wires": []
     },
     {
         "id": "5e838b011b496bb4",

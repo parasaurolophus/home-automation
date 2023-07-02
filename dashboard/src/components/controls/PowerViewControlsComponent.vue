@@ -8,6 +8,16 @@
                     @click="websocketPublish({ payload: scene.id, topic: 'put/powerview/scene' })">
                     {{ scene.name }}
                 </v-btn>
+                <table>
+                    <tr>
+                        <th>{{ room.name }}</th>
+                        <td>{{ room.id }}</td>
+                    </tr>
+                    <tr v-for="(scene, index) in room.scenes" :key="index">
+                        <th>{{ scene.name }}</th>
+                        <td>{{ scene.id }}</td>
+                    </tr>
+                </table>
             </fieldset>
         </v-card-text>
     </v-card>
