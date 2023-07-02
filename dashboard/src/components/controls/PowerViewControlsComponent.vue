@@ -1,8 +1,8 @@
 <template>
-    <v-card v-if="powerviewModel.length > 0">
+    <v-card v-if="hub.length > 0">
         <v-card-title>Window Shades</v-card-title>
         <v-card-text>
-            <fieldset v-for="(room, index) in powerviewModel" :key="index" :disabled="websocketStatus != 1">
+            <fieldset v-for="(room, index) in hub" :key="index" :disabled="websocketStatus != 1">
                 <legend>{{ room.name }}</legend>
                 <v-btn v-for="(scene, index) in room.scenes" :key="index"
                     @click="websocketPublish({ payload: scene.id, topic: 'put/powerview/scene' })">
@@ -30,7 +30,10 @@
 <script setup>
 import { inject } from 'vue'
 
+defineProps({
+    hub: Object
+})
+
 const websocketStatus = inject('websocketStatus')
 const websocketPublish = inject('websocketPublish')
-const powerviewModel = inject('powerviewModel')
 </script>
