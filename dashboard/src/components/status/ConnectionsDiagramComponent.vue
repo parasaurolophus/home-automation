@@ -1,8 +1,10 @@
 <template>
     <v-card>
-        <v-card-title>Connections</v-card-title>
         <v-card-text>
-            <pre ref="diagram"></pre>
+            <fieldset>
+                <legend>Connections</legend>
+                <pre ref="diagram"></pre>
+            </fieldset>
         </v-card-text>
         <v-card-actions>
             <v-btn @click="refreshControls" color="secondary">Refresh Controls</v-btn>

@@ -5,21 +5,23 @@
             <v-container>
                 <v-row>
                     <v-col v-for="(room, index) in hub" :key="index">
-                        <table>
-                            <caption>{{ room.name }}</caption>
-                            <tr>
-                                <th>id</th>
-                                <td>{{ room.id }}</td>
-                            </tr>
-                            <tr v-for="(scene, index) in room.scenes" :key="index">
-                                <th>{{ scene.name }}</th>
-                                <td>
-                                    <button :onclick="onScene" :value="scene.id">
-                                        {{ scene.id }}
-                                    </button>
-                                </td>
-                            </tr>
-                        </table>
+                        <fieldset>
+                            <legend>{{ room.name }}</legend>
+                            <table>
+                                <tr>
+                                    <th>id</th>
+                                    <td>{{ room.id }}</td>
+                                </tr>
+                                <tr v-for="(scene, index) in room.scenes" :key="index">
+                                    <th>{{ scene.name }}</th>
+                                    <td>
+                                        <button :onclick="onScene" :value="scene.id">
+                                            {{ scene.id }}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
                     </v-col>
                 </v-row>
             </v-container>
@@ -28,10 +30,7 @@
 </template>
 
 <style scoped>
-table {
-    border-width: 1px;
-    border-style: solid;
-}
+/* */
 </style>
 
 <script setup>
@@ -47,7 +46,7 @@ function onScene(event) {
 
     const topic = 'put/powerview/scene'
     const payload = event.target.value
-    
+
     showMetadataExample(topic, payload)
 
 }

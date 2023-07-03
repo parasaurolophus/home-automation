@@ -1,9 +1,8 @@
 <template>
     <v-card :disabled="websocketStatus != 1">
-        <v-card-title>Settings</v-card-title>
         <v-card-text>
             <fieldset>
-                <legend>Automation</legend>
+                <legend>Settings</legend>
                 <v-switch v-model="settingsLighting">
                     <template v-slot:label>
                         Lighting automation

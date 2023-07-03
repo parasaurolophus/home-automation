@@ -1,13 +1,15 @@
 <template>
     <v-card>
-        <v-card-title>Timer</v-card-title>
         <v-card-text>
-            <v-table>
-                <tr v-for="(value, name) in timer" :key="name">
-                    <th>{{ name }}</th>
-                    <td>{{ value }}</td>
-                </tr>
-            </v-table>
+            <fieldset>
+                <legend>Timer</legend>
+                <table>
+                    <tr v-for="(value, name) in timer" :key="name">
+                        <th>{{ name }}</th>
+                        <td>{{ value }}</td>
+                    </tr>
+                </table>
+            </fieldset>
         </v-card-text>
     </v-card>
 </template>

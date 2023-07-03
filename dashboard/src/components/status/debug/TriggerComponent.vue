@@ -1,10 +1,11 @@
 <template>
     <div v-if="trigger">
-        <div>&nbsp;</div>
         <v-card>
-            <v-card-title>automation/trigger</v-card-title>
             <v-card-text>
-                <pre v-html="trigger"></pre>
+                <fieldset>
+                    <legend>automation/trigger</legend>
+                    <pre v-html="trigger"></pre>
+                </fieldset>
             </v-card-text>
         </v-card>
     </div>
