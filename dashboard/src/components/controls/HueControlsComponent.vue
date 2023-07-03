@@ -15,16 +15,6 @@
                     @click="websocketPublish({ payload: { recall: { action: 'active' } }, topic: scene.value, method: 'PUT' })">
                     {{ scene.metadata.name }}
                 </v-btn>
-                <table>
-                    <tr>
-                        <th>grouped_light.id for {{ group.owner.type }}</th>
-                        <td>{{ group.grouped_light.id }}</td>
-                    </tr>
-                    <tr v-for="(scene, index) in group.scenes" :key="index">
-                        <th>{{ scene.metadata.name }}</th>
-                        <td>{{ scene.id }}</td>
-                    </tr>
-                </table>
             </fieldset>
         </v-card-text>
     </v-card>
