@@ -1,6 +1,15 @@
 <template>
     <v-alert v-model="showAlert" variant="tonal" type="info" closable>
-        <pre>{{ alertMessage }}</pre>
+        <table>
+            <tr>
+                <th>topic</th>
+                <td>{{ alertMessage.topic }}</td>
+            </tr>
+            <tr>
+                <th>payload</th>
+                <td>{{ alertMessage.payload }}</td>
+            </tr>
+        </table>
     </v-alert>
     <v-container>
         <v-row>
@@ -27,12 +36,20 @@ import HueMetadataComponent from '@/components/metadata/HueMetadataComponent.vue
 import PowerViewMetadataComponent from '@/components/metadata/PowerViewMetadataComponent.vue'
 
 const showAlert = ref(false)
-const alertMessage = ref(null)
+
+const alertMessage = ref({
+    topic: '',
+    payload: ''
+})
+
 const powerviewModel = inject('powerviewModel')
 const hueModels = inject('hueModels')
 
-provide('showAlert', (message) => {
-    alertMessage.value = message
+provide('showMetadataExample', (topic, payload) => {
+
+    alertMessage.value.topic = topic
+    alertMessage.value.payload = payload
     showAlert.value = true
+
 })
 </script>

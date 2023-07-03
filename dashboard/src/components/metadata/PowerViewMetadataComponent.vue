@@ -13,7 +13,11 @@
                             </tr>
                             <tr v-for="(scene, index) in room.scenes" :key="index">
                                 <th>{{ scene.name }}</th>
-                                <td>{{ scene.id }}</td>
+                                <td>
+                                    <button :onclick="onScene" :value="scene.id">
+                                        {{ scene.id }}
+                                    </button>
+                                </td>
                             </tr>
                         </table>
                     </v-col>
@@ -31,7 +35,20 @@ table {
 </style>
 
 <script setup>
+import { inject } from 'vue'
+
+const showMetadataExample = inject('showMetadataExample')
+
 defineProps({
     hub: Object
 })
+
+function onScene(event) {
+
+    const topic = 'put/powerview/scene'
+    const payload = event.target.value
+    
+    showMetadataExample(topic, payload)
+
+}
 </script>

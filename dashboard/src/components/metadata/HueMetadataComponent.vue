@@ -46,7 +46,7 @@ table {
 <script setup>
 import { inject } from 'vue'
 
-const showAlert = inject('showAlert')
+const showMetadataExample = inject('showMetadataExample')
 
 defineProps({
     bridge: Object
@@ -54,23 +54,21 @@ defineProps({
 
 function onGroupedLight(event) {
 
-    let params = event.target.value.split('|')
-    let message = 'put/hue/' + params[0] + '/resource/grouped_light/' + params[1]
+    const params = event.target.value.split('|')
+    const topic = 'put/hue/' + params[0] + '/resource/grouped_light/' + params[1]
+    const payload = '{ "on": { "on": true|false}}'
 
-    message += '\n{ "on": { "on": true|false}}'
-    showAlert(message)
-    console.log(message)
+    showMetadataExample(topic, payload)
 
 }
 
 function onScene(event) {
 
-    let params = event.target.value.split('|')
-    let message = 'put/hue/' + params[0] + '/resource/scene/' + params[1]
+    const params = event.target.value.split('|')
+    const topic = 'put/hue/' + params[0] + '/resource/scene/' + params[1]
+    const payload = '{ "recall": { "action": "active"|"dynamic_palette"}}'
 
-    message += '\n{ "recall": { "action": "active"|"dynamic_palette"}}'
-    showAlert(message)
-    console.log(message)
+    showMetadataExample(topic, payload)
 
 }
 </script>
