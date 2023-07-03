@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-card-title>{{ bridge.title }}</v-card-title>
+        <v-card-title>{{ bridge.title }} ({{ bridge.address }})</v-card-title>
         <v-card-text>
             <v-container>
                 <v-row v-for="(group, index) in bridge.groups" :key="index">

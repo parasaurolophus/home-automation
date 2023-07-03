@@ -299,7 +299,9 @@
             "cb53ddf8e4322675"
         ],
         "x": 14,
-        "y": 199
+        "y": 199,
+        "w": 1272,
+        "h": 242
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -323,7 +325,9 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 459
+        "y": 459,
+        "w": 952,
+        "h": 122
     },
     {
         "id": "0fb8e43c903b3506",
@@ -349,7 +353,9 @@
             "93a323937c189b13"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 1052,
+        "h": 162
     },
     {
         "id": "96971e50c13ead01",
@@ -386,7 +392,9 @@
             "531fbb9eb4631e85"
         ],
         "x": 14,
-        "y": 199
+        "y": 199,
+        "w": 1252,
+        "h": 302
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -408,7 +416,9 @@
             "3479fc4d500c7fa3"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 1352,
+        "h": 162
     },
     {
         "id": "9cf0457b813ca743",
@@ -500,7 +510,9 @@
             "0b223f6872d96c8f"
         ],
         "x": 14,
-        "y": 519
+        "y": 519,
+        "w": 852,
+        "h": 122
     },
     {
         "id": "fa261bdde51028d4",
@@ -520,7 +532,9 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 599
+        "y": 599,
+        "w": 472,
+        "h": 82
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -548,8 +562,6 @@
         ],
         "x": 14,
         "y": 239,
-        "w": 832,
-        "h": 302,
         "info": "Handle lighting automation trigger events\n\n| Bridge | Address |\n|-|-|\n| Basement | 192.168.1.34 |\n| Ground Floor | 192.168.1.12 |\n\n| Room / Zone   | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n\nTo turn off the _Exterior_ zone and activate the _Nightlight_ scene in each of the _Main Bathroom_ and _Main Floor_:\n\n```json\n[\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\n        \"payload\": {\n            \"on\": {\n                \"on\": false\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/48c39b9f-1599-4a5c-b7f6-bad6cad4029a\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    }\n]\n```"
     },
     {
@@ -577,8 +589,6 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 1012,
-        "h": 202,
         "info": "Activate the corresponding PowerView scene upon receipt of of each\n`automation/trigger` event"
     },
     {
@@ -1085,7 +1095,7 @@
         "z": "85ed27d795e6e866",
         "g": "96971e50c13ead01",
         "name": "model",
-        "func": "const ADDRESS = env.get('ADDRESS')\nconst TOPIC = 'hue/' + ADDRESS\nconst MODEL = TOPIC + '/model'\nconst PUT = 'put/' + TOPIC + '/resource'\n\nconst message = {\n    payload: { groups: [], title: env.get('TITLE') },\n    topic: MODEL,\n    retain: true\n}\n\nfunction findOwner(grouped_light) {\n\n    const groups = msg.payload[grouped_light.owner.rtype]\n\n    if (Object.prototype.hasOwnProperty.call(groups, grouped_light.owner.rid)) {\n\n        return groups[grouped_light.owner.rid]\n\n    }\n\n    throw 'no container found for grouped_light ' + grouped_light.id\n\n}\n\nfunction findScenes(owner) {\n\n    const scenes = []\n\n    for (let sceneId in msg.payload.scene) {\n\n        const scene = msg.payload.scene[sceneId]\n\n        if (scene.group.rid == owner.id) {\n\n            scene.value = PUT + '/scene/' + scene.id\n            scenes.push(scene)\n\n        }\n    }\n\n    return scenes.sort((a, b) => {\n\n        return a.metadata.name.localeCompare(b.metadata.name)\n\n    })\n\n}\n\nfor (let grouped_light_id in msg.payload.grouped_light) {\n\n    const grouped_light = msg.payload.grouped_light[grouped_light_id]\n    const owner = findOwner(grouped_light)\n    const scenes = findScenes(owner)\n\n    message.payload.groups.push({\n        grouped_light: grouped_light,\n        owner: owner,\n        scenes: scenes,\n        name: (owner.metadata ? owner.metadata.name : 'All Lights'),\n        value: PUT + '/grouped_light/' + grouped_light.id\n    })\n\n}\n\nmessage.payload.groups = message.payload.groups.sort((a, b) => {\n\n    return a.name.localeCompare(b.name)\n\n})\n\nreturn message",
+        "func": "const ADDRESS = env.get('ADDRESS')\nconst TOPIC = 'hue/' + ADDRESS\nconst MODEL = TOPIC + '/model'\nconst PUT = 'put/' + TOPIC + '/resource'\n\nconst message = {\n    payload: {\n        groups: [],\n        title: env.get('TITLE'),\n        address: ADDRESS\n    },\n    topic: MODEL,\n    retain: true\n}\n\nfunction findOwner(grouped_light) {\n\n    const groups = msg.payload[grouped_light.owner.rtype]\n\n    if (Object.prototype.hasOwnProperty.call(groups, grouped_light.owner.rid)) {\n\n        return groups[grouped_light.owner.rid]\n\n    }\n\n    throw 'no container found for grouped_light ' + grouped_light.id\n\n}\n\nfunction findScenes(owner) {\n\n    const scenes = []\n\n    for (let sceneId in msg.payload.scene) {\n\n        const scene = msg.payload.scene[sceneId]\n\n        if (scene.group.rid == owner.id) {\n\n            scene.value = PUT + '/scene/' + scene.id\n            scenes.push(scene)\n\n        }\n    }\n\n    return scenes.sort((a, b) => {\n\n        return a.metadata.name.localeCompare(b.metadata.name)\n\n    })\n\n}\n\nfor (let grouped_light_id in msg.payload.grouped_light) {\n\n    const grouped_light = msg.payload.grouped_light[grouped_light_id]\n    const owner = findOwner(grouped_light)\n    const scenes = findScenes(owner)\n\n    message.payload.groups.push({\n        grouped_light: grouped_light,\n        owner: owner,\n        scenes: scenes,\n        name: (owner.metadata ? owner.metadata.name : 'All Lights'),\n        value: PUT + '/grouped_light/' + grouped_light.id\n    })\n\n}\n\nmessage.payload.groups = message.payload.groups.sort((a, b) => {\n\n    return a.name.localeCompare(b.name)\n\n})\n\nreturn message",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

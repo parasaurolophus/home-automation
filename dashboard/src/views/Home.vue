@@ -25,5 +25,5 @@ import { ref } from 'vue'
 import DashboardComponent from '@/components/DashboardComponent.vue'
 import MetadataComponent from '@/components/MetadataComponent.vue'
 
-const tab = ref('dashboard')
+const tab = ref(null)
 </script>
