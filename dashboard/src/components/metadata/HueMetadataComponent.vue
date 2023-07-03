@@ -13,11 +13,20 @@
                             </tr>
                             <tr>
                                 <th>grouped_light</th>
-                                <td>{{ group.grouped_light.id }}</td>
+                                <td>
+                                    <button :onclick="onGroupedLight"
+                                        :value="bridge.address + '|' + group.grouped_light.id">
+                                        {{ group.grouped_light.id }}
+                                    </button>
+                                </td>
                             </tr>
                             <tr v-for="(scene, index) in group.scenes" :key="index">
                                 <th>{{ scene.metadata.name }}</th>
-                                <td>{{ scene.id }}</td>
+                                <td>
+                                    <button :onclick="onScene" :value="bridge.address + '|' + scene.id">
+                                        {{ scene.id }}
+                                    </button>
+                                </td>
                             </tr>
                         </table>
                     </v-col>
@@ -35,7 +44,33 @@ table {
 </style>
 
 <script setup>
+import { inject } from 'vue'
+
+const showAlert = inject('showAlert')
+
 defineProps({
     bridge: Object
 })
+
+function onGroupedLight(event) {
+
+    let params = event.target.value.split('|')
+    let message = 'put/hue/' + params[0] + '/resource/grouped_light/' + params[1]
+
+    message += '\n{ "on": { "on": true|false}}'
+    showAlert(message)
+    console.log(message)
+
+}
+
+function onScene(event) {
+
+    let params = event.target.value.split('|')
+    let message = 'put/hue/' + params[0] + '/resource/scene/' + params[1]
+
+    message += '\n{ "recall": { "action": "active"|"dynamic_palette"}}'
+    showAlert(message)
+    console.log(message)
+
+}
 </script>
