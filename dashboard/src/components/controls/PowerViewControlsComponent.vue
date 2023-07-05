@@ -1,16 +1,17 @@
 <template>
-    <v-card v-if="hub.length > 0">
-        <v-card-title>Window Shades</v-card-title>
-        <v-card-text>
-            <fieldset v-for="(room, index) in hub" :key="index" :disabled="websocketStatus != 1">
-                <legend>{{ room.name }}</legend>
-                <v-btn v-for="(scene, index) in room.scenes" :key="index"
-                    @click="websocketPublish({ payload: scene.id, topic: 'put/powerview/scene' })">
-                    {{ scene.name }}
-                </v-btn>
-            </fieldset>
-        </v-card-text>
-    </v-card>
+    <v-container>
+        <v-row>
+            <v-col v-for="(room, index) in hub" :key="index">
+                <fieldset :disabled="websocketStatus != 1">
+                    <legend>{{ room.name }}</legend>
+                    <v-btn v-for="(scene, index) in room.scenes" :key="index"
+                        @click="websocketPublish({ payload: scene.id, topic: 'put/powerview/scene' })">
+                        {{ scene.name }}
+                    </v-btn>
+                </fieldset>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <style scoped>

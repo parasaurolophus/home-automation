@@ -1,15 +1,9 @@
 <template>
-    <v-card>
-        <v-card-text>
-            <fieldset>
-                <legend>Connections</legend>
-                <pre ref="diagram"></pre>
-            </fieldset>
-        </v-card-text>
-        <v-card-actions>
-            <v-btn @click="refreshControls" color="secondary">Refresh Controls</v-btn>
-        </v-card-actions>
-    </v-card>
+    <fieldset>
+        <legend>Connections</legend>
+        <pre ref="diagram"></pre>
+        <v-btn @click="refreshControls">Refresh Controls</v-btn>
+    </fieldset>
 </template>
 
 <style scoped>

@@ -1,5 +1,5 @@
 <template>
-    <v-card v-if="hub.length > 0">
+    <v-card>
         <v-card-title>Window Shades</v-card-title>
         <v-card-text>
             <v-container>
