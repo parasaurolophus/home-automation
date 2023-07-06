@@ -12,7 +12,8 @@
                     <tr>
                         <th>grouped_light</th>
                         <td>
-                            <button :onclick="onGroupedLight" :value="bridge.address + '|' + group.grouped_light.id">
+                            <button :onclick="onGroupedLight"
+                                :value="bridge.address + '|' + group.grouped_light.id + '|' + group.name">
                                 {{ group.grouped_light.id }}
                             </button>
                         </td>
@@ -20,7 +21,7 @@
                     <tr v-for="(scene, index) in group.scenes" :key="index">
                         <th>{{ scene.metadata.name }}</th>
                         <td>
-                            <button :onclick="onScene" :value="bridge.address + '|' + scene.id">
+                            <button :onclick="onScene" :value="bridge.address + '|' + scene.id + '|' + group.name">
                                 {{ scene.id }}
                             </button>
                         </td>
@@ -47,20 +48,30 @@ defineProps({
 function onGroupedLight(event) {
 
     const params = event.target.value.split('|')
-    const topic = 'put/hue/' + params[0] + '/resource/grouped_light/' + params[1]
-    const payload = '{ "on": { "on": true|false}}'
+    const message = {
+        topic: 'put/hue/' + params[0] + '/resource/grouped_light/' + params[1],
+        payload: '{ "on": { "on": true|false}}',
+        method: 'PUT',
+        label: params[2]
+    }
+    const json = JSON.stringify(message, null, 4)
 
-    showMetadataExample(topic, payload)
+    showMetadataExample(json)
 
 }
 
 function onScene(event) {
 
     const params = event.target.value.split('|')
-    const topic = 'put/hue/' + params[0] + '/resource/scene/' + params[1]
-    const payload = '{ "recall": { "action": "active"|"dynamic_palette"}}'
+    const message = {
+        topic: 'put/hue/' + params[0] + '/resource/scene/' + params[1],
+        payload: '{ "recall": { "action": "active"|"dynamic_palette"}}',
+        method: 'PUT',
+        label: params[2]
+    }
+    const json = JSON.stringify(message, null, 4)
 
-    showMetadataExample(topic, payload)
+    showMetadataExample(json)
 
 }
 </script>

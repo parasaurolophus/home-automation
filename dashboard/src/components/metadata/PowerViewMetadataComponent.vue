@@ -15,7 +15,7 @@
                                 <tr v-for="(scene, index) in room.scenes" :key="index">
                                     <th>{{ scene.name }}</th>
                                     <td>
-                                        <button :onclick="onScene" :value="scene.id">
+                                        <button :onclick="onScene" :value="scene.id + '|' + scene.name">
                                             {{ scene.id }}
                                         </button>
                                     </td>
@@ -44,10 +44,15 @@ defineProps({
 
 function onScene(event) {
 
-    const topic = 'put/powerview/scene'
-    const payload = event.target.value
+    const params = event.target.value.split('|')
+    const message = {
+        topic: 'put/powerview/scene',
+        payload: params[0],
+        label: params[1]
+    }
+    const json = JSON.stringify(message, null, 4)
 
-    showMetadataExample(topic, payload)
+    showMetadataExample(json)
 
 }
 </script>
