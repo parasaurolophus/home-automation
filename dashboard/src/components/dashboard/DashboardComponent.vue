@@ -2,6 +2,11 @@
     <v-container>
         <v-row>
             <v-col>
+                <AlertComponent />
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col>
                 <SettingsComponent />
             </v-col>
             <v-col>
@@ -9,11 +14,6 @@
             </v-col>
             <v-col>
                 <TriggerComponent />
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col>
-                <AlertComponent />
             </v-col>
         </v-row>
         <v-row>
