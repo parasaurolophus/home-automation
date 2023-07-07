@@ -299,7 +299,9 @@
             "cb53ddf8e4322675"
         ],
         "x": 14,
-        "y": 199
+        "y": 199,
+        "w": 1272,
+        "h": 242
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -323,7 +325,9 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 459
+        "y": 459,
+        "w": 952,
+        "h": 122
     },
     {
         "id": "0fb8e43c903b3506",
@@ -349,7 +353,9 @@
             "93a323937c189b13"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 1052,
+        "h": 162
     },
     {
         "id": "96971e50c13ead01",
@@ -386,7 +392,9 @@
             "531fbb9eb4631e85"
         ],
         "x": 14,
-        "y": 199
+        "y": 199,
+        "w": 1252,
+        "h": 302
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -408,7 +416,9 @@
             "3479fc4d500c7fa3"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 1352,
+        "h": 162
     },
     {
         "id": "9cf0457b813ca743",
@@ -500,7 +510,9 @@
             "0b223f6872d96c8f"
         ],
         "x": 14,
-        "y": 519
+        "y": 519,
+        "w": 852,
+        "h": 122
     },
     {
         "id": "fa261bdde51028d4",
@@ -520,7 +532,9 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 599
+        "y": 599,
+        "w": 472,
+        "h": 82
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -2309,7 +2323,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/9c1c7975-2f47-4552-bac8-c19b643cd678\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/aea74e74-d544-4d08-ad71-3b6665045256\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\"}]",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/9c1c7975-2f47-4552-bac8-c19b643cd678\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Floor\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/aea74e74-d544-4d08-ad71-3b6665045256\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Bathroom\"}]",
                 "type": "json"
             }
         ],
@@ -2375,7 +2389,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Bathroom\"},{\"topic\":\"01d77dc0-3ff8-4afc-a943-9b04e4a8da0d/01d77dc0-3ff8-4afc-a943-9b04e4a8da0d\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor\"}]",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Bathroom/Nightlight\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/01d77dc0-3ff8-4afc-a943-9b04e4a8da0d\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Nightlight\"}]",
                 "type": "json"
             }
         ],
@@ -2392,7 +2406,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/e9503c3a-16b3-49ae-a4f9-2f6074d67be0\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"}]",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/e9503c3a-16b3-49ae-a4f9-2f6074d67be0\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Tribal\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
                 "type": "json"
             }
         ],
@@ -2409,7 +2423,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/85aef9e7-9805-4f07-afc9-80aa14e7be61\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"target\":\"send to ground floor hue\"}]",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/85aef9e7-9805-4f07-afc9-80aa14e7be61\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"label\":\"Exterior/Spooky\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
                 "type": "json"
             }
         ],
@@ -2426,7 +2440,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/3ac45cbb-21c0-4c2f-8037-c40345537ce2\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/a1a2735c-def7-4db7-8d8e-bebe2a7e2200\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\"}]",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/a1a2735c-def7-4db7-8d8e-bebe2a7e2200\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Jolly\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/3ac45cbb-21c0-4c2f-8037-c40345537ce2\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Jolly\"}]",
                 "type": "json"
             }
         ],
@@ -2443,7 +2457,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6918db34-c83f-4e37-9581-8d4255bfd1f8\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\"}]",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/6918db34-c83f-4e37-9581-8d4255bfd1f8\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Sunset\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
                 "type": "json"
             }
         ],
