@@ -21,7 +21,8 @@
                     <tr v-for="(scene, index) in group.scenes" :key="index">
                         <th>{{ scene.metadata.name }}</th>
                         <td>
-                            <button :onclick="onScene" :value="bridge.address + '|' + scene.id + '|' + group.name">
+                            <button :onclick="onScene"
+                                :value="bridge.address + '|' + scene.id + '|' + group.name + '/' + scene.metadata.name">
                                 {{ scene.id }}
                             </button>
                         </td>
@@ -50,7 +51,7 @@ function onGroupedLight(event) {
     const params = event.target.value.split('|')
     const message = {
         topic: 'put/hue/' + params[0] + '/resource/grouped_light/' + params[1],
-        payload: '{ "on": { "on": true|false}}',
+        payload: { on: { on: false } },
         method: 'PUT',
         label: params[2]
     }
@@ -65,7 +66,7 @@ function onScene(event) {
     const params = event.target.value.split('|')
     const message = {
         topic: 'put/hue/' + params[0] + '/resource/scene/' + params[1],
-        payload: '{ "recall": { "action": "active"|"dynamic_palette"}}',
+        payload: { recall: { action: 'active' } },
         method: 'PUT',
         label: params[2]
     }
