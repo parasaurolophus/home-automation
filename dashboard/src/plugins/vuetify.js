@@ -33,6 +33,9 @@ export default createVuetify({
         },
         VAppBar: {
             flat: true
+        },
+        VContainer: {
+            fluid: true
         }
     }
 })
