@@ -3,33 +3,41 @@
 Node-RED based home automation system
 
 ```mermaid
-flowchart TB
+graph TB
 
-    browser["Web\nBrowser"]
+    browser["Web Browser"]
 
-    browser -- "HTTPS" --- vue
+    subgraph "Home LAN"
 
-    subgraph lan [LAN]
+        hue["Philps Hue Bridge(s)"]
+        powerview["Hunter-Douglas\n(PowerView)\nWindow\nCoverings"]
 
-        hue1["Hue\nBridge\n(Ground\nFloor\nLighting)"]
-        powerview["PowerView\nHub\n(Window\nShades)"]
-        hue2["Hue\nBridge\n(Basement\nLighting)"]
+        subgraph nodered["Node-RED"]
 
-        subgraph nodered [Node-RED]
+            vue["Vue / Vuetify\nWeb App"]
+            flows["Flows\nhttps://github.com/parasaurolophus/home-automation"]
+            dnssd["@parasaurolophus/nodred-dnssd"]
+            eventsource["@parasaurolophus/nodred-eventsource"]
 
-            vue["httpStatic page"]
-            flows["Flows"]
-            vue -- "WebSocket" --- flows
+            vue <-- "WebSocket" --> flows
+            dnssd --> flows
+            eventsource --> flows
 
         end
 
-        flows -- "HTTPS" --- hue1
-        flows -- "HTTP" --- powerview
-        flows -- "HTTPS" --- hue2
-        hue1 -- "EventSource" --> flows
-        hue2 -- "EventSource" --> flows
+        flows -- HTTP --> powerview
+        flows -- "HTTPS" --> hue
+        hue -- "SSE" --> eventsource
+        hue -- "mDNS" --> dnssd
+
+        click flows "https://github.com/parasaurolophus/home-automation" _blank
+        click dnssd "https://flows.nodered.org/node/@parasaurolophus/node-red-dnssd" _blank
+        click eventsource "https://flows.nodered.org/node/@parasaurolophus/node-red-eventsource" _blank
+        click vue "https://github.com/parasaurolophus/home-automation/tree/main/dashboard" _blank
 
     end
+
+    browser <-- "HTTPS /\nWebSocket" ---> vue
 ```
 
 > **Note:** these flows use features introduced in Node-RED
