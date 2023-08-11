@@ -9,15 +9,15 @@ graph TB
 
     subgraph "Home LAN"
 
-        hue["Philps Hue Bridge(s)"]
+        hue["Philips Hue\nBridge(s)"]
         powerview["Hunter-Douglas\n(PowerView)\nWindow\nCoverings"]
 
         subgraph nodered["Node-RED"]
 
             vue["Vue / Vuetify\nWeb App"]
             flows["Flows\nhttps://github.com/parasaurolophus/home-automation"]
-            dnssd["@parasaurolophus/nodred-dnssd"]
-            eventsource["@parasaurolophus/nodred-eventsource"]
+            dnssd["@parasaurolophus/nodered-dnssd"]
+            eventsource["@parasaurolophus/nodered-eventsource"]
 
             vue <-- "WebSocket" --> flows
             dnssd --> flows
