@@ -108,7 +108,7 @@ rather than by directly embedded JavaScript objects:
 - `contextStorage`
 - `projects`
 - An entry in the `httpStatic` array
-- A set of environment variable definistions
+- A set of environment variable definitions
 
 This is accomplished by creating a number of separate
 JavaScript files and referencing them from `settings.js`
@@ -206,7 +206,7 @@ module.exports = {
 ```
 
 To be effective, the corresponding `contextStorage:`
-section in _settings.js_ must be reference the global
+section in _settings.js_ must reference the global
 variable:
 
 ```javascript
@@ -252,7 +252,7 @@ module.exports = {
 
 To be effective, the corresponding `projects:`
 subsection inside the `editorTheme` section in
-_settings.js_ must be reference the global variable:
+_settings.js_ must reference the global variable:
 
 ```javascript
 projects: projects,
@@ -290,8 +290,6 @@ and that the value of the global `dashboardPath` variable
 will be one of its values:
 
 ```javascript
-//httpStatic: '/home/nol/node-red-static/', //single static source
-/* OR multiple static sources can be created using an array of objects... */
 httpStatic: [
     dashboardPath,
     // additional static paths, if desired...
@@ -442,7 +440,7 @@ than in providing useful products and services.
 > dashboard to be  available at
 >`https://<nodered-host>:1880/dashboard`_
 >
-> ```
+> ```bash
 > cd ~/.node-red/projects/home-automation/dashboard
 > npm install
 > npm run build
@@ -453,7 +451,8 @@ than in providing useful products and services.
 > `httpStatic` setting
 > [described above](#static-http-content)._
 
-These Node-RED flows do not directly implement any user interface. Instead, they asynchronously send event messages
+These Node-RED flows do not directly implement any user interface.
+Instead, they asynchronously send event messages
 and receive command messages using a WebSocket node
 configured to "listen to" the URI `/broker`. In addition to
 and separate from _flows.json_, the GitHub repository for
@@ -496,8 +495,8 @@ The reason for this strict separation between view and
 controller is not a dogmatic adherence to theoretical purity
 in the domain of software architecture. The sad truth is
 that while Node-RED greatly benefits from the culture of an
-open source community project, it also suffers from the
-inevitable shortcomings of such products. (This is not
+open source community, it also suffers from the
+inevitable shortcomings of all such products. (This is not
 unique to Node-RED nor even to open source software: the
 many challenges of relying on any open source product is a
 specific example of the general
@@ -532,12 +531,12 @@ interests.)
 Note that once built, the _dashboard/dist_ directory
 contains only HTML, JavaScript, CSS and similar standard
 web content files. It does not require any special code on
-the web server. It uses only the native WebSocket support
-built into modern web browsers to communicate with the
-Node-RED back end rather than using a package like
-_socket.io_. All dynamic rendering is done on the client
-side using JavaScript and the DOM API also built into web
-browsers. _Vue_ does use certain browser features that
+the web server (_Node-RED_, in this case). It uses only
+the native WebSocket support built into modern web browsers
+to communicate with the Node-RED back end rather than using
+a package like _socket.io_. All dynamic rendering is done on
+the client side using JavaScript and the DOM API also built
+into web browsers. _Vue_ does use certain browser features that
 require it to be loaded with a URL beginning with `http://`
 or `https://`, but it does not actually rely on any "server
 side rendering" code.
@@ -598,14 +597,14 @@ values:
 | `msg.payload['timer/time']` | Description                                                                                                                          |
 |-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
 | `sunrise`                   | Sent at sunrise<sup>1</sup>                                                                                                          |
-| `midday`                    | Sent if and when the sun first reaches an altitude of 0.8 radians on a given day<sup>2</sup>                                         |
-| `afternoon`                 | Sent when the sun first drops below an altitude of 0.8 after it has reached an azimuth greater than 0.0 (i.e. shining from the west) |
+| `midday`                    | Sent if and when the sun first reaches an altitude of 0.9 radians on a given day<sup>2</sup>                                         |
+| `afternoon`                 | Sent when the sun first drops below an altitude of 0.9 after it has reached an azimuth greater than 0.0 (i.e. shining from the west) |
 | `sunset`                    | Sent at sunset                                                                                                                       |
 | `bedtime`                   | Sent at somewhat randomized time each evening<sup>3</sup>                                                                            |
 
 Obviously, the preceding times-of-day rules are designed
 for a location in the northern hemisphere, below the arctic
-circle. The value of 0.8 radians for the thresholds
+circle. The value of 0.9 radians for the thresholds
 defining `midday` and `afternoon` were determined
 empirically for a particular home, at a particular latitude,
 with eaves of a particular size over windows facing
@@ -642,7 +641,7 @@ environment variables be set as
 [described above](#environment.js)
 
 <sup>2</sup> No `midday` event will be sent on days on
-which the sun never reaches an altitude of 0.8 radians
+which the sun never reaches an altitude of 0.9 radians
 
 <sup>3</sup> The exact time at which `bedtime` events
 deliberately varies each day. It will be sent at a time
