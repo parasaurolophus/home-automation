@@ -296,12 +296,16 @@
             "7756c6eb9522da59",
             "b0e9b513b0a450c3",
             "d3827e92f3158b11",
-            "cb53ddf8e4322675"
+            "cb53ddf8e4322675",
+            "61819845f9d42866",
+            "24c5060618b2a3bf",
+            "46957044b4a82aac",
+            "55739f413f081a30"
         ],
         "x": 14,
         "y": 199,
-        "w": 1272,
-        "h": 242
+        "w": 1512,
+        "h": 302
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -325,7 +329,7 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 459,
+        "y": 539,
         "w": 952,
         "h": 122
     },
@@ -353,9 +357,7 @@
             "93a323937c189b13"
         ],
         "x": 14,
-        "y": 19,
-        "w": 1052,
-        "h": 162
+        "y": 19
     },
     {
         "id": "96971e50c13ead01",
@@ -392,9 +394,7 @@
             "531fbb9eb4631e85"
         ],
         "x": 14,
-        "y": 199,
-        "w": 1252,
-        "h": 302
+        "y": 199
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -510,9 +510,7 @@
             "0b223f6872d96c8f"
         ],
         "x": 14,
-        "y": 519,
-        "w": 852,
-        "h": 122
+        "y": 519
     },
     {
         "id": "fa261bdde51028d4",
@@ -532,7 +530,7 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 599,
+        "y": 679,
         "w": 472,
         "h": 82
     },
@@ -562,8 +560,6 @@
         ],
         "x": 14,
         "y": 239,
-        "w": 832,
-        "h": 302,
         "info": "Handle lighting automation trigger events\n\n| Bridge | Address |\n|-|-|\n| Basement | 192.168.1.34 |\n| Ground Floor | 192.168.1.12 |\n\n| Room / Zone   | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n\nTo turn off the _Exterior_ zone and activate the _Nightlight_ scene in each of the _Main Bathroom_ and _Main Floor_:\n\n```json\n[\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\n        \"payload\": {\n            \"on\": {\n                \"on\": false\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/48c39b9f-1599-4a5c-b7f6-bad6cad4029a\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    }\n]\n```"
     },
     {
@@ -591,8 +587,6 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 1012,
-        "h": 202,
         "info": "Activate the corresponding PowerView scene upon receipt of of each\n`automation/trigger` event"
     },
     {
@@ -3165,7 +3159,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 360,
+        "x": 600,
         "y": 280,
         "wires": [
             [
@@ -3186,7 +3180,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 530,
+        "x": 770,
         "y": 280,
         "wires": [
             [
@@ -3215,7 +3209,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 650,
+        "x": 890,
         "y": 280,
         "wires": [
             [
@@ -3241,7 +3235,7 @@
         "senderr": false,
         "headers": [],
         "x": 590,
-        "y": 540,
+        "y": 620,
         "wires": [
             [
                 "f74128d99635d540"
@@ -3262,7 +3256,7 @@
         "finalize": "",
         "libs": [],
         "x": 740,
-        "y": 540,
+        "y": 620,
         "wires": [
             [
                 "2159eac5031ae752"
@@ -3277,7 +3271,7 @@
         "name": "https://developers.meethue.com/develop/hue-api-v2/getting-started/",
         "info": "",
         "x": 280,
-        "y": 500,
+        "y": 580,
         "wires": []
     },
     {
@@ -3314,7 +3308,7 @@
         "g": "0fd970345919b420",
         "name": "https://developers.meethue.com/develop/application-design-guidance/hue-bridge-discovery/",
         "info": "",
-        "x": 350,
+        "x": 590,
         "y": 240,
         "wires": []
     },
@@ -3350,7 +3344,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 950,
+        "x": 1190,
         "y": 320,
         "wires": [
             [
@@ -3370,7 +3364,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1070,
+        "x": 1310,
         "y": 320,
         "wires": [
             [
@@ -3398,7 +3392,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 790,
+        "x": 1030,
         "y": 280,
         "wires": [
             [
@@ -3425,7 +3419,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 770,
+        "x": 1010,
         "y": 360,
         "wires": [
             [
@@ -3452,7 +3446,7 @@
         "repair": false,
         "outputs": 1,
         "x": 270,
-        "y": 540,
+        "y": 620,
         "wires": [
             [
                 "2626ba9e8d396f71"
@@ -3467,7 +3461,7 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 600,
+        "x": 840,
         "y": 360,
         "wires": [
             [
@@ -3484,7 +3478,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 540,
+        "y": 620,
         "wires": [
             [
                 "226b30949f9a903b"
@@ -3499,7 +3493,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1200,
+        "x": 1440,
         "y": 320,
         "wires": []
     },
@@ -3512,7 +3506,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 880,
-        "y": 540,
+        "y": 620,
         "wires": []
     },
     {
@@ -3555,7 +3549,7 @@
         "finalize": "",
         "libs": [],
         "x": 440,
-        "y": 540,
+        "y": 620,
         "wires": [
             [
                 "0ed14c935a7933e8"
@@ -3573,7 +3567,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 120,
-        "y": 640,
+        "y": 720,
         "wires": [
             [
                 "ce505f3a3d6ec359"
@@ -3589,7 +3583,7 @@
         "statusCode": "",
         "headers": {},
         "x": 410,
-        "y": 640,
+        "y": 720,
         "wires": []
     },
     {
@@ -3613,7 +3607,7 @@
         "to": "",
         "reg": false,
         "x": 280,
-        "y": 640,
+        "y": 720,
         "wires": [
             [
                 "16e21e0afb427d76"
@@ -3645,7 +3639,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "counter",
-        "x": 350,
+        "x": 590,
         "y": 340,
         "wires": []
     },
@@ -3663,7 +3657,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "counter",
-        "x": 330,
+        "x": 570,
         "y": 400,
         "wires": []
     },
@@ -3675,8 +3669,8 @@
         "name": "",
         "service": "_hue",
         "udp": false,
-        "x": 120,
-        "y": 340,
+        "x": 340,
+        "y": 380,
         "wires": [
             [
                 "14b78c9b72d385fd"
@@ -3685,8 +3679,10 @@
                 "b0e9b513b0a450c3"
             ],
             [
-                "d3827e92f3158b11"
-            ]
+                "d3827e92f3158b11",
+                "46957044b4a82aac"
+            ],
+            []
         ]
     },
     {
@@ -3699,5 +3695,94 @@
         "x": 1040,
         "y": 100,
         "wires": []
+    },
+    {
+        "id": "61819845f9d42866",
+        "type": "inject",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "{\"command\":\"start\"}",
+        "payloadType": "json",
+        "x": 150,
+        "y": 360,
+        "wires": [
+            [
+                "cb53ddf8e4322675"
+            ]
+        ]
+    },
+    {
+        "id": "24c5060618b2a3bf",
+        "type": "link in",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "restart browser",
+        "links": [
+            "55739f413f081a30"
+        ],
+        "x": 160,
+        "y": 400,
+        "wires": [
+            [
+                "cb53ddf8e4322675"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "46957044b4a82aac",
+        "type": "trigger",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "op1": "",
+        "op2": "{\"command\":\"start\"}",
+        "op1type": "nul",
+        "op2type": "json",
+        "duration": "5",
+        "extend": true,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 560,
+        "y": 460,
+        "wires": [
+            [
+                "55739f413f081a30"
+            ]
+        ]
+    },
+    {
+        "id": "55739f413f081a30",
+        "type": "link out",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "restart browser",
+        "mode": "link",
+        "links": [
+            "24c5060618b2a3bf"
+        ],
+        "x": 720,
+        "y": 460,
+        "wires": [],
+        "l": true
     }
 ]
