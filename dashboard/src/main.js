@@ -70,6 +70,12 @@ app.provide('hueModels', hueModels)
 const powerviewModel = ref([])
 app.provide('powerviewModel', powerviewModel)
 
+// model for ConnectionsDiagramComponent.vue,
+// update each time a powerview/status event
+// message is received
+const powerviewStatus = ref(false)
+app.provide('powerviewStatus', powerviewStatus)
+
 // model for timer event debugging output
 const timer = ref({})
 app.provide('timer', timer)
@@ -409,6 +415,13 @@ function connectWS() {
         if (msg.topic == 'powerview/model') {
 
             powerviewModel.value = msg.payload
+            return
+
+        }
+
+        if (msg.topic == 'powerview/status') {
+
+            powerviewStatus.value = msg.payload
             return
 
         }

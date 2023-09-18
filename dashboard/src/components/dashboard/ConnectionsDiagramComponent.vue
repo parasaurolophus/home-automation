@@ -25,6 +25,7 @@ const hueBridges = inject('hueBridges')
 const hueKeys = inject('hueKeys')
 const createHueKey = inject('createHueKey')
 const powerviewModel = inject('powerviewModel')
+const powerviewStatus = inject('powerviewStatus')
 
 ///////////////////////////////////////////////////////////////////////////////
 // TO DO: investigate ways to have the mermaid diagram invoke clickedHandler()
@@ -162,7 +163,8 @@ function renderDiagram() {
 
     if (powerviewModel.value.length > 0) {
 
-        flowchart += '    flows --- powerview["PowerView&nbsp;"]\n\n'
+        flowchart += '    flows --- powerview["PowerView&nbsp;"]\n'
+        flowchart += 'class powerview ' + (powerviewStatus.value ? 'green' : 'red') + '\n\n'
 
     }
 
@@ -193,4 +195,5 @@ onMounted(drawDiagram)
 watch(websocketStatus, drawDiagram)
 watch(hueBridges, drawDiagram)
 watch(theme.global.current, drawDiagram)
+watch(powerviewStatus, drawDiagram)
 </script>

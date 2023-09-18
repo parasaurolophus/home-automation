@@ -303,9 +303,7 @@
             "55739f413f081a30"
         ],
         "x": 14,
-        "y": 199,
-        "w": 1512,
-        "h": 302
+        "y": 199
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -329,9 +327,7 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 539,
-        "w": 952,
-        "h": 122
+        "y": 539
     },
     {
         "id": "0fb8e43c903b3506",
@@ -416,9 +412,7 @@
             "3479fc4d500c7fa3"
         ],
         "x": 14,
-        "y": 19,
-        "w": 1352,
-        "h": 162
+        "y": 19
     },
     {
         "id": "9cf0457b813ca743",
@@ -440,6 +434,8 @@
         ],
         "x": 14,
         "y": 259,
+        "w": 772,
+        "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -463,7 +459,9 @@
             "9154f7fa8b08933f"
         ],
         "x": 14,
-        "y": 119
+        "y": 119,
+        "w": 832,
+        "h": 122
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -484,10 +482,14 @@
             "07a492e2d29b5dd3",
             "99ab390e30a9d634",
             "62d44392a9aac7fc",
-            "4e40e2700edff9ec"
+            "4e40e2700edff9ec",
+            "ebfab5beb0190193",
+            "97566d661d35c324"
         ],
         "x": 14,
-        "y": 359
+        "y": 359,
+        "w": 912,
+        "h": 122
     },
     {
         "id": "4893dd6a2321040d",
@@ -530,9 +532,7 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 679,
-        "w": 472,
-        "h": 82
+        "y": 679
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -670,6 +670,20 @@
         "x": 14,
         "y": 279,
         "info": "Send a `controls/refresh` command message when this flow first connects\nas a client to the publish / subscribe message broker"
+    },
+    {
+        "id": "ebfab5beb0190193",
+        "type": "junction",
+        "z": "40413194443e96c6",
+        "g": "9823c620ddf3d6e0",
+        "x": 360,
+        "y": 420,
+        "wires": [
+            [
+                "02eec7feccc1567d",
+                "07a492e2d29b5dd3"
+            ]
+        ]
     },
     {
         "id": "431414ce08ebb3c0",
@@ -2845,8 +2859,9 @@
         "z": "40413194443e96c6",
         "g": "cb106476337f4d38",
         "name": "validate",
-        "func": "function cloneMessage() {\n\n    return {\n        topic: 'powerview/error',\n        payload: RED.util.cloneMessage(msg)\n    }\n}\n\nlet fill = 'green'\n\ntry {\n\n    if ((typeof msg.statusCode) != 'number') {\n\n        fill = 'red'\n        return cloneMessage()\n\n    }\n\n    if ((msg.statusCode < 200) || (msg.statusCode >= 300)) {\n\n        fill = 'red'\n        return cloneMessage()\n\n    }\n\n    if (msg.statusCode != 200) {\n\n        fill = 'yellow'\n        return cloneMessage()\n\n    }\n\n    return null\n\n} finally {\n\n    node.status({\n        text: msg.statusCode,\n        shape: 'dot',\n        fill: fill\n    })\n}",
+        "func": "function cloneMessage() {\n\n    return [\n        {\n        topic: 'powerview/error',\n        payload: RED.util.cloneMessage(msg)\n    },\n    {\n        topic: 'powerview/status',\n        payload: false\n    }\n    ]\n}\n\nlet fill = 'green'\n\ntry {\n\n    if ((typeof msg.statusCode) != 'number') {\n\n        fill = 'red'\n        return cloneMessage()\n\n    }\n\n    if ((msg.statusCode < 200) || (msg.statusCode >= 300)) {\n\n        fill = 'red'\n        return cloneMessage()\n\n    }\n\n    if (msg.statusCode != 200) {\n\n        fill = 'yellow'\n        return cloneMessage()\n\n    }\n\n    return {\n        topic: 'powerview/status',\n        payload: true\n    }\n\n} finally {\n\n    node.status({\n        text: msg.statusCode,\n        shape: 'dot',\n        fill: fill\n    })\n}",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -2888,7 +2903,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 690,
+        "x": 710,
         "y": 420,
         "wires": [
             [
@@ -2917,7 +2932,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 570,
+        "x": 590,
         "y": 420,
         "wires": [
             [
@@ -2959,7 +2974,7 @@
                 "type": "str"
             }
         ],
-        "x": 430,
+        "x": 450,
         "y": 400,
         "wires": [
             [
@@ -3000,7 +3015,7 @@
                 "type": "str"
             }
         ],
-        "x": 430,
+        "x": 450,
         "y": 440,
         "wires": [
             [
@@ -3053,11 +3068,10 @@
         "repair": false,
         "outputs": 1,
         "x": 260,
-        "y": 420,
+        "y": 400,
         "wires": [
             [
-                "02eec7feccc1567d",
-                "07a492e2d29b5dd3"
+                "ebfab5beb0190193"
             ]
         ]
     },
@@ -3096,7 +3110,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 420,
+        "y": 400,
         "wires": [
             [
                 "99ab390e30a9d634"
@@ -3123,7 +3137,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 820,
+        "x": 840,
         "y": 420,
         "wires": []
     },
@@ -3144,6 +3158,36 @@
         "wires": [
             [
                 "2bf099ec37e84bbc"
+            ]
+        ]
+    },
+    {
+        "id": "97566d661d35c324",
+        "type": "inject",
+        "z": "40413194443e96c6",
+        "g": "9823c620ddf3d6e0",
+        "name": "every 30 seconds",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "30",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "30",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 250,
+        "y": 440,
+        "wires": [
+            [
+                "ebfab5beb0190193"
             ]
         ]
     },
