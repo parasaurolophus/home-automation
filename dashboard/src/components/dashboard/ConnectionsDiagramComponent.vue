@@ -163,8 +163,9 @@ function renderDiagram() {
 
     if (powerviewModel.value.length > 0) {
 
+        const className = powerviewStatus.value === 0 ? 'yellow' : powerviewStatus.value === 1 ? 'green' : 'red'
         flowchart += '    flows --- powerview["PowerView&nbsp;"]\n'
-        flowchart += 'class powerview ' + (powerviewStatus.value ? 'green' : 'red') + '\n\n'
+        flowchart += 'class powerview ' + className + '\n\n'
 
     }
 

@@ -73,7 +73,7 @@ app.provide('powerviewModel', powerviewModel)
 // model for ConnectionsDiagramComponent.vue,
 // update each time a powerview/status event
 // message is received
-const powerviewStatus = ref(false)
+const powerviewStatus = ref(0)
 app.provide('powerviewStatus', powerviewStatus)
 
 // model for timer event debugging output
