@@ -1,6 +1,9 @@
 <template>
     <v-card>
-        <v-card-title>{{ bridge.address }} ({{ bridge.title }})</v-card-title>
+        <v-card-title>
+            {{ bridge.title }}
+            (<button :onclick="onOpenClip" :value="bridge.address">{{ bridge.address }}</button>)
+        </v-card-title>
         <v-card-text>
             <fieldset v-for="(group, index) in bridge.groups" :key="index">
                 <legend>{{ group.name }}</legend>
@@ -45,6 +48,11 @@ const showMetadataExample = inject('showMetadataExample')
 defineProps({
     bridge: Object
 })
+
+function onOpenClip(event) {
+    const url = 'https://' + encodeURI(event.target.value) + '/debug/clip.html'
+    window.open(url, '_blank')
+}
 
 function onGroupedLight(event) {
 
