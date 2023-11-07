@@ -303,9 +303,7 @@
             "55739f413f081a30"
         ],
         "x": 14,
-        "y": 199,
-        "w": 1512,
-        "h": 302
+        "y": 199
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -329,9 +327,7 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 539,
-        "w": 952,
-        "h": 122
+        "y": 539
     },
     {
         "id": "0fb8e43c903b3506",
@@ -416,9 +412,7 @@
             "3479fc4d500c7fa3"
         ],
         "x": 14,
-        "y": 19,
-        "w": 1352,
-        "h": 162
+        "y": 19
     },
     {
         "id": "9cf0457b813ca743",
@@ -532,9 +526,7 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 679,
-        "w": 472,
-        "h": 82
+        "y": 679
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -2337,7 +2329,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/9c1c7975-2f47-4552-bac8-c19b643cd678\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Floor\"}]",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/9c1c7975-2f47-4552-bac8-c19b643cd678\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Floor\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/6f513d61-1c85-457e-9b40-a6ebdcec1b76\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Bathroom\"}]",
                 "type": "json"
             }
         ],
@@ -2403,7 +2395,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/01d77dc0-3ff8-4afc-a943-9b04e4a8da0d\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Nightlight\"}]",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/01d77dc0-3ff8-4afc-a943-9b04e4a8da0d\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Nightlight\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/84e98f82-c1f6-4be7-b66b-bb6e2ee9c848\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Bathroom/Nightlight\"}]",
                 "type": "json"
             }
         ],
