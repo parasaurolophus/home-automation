@@ -303,7 +303,9 @@
             "55739f413f081a30"
         ],
         "x": 14,
-        "y": 199
+        "y": 199,
+        "w": 1512,
+        "h": 302
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -327,7 +329,9 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 539
+        "y": 539,
+        "w": 952,
+        "h": 122
     },
     {
         "id": "0fb8e43c903b3506",
@@ -412,7 +416,9 @@
             "3479fc4d500c7fa3"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 1352,
+        "h": 162
     },
     {
         "id": "9cf0457b813ca743",
@@ -526,7 +532,9 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 679
+        "y": 679,
+        "w": 472,
+        "h": 82
     },
     {
         "id": "c2e3e9d2c97df2d0",
@@ -2446,7 +2454,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/a1a2735c-def7-4db7-8d8e-bebe2a7e2200\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Jolly\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/3ac45cbb-21c0-4c2f-8037-c40345537ce2\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Jolly\"}]",
+                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/a1a2735c-def7-4db7-8d8e-bebe2a7e2200\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Jolly\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
                 "type": "json"
             }
         ],
