@@ -279,9 +279,9 @@
         "style": {
             "label": true,
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "14b78c9b72d385fd",
@@ -314,10 +314,10 @@
         "name": " initiate the client application key creation process on the hue bridge specified by msg.payload",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
             "label": true,
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "0ed14c935a7933e8",
@@ -329,7 +329,7 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 539,
+        "y": 519,
         "w": 952,
         "h": 122
     },
@@ -341,9 +341,9 @@
         "style": {
             "label": true,
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "07d61ea24d59a251",
@@ -357,7 +357,9 @@
             "93a323937c189b13"
         ],
         "x": 14,
-        "y": 19
+        "y": 19,
+        "w": 1052,
+        "h": 162
     },
     {
         "id": "96971e50c13ead01",
@@ -366,9 +368,9 @@
         "name": "subscribe to server-sent events from the Hue Bridge at ${ADDRESS} using ${KEY} as the client application key",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "label": true,
-            "color": "#ffffff",
+            "color": "#000000",
             "fill-opacity": "0.1"
         },
         "nodes": [
@@ -394,7 +396,9 @@
             "531fbb9eb4631e85"
         ],
         "x": 14,
-        "y": 199
+        "y": 199,
+        "w": 1252,
+        "h": 302
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -403,10 +407,10 @@
         "name": "monitor and control specific hue bridges",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
             "label": true,
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "d3686879543e1951",
@@ -427,10 +431,10 @@
         "name": "activate the powerview scene whose id is specified by msg.payload",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
             "label": true,
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "2bf099ec37e84bbc",
@@ -440,6 +444,8 @@
         ],
         "x": 14,
         "y": 259,
+        "w": 772,
+        "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
     {
@@ -449,10 +455,10 @@
         "name": "send commands to the powerview hub at a rate of no more than 1 per second",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
             "label": true,
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "a250d71416af8250",
@@ -463,7 +469,9 @@
             "9154f7fa8b08933f"
         ],
         "x": 14,
-        "y": 119
+        "y": 119,
+        "w": 832,
+        "h": 122
     },
     {
         "id": "9823c620ddf3d6e0",
@@ -472,10 +480,10 @@
         "name": "poweview hub",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
             "label": true,
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "7fb1bd1acb1ca5f7",
@@ -489,7 +497,9 @@
             "97566d661d35c324"
         ],
         "x": 14,
-        "y": 359
+        "y": 359,
+        "w": 912,
+        "h": 122
     },
     {
         "id": "4893dd6a2321040d",
@@ -498,10 +508,10 @@
         "name": "status",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
             "label": true,
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "02be9eee8ee84874",
@@ -512,7 +522,9 @@
             "0b223f6872d96c8f"
         ],
         "x": 14,
-        "y": 519
+        "y": 519,
+        "w": 852,
+        "h": 122
     },
     {
         "id": "fa261bdde51028d4",
@@ -521,10 +533,10 @@
         "name": "provide hue keys to dashboard",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
             "label": true,
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "19b662d5ee4b5a2f",
@@ -532,7 +544,7 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 679,
+        "y": 659,
         "w": 472,
         "h": 82
     },
@@ -543,10 +555,10 @@
         "name": "lighting automation",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
             "label": true,
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "870608ff910feb60",
@@ -574,9 +586,9 @@
         "style": {
             "label": true,
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "6a9ac472018c38ea",
@@ -602,10 +614,10 @@
         "name": "websocket based publish / subscribe message broker with semantics inspired by mqtt",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
             "label": true,
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "b48f13f63fadba17",
@@ -630,10 +642,10 @@
         "name": "send automation trigger events over the course of each day",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
             "label": true,
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "0497e0ed333e8f23",
@@ -653,6 +665,8 @@
         ],
         "x": 14,
         "y": 19,
+        "w": 1372,
+        "h": 242,
         "info": "Subscribe to settings change events. Send `automation/trigger` events up\nto five times per day, at: sunrise, the start of midday, the start of\nafternoon, sunset and bedtime.\n\n- The times for sunrise and sunset are obtained directly from\n  [`suncalc.getTimes()`](https://github.com/mourner/suncalc#sunlight-times)\n\n- The times for midday and afternoon are determined using the position\n  of the sun over the course of the current day as reported by\n  [`suncalc.getPosition()`](https://github.com/mourner/suncalc#sun-position)\n\n- The time for bedtime varies randomly each day, as described below\n\nThe `${LATITUDE}` and `${LONGITUDE}` environment variables must be set\nto the home's geographic coordinates for use with `suncalc`.\n\nMidday starts when the sun first reaches an altitude of 0.8 radians. No\nmidday will be sent on a given day if the sun never reaches that\naltitude for the specified `${LATITUDE}`.\n\nAfternoon starts when the sun's azimuth is greater than 0 and its\naltitude first drops below 0.8 radians. For days on which the altitude\nnever reaches 0.8, this will be as soon after sunrise as the sun starts\nto shine more from the west than the east.\n\nBedtime is randomized each day, constrained to be within &PlusMinus;30\nminutes of the value for `settings/bedtime`.\n\nNote that the inclusion of midday and afternoon and the rules for\ndetermining when they occur on a given day were determined empirically\nfor a particular house with 4 parallel walls, aligned more or less\nexactly with the cardinal compass directions at a particular latitude.\nIt is also influenced by the size of that house's rather substantial\neaves shading the east- and west-facing windows. They might need\nadjustment or an entirely different set of events for a different\nstructure at a different location. The goal of all this is to trigger\nautomation to control lighting and motorized window coverings in such\na way that maximizes the times of day at which the view of the outside\nworld can be enjoyed while optimizing the lighting and window coverings\nfor comfort and energy efficiency during times of day when the sun\nshines too directly into the windows. "
     },
     {
@@ -662,10 +676,10 @@
         "name": "refresh controls when flows start",
         "style": {
             "stroke": "none",
-            "fill": "#ffffff",
+            "fill": "#000000",
             "fill-opacity": "0.1",
             "label": true,
-            "color": "#ffffff"
+            "color": "#000000"
         },
         "nodes": [
             "499f234a478a41e7",
@@ -675,6 +689,8 @@
         ],
         "x": 14,
         "y": 279,
+        "w": 712,
+        "h": 82,
         "info": "Send a `controls/refresh` command message when this flow first connects\nas a client to the publish / subscribe message broker"
     },
     {
@@ -2203,6 +2219,7 @@
         "name": "delay until",
         "func": "const timers = context.get('timers')\n\nif (msg.cancel) {\n\n    timers.forEach(id => clearTimeout(id))\n    context.set('timers', [])\n\n    node.status({\n        text: 0,\n        shape: 'ring',\n        fill: 'green'\n    })\n\n    return null\n\n}\n\nconst at = (msg.at ? new Date(msg.at) : new Date())\nconst now = new Date()\nconst delay = at.getTime() - now.getTime()\n\nif (delay <= 0) {\n\n    return msg\n\n}\n\nconst id = setTimeout(() => {\n\n    let timers = context.get('timers')\n\n    timers = timers.filter(timer => timer != id)\n    context.set('timers', timers)\n\n    node.status({\n        text: timers.length,\n        shape: 'dot',\n        fill: 'green'\n    })\n\n    node.send(msg)\n\n}, delay)\n\ntimers.push(id)\ncontext.set('timers', timers)\n\nnode.status({\n    text: timers.length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn null",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "context.set('timers', [])\n\nnode.status({\n    text: 0,\n    shape: 'ring',\n    fill: 'green'\n})",
         "finalize": "",
@@ -3285,7 +3302,7 @@
         "senderr": false,
         "headers": [],
         "x": 590,
-        "y": 620,
+        "y": 600,
         "wires": [
             [
                 "f74128d99635d540"
@@ -3306,7 +3323,7 @@
         "finalize": "",
         "libs": [],
         "x": 740,
-        "y": 620,
+        "y": 600,
         "wires": [
             [
                 "2159eac5031ae752"
@@ -3321,7 +3338,7 @@
         "name": "https://developers.meethue.com/develop/hue-api-v2/getting-started/",
         "info": "",
         "x": 280,
-        "y": 580,
+        "y": 560,
         "wires": []
     },
     {
@@ -3496,7 +3513,7 @@
         "repair": false,
         "outputs": 1,
         "x": 270,
-        "y": 620,
+        "y": 600,
         "wires": [
             [
                 "2626ba9e8d396f71"
@@ -3528,7 +3545,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 620,
+        "y": 600,
         "wires": [
             [
                 "226b30949f9a903b"
@@ -3556,7 +3573,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 880,
-        "y": 620,
+        "y": 600,
         "wires": []
     },
     {
@@ -3599,7 +3616,7 @@
         "finalize": "",
         "libs": [],
         "x": 440,
-        "y": 620,
+        "y": 600,
         "wires": [
             [
                 "0ed14c935a7933e8"
@@ -3617,7 +3634,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 120,
-        "y": 720,
+        "y": 700,
         "wires": [
             [
                 "ce505f3a3d6ec359"
@@ -3633,7 +3650,7 @@
         "statusCode": "",
         "headers": {},
         "x": 410,
-        "y": 720,
+        "y": 700,
         "wires": []
     },
     {
@@ -3657,7 +3674,7 @@
         "to": "",
         "reg": false,
         "x": 280,
-        "y": 720,
+        "y": 700,
         "wires": [
             [
                 "16e21e0afb427d76"
