@@ -10,7 +10,11 @@
                             <table>
                                 <tr>
                                     <th>id</th>
-                                    <td>{{ room.id }}</td>
+                                    <td>
+                                        <button :onclick="onRoom" :value="JSON.stringify(room)" :key="index">
+                                            {{ room.id }}
+                                        </button>
+                                    </td>
                                 </tr>
                                 <tr v-for="(scene, index) in room.scenes" :key="index">
                                     <th>{{ scene.name }}</th>
@@ -43,7 +47,6 @@ defineProps({
 })
 
 function onScene(event) {
-
     const params = event.target.value.split('|')
     const message = {
         topic: 'put/powerview/scene',
@@ -51,8 +54,18 @@ function onScene(event) {
         label: params[1]
     }
     const json = JSON.stringify(message, null, 4)
-
     showMetadataExample(json)
+}
 
+function onRoom(event) {
+    const room = JSON.parse(event.target.value)
+    const examples = []
+    for (let shade of room.shades) {
+        examples.push({
+            name: shade.name,
+            id: shade.id
+        })
+    }
+    showMetadataExample(JSON.stringify(examples, null, 4))
 }
 </script>
