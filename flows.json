@@ -659,7 +659,6 @@
             "47acab248c4d8501",
             "8ec45bbfd0b4fb4c",
             "0816fe94f5858846",
-            "21c4dba2bb5d0e54",
             "8e84162e92296698",
             "9977146ce026810e",
             "b044e7bab42607f8",
@@ -667,7 +666,8 @@
             "7cf8caea790c9792",
             "106ee66b66de58ab",
             "6792ab0a12231e4e",
-            "fa76ee9fdefa4f89"
+            "fa76ee9fdefa4f89",
+            "21c4dba2bb5d0e54"
         ],
         "x": 14,
         "y": 19,
@@ -2059,36 +2059,6 @@
         ]
     },
     {
-        "id": "21c4dba2bb5d0e54",
-        "type": "join",
-        "z": "bfdb5183ea783e85",
-        "g": "b10eb6ebfd377efe",
-        "name": "",
-        "mode": "custom",
-        "build": "object",
-        "property": "payload",
-        "propertyType": "msg",
-        "key": "topic",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "accumulate": true,
-        "timeout": "",
-        "count": "4",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "",
-        "reduceFixup": "",
-        "x": 970,
-        "y": 100,
-        "wires": [
-            [
-                "7cf8caea790c9792"
-            ]
-        ],
-        "info": "Block `automation/trigger` until after all three of `settings/shades`,\n`settings/lighting` and `timer/theme` have all been received."
-    },
-    {
         "id": "8e84162e92296698",
         "type": "switch",
         "z": "bfdb5183ea783e85",
@@ -2138,7 +2108,7 @@
         "g": "b10eb6ebfd377efe",
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
-        "x": 1140,
+        "x": 1040,
         "y": 60,
         "wires": []
     },
@@ -2376,6 +2346,36 @@
         "x": 820,
         "y": 220,
         "wires": []
+    },
+    {
+        "id": "21c4dba2bb5d0e54",
+        "type": "join",
+        "z": "bfdb5183ea783e85",
+        "g": "b10eb6ebfd377efe",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 970,
+        "y": 100,
+        "wires": [
+            [
+                "7cf8caea790c9792"
+            ]
+        ],
+        "info": "Block `automation/trigger` until after all three of `settings/shades`,\n`settings/lighting` and `timer/theme` have all been received."
     },
     {
         "id": "870608ff910feb60",
