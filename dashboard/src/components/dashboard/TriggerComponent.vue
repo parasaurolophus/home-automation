@@ -1,8 +1,7 @@
 <template>
     <fieldset>
         <legend>automation/trigger</legend>
-        <pre v-if="trigger" v-html="trigger"></pre>
-        <p v-else>None received since dashboard was reloaded</p>
+        <pre v-html="trigger"></pre>
     </fieldset>
 </template>
 

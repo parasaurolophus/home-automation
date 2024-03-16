@@ -81,7 +81,7 @@ const timer = ref({})
 app.provide('timer', timer)
 
 // model for trigger event debugging output
-const trigger = ref(null)
+const trigger = ref("none received since last reload")
 app.provide('trigger', trigger)
 
 // model for hue/{address}/key messages
