@@ -1996,7 +1996,7 @@
         "z": "bfdb5183ea783e85",
         "g": "b10eb6ebfd377efe",
         "name": "timer",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = [{ cancel: true }]\n\nsuncalc.addTime(40, \"midday\", \"ignore1\")\nsuncalc.addTime(45, \"ignore2\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (times.hasOwnProperty(key)) {\n\n        const time = times[key].getTime()\n\n        if (time > now) {\n\n            messages.push({\n                topic: 'timer/time',\n                payload: key,\n                at: time,\n            })\n        }\n    }\n}\n\nconst sunrise = times.sunrise.getTime()\nconst sunset = times.sunset.getTime()\nlet midday = null\nlet afternoon = null\n\nif (sunrise > now) {\n\n    messages.push({\n        payload: 'sunrise',\n        topic: 'timer/time',\n        at: sunrise\n    })\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime\n    })\n}\n\nmessages.sort((a, b) => {\n\n    if (!a.hasOwnProperty('at')) {\n        return b\n    }\n\n    if (!b.hasOwnProperty('at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [messages]",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = [{ cancel: true }]\n\nsuncalc.addTime(40, \"midday\", \"ignore1\")\nsuncalc.addTime(45, \"ignore2\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (times.hasOwnProperty(key)) {\n\n        const time = times[key].getTime()\n\n        if (time > now) {\n\n            messages.push({\n                topic: 'timer/time',\n                payload: key,\n                at: time,\n            })\n        }\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime\n    })\n}\n\nmessages.sort((a, b) => {\n\n    if (!a.hasOwnProperty('at')) {\n        return b\n    }\n\n    if (!b.hasOwnProperty('at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [messages]",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -2017,8 +2017,7 @@
             ]
         ],
         "outputLabels": [
-            "events",
-            "debug"
+            "events"
         ],
         "info": "# Input\n\n- `msg.payload.now` - timestamp at which flows started and again each day\n   at 1am\n\n- `msg.payload.settings/bedtime` - _bedtime_ value selected by a user\n  on the dashboard\n\n# Output\n\nUp to five 'timer/time` messages per day and one `timer/theme` message.\n\n# Details\n\n## Time\n\nWhen the output `msg.topic` is `timer/time`, `msg.payload` will be one\nof:\n\n- `sunrise`\n- `midday`\n- `afternoon`\n- `sunset`\n- `bedtime`\n\nIn addition, `msg.at` will be set to the timestamp at which the\ncorresponding event message should actually be published. See the\ndocumentation for the following `delay until` function node for\ninformation on when the `timer/time` events will actually fire based\non their values for `msg.at`.\n\n## Theme\n\nWhen the output `msg.topic` is `timer/theme`, `msg.payload` will be one\nof the following values based on the date:\n\n- `tribal`\n- `spooky`\n- `jolly`\n- `standard`"
     },
@@ -2335,8 +2334,15 @@
                 "t": "set",
                 "p": "topic",
                 "pt": "msg",
-                "to": "'debug/' & topic",
+                "to": "'debug/' & topic & '/' & payload",
                 "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "at",
+                "tot": "msg"
             },
             {
                 "t": "set",

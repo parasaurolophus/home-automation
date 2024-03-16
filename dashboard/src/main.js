@@ -444,6 +444,25 @@ function connectWS() {
 
         }
 
+        matches = /^debug\/timer\/time\/([^/]+)$/.exec(msg.topic)
+
+        if (Array.isArray(matches) && (matches.length == 2)) {
+
+            if (msg.payload === '') {
+
+                delete timer.value[matches[1]]
+
+            } else {
+
+                const date = new Date(msg.payload)
+                timer.value[matches[1]] = date.toLocaleString()
+
+            }
+
+            return
+
+        }
+
         matches = /^hue\/(.+)\/key$/.exec(msg.topic)
 
         if (Array.isArray(matches) && (matches.length == 2)) {

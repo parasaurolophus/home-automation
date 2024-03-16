@@ -7,6 +7,11 @@
         </v-row>
         <v-row>
             <v-col>
+                <ConnectionsDiagramComponent />
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col>
                 <SettingsComponent />
             </v-col>
             <v-col>
@@ -14,11 +19,6 @@
             </v-col>
             <v-col>
                 <TriggerComponent />
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col>
-                <ConnectionsDiagramComponent />
             </v-col>
         </v-row>
     </v-container>
