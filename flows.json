@@ -300,12 +300,14 @@
             "61819845f9d42866",
             "24c5060618b2a3bf",
             "46957044b4a82aac",
-            "55739f413f081a30"
+            "55739f413f081a30",
+            "0679559867ced9f2",
+            "9e5139329b02df1e"
         ],
         "x": 14,
-        "y": 199,
-        "w": 1512,
-        "h": 302
+        "y": 159,
+        "w": 1372,
+        "h": 322
     },
     {
         "id": "23bf1f9635c44cc8",
@@ -329,7 +331,7 @@
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 519,
+        "y": 499,
         "w": 952,
         "h": 122
     },
@@ -421,8 +423,8 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 1352,
-        "h": 162
+        "w": 1372,
+        "h": 122
     },
     {
         "id": "9cf0457b813ca743",
@@ -545,7 +547,7 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 659,
+        "y": 639,
         "w": 472,
         "h": 82
     },
@@ -574,9 +576,9 @@
             "40d32c56d50a791d"
         ],
         "x": 14,
-        "y": 239,
-        "w": 832,
-        "h": 302,
+        "y": 319,
+        "w": 1312,
+        "h": 262,
         "info": "Handle lighting automation trigger events\n\n| Bridge | Address |\n|-|-|\n| Basement | 192.168.1.34 |\n| Ground Floor | 192.168.1.12 |\n\n| Room / Zone   | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n\nTo turn off the _Exterior_ zone and activate the _Nightlight_ scene in each of the _Main Bathroom_ and _Main Floor_:\n\n```json\n[\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\n        \"payload\": {\n            \"on\": {\n                \"on\": false\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/48c39b9f-1599-4a5c-b7f6-bad6cad4029a\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    }\n]\n```"
     },
     {
@@ -600,12 +602,14 @@
             "679d6a0d2002bcb7",
             "c8fb3c01f10259ca",
             "839872dec0a80cfa",
-            "bb7c962d04498ed7"
+            "bb7c962d04498ed7",
+            "48891106bb0c15f3",
+            "ccd434e2205d566d"
         ],
         "x": 14,
         "y": 19,
-        "w": 1012,
-        "h": 202,
+        "w": 1312,
+        "h": 282,
         "info": "Activate the corresponding PowerView scene upon receipt of of each\n`automation/trigger` event"
     },
     {
@@ -662,7 +666,8 @@
             "0c57cb4bce44a11a",
             "7cf8caea790c9792",
             "106ee66b66de58ab",
-            "1e388cc251e76b84"
+            "6792ab0a12231e4e",
+            "fa76ee9fdefa4f89"
         ],
         "x": 14,
         "y": 19,
@@ -719,22 +724,6 @@
     {
         "id": "06c952f588cb12f4",
         "type": "tls-config",
-        "z": "d3b34304591c64d7",
-        "name": "Ignore Server Certificate",
-        "cert": "",
-        "key": "",
-        "ca": "",
-        "certname": "",
-        "keyname": "",
-        "caname": "",
-        "servername": "",
-        "verifyservercert": false,
-        "alpnprotocol": ""
-    },
-    {
-        "id": "723506cc20638a3c",
-        "type": "tls-config",
-        "z": "85ed27d795e6e866",
         "name": "Ignore Server Certificate",
         "cert": "",
         "key": "",
@@ -791,7 +780,7 @@
         "ret": "obj",
         "paytoqs": "body",
         "url": "",
-        "tls": "723506cc20638a3c",
+        "tls": "06c952f588cb12f4",
         "persist": false,
         "proxy": "",
         "insecureHTTPParser": false,
@@ -2007,8 +1996,9 @@
         "z": "bfdb5183ea783e85",
         "g": "b10eb6ebfd377efe",
         "name": "timer",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = [{ cancel: true }]\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nconst sunrise = times.sunrise.getTime()\nconst sunset = times.sunset.getTime()\nlet midday = null\nlet afternoon = null\n\nfunction sendDebugMessage(topic, payload) {\n\n    node.send([\n        null,\n        {\n            topic: 'debug/timer/' + topic,\n            payload: payload,\n            retain: true\n        }\n    ])\n}\n\nsendDebugMessage('sunrise', times.sunrise.toLocaleString())\n\nif (sunrise > now) {\n\n    messages.push({\n        payload: 'sunrise',\n        topic: 'timer/time',\n        at: sunrise\n    })\n}\n\nfor (let time = sunrise; time < sunset; time += 60000) {\n\n    const position = suncalc.getPosition(new Date(time), LATITUDE, LONGITUDE)\n\n    if ((midday === null) && (position.altitude > 1.0)) {\n\n        midday = time\n        sendDebugMessage('midday', new Date(midday).toLocaleString())\n\n        if (midday > now) {\n            messages.push({\n                payload: 'midday',\n                topic: 'timer/time',\n                at: midday\n            })\n        }\n    }\n\n    if ((afternoon == null) && (position.azimuth > 0) && (position.altitude < 1.0)) {\n\n        afternoon = time\n        sendDebugMessage('afternoon', new Date(afternoon).toLocaleString())\n\n        if (afternoon > now) {\n\n            messages.push({\n                payload: 'afternoon',\n                topic: 'timer/time',\n                at: afternoon\n            })\n        }\n\n        break\n\n    }\n}\n\nsendDebugMessage('sunset', times.sunset.toLocaleString())\n\nif (sunset > now) {\n\n    messages.push({\n        payload: 'sunset',\n        topic: 'timer/time',\n        at: sunset\n    })\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nsendDebugMessage('bedtime', new Date(bedtime).toLocaleString())\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime\n    })\n}\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nsendDebugMessage('theme', theme)\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [\n    messages,\n    null\n]",
-        "outputs": 2,
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = [{ cancel: true }]\n\nsuncalc.addTime(40, \"midday\", \"ignore1\")\nsuncalc.addTime(45, \"ignore2\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (times.hasOwnProperty(key)) {\n\n        const time = times[key].getTime()\n\n        if (time > now) {\n\n            messages.push({\n                topic: 'timer/time',\n                payload: key,\n                at: time,\n            })\n        }\n    }\n}\n\nconst sunrise = times.sunrise.getTime()\nconst sunset = times.sunset.getTime()\nlet midday = null\nlet afternoon = null\n\nif (sunrise > now) {\n\n    messages.push({\n        payload: 'sunrise',\n        topic: 'timer/time',\n        at: sunrise\n    })\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime\n    })\n}\n\nmessages.sort((a, b) => {\n\n    if (!a.hasOwnProperty('at')) {\n        return b\n    }\n\n    if (!b.hasOwnProperty('at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [messages]",
+        "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -2022,10 +2012,8 @@
         "y": 180,
         "wires": [
             [
-                "106ee66b66de58ab"
-            ],
-            [
-                "1e388cc251e76b84"
+                "106ee66b66de58ab",
+                "6792ab0a12231e4e"
             ]
         ],
         "outputLabels": [
@@ -2098,7 +2086,8 @@
             [
                 "7cf8caea790c9792"
             ]
-        ]
+        ],
+        "info": "Block `automation/trigger` until after all three of `settings/shades`,\n`settings/lighting` and `timer/theme` have all been received."
     },
     {
         "id": "8e84162e92296698",
@@ -2150,8 +2139,8 @@
         "g": "b10eb6ebfd377efe",
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
-        "x": 240,
-        "y": 120,
+        "x": 1140,
+        "y": 60,
         "wires": []
     },
     {
@@ -2237,18 +2226,6 @@
             "delayed"
         ],
         "info": "Delay messages until a particular time has been reached.\n\nMessages are passed through unchanged but may be delayed based on the\nvalue of `msg.at`. If `msg.at` is present, it must indicate an\nabsolute time in a format compatible with JavaScript's `new Date(time)`\nconstructor. If that time is in the future, this function will delay\nforwarding the given message until the specified time has been reached.\n\nIf `msg.at` is missing or indicates a time that is the same or earlier\nthan \"now\" (`new Date()` with no argument) then the message is passed\nthrough with no delay.\n\nIf a message arrives with `msg.cancel` set to `true`, all pending\nmessages are canceled without being sent.\n\n> **Warning:** Delays are implemented using `setTimeout()`. This means\nthat while this node will emit messages no earlier than the time\nspecified by `msg.at`, they will actually be delivered some (typically\ntiny) amount of time later based on the overhead of any computer\nprogram combined with the fact that Node-RED flows are intrinsically\nsingle-threaded. Ultra-precise timers require real-time programming\ntechniques driven by specialized hardware.\n\nNote that it would require only a bit more work to support a `msg.flush`\nthat would immediately send all pending messages rather than canceling\nthem, but there is no use case for such a feature in these flows.\n\nCanceling or flushing only a particular message without canceling or\nflushing them all would require a lot more work and a second output.\nThat is far more effort than it is worth given the probable use cases\nfor a node like this in the first place."
-    },
-    {
-        "id": "1e388cc251e76b84",
-        "type": "websocket out",
-        "z": "bfdb5183ea783e85",
-        "g": "b10eb6ebfd377efe",
-        "name": "publish",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 700,
-        "y": 220,
-        "wires": []
     },
     {
         "id": "499f234a478a41e7",
@@ -2348,6 +2325,53 @@
         ]
     },
     {
+        "id": "6792ab0a12231e4e",
+        "type": "change",
+        "z": "bfdb5183ea783e85",
+        "g": "b10eb6ebfd377efe",
+        "name": "debug",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "'debug/' & topic",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "retain",
+                "pt": "msg",
+                "to": "true",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 690,
+        "y": 220,
+        "wires": [
+            [
+                "fa76ee9fdefa4f89"
+            ]
+        ]
+    },
+    {
+        "id": "fa76ee9fdefa4f89",
+        "type": "websocket out",
+        "z": "bfdb5183ea783e85",
+        "g": "b10eb6ebfd377efe",
+        "name": "publish",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 820,
+        "y": 220,
+        "wires": []
+    },
+    {
         "id": "870608ff910feb60",
         "type": "subflow:450f4de3c4f73b40",
         "z": "0af010efd04e8017",
@@ -2360,8 +2384,8 @@
                 "type": "json"
             }
         ],
-        "x": 540,
-        "y": 320,
+        "x": 1020,
+        "y": 360,
         "wires": []
     },
     {
@@ -2395,8 +2419,8 @@
         "checkall": "false",
         "repair": false,
         "outputs": 4,
-        "x": 550,
-        "y": 400,
+        "x": 1030,
+        "y": 440,
         "wires": [
             [
                 "1cb0a0826e19ac25"
@@ -2426,8 +2450,8 @@
                 "type": "json"
             }
         ],
-        "x": 530,
-        "y": 480,
+        "x": 1010,
+        "y": 520,
         "wires": []
     },
     {
@@ -2443,8 +2467,8 @@
                 "type": "json"
             }
         ],
-        "x": 750,
-        "y": 320,
+        "x": 1230,
+        "y": 360,
         "wires": []
     },
     {
@@ -2460,8 +2484,8 @@
                 "type": "json"
             }
         ],
-        "x": 760,
-        "y": 380,
+        "x": 1240,
+        "y": 420,
         "wires": []
     },
     {
@@ -2477,8 +2501,8 @@
                 "type": "json"
             }
         ],
-        "x": 750,
-        "y": 440,
+        "x": 1230,
+        "y": 480,
         "wires": []
     },
     {
@@ -2494,8 +2518,8 @@
                 "type": "json"
             }
         ],
-        "x": 760,
-        "y": 500,
+        "x": 1240,
+        "y": 540,
         "wires": []
     },
     {
@@ -2504,14 +2528,15 @@
         "z": "0af010efd04e8017",
         "g": "c2e3e9d2c97df2d0",
         "name": "lighting automation event",
-        "func": "function copyMsg() {\n\n    node.status({\n        text: new Date(msg.timestamp).toLocaleString(),\n        shape: 'dot',\n        fill: 'blue'\n    })\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    return [null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    return [null, null, null]\n\n}\n\nif (!msg.payload['settings/lighting']) {\n\n    return [null, null, null]\n\n}\n\nswitch (msg.payload[\"timer/time\"]) {\n\n    case 'sunrise':\n\n        return [copyMsg(), null, null]\n\n    case 'sunset':\n\n        return [null, copyMsg(), null]\n\n    case 'bedtime':\n\n        return [null, null, copyMsg()]\n\n    default:\n\n        return [null, null, null]\n\n}",
+        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: msg.topic + ' (retain)' });\n    return [null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: msg.topic });\n    return [null, null, null]\n\n}\n\nif (!msg.payload['settings/lighting']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: msg.topic + ' (disabled)' });\n    return [null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.topic + ' (' + msg.payload['timer/time'] + ')' });\n        return [copyMsg(), null, null]\n\n    case 'sunset':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.topic + ' (' + msg.payload['timer/time'] + ')' });\n        return [null, copyMsg(), null]\n\n    case 'bedtime':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.topic + ' (' + msg.payload['timer/time'] + ')' });\n        return [null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.topic + ' (' + msg.payload['timer/time'] + ')' });\n        return [null, null, null]\n\n}",
         "outputs": 3,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 400,
+        "y": 440,
         "wires": [
             [
                 "870608ff910feb60"
@@ -2538,7 +2563,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 400,
+        "y": 440,
         "wires": [
             [
                 "5e838b011b496bb4"
@@ -2553,7 +2578,7 @@
         "name": "contains hard-coded references to philips hue group and scene id's",
         "info": "",
         "x": 280,
-        "y": 280,
+        "y": 380,
         "wires": []
     },
     {
@@ -2576,7 +2601,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 560,
+        "x": 820,
         "y": 60,
         "wires": [
             [
@@ -2605,7 +2630,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 550,
+        "x": 810,
         "y": 100,
         "wires": [
             [
@@ -2634,7 +2659,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 550,
+        "x": 810,
         "y": 140,
         "wires": [
             [
@@ -2663,8 +2688,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 550,
-        "y": 180,
+        "x": 810,
+        "y": 260,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2699,8 +2724,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 780,
-        "y": 120,
+        "x": 1080,
+        "y": 160,
         "wires": [
             [
                 "c8fb3c01f10259ca"
@@ -2713,14 +2738,15 @@
         "z": "0af010efd04e8017",
         "g": "8326ae1a15518f8f",
         "name": "shades automation event",
-        "func": "function copyMsg() {\n\n    node.status({\n        text: new Date(msg.timestamp).toLocaleString(),\n        shape: 'dot',\n        fill: 'blue'\n    })\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    return [null, null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    return [null, null, null, null]\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    return [null, null, null, null]\n\n}\n\nswitch (msg.payload[\"timer/time\"]) {\n\n    case 'sunrise':\n\n        return [copyMsg(), null, null, null]\n\n    case 'midday':\n\n        return [null, copyMsg(), null, null]\n\n    case 'afternoon':\n\n        return [null, null, copyMsg(), null]\n\n    case 'bedtime':\n\n        return [null, null, null, copyMsg()]\n\n    default:\n\n        return [null, null, null, null]\n\n}\n",
-        "outputs": 4,
+        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: msg.topic + ' (retained)' });\n    return [null, null, null, null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: msg.topic });\n    return [null, null, null, null, null, null]\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: msg.topic + ' (disabled)' });\n    return [null, null, null, null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.topic + ' (' + msg.payload['timer/time'] + ')' });\n        return [copyMsg(), null, null, null, null, null]\n\n    case 'midday':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.topic + ' (' + msg.payload['timer/time'] + ')' });\n        return [null, copyMsg(), null, null, null, null]\n\n    case 'afternoon':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.topic + ' (' + msg.payload['timer/time'] + ')' });\n        return [null, null, copyMsg(), null, null, null]\n\n    case 'sunset':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.topic + ' (' + msg.payload['timer/time'] + ')' });\n        return [null, null, null, copyMsg(), null, null]\n\n    case 'nauticalDusk':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.topic + ' (' + msg.payload['timer/time'] + ')' });\n        return [null, null, null, null, copyMsg(), null]\n\n    case 'bedtime':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.topic + ' (' + msg.payload['timer/time'] + ')' });\n        return [null, null, null, null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.topic + ' (' + msg.payload['timer/time'] + ')' });\n        return [null, null, null, null, null, null]\n\n}\n",
+        "outputs": 6,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 120,
+        "y": 160,
         "wires": [
             [
                 "6a9ac472018c38ea"
@@ -2732,6 +2758,12 @@
                 "9e961b1409432775"
             ],
             [
+                "48891106bb0c15f3"
+            ],
+            [
+                "ccd434e2205d566d"
+            ],
+            [
                 "db4f7c2c93cd8f30"
             ]
         ],
@@ -2739,6 +2771,8 @@
             "sunrise",
             "midday",
             "afternoon",
+            "sunset",
+            "nauticalDusk",
             "bedtime"
         ]
     },
@@ -2750,8 +2784,8 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 940,
-        "y": 120,
+        "x": 1240,
+        "y": 160,
         "wires": []
     },
     {
@@ -2763,7 +2797,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 120,
+        "y": 160,
         "wires": [
             [
                 "679d6a0d2002bcb7"
@@ -2778,8 +2812,66 @@
         "name": "contains hard-coded references to powerview scene id's",
         "info": "",
         "x": 240,
-        "y": 60,
+        "y": 80,
         "wires": []
+    },
+    {
+        "id": "48891106bb0c15f3",
+        "type": "change",
+        "z": "0af010efd04e8017",
+        "g": "8326ae1a15518f8f",
+        "name": "Open All Shades",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "7307",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 810,
+        "y": 180,
+        "wires": [
+            [
+                "7adca925e9011e2f"
+            ]
+        ],
+        "info": "Set `msg.payload` to the scene id for _Open All Shades_."
+    },
+    {
+        "id": "ccd434e2205d566d",
+        "type": "change",
+        "z": "0af010efd04e8017",
+        "g": "8326ae1a15518f8f",
+        "name": "Close All Shades",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "15208",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 810,
+        "y": 220,
+        "wires": [
+            [
+                "7adca925e9011e2f"
+            ]
+        ],
+        "info": "Set `msg.payload` to the scene id for _Close All Shades_."
     },
     {
         "id": "9b22e1e38e67938b",
@@ -3265,8 +3357,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 600,
-        "y": 280,
+        "x": 620,
+        "y": 200,
         "wires": [
             [
                 "854fc957cc0aa798"
@@ -3286,8 +3378,8 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 770,
-        "y": 280,
+        "x": 790,
+        "y": 200,
         "wires": [
             [
                 "57e2d4b892263fc3"
@@ -3315,8 +3407,8 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 890,
-        "y": 280,
+        "x": 910,
+        "y": 200,
         "wires": [
             [
                 "a8cede2bfeed191c"
@@ -3341,7 +3433,7 @@
         "senderr": false,
         "headers": [],
         "x": 590,
-        "y": 600,
+        "y": 580,
         "wires": [
             [
                 "f74128d99635d540"
@@ -3362,7 +3454,7 @@
         "finalize": "",
         "libs": [],
         "x": 740,
-        "y": 600,
+        "y": 580,
         "wires": [
             [
                 "2159eac5031ae752"
@@ -3377,7 +3469,7 @@
         "name": "https://developers.meethue.com/develop/hue-api-v2/getting-started/",
         "info": "",
         "x": 280,
-        "y": 560,
+        "y": 540,
         "wires": []
     },
     {
@@ -3404,7 +3496,7 @@
             }
         ],
         "x": 130,
-        "y": 140,
+        "y": 100,
         "wires": []
     },
     {
@@ -3414,8 +3506,8 @@
         "g": "0fd970345919b420",
         "name": "https://developers.meethue.com/develop/application-design-guidance/hue-bridge-discovery/",
         "info": "",
-        "x": 590,
-        "y": 240,
+        "x": 1010,
+        "y": 440,
         "wires": []
     },
     {
@@ -3426,7 +3518,7 @@
         "name": "assumes ${GROUND_FLOOR_HUE_ADDRESS} and ${GROUND_FLOOR_HUE_KEY} are defined",
         "info": "",
         "x": 380,
-        "y": 100,
+        "y": 60,
         "wires": []
     },
     {
@@ -3450,8 +3542,8 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 1190,
-        "y": 320,
+        "x": 1210,
+        "y": 240,
         "wires": [
             [
                 "8a2991eb5255cb54"
@@ -3470,8 +3562,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1310,
-        "y": 320,
+        "x": 1170,
+        "y": 380,
         "wires": [
             [
                 "7756c6eb9522da59"
@@ -3498,8 +3590,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1030,
-        "y": 280,
+        "x": 1050,
+        "y": 200,
         "wires": [
             [
                 "c16229f8f80c5a43"
@@ -3525,8 +3617,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 1010,
-        "y": 360,
+        "x": 1030,
+        "y": 280,
         "wires": [
             [
                 "c16229f8f80c5a43"
@@ -3552,7 +3644,7 @@
         "repair": false,
         "outputs": 1,
         "x": 270,
-        "y": 600,
+        "y": 580,
         "wires": [
             [
                 "2626ba9e8d396f71"
@@ -3567,8 +3659,8 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 840,
-        "y": 360,
+        "x": 860,
+        "y": 280,
         "wires": [
             [
                 "90c4d02d576477e1"
@@ -3584,7 +3676,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 600,
+        "y": 580,
         "wires": [
             [
                 "226b30949f9a903b"
@@ -3599,8 +3691,8 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1440,
-        "y": 320,
+        "x": 1300,
+        "y": 380,
         "wires": []
     },
     {
@@ -3612,7 +3704,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 880,
-        "y": 600,
+        "y": 580,
         "wires": []
     },
     {
@@ -3638,8 +3730,8 @@
                 "type": "str"
             }
         ],
-        "x": 820,
-        "y": 140,
+        "x": 840,
+        "y": 100,
         "wires": []
     },
     {
@@ -3655,7 +3747,7 @@
         "finalize": "",
         "libs": [],
         "x": 440,
-        "y": 600,
+        "y": 580,
         "wires": [
             [
                 "0ed14c935a7933e8"
@@ -3673,7 +3765,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 120,
-        "y": 700,
+        "y": 680,
         "wires": [
             [
                 "ce505f3a3d6ec359"
@@ -3689,7 +3781,7 @@
         "statusCode": "",
         "headers": {},
         "x": 410,
-        "y": 700,
+        "y": 680,
         "wires": []
     },
     {
@@ -3713,7 +3805,7 @@
         "to": "",
         "reg": false,
         "x": 280,
-        "y": 700,
+        "y": 680,
         "wires": [
             [
                 "16e21e0afb427d76"
@@ -3727,8 +3819,8 @@
         "g": "f1e1b4bb5ddac24f",
         "name": "https://developers.meethue.com/develop/hue-api-v2/",
         "info": "",
-        "x": 230,
-        "y": 60,
+        "x": 530,
+        "y": 100,
         "wires": []
     },
     {
@@ -3745,8 +3837,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "counter",
-        "x": 590,
-        "y": 340,
+        "x": 610,
+        "y": 260,
         "wires": []
     },
     {
@@ -3763,8 +3855,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "counter",
-        "x": 570,
-        "y": 400,
+        "x": 590,
+        "y": 320,
         "wires": []
     },
     {
@@ -3775,8 +3867,8 @@
         "name": "",
         "service": "_hue",
         "udp": false,
-        "x": 340,
-        "y": 380,
+        "x": 360,
+        "y": 340,
         "wires": [
             [
                 "14b78c9b72d385fd"
@@ -3788,7 +3880,9 @@
                 "d3827e92f3158b11",
                 "46957044b4a82aac"
             ],
-            []
+            [
+                "0679559867ced9f2"
+            ]
         ]
     },
     {
@@ -3798,8 +3892,8 @@
         "g": "f1e1b4bb5ddac24f",
         "name": "assumes ${BASEMENT_HUE_ADDRESS} and ${BASEMENT_HUE_KEY}  are defined",
         "info": "",
-        "x": 1040,
-        "y": 100,
+        "x": 1060,
+        "y": 60,
         "wires": []
     },
     {
@@ -3825,7 +3919,7 @@
         "payload": "{\"command\":\"start\"}",
         "payloadType": "json",
         "x": 150,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "cb53ddf8e4322675"
@@ -3842,7 +3936,7 @@
             "55739f413f081a30"
         ],
         "x": 160,
-        "y": 400,
+        "y": 380,
         "wires": [
             [
                 "cb53ddf8e4322675"
@@ -3868,8 +3962,8 @@
         "bytopic": "all",
         "topic": "topic",
         "outputs": 1,
-        "x": 560,
-        "y": 460,
+        "x": 580,
+        "y": 380,
         "wires": [
             [
                 "55739f413f081a30"
@@ -3886,9 +3980,57 @@
         "links": [
             "24c5060618b2a3bf"
         ],
-        "x": 720,
-        "y": 460,
+        "x": 740,
+        "y": 380,
         "wires": [],
         "l": true
+    },
+    {
+        "id": "0679559867ced9f2",
+        "type": "debug",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "dnssd list",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 580,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "9e5139329b02df1e",
+        "type": "inject",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "{\"command\":\"list\"}",
+        "payloadType": "json",
+        "x": 150,
+        "y": 300,
+        "wires": [
+            [
+                "cb53ddf8e4322675"
+            ]
+        ]
     }
 ]
