@@ -661,7 +661,7 @@
         "id": "b10eb6ebfd377efe",
         "type": "group",
         "z": "bfdb5183ea783e85",
-        "name": "send automation trigger events over the course of each day",
+        "name": "send timer events over the course of each day",
         "style": {
             "stroke": "none",
             "fill": "#000000",
@@ -676,15 +676,15 @@
             "47acab248c4d8501",
             "8ec45bbfd0b4fb4c",
             "0816fe94f5858846",
-            "8e84162e92296698",
             "9977146ce026810e",
             "b044e7bab42607f8",
-            "0c57cb4bce44a11a",
-            "7cf8caea790c9792",
             "106ee66b66de58ab",
             "6792ab0a12231e4e",
             "fa76ee9fdefa4f89",
-            "21c4dba2bb5d0e54"
+            "21c4dba2bb5d0e54",
+            "7cf8caea790c9792",
+            "0c57cb4bce44a11a",
+            "e6fc90237bd5a5e9"
         ],
         "x": 14,
         "y": 19,
@@ -2013,7 +2013,7 @@
         "z": "bfdb5183ea783e85",
         "g": "b10eb6ebfd377efe",
         "name": "timer",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = [{ cancel: true }]\n\nsuncalc.addTime(40, \"midday\", \"ignore1\")\nsuncalc.addTime(45, \"ignore2\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (times.hasOwnProperty(key)) {\n\n        const time = times[key].getTime()\n\n        if (time > now) {\n\n            messages.push({\n                topic: 'timer/time',\n                payload: key,\n                at: time,\n            })\n        }\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime\n    })\n}\n\nmessages.sort((a, b) => {\n\n    if (!a.hasOwnProperty('at')) {\n        return b\n    }\n\n    if (!b.hasOwnProperty('at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [messages]",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = [{ cancel: true }]\n\nsuncalc.addTime(40, \"midday\", \"ignore1\")\nsuncalc.addTime(45, \"ignore2\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (Object.prototype.hasOwnProperty.call(times, key)) {\n\n        const time = times[key].getTime()\n\n        if (time > now) {\n\n            messages.push({\n                topic: 'timer/time',\n                payload: key,\n                at: time,\n            })\n        }\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime\n    })\n}\n\nmessages.sort((a, b) => {\n\n    if (!Object.prototype.hasOwnProperty.call(a, 'at')) {\n        return b\n    }\n\n    if (!Object.prototype.hasOwnProperty.call(b, 'at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [messages]",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -2076,33 +2076,6 @@
         ]
     },
     {
-        "id": "8e84162e92296698",
-        "type": "switch",
-        "z": "bfdb5183ea783e85",
-        "g": "b10eb6ebfd377efe",
-        "name": "^settings/shades$|^settings/lighting$ ?",
-        "property": "topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "regex",
-                "v": "^settings/shades$|^settings/lighting$",
-                "vt": "str",
-                "case": false
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 610,
-        "y": 60,
-        "wires": [
-            [
-                "0816fe94f5858846"
-            ]
-        ]
-    },
-    {
         "id": "9977146ce026810e",
         "type": "websocket in",
         "z": "bfdb5183ea783e85",
@@ -2110,11 +2083,11 @@
         "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 380,
+        "x": 220,
         "y": 60,
         "wires": [
             [
-                "8e84162e92296698"
+                "e6fc90237bd5a5e9"
             ]
         ]
     },
@@ -2125,68 +2098,9 @@
         "g": "b10eb6ebfd377efe",
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
-        "x": 1040,
+        "x": 1000,
         "y": 60,
         "wires": []
-    },
-    {
-        "id": "0c57cb4bce44a11a",
-        "type": "websocket out",
-        "z": "bfdb5183ea783e85",
-        "g": "b10eb6ebfd377efe",
-        "name": "publish",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 1300,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "7cf8caea790c9792",
-        "type": "change",
-        "z": "bfdb5183ea783e85",
-        "g": "b10eb6ebfd377efe",
-        "name": "automation/trigger",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "automation/trigger",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "retain",
-                "pt": "msg",
-                "to": "false",
-                "tot": "bool"
-            },
-            {
-                "t": "set",
-                "p": "timestamp",
-                "pt": "msg",
-                "to": "",
-                "tot": "date"
-            },
-            {
-                "t": "delete",
-                "p": "_session",
-                "pt": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1130,
-        "y": 100,
-        "wires": [
-            [
-                "0c57cb4bce44a11a"
-            ]
-        ]
     },
     {
         "id": "106ee66b66de58ab",
@@ -2393,6 +2307,92 @@
             ]
         ],
         "info": "Block `automation/trigger` until after all three of `settings/shades`,\n`settings/lighting` and `timer/theme` have all been received."
+    },
+    {
+        "id": "7cf8caea790c9792",
+        "type": "change",
+        "z": "bfdb5183ea783e85",
+        "g": "b10eb6ebfd377efe",
+        "name": "automation/trigger",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "automation/trigger",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "retain",
+                "pt": "msg",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "set",
+                "p": "timestamp",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "delete",
+                "p": "_session",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1130,
+        "y": 100,
+        "wires": [
+            [
+                "0c57cb4bce44a11a"
+            ]
+        ]
+    },
+    {
+        "id": "0c57cb4bce44a11a",
+        "type": "websocket out",
+        "z": "bfdb5183ea783e85",
+        "g": "b10eb6ebfd377efe",
+        "name": "publish",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 1300,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "e6fc90237bd5a5e9",
+        "type": "switch",
+        "z": "bfdb5183ea783e85",
+        "g": "b10eb6ebfd377efe",
+        "name": "^timer/time$|^timer/theme$|^settings/lighting$|^settings/shades$",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "regex",
+                "v": "^timer/time$|^timer/theme$|^settings/lighting$|^settings/shades$",
+                "vt": "str",
+                "case": false
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 530,
+        "y": 60,
+        "wires": [
+            [
+                "0816fe94f5858846"
+            ]
+        ]
     },
     {
         "id": "870608ff910feb60",

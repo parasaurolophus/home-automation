@@ -1,9 +1,18 @@
 <template>
-    <fieldset>
+    <fieldset :disabled="websocketStatus != 1">
         <legend>Timer</legend>
         <table>
             <tr v-for="(pair, index) in sorted(timer)" :key="index">
-                <th>{{ pair[0] }}</th>
+                <th>
+                    <!--
+                    <v-btn @click="websocketPublish({ payload: pair[0], topic: 'timer/time' })">
+                        {{ pair[0] }}
+                    </v-btn>
+                    -->
+                    <a @click="websocketPublish({ payload: pair[0], topic: 'timer/time' })">
+                        {{ pair[0] }}
+                    </a>
+                </th>
                 <td>{{ localeString(pair[1]) }}</td>
             </tr>
         </table>
@@ -11,12 +20,17 @@
 </template>
 
 <style scoped>
-/* */
+a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
 </style>
 
 <script setup>
 import { inject } from 'vue'
 
+const websocketStatus = inject('websocketStatus')
+const websocketPublish = inject('websocketPublish')
 const timer = inject('timer')
 
 function sorted(obj) {
