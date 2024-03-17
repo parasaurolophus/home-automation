@@ -454,8 +454,7 @@ function connectWS() {
 
             } else {
 
-                const date = new Date(msg.payload)
-                timer.value[matches[1]] = date.toLocaleString()
+                timer.value[matches[1]] = msg.payload
 
             }
 
