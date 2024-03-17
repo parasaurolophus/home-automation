@@ -76,9 +76,12 @@ app.provide('powerviewModel', powerviewModel)
 const powerviewStatus = ref(0)
 app.provide('powerviewStatus', powerviewStatus)
 
+const timerValues = ref([])
+app.provide('timerValues', timerValues)
+
 // model for timer event debugging output
-const timer = ref({})
-app.provide('timer', timer)
+const timerTime = ref('')
+app.provide('timerTime', timerTime)
 
 // model for trigger event debugging output
 const trigger = ref("none received since last reload")
@@ -296,6 +299,13 @@ function connectWS() {
         // string in event.data
         const msg = JSON.parse(event.data)
 
+        if (msg.topic == 'timer/time') {
+
+            timerTime.value = msg.payload
+            return
+
+        }
+
         if (msg.topic == 'powerview/model') {
 
             powerviewModel.value = msg.payload
@@ -432,16 +442,24 @@ function connectWS() {
 
             if (msg.payload === '') {
 
-                delete timer.value[matches[1]]
-
-            } else {
-
-                timer.value[matches[1]] = msg.payload
-
+                timerValues.value = timerValues.value.filter(pair => pair[0] != matches[1])
+                return
             }
 
-            return
+            const found = timerValues.value.filter(pair => pair[0] == matches[1])
 
+            if (found.length > 0) {
+
+                found[1] = msg.payload
+                return
+            }
+
+            const pairs = timerValues.value.concat([[matches[1], msg.payload]])
+
+            pairs.sort((a, b) => a[1] - b[1])
+
+            timerValues.value = pairs
+            return
         }
 
         matches = /^hue\/(.+)\/key$/.exec(msg.topic)
@@ -466,7 +484,10 @@ function connectWS() {
 
             }
 
-            sorted.sort((a, b) => { return a.title.localeCompare(b.title) })
+            sorted.sort((a, b) => {
+                return a.title.localeCompare(b.title)
+            })
+
             hueModels.value = sorted
             return
 
