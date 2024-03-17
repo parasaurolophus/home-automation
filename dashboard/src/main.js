@@ -296,6 +296,20 @@ function connectWS() {
         // string in event.data
         const msg = JSON.parse(event.data)
 
+        if (msg.topic == 'powerview/model') {
+
+            powerviewModel.value = msg.payload
+            return
+
+        }
+
+        if (msg.topic == 'powerview/status') {
+
+            powerviewStatus.value = msg.payload
+            return
+
+        }
+
         if (msg.topic == 'settings/lighting') {
 
             settingsLighting.value = msg.payload
@@ -412,39 +426,7 @@ function connectWS() {
 
         }
 
-        if (msg.topic == 'powerview/model') {
-
-            powerviewModel.value = msg.payload
-            return
-
-        }
-
-        if (msg.topic == 'powerview/status') {
-
-            powerviewStatus.value = msg.payload
-            return
-
-        }
-
-        let matches = /^debug\/timer\/([^/]+)$/.exec(msg.topic)
-
-        if (Array.isArray(matches) && (matches.length == 2)) {
-
-            if (msg.payload === '') {
-
-                delete timer.value[matches[1]]
-
-            } else {
-
-                timer.value[matches[1]] = msg.payload
-
-            }
-
-            return
-
-        }
-
-        matches = /^debug\/timer\/time\/([^/]+)$/.exec(msg.topic)
+        let matches = /^debug\/timer\/time\/([^/]+)$/.exec(msg.topic)
 
         if (Array.isArray(matches) && (matches.length == 2)) {
 
