@@ -4,11 +4,6 @@
         <table>
             <tr v-for="(pair, index) in sorted(timer)" :key="index">
                 <th>
-                    <!--
-                    <v-btn @click="websocketPublish({ payload: pair[0], topic: 'timer/time' })">
-                        {{ pair[0] }}
-                    </v-btn>
-                    -->
                     <a @click="websocketPublish({ payload: pair[0], topic: 'timer/time' })">
                         {{ pair[0] }}
                     </a>
