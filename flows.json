@@ -4,23 +4,15 @@
         "type": "tab",
         "label": "Broker",
         "disabled": false,
-        "info": "WebSocket based publish / subscribe message broker with semantics\ninspired by MQTT",
-        "env": []
-    },
-    {
-        "id": "bfdb5183ea783e85",
-        "type": "tab",
-        "label": "Automation",
-        "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "40413194443e96c6",
+        "id": "94027c46c4bfae12",
         "type": "tab",
-        "label": "PowerView",
+        "label": "Automation",
         "disabled": false,
-        "info": "Interoperate with the PowerView hub whose IP address is specified by the\n`${POWERVIEW_ADDRESS}` environment variable.\n\nThis flow obtains the current configuration data from the hub and\npublishes an event message whose `msg.topic` is `powerview/model`\nand whose `msg.payload` contains a JSON object with the structure\nexpected by the front-end code for the dashboard. It also subscribes\nto `put/powerview/scene` messages and activates the PowerView scenes\nindicated by their payloads.",
+        "info": "",
         "env": []
     },
     {
@@ -29,6 +21,14 @@
         "label": "Hue",
         "disabled": false,
         "info": "Interoperate with Philips Hue Bridges.\n\nThis flow:\n\n- Uses mDNS to discover Hue bridges on the LAN and publishes\n  corresponding `hue/bridges` event messages for use by the dashboard's\n  front-end logic\n\n- Contains two instances of the _Hue API V2_ subflow, one each for\n  the Hue bridges specified by the `${GROUND_FLOOR_HUE_ADDRESS}` and\n  `${BASEMENT_HUE_ADDRESS}` environment variables",
+        "env": []
+    },
+    {
+        "id": "40413194443e96c6",
+        "type": "tab",
+        "label": "PowerView",
+        "disabled": false,
+        "info": "Interoperate with the PowerView hub whose IP address is specified by the\n`${POWERVIEW_ADDRESS}` environment variable.\n\nThis flow obtains the current configuration data from the hub and\npublishes an event message whose `msg.topic` is `powerview/model`\nand whose `msg.payload` contains a JSON object with the structure\nexpected by the front-end code for the dashboard. It also subscribes\nto `put/powerview/scene` messages and activates the PowerView scenes\nindicated by their payloads.\n\n## PowerView&reg; API\n\nNote that despite what the official documentation says, it is also\npossible to query a list of rooms, in addition to the documented query\nfor listing scenes. See [Undocumented Feature](#undocumented-feature),\nbelow.\n\nHere is a snapshot of\n<https://motorisation.hde.nl/hd/powerview/general-guides/API/>\nas of March 17, 2024:\n\n> ---\n> To connect a PowerView&reg; system to a home automation system a\n> PowerView&reg; Hub is required.\n>\n> The current hub implementation supports an HTTP REST API which is\n> described in this document. If you have an older hub, it is also\n> possible to make use of the API through a serial connection, which is\n> described here\n>\n> Currently the API is limited to commands for getting a list of scenes\n> and commands to activate scenes. These scenes need to be created in the\n> PowerView&reg; app first. When receiving a list of scenes from the hub the\n> scene names are base64 encoded. For proper identification they need to\n> be programmatically converted to unicode utf-8 readable text. Go\n> [here](https://www.base64decode.org/) for an online converter. Go\n> [here](#base64_encoding) for some code examples.\n>\n> ---\n> **PowerView&reg; HTTP API**\n>\n>> **IMPORTANT**\n>>\n>> Make sure your hub gets a reserved/fixed ip address from the dhcp\n>> server.\n>>\n>> The preferred method of setting a fixed IP address is IP address\n>> reservation based on MAC address in the home router (which should be\n>> the router with the dhcp server running)\n>>\n>> The hub ip and MAC address can be found using the PowerView app:\n>>\n>> 1. Open the side menu.\n>> 2. Select <Hub>\n>> 3. Select the currently connected hub\n>> 4. Select <hub info>\n>>\n>> A list should appear with both ip and MAC address displayed.\n>\n> ---\n> **Get a list of all available scenes**\n>\n> request:\n>\n> method: `GET`\n>\n> `api/scenes/`\n>\n> response example:\n>\n> ```\n> {\n>   \"sceneIds\":[7214,64073,15890,42747],\n>   \"sceneData\":[\n>     {\n>       \"id\":7214,\n>       \"name\":\"QWxsIGRvd24=\", //base64 encoded.\n>       \"roomId\":64902,\n>       \"order\":0,\n>       \"colorId\":2,\n>       \"iconId\":0\n>     },\n>     {\n>       \"id\":64073,\n>       \"name\":\"UGxpc3NlIDE=\", //base64 encoded.\n>       \"roomId\":64902,\n>       \"order\":1,\n>       \"colorId\":5,\n>       \"iconId\":0\n>     },\n>     {\n>       \"id\":15890,\n>       \"name\":\"QWxsIHVw\", //base64 encoded.\n>       \"roomId\":64902,\n>       \"order\":2,\n>       \"colorId\":0,\n>       \"iconId\":0\n>     },\n>     {\n>       \"id\":42747,\n>       \"name\":\"UGxpc3NlIDI=\", //base64 encoded.\n>       \"roomId\":64902,\n>       \"order\":3,\n>       \"colorId\":7,\n>       \"iconId\":0\n>     }\n>   ]\n> }\n> ```\n>\n> ---\n> **Activate a scene**\n>\n> request:\n>\n> method: `GET`\n>\n> `/api/scenes?sceneId=<sceneid>`  //replace <sceneid> with actual scene id.\n>\n> response example:\n>\n> ```\n> {\n>   \"scene\":{\"shadeIds\":[35523]}\n> }\n> ```\n>\n> **Base64 encoding**\n>\n> **Python**\n>\n> ```python\n> import base64\n>\n> def decode_base64(str):\n>     \"\"\"Convert base64 to unicode text\"\"\"\n>     return base64.b64decode(str).decode('utf-8')\n> ```\n>\n> **javascript**\n>\n> ```javascript\n> function decode_base64(str){\n>   // Converts incoming base64 to unicode text.\n>   return new Buffer(str, 'base64').toString('binary');\n> }\n> ```\n\n### Undocumented Feature\n\n**Get a list of all available rooms**\n\nrequest: `GET`\n\n`api/rooms`\n\nresponse example:\n\n```\n{\n    \"roomIds\":[\n        12345,\n        56789\n    ],\n    \"roomData\":[\n        {\n            \"order\":13,\n            \"name\":\"pR9Yj2g=\",\n            \"colorId\":3,\n            \"iconId\":50,\n            \"type\":0,\n            \"id\":12345\n        },\n        {\n            \"order\":10,\n            \"name\":\"GhH357==\",\n            \"colorId\":3,\n            \"iconId\":50,\n            \"type\":0,\n            \"id\":56789\n        }\n    ]\n}\n```\n",
         "env": []
     },
     {
@@ -95,7 +95,7 @@
         "color": "#D8BFD8",
         "icon": "font-awesome/fa-lightbulb-o",
         "status": {
-            "x": 1020,
+            "x": 1060,
             "y": 600,
             "wires": [
                 {
@@ -279,7 +279,6 @@
             "14b78c9b72d385fd",
             "854fc957cc0aa798",
             "57e2d4b892263fc3",
-            "05224ffb74b3f646",
             "a8cede2bfeed191c",
             "c16229f8f80c5a43",
             "8a2991eb5255cb54",
@@ -297,8 +296,8 @@
             "9e5139329b02df1e"
         ],
         "x": 14,
-        "y": 159,
-        "w": 1372,
+        "y": 19,
+        "w": 1312,
         "h": 322
     },
     {
@@ -316,16 +315,15 @@
         "nodes": [
             "0ed14c935a7933e8",
             "f74128d99635d540",
-            "3dbe561bfaf5bbf1",
             "226b30949f9a903b",
             "35758e623450f0b1",
             "2159eac5031ae752",
             "2626ba9e8d396f71"
         ],
         "x": 14,
-        "y": 499,
+        "y": 359,
         "w": 952,
-        "h": 122
+        "h": 82
     },
     {
         "id": "0fb8e43c903b3506",
@@ -384,14 +382,13 @@
             "f7841898977deb1b",
             "c3f7e150dea7e636",
             "cded354eec0287f2",
-            "7e1652c67f07cb3c",
             "4f5d5c8a6961a27c",
             "9055d5f42e64e6d0",
             "531fbb9eb4631e85"
         ],
         "x": 14,
         "y": 199,
-        "w": 1252,
+        "w": 1292,
         "h": 302
     },
     {
@@ -408,15 +405,12 @@
         },
         "nodes": [
             "d3686879543e1951",
-            "d046e6267c76dfe1",
-            "1867621f8f44eff1",
-            "0f699ed605fadf59",
-            "3479fc4d500c7fa3"
+            "0f699ed605fadf59"
         ],
         "x": 14,
-        "y": 19,
-        "w": 1372,
-        "h": 122
+        "y": 559,
+        "w": 432,
+        "h": 82
     },
     {
         "id": "9cf0457b813ca743",
@@ -437,8 +431,8 @@
             "8d706565bc654112"
         ],
         "x": 14,
-        "y": 259,
-        "w": 772,
+        "y": 299,
+        "w": 852,
         "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
@@ -463,8 +457,8 @@
             "9154f7fa8b08933f"
         ],
         "x": 14,
-        "y": 119,
-        "w": 832,
+        "y": 159,
+        "w": 912,
         "h": 122
     },
     {
@@ -492,8 +486,8 @@
             "0cd6a253ead58c18"
         ],
         "x": 14,
-        "y": 359,
-        "w": 972,
+        "y": 399,
+        "w": 1132,
         "h": 162
     },
     {
@@ -510,15 +504,15 @@
         },
         "nodes": [
             "02be9eee8ee84874",
-            "fdc1f995f016ddba",
             "83f1cdfad9fc4846",
             "a45d7fdb0d022401",
             "4b9c1c4c1a78af55",
-            "0b223f6872d96c8f"
+            "0b223f6872d96c8f",
+            "fdc1f995f016ddba"
         ],
         "x": 14,
         "y": 519,
-        "w": 852,
+        "w": 812,
         "h": 122
     },
     {
@@ -539,7 +533,7 @@
             "ce505f3a3d6ec359"
         ],
         "x": 14,
-        "y": 639,
+        "y": 459,
         "w": 472,
         "h": 82
     },
@@ -562,19 +556,19 @@
             "5f09f67803464fe9",
             "1b10e2f1524c44ef",
             "e450663aac44ed28",
-            "9cb4a587d2d04193",
-            "032d5842e53c6015"
+            "032d5842e53c6015",
+            "9cb4a587d2d04193"
         ],
         "x": 14,
         "y": 19,
-        "w": 752,
+        "w": 712,
         "h": 202,
         "info": "Broadcast messages received from any client to all clients. Note that\nall properties other than `msg._session` and `msg.retain` are\ntransmitted directly from the publisher to all subscribers.\n\n- Removes `msg._session` entirely, in the case of initially published\n  messages.\n\n- Handles `msg.topic` and `msg.retain` in a fashion inspired by MQTT.\n\nIf a client publishes a message with `msg.retain` set to `true`, the\n`retain` function node saves a clone of the message in flow context\nusing a file-system backed context store using `msg.topic` as the key.\nIt then sets `msg.retain` to `false` before broadcasting the message\nto subscribed clients.\n\nEach time a client connects, the `retained` function node sends that\nclient all currently stored messages with `msg.retain` set to `true`.\n\nRetained messages' contents can be updated by sending subsequent\nmessages with the same `msg.topic` and `msg.retain` set to `true`.\n\nRetained messages can be deleted by sending subsequent messages with\nthe same `msg.topic`, `msg.retain` set to `true` and `msg.payload`\nset to the empty string (`''`)."
     },
     {
         "id": "b10eb6ebfd377efe",
         "type": "group",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "name": "send timer events over the course of each day",
         "style": {
             "stroke": "none",
@@ -589,29 +583,27 @@
             "47acab248c4d8501",
             "0816fe94f5858846",
             "9977146ce026810e",
-            "b044e7bab42607f8",
             "106ee66b66de58ab",
             "6792ab0a12231e4e",
             "21c4dba2bb5d0e54",
             "7cf8caea790c9792",
-            "0c57cb4bce44a11a",
             "e6fc90237bd5a5e9",
             "f31a29f33090b700",
             "c3cac0049cccb7e7",
             "c79b769649c2b419",
             "189c38230a6eb7a0",
-            "15235a9b2634a2a1"
+            "0c57cb4bce44a11a"
         ],
         "x": 14,
         "y": 19,
-        "w": 1252,
+        "w": 1112,
         "h": 242,
         "info": "Subscribe to settings change events. Send `automation/trigger` events up\nto five times per day, at: sunrise, the start of midday, the start of\nafternoon, sunset and bedtime.\n\n- The times for sunrise and sunset are obtained directly from\n  [`suncalc.getTimes()`](https://github.com/mourner/suncalc#sunlight-times)\n\n- The times for midday and afternoon are determined using the position\n  of the sun over the course of the current day as reported by\n  [`suncalc.getPosition()`](https://github.com/mourner/suncalc#sun-position)\n\n- The time for bedtime varies randomly each day, as described below\n\nThe `${LATITUDE}` and `${LONGITUDE}` environment variables must be set\nto the home's geographic coordinates for use with `suncalc`.\n\nMidday starts when the sun first reaches an altitude of 0.8 radians. No\nmidday will be sent on a given day if the sun never reaches that\naltitude for the specified `${LATITUDE}`.\n\nAfternoon starts when the sun's azimuth is greater than 0 and its\naltitude first drops below 0.8 radians. For days on which the altitude\nnever reaches 0.8, this will be as soon after sunrise as the sun starts\nto shine more from the west than the east.\n\nBedtime is randomized each day, constrained to be within &PlusMinus;30\nminutes of the value for `settings/bedtime`.\n\nNote that the inclusion of midday and afternoon and the rules for\ndetermining when they occur on a given day were determined empirically\nfor a particular house with 4 parallel walls, aligned more or less\nexactly with the cardinal compass directions at a particular latitude.\nIt is also influenced by the size of that house's rather substantial\neaves shading the east- and west-facing windows. They might need\nadjustment or an entirely different set of events for a different\nstructure at a different location. The goal of all this is to trigger\nautomation to control lighting and motorized window coverings in such\na way that maximizes the times of day at which the view of the outside\nworld can be enjoyed while optimizing the lighting and window coverings\nfor comfort and energy efficiency during times of day when the sun\nshines too directly into the windows. "
     },
     {
         "id": "8326ae1a15518f8f",
         "type": "group",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "name": "window shade automation",
         "style": {
             "label": true,
@@ -626,7 +618,6 @@
             "db4f7c2c93cd8f30",
             "7adca925e9011e2f",
             "679d6a0d2002bcb7",
-            "c8fb3c01f10259ca",
             "839872dec0a80cfa",
             "48891106bb0c15f3",
             "2faadc63ef5e77d2",
@@ -641,7 +632,8 @@
             "9c763cec842003b4",
             "11cc62548c1ebf9e",
             "8f3017ac0fd35db7",
-            "b5eb05ffb31db5ed"
+            "b5eb05ffb31db5ed",
+            "c8fb3c01f10259ca"
         ],
         "x": 14,
         "y": 279,
@@ -652,7 +644,7 @@
     {
         "id": "c2e3e9d2c97df2d0",
         "type": "group",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "name": "lighting automation",
         "style": {
             "stroke": "none",
@@ -679,12 +671,77 @@
         "info": "Handle lighting automation trigger events\n\n| Bridge | Address |\n|-|-|\n| Basement | 192.168.1.34 |\n| Ground Floor | 192.168.1.12 |\n\n| Room / Zone   | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n\nTo turn off the _Exterior_ zone and activate the _Nightlight_ scene in each of the _Main Bathroom_ and _Main Floor_:\n\n```json\n[\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\n        \"payload\": {\n            \"on\": {\n                \"on\": false\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/48c39b9f-1599-4a5c-b7f6-bad6cad4029a\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    }\n]\n```"
     },
     {
+        "id": "f33001c4a3f90bd3",
+        "type": "group",
+        "z": "94027c46c4bfae12",
+        "name": "",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "b044e7bab42607f8"
+        ],
+        "x": 854,
+        "y": 639,
+        "w": 452,
+        "h": 82
+    },
+    {
+        "id": "d14a8a332e18c919",
+        "type": "group",
+        "z": "40413194443e96c6",
+        "name": "",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "9b22e1e38e67938b",
+            "5080b46132584bf3"
+        ],
+        "x": 14,
+        "y": 19,
+        "w": 492,
+        "h": 122
+    },
+    {
+        "id": "b1c25d211c540da7",
+        "type": "group",
+        "z": "d3b34304591c64d7",
+        "name": "",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "05224ffb74b3f646",
+            "d046e6267c76dfe1",
+            "1867621f8f44eff1",
+            "3dbe561bfaf5bbf1",
+            "3479fc4d500c7fa3"
+        ],
+        "x": 494,
+        "y": 459,
+        "w": 732,
+        "h": 242
+    },
+    {
         "id": "ebfab5beb0190193",
         "type": "junction",
         "z": "40413194443e96c6",
         "g": "9823c620ddf3d6e0",
-        "x": 360,
-        "y": 440,
+        "x": 440,
+        "y": 480,
         "wires": [
             [
                 "02eec7feccc1567d",
@@ -696,10 +753,10 @@
     {
         "id": "f31a29f33090b700",
         "type": "junction",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
-        "x": 1080,
-        "y": 140,
+        "x": 740,
+        "y": 200,
         "wires": [
             [
                 "0c57cb4bce44a11a"
@@ -1122,7 +1179,7 @@
         "y": 260,
         "wires": [
             [
-                "7e1652c67f07cb3c"
+                "4f5d5c8a6961a27c"
             ]
         ]
     },
@@ -1193,21 +1250,6 @@
         ]
     },
     {
-        "id": "fdc1f995f016ddba",
-        "type": "link out",
-        "z": "85ed27d795e6e866",
-        "g": "4893dd6a2321040d",
-        "name": "status",
-        "mode": "link",
-        "links": [
-            "ce519b683b6e6767"
-        ],
-        "x": 290,
-        "y": 600,
-        "wires": [],
-        "l": true
-    },
-    {
         "id": "ce519b683b6e6767",
         "type": "link in",
         "z": "85ed27d795e6e866",
@@ -1215,7 +1257,7 @@
         "links": [
             "fdc1f995f016ddba"
         ],
-        "x": 930,
+        "x": 970,
         "y": 600,
         "wires": [
             []
@@ -1227,16 +1269,16 @@
         "type": "status",
         "z": "85ed27d795e6e866",
         "g": "4893dd6a2321040d",
-        "name": "status: eventsource",
+        "name": "eventsource",
         "scope": [
             "153449edfaf38a67"
         ],
-        "x": 130,
+        "x": 110,
         "y": 580,
         "wires": [
             [
-                "fdc1f995f016ddba",
-                "4b9c1c4c1a78af55"
+                "4b9c1c4c1a78af55",
+                "fdc1f995f016ddba"
             ]
         ]
     },
@@ -1267,7 +1309,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 620,
+        "x": 580,
         "y": 560,
         "wires": [
             [
@@ -1320,18 +1362,6 @@
         "wires": []
     },
     {
-        "id": "7e1652c67f07cb3c",
-        "type": "websocket out",
-        "z": "85ed27d795e6e866",
-        "g": "96971e50c13ead01",
-        "name": "publish",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 1180,
-        "y": 260,
-        "wires": []
-    },
-    {
         "id": "4f5d5c8a6961a27c",
         "type": "websocket out",
         "z": "85ed27d795e6e866",
@@ -1339,8 +1369,8 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1180,
-        "y": 380,
+        "x": 1220,
+        "y": 320,
         "wires": []
     },
     {
@@ -1351,7 +1381,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 780,
+        "x": 740,
         "y": 560,
         "wires": []
     },
@@ -1393,7 +1423,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 320,
+        "x": 280,
         "y": 560,
         "wires": [
             [
@@ -1414,7 +1444,7 @@
         "septopics": false,
         "property": "payload",
         "topi": "topic",
-        "x": 470,
+        "x": 430,
         "y": 560,
         "wires": [
             [
@@ -1489,6 +1519,21 @@
                 "153449edfaf38a67"
             ]
         ]
+    },
+    {
+        "id": "fdc1f995f016ddba",
+        "type": "link out",
+        "z": "85ed27d795e6e866",
+        "g": "4893dd6a2321040d",
+        "name": "status",
+        "mode": "link",
+        "links": [
+            "ce519b683b6e6767"
+        ],
+        "x": 250,
+        "y": 600,
+        "wires": [],
+        "l": true
     },
     {
         "id": "02eb116aa3a7efad",
@@ -1754,7 +1799,7 @@
         "name": "",
         "server": "431414ce08ebb3c0",
         "client": "",
-        "x": 150,
+        "x": 110,
         "y": 100,
         "wires": [
             [
@@ -1770,7 +1815,7 @@
         "name": "",
         "server": "431414ce08ebb3c0",
         "client": "",
-        "x": 670,
+        "x": 630,
         "y": 140,
         "wires": []
     },
@@ -1779,7 +1824,7 @@
         "type": "status",
         "z": "e1d7dd3bdd3cf24a",
         "g": "165c6266935e206f",
-        "name": "status: websocket out",
+        "name": "broker out",
         "scope": [
             "e1c10e3b6608de71"
         ],
@@ -1809,7 +1854,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 320,
+        "x": 280,
         "y": 180,
         "wires": [
             [
@@ -1829,7 +1874,7 @@
         "initialize": "const retained = flow.get('retained', 'file') || {}\n\nnode.status({\n    text: Object.keys(retained).length,\n    shape: 'ring',\n    fill: 'blue'\n})",
         "finalize": "",
         "libs": [],
-        "x": 480,
+        "x": 440,
         "y": 180,
         "wires": [
             [
@@ -1850,7 +1895,7 @@
         "initialize": "const retained = flow.get('retained', 'file') || {}\n\nnode.status({\n    text: Object.keys(retained).length,\n    shape: 'ring',\n    fill: 'blue'\n})",
         "finalize": "",
         "libs": [],
-        "x": 510,
+        "x": 470,
         "y": 100,
         "wires": [
             [
@@ -1888,7 +1933,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 340,
+        "x": 300,
         "y": 100,
         "wires": [
             [
@@ -1899,7 +1944,7 @@
     {
         "id": "0497e0ed333e8f23",
         "type": "join",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "",
         "mode": "custom",
@@ -1929,7 +1974,7 @@
     {
         "id": "8624deaf4bee22fa",
         "type": "inject",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "",
         "props": [
@@ -1959,11 +2004,11 @@
     {
         "id": "47acab248c4d8501",
         "type": "function",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "timer",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst messages = [{ cancel: true }]\n\nsuncalc.addTime(40, \"midday\", \"ignore1\")\nsuncalc.addTime(45, \"ignore2\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (Object.prototype.hasOwnProperty.call(times, key)) {\n\n        const time = times[key].getTime()\n\n        if (time > now) {\n\n            messages.push({\n                topic: 'timer/time',\n                payload: key,\n                at: time,\n            })\n        }\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime =\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        hour).getTime() + offset\n\nif (bedtime > now) {\n\n    messages.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime\n    })\n}\n\nmessages.sort((a, b) => {\n\n    if (!Object.prototype.hasOwnProperty.call(a, 'at')) {\n        return b\n    }\n\n    if (!Object.prototype.hasOwnProperty.call(b, 'at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nmessages.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [messages]",
-        "outputs": 1,
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst events = [{ cancel: true }]\nconst debug = []\n\nsuncalc.addTime(40, \"midday\", \"ignore1\")\nsuncalc.addTime(45, \"ignore2\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (Object.prototype.hasOwnProperty.call(times, key)) {\n\n        const time = times[key].getTime()\n\n        const message = {\n            topic: 'timer/time',\n            payload: key,\n            at: time,\n        }\n\n        debug.push(message)\n\n        if (time > now) {\n            events.push(message)\n        }\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate(),\n    hour).getTime() + offset\n\nconst bedtimeEvent = {\n    payload: 'bedtime',\n    topic: 'timer/time',\n    at: bedtime\n}\n\ndebug.push(bedtimeEvent)\n\nif (bedtime > now) {\n\n    events.push(bedtimeEvent)\n}\n\nevents.sort((a, b) => {\n\n    if (!Object.prototype.hasOwnProperty.call(a, 'at')) {\n        return b\n    }\n\n    if (!Object.prototype.hasOwnProperty.call(b, 'at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nevents.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [events, debug]",
+        "outputs": 2,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
@@ -1978,19 +2023,22 @@
         "y": 140,
         "wires": [
             [
-                "106ee66b66de58ab",
+                "106ee66b66de58ab"
+            ],
+            [
                 "6792ab0a12231e4e"
             ]
         ],
         "outputLabels": [
-            "events"
+            "events",
+            "debug"
         ],
         "info": "# Input\n\n- `msg.payload.now` - timestamp at which flows started and again each day\n   at 1am\n\n- `msg.payload.settings/bedtime` - _bedtime_ value selected by a user\n  on the dashboard\n\n# Output\n\nUp to five 'timer/time` messages per day and one `timer/theme` message.\n\n# Details\n\n## Time\n\nWhen the output `msg.topic` is `timer/time`, `msg.payload` will be one\nof:\n\n- `sunrise`\n- `midday`\n- `afternoon`\n- `sunset`\n- `bedtime`\n\nIn addition, `msg.at` will be set to the timestamp at which the\ncorresponding event message should actually be published. See the\ndocumentation for the following `delay until` function node for\ninformation on when the `timer/time` events will actually fire based\non their values for `msg.at`.\n\n## Theme\n\nWhen the output `msg.topic` is `timer/theme`, `msg.payload` will be one\nof the following values based on the date:\n\n- `tribal`\n- `spooky`\n- `jolly`\n- `standard`"
     },
     {
         "id": "0816fe94f5858846",
         "type": "rbe",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "",
         "func": "rbe",
@@ -2011,7 +2059,7 @@
     {
         "id": "9977146ce026810e",
         "type": "websocket in",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "subscribe",
         "server": "",
@@ -2025,23 +2073,12 @@
         ]
     },
     {
-        "id": "b044e7bab42607f8",
-        "type": "comment",
-        "z": "bfdb5183ea783e85",
-        "g": "b10eb6ebfd377efe",
-        "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
-        "info": "",
-        "x": 240,
-        "y": 220,
-        "wires": []
-    },
-    {
         "id": "106ee66b66de58ab",
         "type": "function",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "delay until",
-        "func": "const timers = context.get('timers')\n\nif (msg.cancel) {\n\n    timers.forEach(id => clearTimeout(id))\n    context.set('timers', [])\n\n    node.status({\n        text: 0,\n        shape: 'ring',\n        fill: 'green'\n    })\n\n    return null\n\n}\n\nconst at = (msg.at ? new Date(msg.at) : new Date())\nconst now = new Date()\nconst delay = at.getTime() - now.getTime()\n\nif (delay <= 0) {\n\n    return msg\n\n}\n\nconst id = setTimeout(() => {\n\n    let timers = context.get('timers')\n\n    timers = timers.filter(timer => timer != id)\n    context.set('timers', timers)\n\n    node.status({\n        text: timers.length,\n        shape: 'dot',\n        fill: 'green'\n    })\n\n    node.send(msg)\n\n}, delay)\n\ntimers.push(id)\ncontext.set('timers', timers)\n\nnode.status({\n    text: timers.length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn null",
+        "func": "const timers = context.get('timers')\n\nif (msg.cancel) {\n\n    timers.forEach(id => clearTimeout(id))\n    context.set('timers', [])\n\n    node.status({\n        text: 0,\n        shape: 'ring',\n        fill: 'green'\n    })\n\n    return null\n\n}\n\nif (msg.at === undefined) {\n    return msg\n}\n\nconst delay = msg.at - new Date().getTime()\n\nif (delay <= 0) {\n\n    return msg\n\n}\n\nconst id = setTimeout(() => {\n\n    let timers = context.get('timers')\n\n    timers = timers.filter(timer => timer != id)\n    context.set('timers', timers)\n\n    node.status({\n        text: timers.length,\n        shape: 'dot',\n        fill: 'green'\n    })\n\n    node.send(msg)\n\n}, delay)\n\ntimers.push(id)\ncontext.set('timers', timers)\n\nnode.status({\n    text: timers.length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn null",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -2053,7 +2090,7 @@
         "wires": [
             [
                 "0816fe94f5858846",
-                "15235a9b2634a2a1"
+                "0c57cb4bce44a11a"
             ]
         ],
         "outputLabels": [
@@ -2062,94 +2099,9 @@
         "info": "Delay messages until a particular time has been reached.\n\nMessages are passed through unchanged but may be delayed based on the\nvalue of `msg.at`. If `msg.at` is present, it must indicate an\nabsolute time in a format compatible with JavaScript's `new Date(time)`\nconstructor. If that time is in the future, this function will delay\nforwarding the given message until the specified time has been reached.\n\nIf `msg.at` is missing or indicates a time that is the same or earlier\nthan \"now\" (`new Date()` with no argument) then the message is passed\nthrough with no delay.\n\nIf a message arrives with `msg.cancel` set to `true`, all pending\nmessages are canceled without being sent.\n\n> **Warning:** Delays are implemented using `setTimeout()`. This means\nthat while this node will emit messages no earlier than the time\nspecified by `msg.at`, they will actually be delivered some (typically\ntiny) amount of time later based on the overhead of any computer\nprogram combined with the fact that Node-RED flows are intrinsically\nsingle-threaded. Ultra-precise timers require real-time programming\ntechniques driven by specialized hardware.\n\nNote that it would require only a bit more work to support a `msg.flush`\nthat would immediately send all pending messages rather than canceling\nthem, but there is no use case for such a feature in these flows.\n\nCanceling or flushing only a particular message without canceling or\nflushing them all would require a lot more work and a second output.\nThat is far more effort than it is worth given the probable use cases\nfor a node like this in the first place."
     },
     {
-        "id": "c3cac0049cccb7e7",
-        "type": "change",
-        "z": "bfdb5183ea783e85",
-        "g": "b10eb6ebfd377efe",
-        "name": "controls/refresh",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "date"
-            },
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "controls/refresh",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "retain",
-                "pt": "msg",
-                "to": "false",
-                "tot": "bool"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 920,
-        "y": 220,
-        "wires": [
-            [
-                "f31a29f33090b700"
-            ]
-        ]
-    },
-    {
-        "id": "c79b769649c2b419",
-        "type": "status",
-        "z": "bfdb5183ea783e85",
-        "g": "b10eb6ebfd377efe",
-        "name": "status: websocket out",
-        "scope": [
-            "0c57cb4bce44a11a"
-        ],
-        "x": 580,
-        "y": 220,
-        "wires": [
-            [
-                "189c38230a6eb7a0"
-            ]
-        ]
-    },
-    {
-        "id": "189c38230a6eb7a0",
-        "type": "switch",
-        "z": "bfdb5183ea783e85",
-        "g": "b10eb6ebfd377efe",
-        "name": "connect?",
-        "property": "status.event",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "connect",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 760,
-        "y": 220,
-        "wires": [
-            [
-                "c3cac0049cccb7e7"
-            ]
-        ]
-    },
-    {
         "id": "6792ab0a12231e4e",
         "type": "change",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "debug",
         "rules": [
@@ -2180,18 +2132,18 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 570,
+        "x": 670,
         "y": 180,
         "wires": [
             [
-                "15235a9b2634a2a1"
+                "f31a29f33090b700"
             ]
         ]
     },
     {
         "id": "21c4dba2bb5d0e54",
         "type": "join",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "",
         "mode": "custom",
@@ -2203,7 +2155,7 @@
         "joinerType": "str",
         "accumulate": true,
         "timeout": "",
-        "count": "3",
+        "count": "1",
         "reduceRight": false,
         "reduceExp": "",
         "reduceInit": "",
@@ -2221,7 +2173,7 @@
     {
         "id": "7cf8caea790c9792",
         "type": "change",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "automation/trigger",
         "rules": [
@@ -2238,13 +2190,6 @@
                 "pt": "msg",
                 "to": "false",
                 "tot": "bool"
-            },
-            {
-                "t": "set",
-                "p": "timestamp",
-                "pt": "msg",
-                "to": "",
-                "tot": "date"
             },
             {
                 "t": "delete",
@@ -2266,21 +2211,9 @@
         ]
     },
     {
-        "id": "0c57cb4bce44a11a",
-        "type": "websocket out",
-        "z": "bfdb5183ea783e85",
-        "g": "b10eb6ebfd377efe",
-        "name": "publish",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 1180,
-        "y": 100,
-        "wires": []
-    },
-    {
         "id": "e6fc90237bd5a5e9",
         "type": "switch",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "timer and settings",
         "property": "topic",
@@ -2313,20 +2246,41 @@
         ]
     },
     {
-        "id": "15235a9b2634a2a1",
-        "type": "rbe",
-        "z": "bfdb5183ea783e85",
+        "id": "c3cac0049cccb7e7",
+        "type": "change",
+        "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 710,
-        "y": 140,
+        "name": "controls/refresh",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "controls/refresh",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "retain",
+                "pt": "msg",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 640,
+        "y": 220,
         "wires": [
             [
                 "f31a29f33090b700"
@@ -2334,9 +2288,64 @@
         ]
     },
     {
+        "id": "c79b769649c2b419",
+        "type": "status",
+        "z": "94027c46c4bfae12",
+        "g": "b10eb6ebfd377efe",
+        "name": "websocket out",
+        "scope": [
+            "0c57cb4bce44a11a"
+        ],
+        "x": 330,
+        "y": 220,
+        "wires": [
+            [
+                "189c38230a6eb7a0"
+            ]
+        ]
+    },
+    {
+        "id": "189c38230a6eb7a0",
+        "type": "switch",
+        "z": "94027c46c4bfae12",
+        "g": "b10eb6ebfd377efe",
+        "name": "connect?",
+        "property": "status.event",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "connect",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 480,
+        "y": 220,
+        "wires": [
+            [
+                "c3cac0049cccb7e7"
+            ]
+        ]
+    },
+    {
+        "id": "0c57cb4bce44a11a",
+        "type": "websocket out",
+        "z": "94027c46c4bfae12",
+        "g": "b10eb6ebfd377efe",
+        "name": "publish",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 1040,
+        "y": 200,
+        "wires": []
+    },
+    {
         "id": "6a9ac472018c38ea",
         "type": "change",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "Morning Shades",
         "rules": [
@@ -2354,7 +2363,7 @@
         "to": "",
         "reg": false,
         "x": 900,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2365,7 +2374,7 @@
     {
         "id": "9e961b1409432775",
         "type": "change",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "Afternoon Shades",
         "rules": [
@@ -2383,7 +2392,7 @@
         "to": "",
         "reg": false,
         "x": 890,
-        "y": 400,
+        "y": 380,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2394,7 +2403,7 @@
     {
         "id": "db4f7c2c93cd8f30",
         "type": "change",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "Close All Shades",
         "rules": [
@@ -2412,7 +2421,7 @@
         "to": "",
         "reg": false,
         "x": 890,
-        "y": 480,
+        "y": 460,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2423,7 +2432,7 @@
     {
         "id": "7adca925e9011e2f",
         "type": "change",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "",
         "rules": [
@@ -2448,7 +2457,7 @@
         "to": "",
         "reg": false,
         "x": 1140,
-        "y": 420,
+        "y": 400,
         "wires": [
             [
                 "c8fb3c01f10259ca"
@@ -2458,10 +2467,10 @@
     {
         "id": "679d6a0d2002bcb7",
         "type": "function",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "shades automation event",
-        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'retained' });\n    return [null, null, null, null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: msg.topic });\n    return [null, null, null, null, null, null]\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'settings/shades' });\n    return [null, null, null, null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [copyMsg(), null, null, null, null, null]\n\n    case 'midday':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, copyMsg(), null, null, null, null]\n\n    case 'afternoon':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, copyMsg(), null, null, null]\n\n    case 'sunset':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, copyMsg(), null, null]\n\n    case 'dusk':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, copyMsg(), null]\n\n    case 'bedtime':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, null, null]\n\n}\n",
+        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'retained' });\n    return [null, null, null, null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'different topic' });\n    return [null, null, null, null, null, null]\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'shades disabled' });\n    return [null, null, null, null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [copyMsg(), null, null, null, null, null]\n\n    case 'midday':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, copyMsg(), null, null, null, null]\n\n    case 'afternoon':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, copyMsg(), null, null, null]\n\n    case 'sunset':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, copyMsg(), null, null]\n\n    case 'dusk':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, copyMsg(), null]\n\n    case 'bedtime':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, null, null]\n\n}\n",
         "outputs": 6,
         "timeout": "",
         "noerr": 0,
@@ -2500,21 +2509,9 @@
         ]
     },
     {
-        "id": "c8fb3c01f10259ca",
-        "type": "websocket out",
-        "z": "bfdb5183ea783e85",
-        "g": "8326ae1a15518f8f",
-        "name": "publish",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 1300,
-        "y": 420,
-        "wires": []
-    },
-    {
         "id": "839872dec0a80cfa",
         "type": "websocket in",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "subscribe",
         "server": "",
@@ -2530,7 +2527,7 @@
     {
         "id": "48891106bb0c15f3",
         "type": "change",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "Open All Shades",
         "rules": [
@@ -2548,7 +2545,7 @@
         "to": "",
         "reg": false,
         "x": 890,
-        "y": 440,
+        "y": 420,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2559,7 +2556,7 @@
     {
         "id": "2faadc63ef5e77d2",
         "type": "trigger",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "",
         "op1": "",
@@ -2574,8 +2571,8 @@
         "bytopic": "all",
         "topic": "topic",
         "outputs": 1,
-        "x": 870,
-        "y": 520,
+        "x": 850,
+        "y": 500,
         "wires": [
             [
                 "cc0f759f7fc83125"
@@ -2585,7 +2582,7 @@
     {
         "id": "6d027828f94cb558",
         "type": "link out",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "sunset",
         "mode": "link",
@@ -2600,7 +2597,7 @@
     {
         "id": "97324173f5cd31d1",
         "type": "link in",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "open all",
         "links": [
@@ -2608,7 +2605,7 @@
             "befa2aee7b7c68f0"
         ],
         "x": 730,
-        "y": 440,
+        "y": 420,
         "wires": [
             [
                 "48891106bb0c15f3"
@@ -2619,7 +2616,7 @@
     {
         "id": "befa2aee7b7c68f0",
         "type": "link out",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "midday",
         "mode": "link",
@@ -2634,22 +2631,22 @@
     {
         "id": "cc0f759f7fc83125",
         "type": "link out",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "dusk",
         "mode": "link",
         "links": [
             "f0fd3673cca0dbde"
         ],
-        "x": 1010,
-        "y": 520,
+        "x": 990,
+        "y": 500,
         "wires": [],
         "l": true
     },
     {
         "id": "f0fd3673cca0dbde",
         "type": "link in",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "close all",
         "links": [
@@ -2657,7 +2654,7 @@
             "bc4239a2638e560d"
         ],
         "x": 720,
-        "y": 480,
+        "y": 460,
         "wires": [
             [
                 "db4f7c2c93cd8f30"
@@ -2668,7 +2665,7 @@
     {
         "id": "bc4239a2638e560d",
         "type": "link out",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "bedtime",
         "mode": "link",
@@ -2683,14 +2680,14 @@
     {
         "id": "e471a1ddbc9ef198",
         "type": "link in",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "morning",
         "links": [
             "0a76f5d385da96d7"
         ],
         "x": 720,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "6a9ac472018c38ea"
@@ -2701,7 +2698,7 @@
     {
         "id": "0a76f5d385da96d7",
         "type": "link out",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "sunrise",
         "mode": "link",
@@ -2716,14 +2713,14 @@
     {
         "id": "9c763cec842003b4",
         "type": "link in",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "afternoon",
         "links": [
             "11cc62548c1ebf9e"
         ],
         "x": 720,
-        "y": 400,
+        "y": 380,
         "wires": [
             [
                 "9e961b1409432775"
@@ -2734,7 +2731,7 @@
     {
         "id": "11cc62548c1ebf9e",
         "type": "link out",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "afternoon",
         "mode": "link",
@@ -2749,14 +2746,14 @@
     {
         "id": "8f3017ac0fd35db7",
         "type": "link in",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "dusk",
         "links": [
             "b5eb05ffb31db5ed"
         ],
-        "x": 730,
-        "y": 520,
+        "x": 710,
+        "y": 500,
         "wires": [
             [
                 "2faadc63ef5e77d2"
@@ -2767,7 +2764,7 @@
     {
         "id": "b5eb05ffb31db5ed",
         "type": "link out",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "dusk",
         "mode": "link",
@@ -2780,9 +2777,21 @@
         "l": true
     },
     {
+        "id": "c8fb3c01f10259ca",
+        "type": "websocket out",
+        "z": "94027c46c4bfae12",
+        "g": "8326ae1a15518f8f",
+        "name": "publish",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 1300,
+        "y": 400,
+        "wires": []
+    },
+    {
         "id": "870608ff910feb60",
         "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "c2e3e9d2c97df2d0",
         "name": "Morning",
         "env": [
@@ -2799,7 +2808,7 @@
     {
         "id": "0e592700939a92aa",
         "type": "switch",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "c2e3e9d2c97df2d0",
         "name": "timer/theme",
         "property": "payload.timer/theme",
@@ -2848,7 +2857,7 @@
     {
         "id": "353cfc8157d414e1",
         "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "c2e3e9d2c97df2d0",
         "name": "Night",
         "env": [
@@ -2865,7 +2874,7 @@
     {
         "id": "1cb0a0826e19ac25",
         "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "c2e3e9d2c97df2d0",
         "name": "Tribal",
         "env": [
@@ -2882,7 +2891,7 @@
     {
         "id": "8b2870e325e61ea1",
         "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "c2e3e9d2c97df2d0",
         "name": "Spooky",
         "env": [
@@ -2899,7 +2908,7 @@
     {
         "id": "541a0eff9f0235b7",
         "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "c2e3e9d2c97df2d0",
         "name": "Jolly",
         "env": [
@@ -2916,7 +2925,7 @@
     {
         "id": "4c3ffaa9eed2fd35",
         "type": "subflow:450f4de3c4f73b40",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "c2e3e9d2c97df2d0",
         "name": "Standard",
         "env": [
@@ -2933,10 +2942,10 @@
     {
         "id": "5e838b011b496bb4",
         "type": "function",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "c2e3e9d2c97df2d0",
         "name": "lighting automation event",
-        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'retain' });\n    return [null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: msg.topic });\n    return [null, null, null]\n\n}\n\nif (!msg.payload['settings/lighting']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'settings/lighting' });\n    return [null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [copyMsg(), null, null]\n\n    case 'sunset':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, copyMsg(), null]\n\n    case 'bedtime':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null]\n\n}\n",
+        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'retain' });\n    return [null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'different topic' });\n    return [null, null, null]\n\n}\n\nif (!msg.payload['settings/lighting']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'lighting disabled' });\n    return [null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [copyMsg(), null, null]\n\n    case 'sunset':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, copyMsg(), null]\n\n    case 'bedtime':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null]\n\n}\n",
         "outputs": 3,
         "timeout": "",
         "noerr": 0,
@@ -2965,7 +2974,7 @@
     {
         "id": "244e029d9a276e82",
         "type": "websocket in",
-        "z": "bfdb5183ea783e85",
+        "z": "94027c46c4bfae12",
         "g": "c2e3e9d2c97df2d0",
         "name": "subscribe",
         "server": "",
@@ -2979,13 +2988,713 @@
         ]
     },
     {
+        "id": "b044e7bab42607f8",
+        "type": "comment",
+        "z": "94027c46c4bfae12",
+        "g": "f33001c4a3f90bd3",
+        "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
+        "info": "",
+        "x": 1080,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "14b78c9b72d385fd",
+        "type": "function",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "split by ipv4 address",
+        "func": "const messages = []\n\nif (Object.prototype.hasOwnProperty.call(msg.payload, 'addresses') && Array.isArray(msg.payload.addresses)) {\n\n    for (let address of msg.payload.addresses) {\n\n        if (/^\\d{1,3}(\\.\\d{1,3}){3}/.exec(address)) {\n\n            const message = RED.util.cloneMessage(msg)\n\n            delete message.payload.addresses\n            message.topic = address\n            messages.push(message)\n\n        }\n    }\n}\n\nreturn [messages]",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 60,
+        "wires": [
+            [
+                "854fc957cc0aa798"
+            ]
+        ]
+    },
+    {
+        "id": "854fc957cc0aa798",
+        "type": "rbe",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 790,
+        "y": 60,
+        "wires": [
+            [
+                "57e2d4b892263fc3"
+            ]
+        ]
+    },
+    {
+        "id": "57e2d4b892263fc3",
+        "type": "join",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "1",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 910,
+        "y": 60,
+        "wires": [
+            [
+                "a8cede2bfeed191c"
+            ]
+        ]
+    },
+    {
+        "id": "0ed14c935a7933e8",
+        "type": "http request",
+        "z": "d3b34304591c64d7",
+        "g": "23bf1f9635c44cc8",
+        "name": "",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "06c952f588cb12f4",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 590,
+        "y": 400,
+        "wires": [
+            [
+                "f74128d99635d540"
+            ]
+        ],
+        "info": "Send a HTTP `POST` request using TLS but without certificate validation\ndue to defects in the Hue Bridge API."
+    },
+    {
+        "id": "f74128d99635d540",
+        "type": "function",
+        "z": "d3b34304591c64d7",
+        "g": "23bf1f9635c44cc8",
+        "name": "response",
+        "func": "const messages = []\n\nfunction errorMessage(payload) {\n\n    return {\n        payload: payload,\n        topic: 'hue/' + msg.bridgeAddress + '/error',\n        retain: false\n    }\n}\n\nfunction successMessage(payload) {\n\n    return {\n        payload: payload,\n        topic: 'hue/' + msg.bridgeAddress + '/key',\n        retain: false\n    }\n}\n\nif (Array.isArray(msg.payload)) {\n\n    for (let result of msg.payload) {\n\n        if (Object.prototype.hasOwnProperty.call(result, 'success')) {\n\n            messages.push(successMessage(result.success.username))\n\n        }\n\n        if (Object.prototype.hasOwnProperty.call(result, 'error')) {\n\n            messages.push(errorMessage(result.error.description))\n\n        }\n    }\n\n} else {\n\n    messages.push(errorMessage(msg.payload))\n\n}\n\nnode.status({\n    text: Object.keys(messages).length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn [messages]",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 400,
+        "wires": [
+            [
+                "2159eac5031ae752"
+            ]
+        ]
+    },
+    {
+        "id": "d3686879543e1951",
+        "type": "subflow:85ed27d795e6e866",
+        "z": "d3b34304591c64d7",
+        "g": "f1e1b4bb5ddac24f",
+        "name": "Ground Floor Hue",
+        "env": [
+            {
+                "name": "ADDRESS",
+                "value": "GROUND_FLOOR_HUE_ADDRESS",
+                "type": "env"
+            },
+            {
+                "name": "KEY",
+                "value": "GROUND_FLOOR_HUE_KEY",
+                "type": "env"
+            },
+            {
+                "name": "TITLE",
+                "value": "Ground Floor",
+                "type": "str"
+            }
+        ],
+        "x": 130,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "c16229f8f80c5a43",
+        "type": "join",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "1",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1210,
+        "y": 100,
+        "wires": [
+            [
+                "8a2991eb5255cb54"
+            ]
+        ]
+    },
+    {
+        "id": "8a2991eb5255cb54",
+        "type": "function",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "model",
+        "func": "const discovered = msg.payload.discovered || {}\nconst bridges = flow.get('bridges') || {}\n\nfor (let address in discovered) {\n\n    const bridge = bridges[address] || {}\n    const b = discovered[address]\n\n    for (let property in b) {\n\n        bridge[property] = b[property]\n\n    }\n\n    bridges[address] = bridge\n\n}\n\nfor (let topic in msg.payload) {\n\n    const matches = /^hue\\/([^ /]+)\\/status$/.exec(topic)\n\n    if (Array.isArray(matches) && (matches.length == 2)) {\n\n        const address = matches[1]\n        const bridge = bridges[address] || {}\n\n        bridge.status = msg.payload[topic]\n        bridges[address] = bridge\n\n    }\n}\n\nflow.set('bridges', bridges)\n\nconst model = []\n\nfor (let address in bridges) {\n\n    const bridge = bridges[address]\n\n    if (bridge.txt) {\n\n        model.push({\n            id: bridge.txt.bridgeid,\n            model: bridge.txt.modelid,\n            name: bridge.name,\n            host: bridge.host,\n            address: address,\n            port: bridge.port,\n            status: bridge.status\n        })\n    }\n}\n\nreturn {\n    payload: model,\n    topic: 'hue/bridges',\n    retain: true\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 240,
+        "wires": [
+            [
+                "7756c6eb9522da59"
+            ]
+        ]
+    },
+    {
+        "id": "a8cede2bfeed191c",
+        "type": "change",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "discovered",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "discovered",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1050,
+        "y": 60,
+        "wires": [
+            [
+                "c16229f8f80c5a43"
+            ]
+        ]
+    },
+    {
+        "id": "90c4d02d576477e1",
+        "type": "switch",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "^hue/[^/]+/status$",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "regex",
+                "v": "^hue/[^/]+/status$",
+                "vt": "str",
+                "case": false
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1030,
+        "y": 140,
+        "wires": [
+            [
+                "c16229f8f80c5a43"
+            ]
+        ]
+    },
+    {
+        "id": "226b30949f9a903b",
+        "type": "switch",
+        "z": "d3b34304591c64d7",
+        "g": "23bf1f9635c44cc8",
+        "name": "put/hue/create-key",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "put/hue/create-key",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 270,
+        "y": 400,
+        "wires": [
+            [
+                "2626ba9e8d396f71"
+            ]
+        ]
+    },
+    {
+        "id": "e923bea48eeed441",
+        "type": "websocket in",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "subscribe",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 860,
+        "y": 140,
+        "wires": [
+            [
+                "90c4d02d576477e1"
+            ]
+        ]
+    },
+    {
+        "id": "35758e623450f0b1",
+        "type": "websocket in",
+        "z": "d3b34304591c64d7",
+        "g": "23bf1f9635c44cc8",
+        "name": "subscribe",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 100,
+        "y": 400,
+        "wires": [
+            [
+                "226b30949f9a903b"
+            ]
+        ]
+    },
+    {
+        "id": "7756c6eb9522da59",
+        "type": "websocket out",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "publish",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 1240,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "2159eac5031ae752",
+        "type": "websocket out",
+        "z": "d3b34304591c64d7",
+        "g": "23bf1f9635c44cc8",
+        "name": "publish",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 880,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "0f699ed605fadf59",
+        "type": "subflow:85ed27d795e6e866",
+        "z": "d3b34304591c64d7",
+        "g": "f1e1b4bb5ddac24f",
+        "name": "Basement Hue",
+        "env": [
+            {
+                "name": "ADDRESS",
+                "value": "BASEMENT_HUE_ADDRESS",
+                "type": "env"
+            },
+            {
+                "name": "KEY",
+                "value": "BASEMENT_HUE_KEY",
+                "type": "env"
+            },
+            {
+                "name": "TITLE",
+                "value": "Basement",
+                "type": "str"
+            }
+        ],
+        "x": 340,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "2626ba9e8d396f71",
+        "type": "function",
+        "z": "d3b34304591c64d7",
+        "g": "23bf1f9635c44cc8",
+        "name": "request",
+        "func": "const address = msg.payload\n\nreturn {\n    bridgeAddress: address,\n    url: 'https://' + address + '/api',\n    payload: {\n        devicetype: 'nodered',\n        generateclientkey: true\n    },\n    method: 'POST'\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 400,
+        "wires": [
+            [
+                "0ed14c935a7933e8"
+            ]
+        ]
+    },
+    {
+        "id": "19b662d5ee4b5a2f",
+        "type": "http in",
+        "z": "d3b34304591c64d7",
+        "g": "fa261bdde51028d4",
+        "name": "",
+        "url": "/hue-keys",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 500,
+        "wires": [
+            [
+                "ce505f3a3d6ec359"
+            ]
+        ]
+    },
+    {
+        "id": "16e21e0afb427d76",
+        "type": "http response",
+        "z": "d3b34304591c64d7",
+        "g": "fa261bdde51028d4",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 410,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "ce505f3a3d6ec359",
+        "type": "change",
+        "z": "d3b34304591c64d7",
+        "g": "fa261bdde51028d4",
+        "name": "hue keys",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\t   $env('GROUND_FLOOR_HUE_ADDRESS'): $env('GROUND_FLOOR_HUE_KEY'),\t   $env('BASEMENT_HUE_ADDRESS'): $env('BASEMENT_HUE_KEY')\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 280,
+        "y": 500,
+        "wires": [
+            [
+                "16e21e0afb427d76"
+            ]
+        ]
+    },
+    {
+        "id": "b0e9b513b0a450c3",
+        "type": "debug",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "dnssd serviceDown",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 610,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "d3827e92f3158b11",
+        "type": "debug",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "dnssd error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 590,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "cb53ddf8e4322675",
+        "type": "dnssd-browser",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "service": "_hue",
+        "udp": false,
+        "x": 360,
+        "y": 180,
+        "wires": [
+            [
+                "14b78c9b72d385fd"
+            ],
+            [
+                "b0e9b513b0a450c3"
+            ],
+            [
+                "d3827e92f3158b11",
+                "46957044b4a82aac"
+            ],
+            [
+                "0679559867ced9f2"
+            ]
+        ]
+    },
+    {
+        "id": "61819845f9d42866",
+        "type": "inject",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "{\"command\":\"start\"}",
+        "payloadType": "json",
+        "x": 150,
+        "y": 180,
+        "wires": [
+            [
+                "cb53ddf8e4322675"
+            ]
+        ]
+    },
+    {
+        "id": "24c5060618b2a3bf",
+        "type": "link in",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "restart browser",
+        "links": [
+            "55739f413f081a30"
+        ],
+        "x": 160,
+        "y": 220,
+        "wires": [
+            [
+                "cb53ddf8e4322675"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "46957044b4a82aac",
+        "type": "trigger",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "op1": "",
+        "op2": "{\"command\":\"start\"}",
+        "op1type": "nul",
+        "op2type": "json",
+        "duration": "5",
+        "extend": true,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 580,
+        "y": 240,
+        "wires": [
+            [
+                "55739f413f081a30"
+            ]
+        ]
+    },
+    {
+        "id": "55739f413f081a30",
+        "type": "link out",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "restart browser",
+        "mode": "link",
+        "links": [
+            "24c5060618b2a3bf"
+        ],
+        "x": 740,
+        "y": 240,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "0679559867ced9f2",
+        "type": "debug",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "dnssd list",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 580,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "9e5139329b02df1e",
+        "type": "inject",
+        "z": "d3b34304591c64d7",
+        "g": "0fd970345919b420",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "{\"command\":\"list\"}",
+        "payloadType": "json",
+        "x": 150,
+        "y": 140,
+        "wires": [
+            [
+                "cb53ddf8e4322675"
+            ]
+        ]
+    },
+    {
+        "id": "05224ffb74b3f646",
+        "type": "comment",
+        "z": "d3b34304591c64d7",
+        "g": "b1c25d211c540da7",
+        "name": "https://developers.meethue.com/develop/application-design-guidance/hue-bridge-discovery/",
+        "info": "",
+        "x": 830,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "d046e6267c76dfe1",
+        "type": "comment",
+        "z": "d3b34304591c64d7",
+        "g": "b1c25d211c540da7",
+        "name": "assumes ${GROUND_FLOOR_HUE_ADDRESS} and ${GROUND_FLOOR_HUE_KEY} are defined",
+        "info": "",
+        "x": 860,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "1867621f8f44eff1",
+        "type": "comment",
+        "z": "d3b34304591c64d7",
+        "g": "b1c25d211c540da7",
+        "name": "assumes ${BASEMENT_HUE_ADDRESS} and ${BASEMENT_HUE_KEY}  are defined",
+        "info": "",
+        "x": 820,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "3dbe561bfaf5bbf1",
+        "type": "comment",
+        "z": "d3b34304591c64d7",
+        "g": "b1c25d211c540da7",
+        "name": "https://developers.meethue.com/develop/hue-api-v2/getting-started/",
+        "info": "",
+        "x": 760,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "3479fc4d500c7fa3",
+        "type": "comment",
+        "z": "d3b34304591c64d7",
+        "g": "b1c25d211c540da7",
+        "name": "https://developers.meethue.com/develop/hue-api-v2/",
+        "info": "",
+        "x": 710,
+        "y": 580,
+        "wires": []
+    },
+    {
         "id": "9b22e1e38e67938b",
         "type": "comment",
         "z": "40413194443e96c6",
+        "g": "d14a8a332e18c919",
         "name": "https://motorisation.hde.nl/hd/powerview/general-guides/API/",
         "info": "",
         "x": 260,
-        "y": 40,
+        "y": 60,
         "wires": []
     },
     {
@@ -2999,8 +3708,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 670,
-        "y": 300,
+        "x": 750,
+        "y": 340,
         "wires": [
             []
         ]
@@ -3013,7 +3722,7 @@
         "name": "send to powerview",
         "links": [],
         "x": 130,
-        "y": 180,
+        "y": 220,
         "wires": [
             [
                 "70e42b6637f4c865"
@@ -3040,7 +3749,7 @@
         "allowrate": true,
         "outputs": 1,
         "x": 310,
-        "y": 180,
+        "y": 220,
         "wires": [
             [
                 "413305fe8cf8bc16"
@@ -3066,7 +3775,7 @@
         "senderr": false,
         "headers": [],
         "x": 470,
-        "y": 180,
+        "y": 220,
         "wires": [
             [
                 "3b9aea255e25c86d",
@@ -3089,7 +3798,7 @@
         "finalize": "",
         "libs": [],
         "x": 620,
-        "y": 200,
+        "y": 240,
         "wires": [
             [
                 "9154f7fa8b08933f"
@@ -3109,7 +3818,7 @@
         "mode": "return",
         "links": [],
         "x": 660,
-        "y": 160,
+        "y": 200,
         "wires": [],
         "l": true
     },
@@ -3126,8 +3835,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 770,
-        "y": 440,
+        "x": 850,
+        "y": 480,
         "wires": [
             [
                 "4e40e2700edff9ec"
@@ -3155,8 +3864,8 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 650,
-        "y": 440,
+        "x": 730,
+        "y": 480,
         "wires": [
             [
                 "7fb1bd1acb1ca5f7"
@@ -3197,8 +3906,8 @@
                 "type": "str"
             }
         ],
-        "x": 490,
-        "y": 400,
+        "x": 570,
+        "y": 440,
         "wires": [
             [
                 "eb7123132bce19c7"
@@ -3238,8 +3947,8 @@
                 "type": "str"
             }
         ],
-        "x": 490,
-        "y": 440,
+        "x": 570,
+        "y": 480,
         "wires": [
             [
                 "eb7123132bce19c7"
@@ -3264,8 +3973,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 280,
-        "y": 300,
+        "x": 360,
+        "y": 340,
         "wires": [
             [
                 "8d706565bc654112"
@@ -3290,8 +3999,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 260,
-        "y": 420,
+        "x": 340,
+        "y": 460,
         "wires": [
             [
                 "ebfab5beb0190193"
@@ -3302,10 +4011,11 @@
         "id": "5080b46132584bf3",
         "type": "comment",
         "z": "40413194443e96c6",
+        "g": "d14a8a332e18c919",
         "name": "assumes ${POWERVIEW_ADDRESS} is defined",
         "info": "",
         "x": 220,
-        "y": 80,
+        "y": 100,
         "wires": []
     },
     {
@@ -3313,11 +4023,11 @@
         "type": "websocket in",
         "z": "40413194443e96c6",
         "g": "9cf0457b813ca743",
-        "name": "subscribe",
+        "name": "",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 100,
-        "y": 300,
+        "x": 140,
+        "y": 340,
         "wires": [
             [
                 "0710d650a741b921"
@@ -3329,11 +4039,11 @@
         "type": "websocket in",
         "z": "40413194443e96c6",
         "g": "9823c620ddf3d6e0",
-        "name": "subscribe",
+        "name": "",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 100,
-        "y": 420,
+        "x": 140,
+        "y": 460,
         "wires": [
             [
                 "99ab390e30a9d634"
@@ -3345,11 +4055,11 @@
         "type": "websocket out",
         "z": "40413194443e96c6",
         "g": "cb106476337f4d38",
-        "name": "publish",
+        "name": "",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 760,
-        "y": 200,
+        "x": 800,
+        "y": 240,
         "wires": []
     },
     {
@@ -3357,11 +4067,11 @@
         "type": "websocket out",
         "z": "40413194443e96c6",
         "g": "9823c620ddf3d6e0",
-        "name": "publish",
+        "name": "",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 900,
-        "y": 440,
+        "x": 1020,
+        "y": 480,
         "wires": []
     },
     {
@@ -3376,8 +4086,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 480,
-        "y": 300,
+        "x": 560,
+        "y": 340,
         "wires": [
             [
                 "2bf099ec37e84bbc"
@@ -3406,8 +4116,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 250,
-        "y": 460,
+        "x": 330,
+        "y": 500,
         "wires": [
             [
                 "ebfab5beb0190193"
@@ -3442,699 +4152,11 @@
                 "type": "str"
             }
         ],
-        "x": 490,
-        "y": 480,
+        "x": 570,
+        "y": 520,
         "wires": [
             [
                 "eb7123132bce19c7"
-            ]
-        ]
-    },
-    {
-        "id": "14b78c9b72d385fd",
-        "type": "function",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "split by ipv4 address",
-        "func": "const messages = []\n\nif (Object.prototype.hasOwnProperty.call(msg.payload, 'addresses') && Array.isArray(msg.payload.addresses)) {\n\n    for (let address of msg.payload.addresses) {\n\n        if (/^\\d{1,3}(\\.\\d{1,3}){3}/.exec(address)) {\n\n            const message = RED.util.cloneMessage(msg)\n\n            delete message.payload.addresses\n            message.topic = address\n            messages.push(message)\n\n        }\n    }\n}\n\nreturn [messages]",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 620,
-        "y": 200,
-        "wires": [
-            [
-                "854fc957cc0aa798"
-            ]
-        ]
-    },
-    {
-        "id": "854fc957cc0aa798",
-        "type": "rbe",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 790,
-        "y": 200,
-        "wires": [
-            [
-                "57e2d4b892263fc3"
-            ]
-        ]
-    },
-    {
-        "id": "57e2d4b892263fc3",
-        "type": "join",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "",
-        "mode": "custom",
-        "build": "object",
-        "property": "payload",
-        "propertyType": "msg",
-        "key": "topic",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "accumulate": true,
-        "timeout": "",
-        "count": "1",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "",
-        "reduceFixup": "",
-        "x": 910,
-        "y": 200,
-        "wires": [
-            [
-                "a8cede2bfeed191c"
-            ]
-        ]
-    },
-    {
-        "id": "0ed14c935a7933e8",
-        "type": "http request",
-        "z": "d3b34304591c64d7",
-        "g": "23bf1f9635c44cc8",
-        "name": "",
-        "method": "use",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "06c952f588cb12f4",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 590,
-        "y": 580,
-        "wires": [
-            [
-                "f74128d99635d540"
-            ]
-        ],
-        "info": "Send a HTTP `POST` request using TLS but without certificate validation\ndue to defects in the Hue Bridge API."
-    },
-    {
-        "id": "f74128d99635d540",
-        "type": "function",
-        "z": "d3b34304591c64d7",
-        "g": "23bf1f9635c44cc8",
-        "name": "response",
-        "func": "const messages = []\n\nfunction errorMessage(payload) {\n\n    return {\n        payload: payload,\n        topic: 'hue/' + msg.bridgeAddress + '/error',\n        retain: false\n    }\n}\n\nfunction successMessage(payload) {\n\n    return {\n        payload: payload,\n        topic: 'hue/' + msg.bridgeAddress + '/key',\n        retain: false\n    }\n}\n\nif (Array.isArray(msg.payload)) {\n\n    for (let result of msg.payload) {\n\n        if (Object.prototype.hasOwnProperty.call(result, 'success')) {\n\n            messages.push(successMessage(result.success.username))\n\n        }\n\n        if (Object.prototype.hasOwnProperty.call(result, 'error')) {\n\n            messages.push(errorMessage(result.error.description))\n\n        }\n    }\n\n} else {\n\n    messages.push(errorMessage(msg.payload))\n\n}\n\nnode.status({\n    text: Object.keys(messages).length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn [messages]",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 740,
-        "y": 580,
-        "wires": [
-            [
-                "2159eac5031ae752"
-            ]
-        ]
-    },
-    {
-        "id": "3dbe561bfaf5bbf1",
-        "type": "comment",
-        "z": "d3b34304591c64d7",
-        "g": "23bf1f9635c44cc8",
-        "name": "https://developers.meethue.com/develop/hue-api-v2/getting-started/",
-        "info": "",
-        "x": 280,
-        "y": 540,
-        "wires": []
-    },
-    {
-        "id": "d3686879543e1951",
-        "type": "subflow:85ed27d795e6e866",
-        "z": "d3b34304591c64d7",
-        "g": "f1e1b4bb5ddac24f",
-        "name": "Ground Floor Hue",
-        "env": [
-            {
-                "name": "ADDRESS",
-                "value": "GROUND_FLOOR_HUE_ADDRESS",
-                "type": "env"
-            },
-            {
-                "name": "KEY",
-                "value": "GROUND_FLOOR_HUE_KEY",
-                "type": "env"
-            },
-            {
-                "name": "TITLE",
-                "value": "Ground Floor",
-                "type": "str"
-            }
-        ],
-        "x": 130,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "05224ffb74b3f646",
-        "type": "comment",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "https://developers.meethue.com/develop/application-design-guidance/hue-bridge-discovery/",
-        "info": "",
-        "x": 1010,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "d046e6267c76dfe1",
-        "type": "comment",
-        "z": "d3b34304591c64d7",
-        "g": "f1e1b4bb5ddac24f",
-        "name": "assumes ${GROUND_FLOOR_HUE_ADDRESS} and ${GROUND_FLOOR_HUE_KEY} are defined",
-        "info": "",
-        "x": 380,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "c16229f8f80c5a43",
-        "type": "join",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "",
-        "mode": "custom",
-        "build": "object",
-        "property": "payload",
-        "propertyType": "msg",
-        "key": "topic",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "accumulate": true,
-        "timeout": "",
-        "count": "1",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "",
-        "reduceFixup": "",
-        "x": 1210,
-        "y": 240,
-        "wires": [
-            [
-                "8a2991eb5255cb54"
-            ]
-        ]
-    },
-    {
-        "id": "8a2991eb5255cb54",
-        "type": "function",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "model",
-        "func": "const discovered = msg.payload.discovered || {}\nconst bridges = flow.get('bridges') || {}\n\nfor (let address in discovered) {\n\n    const bridge = bridges[address] || {}\n    const b = discovered[address]\n\n    for (let property in b) {\n\n        bridge[property] = b[property]\n\n    }\n\n    bridges[address] = bridge\n\n}\n\nfor (let topic in msg.payload) {\n\n    const matches = /^hue\\/([^ /]+)\\/status$/.exec(topic)\n\n    if (Array.isArray(matches) && (matches.length == 2)) {\n\n        const address = matches[1]\n        const bridge = bridges[address] || {}\n\n        bridge.status = msg.payload[topic]\n        bridges[address] = bridge\n\n    }\n}\n\nflow.set('bridges', bridges)\n\nconst model = []\n\nfor (let address in bridges) {\n\n    const bridge = bridges[address]\n\n    if (bridge.txt) {\n\n        model.push({\n            id: bridge.txt.bridgeid,\n            model: bridge.txt.modelid,\n            name: bridge.name,\n            host: bridge.host,\n            address: address,\n            port: bridge.port,\n            status: bridge.status\n        })\n    }\n}\n\nreturn {\n    payload: model,\n    topic: 'hue/bridges',\n    retain: true\n}",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1170,
-        "y": 380,
-        "wires": [
-            [
-                "7756c6eb9522da59"
-            ]
-        ]
-    },
-    {
-        "id": "a8cede2bfeed191c",
-        "type": "change",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "discovered",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "discovered",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1050,
-        "y": 200,
-        "wires": [
-            [
-                "c16229f8f80c5a43"
-            ]
-        ]
-    },
-    {
-        "id": "90c4d02d576477e1",
-        "type": "switch",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "^hue/[^/]+/status$",
-        "property": "topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "regex",
-                "v": "^hue/[^/]+/status$",
-                "vt": "str",
-                "case": false
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 1030,
-        "y": 280,
-        "wires": [
-            [
-                "c16229f8f80c5a43"
-            ]
-        ]
-    },
-    {
-        "id": "226b30949f9a903b",
-        "type": "switch",
-        "z": "d3b34304591c64d7",
-        "g": "23bf1f9635c44cc8",
-        "name": "put/hue/create-key",
-        "property": "topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "put/hue/create-key",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 270,
-        "y": 580,
-        "wires": [
-            [
-                "2626ba9e8d396f71"
-            ]
-        ]
-    },
-    {
-        "id": "e923bea48eeed441",
-        "type": "websocket in",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "subscribe",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 860,
-        "y": 280,
-        "wires": [
-            [
-                "90c4d02d576477e1"
-            ]
-        ]
-    },
-    {
-        "id": "35758e623450f0b1",
-        "type": "websocket in",
-        "z": "d3b34304591c64d7",
-        "g": "23bf1f9635c44cc8",
-        "name": "subscribe",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 100,
-        "y": 580,
-        "wires": [
-            [
-                "226b30949f9a903b"
-            ]
-        ]
-    },
-    {
-        "id": "7756c6eb9522da59",
-        "type": "websocket out",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "publish",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 1300,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "2159eac5031ae752",
-        "type": "websocket out",
-        "z": "d3b34304591c64d7",
-        "g": "23bf1f9635c44cc8",
-        "name": "publish",
-        "server": "",
-        "client": "b46802b9cb5603b3",
-        "x": 880,
-        "y": 580,
-        "wires": []
-    },
-    {
-        "id": "0f699ed605fadf59",
-        "type": "subflow:85ed27d795e6e866",
-        "z": "d3b34304591c64d7",
-        "g": "f1e1b4bb5ddac24f",
-        "name": "Basement Hue",
-        "env": [
-            {
-                "name": "ADDRESS",
-                "value": "BASEMENT_HUE_ADDRESS",
-                "type": "env"
-            },
-            {
-                "name": "KEY",
-                "value": "BASEMENT_HUE_KEY",
-                "type": "env"
-            },
-            {
-                "name": "TITLE",
-                "value": "Basement",
-                "type": "str"
-            }
-        ],
-        "x": 840,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "2626ba9e8d396f71",
-        "type": "function",
-        "z": "d3b34304591c64d7",
-        "g": "23bf1f9635c44cc8",
-        "name": "request",
-        "func": "const address = msg.payload\n\nreturn {\n    bridgeAddress: address,\n    url: 'https://' + address + '/api',\n    payload: {\n        devicetype: 'nodered',\n        generateclientkey: true\n    },\n    method: 'POST'\n}",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 440,
-        "y": 580,
-        "wires": [
-            [
-                "0ed14c935a7933e8"
-            ]
-        ]
-    },
-    {
-        "id": "19b662d5ee4b5a2f",
-        "type": "http in",
-        "z": "d3b34304591c64d7",
-        "g": "fa261bdde51028d4",
-        "name": "",
-        "url": "/hue-keys",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 120,
-        "y": 680,
-        "wires": [
-            [
-                "ce505f3a3d6ec359"
-            ]
-        ]
-    },
-    {
-        "id": "16e21e0afb427d76",
-        "type": "http response",
-        "z": "d3b34304591c64d7",
-        "g": "fa261bdde51028d4",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 410,
-        "y": 680,
-        "wires": []
-    },
-    {
-        "id": "ce505f3a3d6ec359",
-        "type": "change",
-        "z": "d3b34304591c64d7",
-        "g": "fa261bdde51028d4",
-        "name": "hue keys",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "{\t   $env('GROUND_FLOOR_HUE_ADDRESS'): $env('GROUND_FLOOR_HUE_KEY'),\t   $env('BASEMENT_HUE_ADDRESS'): $env('BASEMENT_HUE_KEY')\t}",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 680,
-        "wires": [
-            [
-                "16e21e0afb427d76"
-            ]
-        ]
-    },
-    {
-        "id": "3479fc4d500c7fa3",
-        "type": "comment",
-        "z": "d3b34304591c64d7",
-        "g": "f1e1b4bb5ddac24f",
-        "name": "https://developers.meethue.com/develop/hue-api-v2/",
-        "info": "",
-        "x": 530,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "b0e9b513b0a450c3",
-        "type": "debug",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "dnssd serviceDown",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": true,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "counter",
-        "x": 610,
-        "y": 260,
-        "wires": []
-    },
-    {
-        "id": "d3827e92f3158b11",
-        "type": "debug",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "dnssd error",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": true,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "counter",
-        "x": 590,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "cb53ddf8e4322675",
-        "type": "dnssd-browser",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "",
-        "service": "_hue",
-        "udp": false,
-        "x": 360,
-        "y": 340,
-        "wires": [
-            [
-                "14b78c9b72d385fd"
-            ],
-            [
-                "b0e9b513b0a450c3"
-            ],
-            [
-                "d3827e92f3158b11",
-                "46957044b4a82aac"
-            ],
-            [
-                "0679559867ced9f2"
-            ]
-        ]
-    },
-    {
-        "id": "1867621f8f44eff1",
-        "type": "comment",
-        "z": "d3b34304591c64d7",
-        "g": "f1e1b4bb5ddac24f",
-        "name": "assumes ${BASEMENT_HUE_ADDRESS} and ${BASEMENT_HUE_KEY}  are defined",
-        "info": "",
-        "x": 1060,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "61819845f9d42866",
-        "type": "inject",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "1",
-        "topic": "",
-        "payload": "{\"command\":\"start\"}",
-        "payloadType": "json",
-        "x": 150,
-        "y": 340,
-        "wires": [
-            [
-                "cb53ddf8e4322675"
-            ]
-        ]
-    },
-    {
-        "id": "24c5060618b2a3bf",
-        "type": "link in",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "restart browser",
-        "links": [
-            "55739f413f081a30"
-        ],
-        "x": 160,
-        "y": 380,
-        "wires": [
-            [
-                "cb53ddf8e4322675"
-            ]
-        ],
-        "l": true
-    },
-    {
-        "id": "46957044b4a82aac",
-        "type": "trigger",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "",
-        "op1": "",
-        "op2": "{\"command\":\"start\"}",
-        "op1type": "nul",
-        "op2type": "json",
-        "duration": "5",
-        "extend": true,
-        "overrideDelay": false,
-        "units": "s",
-        "reset": "",
-        "bytopic": "all",
-        "topic": "topic",
-        "outputs": 1,
-        "x": 580,
-        "y": 380,
-        "wires": [
-            [
-                "55739f413f081a30"
-            ]
-        ]
-    },
-    {
-        "id": "55739f413f081a30",
-        "type": "link out",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "restart browser",
-        "mode": "link",
-        "links": [
-            "24c5060618b2a3bf"
-        ],
-        "x": 740,
-        "y": 380,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "0679559867ced9f2",
-        "type": "debug",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "dnssd list",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": true,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "counter",
-        "x": 580,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "9e5139329b02df1e",
-        "type": "inject",
-        "z": "d3b34304591c64d7",
-        "g": "0fd970345919b420",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": "1",
-        "topic": "",
-        "payload": "{\"command\":\"list\"}",
-        "payloadType": "json",
-        "x": 150,
-        "y": 300,
-        "wires": [
-            [
-                "cb53ddf8e4322675"
             ]
         ]
     }
