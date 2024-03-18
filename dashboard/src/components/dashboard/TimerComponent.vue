@@ -17,12 +17,12 @@
 </template>
 
 <style scoped>
-.next-time {
+.last-time {
     border: thin solid;
 }
 
-.last-time {
-    color: darkmagenta;
+.next-time {
+    border: thin dashed;
 }
 
 a:hover {
