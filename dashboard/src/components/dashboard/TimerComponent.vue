@@ -8,7 +8,7 @@
                         {{ pair[0] }}
                     </a>
                 </th>
-                <td :class="{ 'next-trigger': pair[0] == nextTrigger(), 'last-time': pair[0] == lastTrigger() }">
+                <td :class="{ 'next-time': pair[0] == nextTrigger(), 'last-time': pair[0] == lastTrigger() }">
                     {{ localeString(pair[1]) }}
                 </td>
             </tr>
@@ -17,9 +17,10 @@
 </template>
 
 <style scoped>
-.next-trigger {
+.next-time {
     border: thin solid;
 }
+
 .last-time {
     color: darkmagenta;
 }
@@ -59,7 +60,7 @@ function nextTrigger() {
 
 function lastTrigger() {
 
-    if (typeof(trigger.value) == 'object') {
+    if (typeof (trigger.value) == 'object') {
         return trigger.value["timer/time"]
     }
 
