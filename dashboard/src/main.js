@@ -84,7 +84,7 @@ const timerTime = ref('')
 app.provide('timerTime', timerTime)
 
 // model for trigger event debugging output
-const trigger = ref("none received since last reload")
+const trigger = ref("none received since\npage last reloaded")
 app.provide('trigger', trigger)
 
 // model for hue/{address}/key messages
@@ -368,13 +368,7 @@ function connectWS() {
 
         if (msg.topic == 'automation/trigger') {
 
-            if (msg.payload !== '') {
-
-                msg.payload.timestamp = new Date(msg.timestamp).toLocaleString()
-                trigger.value = JSON.stringify(msg.payload, undefined, 1)
-
-            }
-
+            trigger.value = msg.payload
             return
 
         }
@@ -446,18 +440,8 @@ function connectWS() {
                 return
             }
 
-            const found = timerValues.value.filter(pair => pair[0] == matches[1])
-
-            if (found.length > 0) {
-
-                found[1] = msg.payload
-                return
-            }
-
-            const pairs = timerValues.value.concat([[matches[1], msg.payload]])
-
+            const pairs = timerValues.value.filter(pair => pair[0] != matches[1]).concat([[matches[1], msg.payload]])
             pairs.sort((a, b) => a[1] - b[1])
-
             timerValues.value = pairs
             return
         }
