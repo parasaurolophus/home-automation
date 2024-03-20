@@ -16,11 +16,19 @@
         "env": []
     },
     {
+        "id": "6057c05b02d1aad0",
+        "type": "tab",
+        "label": "Initialize Settings",
+        "disabled": false,
+        "info": "When clients first connect, send settings events with default values if\nno retained settings are found.",
+        "env": []
+    },
+    {
         "id": "d3b34304591c64d7",
         "type": "tab",
         "label": "Hue",
         "disabled": false,
-        "info": "Interoperate with Philips Hue Bridges.\n\nThis flow:\n\n- Uses mDNS to discover Hue bridges on the LAN and publishes\n  corresponding `hue/bridges` event messages for use by the dashboard's\n  front-end logic\n\n- Contains two instances of the _Hue API V2_ subflow, one each for\n  the Hue bridges specified by the `${GROUND_FLOOR_HUE_ADDRESS}` and\n  `${BASEMENT_HUE_ADDRESS}` environment variables",
+        "info": "Interoperate with Philips Hue Bridges using local API. See <https://developers.meethue.com/develop/hue-api-v2/getting-started/> for more information.\n\nThis flow:\n\n- Uses mDNS to discover Hue bridges on the LAN and publishes\n  corresponding `hue/bridges` event messages for use by the dashboard's\n  front-end logic\n\n- Contains two instances of the _Hue API V2_ subflow, one each for\n  the Hue bridges specified by the `${GROUND_FLOOR_HUE_ADDRESS}` and\n  `${BASEMENT_HUE_ADDRESS}` environment variables",
         "env": []
     },
     {
@@ -592,7 +600,8 @@
             "c3cac0049cccb7e7",
             "c79b769649c2b419",
             "189c38230a6eb7a0",
-            "0c57cb4bce44a11a"
+            "0c57cb4bce44a11a",
+            "3cbcdb02b5e451a3"
         ],
         "x": 14,
         "y": 19,
@@ -685,7 +694,7 @@
         "nodes": [
             "b044e7bab42607f8"
         ],
-        "x": 854,
+        "x": 874,
         "y": 639,
         "w": 452,
         "h": 82
@@ -734,6 +743,151 @@
         "y": 459,
         "w": 732,
         "h": 242
+    },
+    {
+        "id": "8ff3dbba8ae94edb",
+        "type": "group",
+        "z": "6057c05b02d1aad0",
+        "name": "check for retained settings",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "2b03bb375cf8a67b",
+            "34d16eacb94f3e0a",
+            "c556cb062dc66d2a",
+            "148d79087235cd86",
+            "70d2ad7cf7335e75",
+            "c1f4e496380951b9",
+            "a855c1550339c122"
+        ],
+        "x": 34,
+        "y": 19,
+        "w": 772,
+        "h": 162
+    },
+    {
+        "id": "76e4f1af6f6965f0",
+        "type": "group",
+        "z": "6057c05b02d1aad0",
+        "name": "set shades when not yet retained",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "18e0549eb96bd879",
+            "9cdaafc330c26d06",
+            "146a87a644d4c618",
+            "2be3f542ce0a582e",
+            "0cddce8a6a59e3f7"
+        ],
+        "x": 34,
+        "y": 619,
+        "w": 752,
+        "h": 122
+    },
+    {
+        "id": "571a5373c51d8862",
+        "type": "group",
+        "z": "6057c05b02d1aad0",
+        "name": "wait for both websocket in and out nodes to be connected",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "a00aefc7eab1e6a6",
+            "1d8b910fae3ff2a8",
+            "6a55581296547a51",
+            "5e9431336f357250",
+            "821be014e963dc51",
+            "4b7ff41599bc5342"
+        ],
+        "x": 34,
+        "y": 199,
+        "w": 812,
+        "h": 122
+    },
+    {
+        "id": "71edb8f081a205bf",
+        "type": "group",
+        "z": "6057c05b02d1aad0",
+        "name": "send default settings message",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "1fb4f0f5028c454b",
+            "5a096d86dd501f10",
+            "ed80322f1fe4a167"
+        ],
+        "x": 814,
+        "y": 499,
+        "w": 452,
+        "h": 82
+    },
+    {
+        "id": "53f847c1e2a0e2b4",
+        "type": "group",
+        "z": "6057c05b02d1aad0",
+        "name": "set bedtime when not yet retained",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "1c130fa5c6f4fb9e",
+            "8df09ed123e9dda6",
+            "7c3c09155bb047cb",
+            "0b84ce158df70ce8",
+            "6e6428d2eeca04bd"
+        ],
+        "x": 34,
+        "y": 339,
+        "w": 752,
+        "h": 122
+    },
+    {
+        "id": "6cbb92fa530f2a8d",
+        "type": "group",
+        "z": "6057c05b02d1aad0",
+        "name": "set lighting when not yet retained",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "0cfb70bafb2a3428",
+            "96f8511f1df7faeb",
+            "3773e4defea6a3bc",
+            "46732b168c58f0e7",
+            "0d4f1677d9760b9c"
+        ],
+        "x": 34,
+        "y": 479,
+        "w": 752,
+        "h": 122
     },
     {
         "id": "ebfab5beb0190193",
@@ -1997,7 +2151,8 @@
         "y": 160,
         "wires": [
             [
-                "0497e0ed333e8f23"
+                "0497e0ed333e8f23",
+                "3cbcdb02b5e451a3"
             ]
         ]
     },
@@ -2994,9 +3149,687 @@
         "g": "f33001c4a3f90bd3",
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
-        "x": 1080,
+        "x": 1100,
         "y": 680,
         "wires": []
+    },
+    {
+        "id": "3cbcdb02b5e451a3",
+        "type": "link out",
+        "z": "94027c46c4bfae12",
+        "g": "b10eb6ebfd377efe",
+        "name": "initialize",
+        "mode": "link",
+        "links": [
+            "0dfcf308245816ba",
+            "08b9165876ab2131"
+        ],
+        "x": 300,
+        "y": 180,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "34d16eacb94f3e0a",
+        "type": "websocket in",
+        "z": "6057c05b02d1aad0",
+        "g": "8ff3dbba8ae94edb",
+        "name": "subscribe",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 120,
+        "y": 100,
+        "wires": [
+            [
+                "a855c1550339c122"
+            ]
+        ]
+    },
+    {
+        "id": "2b03bb375cf8a67b",
+        "type": "switch",
+        "z": "6057c05b02d1aad0",
+        "g": "8ff3dbba8ae94edb",
+        "name": "settings",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "settings/bedtime",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "settings/lighting",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "settings/shades",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 520,
+        "y": 100,
+        "wires": [
+            [
+                "c556cb062dc66d2a"
+            ],
+            [
+                "148d79087235cd86"
+            ],
+            [
+                "70d2ad7cf7335e75"
+            ]
+        ]
+    },
+    {
+        "id": "c556cb062dc66d2a",
+        "type": "link out",
+        "z": "6057c05b02d1aad0",
+        "g": "8ff3dbba8ae94edb",
+        "name": "reset bedtime",
+        "mode": "link",
+        "links": [
+            "d8203a0ddd97b936",
+            "8df09ed123e9dda6"
+        ],
+        "x": 700,
+        "y": 60,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "148d79087235cd86",
+        "type": "link out",
+        "z": "6057c05b02d1aad0",
+        "g": "8ff3dbba8ae94edb",
+        "name": "reset lighting",
+        "mode": "link",
+        "links": [
+            "43188c75feb44742",
+            "9d30e6537dee4911",
+            "96f8511f1df7faeb"
+        ],
+        "x": 690,
+        "y": 100,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "70d2ad7cf7335e75",
+        "type": "link out",
+        "z": "6057c05b02d1aad0",
+        "g": "8ff3dbba8ae94edb",
+        "name": "reset shades",
+        "mode": "link",
+        "links": [
+            "aa30475a841de070",
+            "9cdaafc330c26d06",
+            "178f71b38b1e27a1"
+        ],
+        "x": 690,
+        "y": 140,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "1c130fa5c6f4fb9e",
+        "type": "trigger",
+        "z": "6057c05b02d1aad0",
+        "g": "53f847c1e2a0e2b4",
+        "name": "21 after 5s",
+        "op1": "",
+        "op2": "21",
+        "op1type": "nul",
+        "op2type": "num",
+        "duration": "5",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 290,
+        "y": 400,
+        "wires": [
+            [
+                "7c3c09155bb047cb"
+            ]
+        ]
+    },
+    {
+        "id": "18e0549eb96bd879",
+        "type": "trigger",
+        "z": "6057c05b02d1aad0",
+        "g": "76e4f1af6f6965f0",
+        "name": "false after 5s",
+        "op1": "",
+        "op2": "false",
+        "op1type": "nul",
+        "op2type": "bool",
+        "duration": "5",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 290,
+        "y": 680,
+        "wires": [
+            [
+                "146a87a644d4c618"
+            ]
+        ]
+    },
+    {
+        "id": "8df09ed123e9dda6",
+        "type": "link in",
+        "z": "6057c05b02d1aad0",
+        "g": "53f847c1e2a0e2b4",
+        "name": "reset bedtime",
+        "links": [
+            "0a1c0fddf6b6ca0b",
+            "c556cb062dc66d2a"
+        ],
+        "x": 130,
+        "y": 420,
+        "wires": [
+            [
+                "1c130fa5c6f4fb9e"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "9cdaafc330c26d06",
+        "type": "link in",
+        "z": "6057c05b02d1aad0",
+        "g": "76e4f1af6f6965f0",
+        "name": "reset shades",
+        "links": [
+            "a5741ce43908ad92",
+            "70d2ad7cf7335e75"
+        ],
+        "x": 130,
+        "y": 700,
+        "wires": [
+            [
+                "18e0549eb96bd879"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "7c3c09155bb047cb",
+        "type": "change",
+        "z": "6057c05b02d1aad0",
+        "g": "53f847c1e2a0e2b4",
+        "name": "settings/bedtime",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "settings/bedtime",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 460,
+        "y": 400,
+        "wires": [
+            [
+                "0b84ce158df70ce8"
+            ]
+        ]
+    },
+    {
+        "id": "146a87a644d4c618",
+        "type": "change",
+        "z": "6057c05b02d1aad0",
+        "g": "76e4f1af6f6965f0",
+        "name": "settings/shades",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "settings/shades",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 460,
+        "y": 680,
+        "wires": [
+            [
+                "0cddce8a6a59e3f7"
+            ]
+        ]
+    },
+    {
+        "id": "ed80322f1fe4a167",
+        "type": "websocket out",
+        "z": "6057c05b02d1aad0",
+        "g": "71edb8f081a205bf",
+        "name": "publish",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 1180,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "821be014e963dc51",
+        "type": "status",
+        "z": "6057c05b02d1aad0",
+        "g": "571a5373c51d8862",
+        "name": "websocket in",
+        "scope": [
+            "34d16eacb94f3e0a"
+        ],
+        "x": 130,
+        "y": 240,
+        "wires": [
+            [
+                "1d8b910fae3ff2a8"
+            ]
+        ]
+    },
+    {
+        "id": "c1f4e496380951b9",
+        "type": "function",
+        "z": "6057c05b02d1aad0",
+        "g": "8ff3dbba8ae94edb",
+        "name": "reset",
+        "func": "const message = RED.util.cloneMessage(msg)\n\nmessage.reset = true\nreturn message\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 100,
+        "wires": [
+            [
+                "2b03bb375cf8a67b"
+            ]
+        ]
+    },
+    {
+        "id": "a855c1550339c122",
+        "type": "delay",
+        "z": "6057c05b02d1aad0",
+        "g": "8ff3dbba8ae94edb",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 260,
+        "y": 100,
+        "wires": [
+            [
+                "c1f4e496380951b9"
+            ]
+        ]
+    },
+    {
+        "id": "5a096d86dd501f10",
+        "type": "function",
+        "z": "6057c05b02d1aad0",
+        "g": "71edb8f081a205bf",
+        "name": "default",
+        "func": "const messages = []\nconst message = RED.util.cloneMessage(msg)\nconst count = context.get(\"count\") + 1\n\nmessage.retain = true\nmessage.label = 'default'\nmessages.push(message)\n\nmessages.push({\n    payload: {\n        setting: msg.topic,\n        value: msg.payload\n    },\n    topic: 'settings/default/info'\n})\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: count })\ncontext.set(\"count\", count)\nreturn [messages]\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "context.set(\"count\", 0)\nnode.status({ fill: \"blue\", shape: \"dot\", text: 0 })\n",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 540,
+        "wires": [
+            [
+                "ed80322f1fe4a167"
+            ]
+        ]
+    },
+    {
+        "id": "a00aefc7eab1e6a6",
+        "type": "join",
+        "z": "6057c05b02d1aad0",
+        "g": "571a5373c51d8862",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "status.source.id",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 450,
+        "y": 260,
+        "wires": [
+            [
+                "6a55581296547a51"
+            ]
+        ]
+    },
+    {
+        "id": "4b7ff41599bc5342",
+        "type": "status",
+        "z": "6057c05b02d1aad0",
+        "g": "571a5373c51d8862",
+        "name": "websocket out",
+        "scope": [
+            "ed80322f1fe4a167"
+        ],
+        "x": 130,
+        "y": 280,
+        "wires": [
+            [
+                "1d8b910fae3ff2a8"
+            ]
+        ]
+    },
+    {
+        "id": "1d8b910fae3ff2a8",
+        "type": "change",
+        "z": "6057c05b02d1aad0",
+        "g": "571a5373c51d8862",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "status.text",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "status.source.id",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 300,
+        "y": 260,
+        "wires": [
+            [
+                "a00aefc7eab1e6a6"
+            ]
+        ]
+    },
+    {
+        "id": "6a55581296547a51",
+        "type": "function",
+        "z": "6057c05b02d1aad0",
+        "g": "571a5373c51d8862",
+        "name": "connected",
+        "func": "for (let key in msg.payload) {\n\n    if (Object.prototype.hasOwnProperty.call(msg.payload, key)) {\n\n        const value = msg.payload[key].trim()\n\n        if (value != 'connected') {\n            node.status({ fill: \"grey\", shape: \"dot\", text: value })\n            return null\n        }\n    }\n}\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: \"connected\" })\n\nreturn {\n    payload: true,\n    topic: 'connected'\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 260,
+        "wires": [
+            [
+                "5e9431336f357250"
+            ]
+        ]
+    },
+    {
+        "id": "5e9431336f357250",
+        "type": "link out",
+        "z": "6057c05b02d1aad0",
+        "g": "571a5373c51d8862",
+        "name": "connected",
+        "mode": "link",
+        "links": [
+            "2be3f542ce0a582e",
+            "6e6428d2eeca04bd",
+            "46732b168c58f0e7"
+        ],
+        "x": 750,
+        "y": 260,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "2be3f542ce0a582e",
+        "type": "link in",
+        "z": "6057c05b02d1aad0",
+        "g": "76e4f1af6f6965f0",
+        "name": "set shades",
+        "links": [
+            "5e9431336f357250"
+        ],
+        "x": 140,
+        "y": 660,
+        "wires": [
+            [
+                "18e0549eb96bd879"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "0b84ce158df70ce8",
+        "type": "link out",
+        "z": "6057c05b02d1aad0",
+        "g": "53f847c1e2a0e2b4",
+        "name": "send default bedtime",
+        "mode": "link",
+        "links": [
+            "1fb4f0f5028c454b"
+        ],
+        "x": 660,
+        "y": 400,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "1fb4f0f5028c454b",
+        "type": "link in",
+        "z": "6057c05b02d1aad0",
+        "g": "71edb8f081a205bf",
+        "name": "send default",
+        "links": [
+            "0b84ce158df70ce8",
+            "0d4f1677d9760b9c",
+            "0cddce8a6a59e3f7"
+        ],
+        "x": 910,
+        "y": 540,
+        "wires": [
+            [
+                "5a096d86dd501f10"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "6e6428d2eeca04bd",
+        "type": "link in",
+        "z": "6057c05b02d1aad0",
+        "g": "53f847c1e2a0e2b4",
+        "name": "set bedtime",
+        "links": [
+            "5e9431336f357250"
+        ],
+        "x": 130,
+        "y": 380,
+        "wires": [
+            [
+                "1c130fa5c6f4fb9e"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "0cfb70bafb2a3428",
+        "type": "trigger",
+        "z": "6057c05b02d1aad0",
+        "g": "6cbb92fa530f2a8d",
+        "name": "false after 5s",
+        "op1": "",
+        "op2": "false",
+        "op1type": "nul",
+        "op2type": "bool",
+        "duration": "5",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 290,
+        "y": 540,
+        "wires": [
+            [
+                "3773e4defea6a3bc"
+            ]
+        ]
+    },
+    {
+        "id": "96f8511f1df7faeb",
+        "type": "link in",
+        "z": "6057c05b02d1aad0",
+        "g": "6cbb92fa530f2a8d",
+        "name": "reset lighting",
+        "links": [
+            "811aa5e79e9f10e6",
+            "148d79087235cd86"
+        ],
+        "x": 130,
+        "y": 560,
+        "wires": [
+            [
+                "0cfb70bafb2a3428"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "3773e4defea6a3bc",
+        "type": "change",
+        "z": "6057c05b02d1aad0",
+        "g": "6cbb92fa530f2a8d",
+        "name": "settings/lighting",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "settings/lighting",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 460,
+        "y": 540,
+        "wires": [
+            [
+                "0d4f1677d9760b9c"
+            ]
+        ]
+    },
+    {
+        "id": "46732b168c58f0e7",
+        "type": "link in",
+        "z": "6057c05b02d1aad0",
+        "g": "6cbb92fa530f2a8d",
+        "name": "set lighting",
+        "links": [
+            "5e9431336f357250"
+        ],
+        "x": 140,
+        "y": 520,
+        "wires": [
+            [
+                "0cfb70bafb2a3428"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "0d4f1677d9760b9c",
+        "type": "link out",
+        "z": "6057c05b02d1aad0",
+        "g": "6cbb92fa530f2a8d",
+        "name": "send default lighting",
+        "mode": "link",
+        "links": [
+            "1fb4f0f5028c454b"
+        ],
+        "x": 660,
+        "y": 540,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "0cddce8a6a59e3f7",
+        "type": "link out",
+        "z": "6057c05b02d1aad0",
+        "g": "76e4f1af6f6965f0",
+        "name": "send default shades",
+        "mode": "link",
+        "links": [
+            "1fb4f0f5028c454b"
+        ],
+        "x": 660,
+        "y": 680,
+        "wires": [],
+        "l": true
     },
     {
         "id": "14b78c9b72d385fd",
@@ -3692,7 +4525,7 @@
         "z": "40413194443e96c6",
         "g": "d14a8a332e18c919",
         "name": "https://motorisation.hde.nl/hd/powerview/general-guides/API/",
-        "info": "",
+        "info": "## Docmented API\n\nHere is a snapshot of\n<https://motorisation.hde.nl/hd/powerview/general-guides/API/>\nas of March 17, 2024:\n\n> ---\n> To connect a PowerView&reg; system to a home automation system a\n> PowerView&reg; Hub is required.\n>\n> The current hub implementation supports an HTTP REST API which is\n> described in this document. If you have an older hub, it is also\n> possible to make use of the API through a serial connection, which is\n> described here\n>\n> Currently the API is limited to commands for getting a list of scenes\n> and commands to activate scenes. These scenes need to be created in the\n> PowerView&reg; app first. When receiving a list of scenes from the hub the\n> scene names are base64 encoded. For proper identification they need to\n> be programmatically converted to unicode utf-8 readable text. Go\n> [here](https://www.base64decode.org/) for an online converter. Go\n> [here](#base64_encoding) for some code examples.\n>\n> ---\n> **PowerView&reg; HTTP API**\n>\n>> **IMPORTANT**\n>>\n>> Make sure your hub gets a reserved/fixed ip address from the dhcp\n>> server.\n>>\n>> The preferred method of setting a fixed IP address is IP address\n>> reservation based on MAC address in the home router (which should be\n>> the router with the dhcp server running)\n>>\n>> The hub ip and MAC address can be found using the PowerView app:\n>>\n>> 1. Open the side menu.\n>> 2. Select <Hub>\n>> 3. Select the currently connected hub\n>> 4. Select <hub info>\n>>\n>> A list should appear with both ip and MAC address displayed.\n>\n> ---\n> **Get a list of all available scenes**\n>\n> request:\n>\n> method: `GET`\n>\n> `api/scenes/`\n>\n> response example:\n>\n> ```\n> {\n>   \"sceneIds\":[7214,64073,15890,42747],\n>   \"sceneData\":[\n>     {\n>       \"id\":7214,\n>       \"name\":\"QWxsIGRvd24=\", //base64 encoded.\n>       \"roomId\":64902,\n>       \"order\":0,\n>       \"colorId\":2,\n>       \"iconId\":0\n>     },\n>     {\n>       \"id\":64073,\n>       \"name\":\"UGxpc3NlIDE=\", //base64 encoded.\n>       \"roomId\":64902,\n>       \"order\":1,\n>       \"colorId\":5,\n>       \"iconId\":0\n>     },\n>     {\n>       \"id\":15890,\n>       \"name\":\"QWxsIHVw\", //base64 encoded.\n>       \"roomId\":64902,\n>       \"order\":2,\n>       \"colorId\":0,\n>       \"iconId\":0\n>     },\n>     {\n>       \"id\":42747,\n>       \"name\":\"UGxpc3NlIDI=\", //base64 encoded.\n>       \"roomId\":64902,\n>       \"order\":3,\n>       \"colorId\":7,\n>       \"iconId\":0\n>     }\n>   ]\n> }\n> ```\n>\n> ---\n> **Activate a scene**\n>\n> request:\n>\n> method: `GET`\n>\n> `/api/scenes?sceneId=<sceneid>`  //replace <sceneid> with actual scene id.\n>\n> response example:\n>\n> ```\n> {\n>   \"scene\":{\"shadeIds\":[35523]}\n> }\n> ```\n>\n> **Base64 encoding**\n>\n> **Python**\n>\n> ```python\n> import base64\n>\n> def decode_base64(str):\n>     \"\"\"Convert base64 to unicode text\"\"\"\n>     return base64.b64decode(str).decode('utf-8')\n> ```\n>\n> **javascript**\n>\n> ```javascript\n> function decode_base64(str){\n>   // Converts incoming base64 to unicode text.\n>   return new Buffer(str, 'base64').toString('binary');\n> }\n> ```\n\n## Undocumented Feature\n\n**Get a list of all available rooms**\n\nrequest: `GET`\n\n`api/rooms`\n\nresponse example:\n\n```\n{\n    \"roomIds\":[\n        12345,\n        56789\n    ],\n    \"roomData\":[\n        {\n            \"order\":13,\n            \"name\":\"pR9Yj2g=\",\n            \"colorId\":3,\n            \"iconId\":50,\n            \"type\":0,\n            \"id\":12345\n        },\n        {\n            \"order\":10,\n            \"name\":\"GhH357==\",\n            \"colorId\":3,\n            \"iconId\":50,\n            \"type\":0,\n            \"id\":56789\n        }\n    ]\n}\n```\n",
         "x": 260,
         "y": 60,
         "wires": []
