@@ -601,11 +601,12 @@
             "c79b769649c2b419",
             "189c38230a6eb7a0",
             "0c57cb4bce44a11a",
-            "3cbcdb02b5e451a3"
+            "3cbcdb02b5e451a3",
+            "499de1cc5ab65c53"
         ],
         "x": 14,
         "y": 19,
-        "w": 1112,
+        "w": 1272,
         "h": 242,
         "info": "Subscribe to settings change events. Send `automation/trigger` events up\nto five times per day, at: sunrise, the start of midday, the start of\nafternoon, sunset and bedtime.\n\n- The times for sunrise and sunset are obtained directly from\n  [`suncalc.getTimes()`](https://github.com/mourner/suncalc#sunlight-times)\n\n- The times for midday and afternoon are determined using the position\n  of the sun over the course of the current day as reported by\n  [`suncalc.getPosition()`](https://github.com/mourner/suncalc#sun-position)\n\n- The time for bedtime varies randomly each day, as described below\n\nThe `${LATITUDE}` and `${LONGITUDE}` environment variables must be set\nto the home's geographic coordinates for use with `suncalc`.\n\nMidday starts when the sun first reaches an altitude of 0.8 radians. No\nmidday will be sent on a given day if the sun never reaches that\naltitude for the specified `${LATITUDE}`.\n\nAfternoon starts when the sun's azimuth is greater than 0 and its\naltitude first drops below 0.8 radians. For days on which the altitude\nnever reaches 0.8, this will be as soon after sunrise as the sun starts\nto shine more from the west than the east.\n\nBedtime is randomized each day, constrained to be within &PlusMinus;30\nminutes of the value for `settings/bedtime`.\n\nNote that the inclusion of midday and afternoon and the rules for\ndetermining when they occur on a given day were determined empirically\nfor a particular house with 4 parallel walls, aligned more or less\nexactly with the cardinal compass directions at a particular latitude.\nIt is also influenced by the size of that house's rather substantial\neaves shading the east- and west-facing windows. They might need\nadjustment or an entirely different set of events for a different\nstructure at a different location. The goal of all this is to trigger\nautomation to control lighting and motorized window coverings in such\na way that maximizes the times of day at which the view of the outside\nworld can be enjoyed while optimizing the lighting and window coverings\nfor comfort and energy efficiency during times of day when the sun\nshines too directly into the windows. "
     },
@@ -2361,7 +2362,7 @@
         "y": 60,
         "wires": [
             [
-                "0c57cb4bce44a11a"
+                "499de1cc5ab65c53"
             ]
         ]
     },
@@ -2493,7 +2494,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1040,
+        "x": 1200,
         "y": 200,
         "wires": []
     },
@@ -3168,6 +3169,27 @@
         "y": 180,
         "wires": [],
         "l": true
+    },
+    {
+        "id": "499de1cc5ab65c53",
+        "type": "function",
+        "z": "94027c46c4bfae12",
+        "g": "b10eb6ebfd377efe",
+        "name": "debug trigger",
+        "func": "const debug = RED.util.cloneMessage(msg)\n\ndebug.topic = 'debug/' + debug.topic\ndebug.retain = true\ndebug.payload.timestamp = new Date().toLocaleString()\n\nreturn [\n    [msg, debug]\n]\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 60,
+        "wires": [
+            [
+                "0c57cb4bce44a11a"
+            ]
+        ]
     },
     {
         "id": "34d16eacb94f3e0a",

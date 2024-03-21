@@ -366,7 +366,7 @@ function connectWS() {
 
         }
 
-        if (msg.topic == 'automation/trigger') {
+        if (msg.topic == 'debug/automation/trigger') {
 
             trigger.value = msg.payload
             return

@@ -1,6 +1,6 @@
 <template>
     <fieldset :disabled="websocketStatus != 1">
-        <legend>Timer</legend>
+        <legend>^debug/timer/time/([^/]+)$</legend>
         <table>
             <tr v-for="(pair, index) in timerValues" :key="index">
                 <th :class="{ 'last-time': pair[0] == timerTime }">

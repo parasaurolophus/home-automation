@@ -1,6 +1,6 @@
 <template>
     <fieldset>
-        <legend>automation/trigger</legend>
+        <legend>debug/automation/trigger</legend>
         <pre v-html="formattedTrigger()"></pre>
     </fieldset>
 </template>
