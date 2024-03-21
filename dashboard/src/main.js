@@ -83,6 +83,10 @@ app.provide('timerValues', timerValues)
 const timerTime = ref('')
 app.provide('timerTime', timerTime)
 
+// model for timer theme debugging output
+const timerTheme = ref('')
+app.provide('timerTheme', timerTheme)
+
 // model for trigger event debugging output
 const trigger = ref("none received since\npage last reloaded")
 app.provide('trigger', trigger)
@@ -304,6 +308,12 @@ function connectWS() {
             timerTime.value = msg.payload
             return
 
+        }
+
+        if (msg.topic == 'debug/timer/theme') {
+
+            timerTheme.value = msg.payload
+            return
         }
 
         if (msg.topic == 'powerview/model') {

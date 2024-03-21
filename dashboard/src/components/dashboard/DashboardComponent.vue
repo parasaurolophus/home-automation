@@ -7,13 +7,13 @@
         </v-row>
         <v-row>
             <v-col>
+                <SettingsComponent />
+            </v-col>
+            <v-col>
                 <ConnectionsDiagramComponent />
             </v-col>
         </v-row>
         <v-row>
-            <v-col>
-                <SettingsComponent />
-            </v-col>
             <v-col>
                 <TimerComponent />
             </v-col>
