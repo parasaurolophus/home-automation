@@ -4932,7 +4932,7 @@
         "type": "inject",
         "z": "40413194443e96c6",
         "g": "9823c620ddf3d6e0",
-        "name": "every 30 seconds",
+        "name": "every 10 seconds",
         "props": [
             {
                 "p": "payload"
@@ -4942,10 +4942,10 @@
                 "vt": "str"
             }
         ],
-        "repeat": "30",
+        "repeat": "10",
         "crontab": "",
         "once": true,
-        "onceDelay": "30",
+        "onceDelay": "10",
         "topic": "",
         "payload": "",
         "payloadType": "date",
