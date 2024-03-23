@@ -6,7 +6,7 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col>
+            <v-col cols="3">
                 <SettingsComponent />
             </v-col>
             <v-col>
