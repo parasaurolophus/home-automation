@@ -1,5 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
+
     <v-tabs v-model="tab">
         <v-tab value="hue">Lighting</v-tab>
         <v-tab value="powerview">Window Shades</v-tab>
@@ -9,6 +10,7 @@
     </v-tabs>
 
     <v-window v-model="tab">
+
         <v-window-item value="hue">
             <v-container>
                 <v-row>
@@ -18,6 +20,7 @@
                 </v-row>
             </v-container>
         </v-window-item>
+
         <v-window-item value="powerview">
             <v-container>
                 <v-row>
@@ -27,16 +30,31 @@
                 </v-row>
             </v-container>
         </v-window-item>
+
         <v-window-item value="dashboard">
             <DashboardComponent />
         </v-window-item>
+
         <v-window-item value="metadata">
             <MetadataComponent />
         </v-window-item>
+
         <v-window-item value="example">
-            <MermaidComponent diagram-url="/ui/diagram.mmd" />
+            <v-container>
+                <v-row>
+                    <v-col>
+                        <MermaidComponent diagram-url="/ui/diagram.mmd" />
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <HueTreeComponent />
+                    </v-col>
+                </v-row>
+            </v-container>
         </v-window-item>
     </v-window>
+
 </template>
 
 <style>
@@ -50,8 +68,10 @@ import PowerViewControlsComponent from '@/components/controls/PowerViewControlsC
 import DashboardComponent from '@/components/ui/DashboardComponent.vue'
 import MetadataComponent from '@/components/metadata/MetadataComponent.vue'
 import MermaidComponent from '@/components/MermaidComponent.vue'
+import HueTreeComponent from '@/components/controls/HueTreeComponent.vue'
 
 const hueModels = inject('hueModels')
 const powerviewModel = inject('powerviewModel')
 const tab = ref(null)
+
 </script>
