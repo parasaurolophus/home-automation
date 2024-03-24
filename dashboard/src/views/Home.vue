@@ -5,6 +5,7 @@
         <v-tab value="powerview">Window Shades</v-tab>
         <v-tab value="dashboard">Dashboard</v-tab>
         <v-tab value="metadata">Metadata</v-tab>
+        <v-tab value="example">Example</v-tab>
     </v-tabs>
 
     <v-window v-model="tab">
@@ -32,6 +33,9 @@
         <v-window-item value="metadata">
             <MetadataComponent />
         </v-window-item>
+        <v-window-item value="example">
+            <MermaidComponent diagram-url="/dashboard/diagram.mmd" />
+        </v-window-item>
     </v-window>
 </template>
 
@@ -45,6 +49,7 @@ import HueControlsComponent from '@/components/controls/HueControlsComponent.vue
 import PowerViewControlsComponent from '@/components/controls/PowerViewControlsComponent.vue'
 import DashboardComponent from '@/components/dashboard/DashboardComponent.vue'
 import MetadataComponent from '@/components/metadata/MetadataComponent.vue'
+import MermaidComponent from '@/components/MermaidComponent.vue'
 
 const hueModels = inject('hueModels')
 const powerviewModel = inject('powerviewModel')
