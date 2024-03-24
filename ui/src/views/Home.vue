@@ -34,7 +34,7 @@
             <MetadataComponent />
         </v-window-item>
         <v-window-item value="example">
-            <MermaidComponent diagram-url="/dashboard/diagram.mmd" />
+            <MermaidComponent diagram-url="/ui/diagram.mmd" />
         </v-window-item>
     </v-window>
 </template>
@@ -47,7 +47,7 @@
 import { inject, ref } from 'vue'
 import HueControlsComponent from '@/components/controls/HueControlsComponent.vue'
 import PowerViewControlsComponent from '@/components/controls/PowerViewControlsComponent.vue'
-import DashboardComponent from '@/components/dashboard/DashboardComponent.vue'
+import DashboardComponent from '@/components/ui/DashboardComponent.vue'
 import MetadataComponent from '@/components/metadata/MetadataComponent.vue'
 import MermaidComponent from '@/components/MermaidComponent.vue'
 

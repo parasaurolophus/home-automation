@@ -35,7 +35,7 @@ export default defineConfig({
       '.vue',
     ],
   },
-  base: '/dashboard/',
+  base: '/ui/',
   server: {
     port: 3000,
   },

@@ -131,16 +131,16 @@ function renderDiagram() {
     const flowsClassName = websocketStatus.value == 0 ? 'yellow' : websocketStatus.value == 1 ? 'green' : 'red'
 
     flowchart += '  browser["browser&nbsp;"]\n'
-    flowchart += '  dashboard["dashboard&nbsp;"]\n'
+    flowchart += '  ui["ui&nbsp;"]\n'
     flowchart += '  flows["flows&nbsp;\n(' + flowsStatus + ')&nbsp;"]\n'
     flowchart += '  class flows ' + flowsClassName + '\n\n'
 
-    flowchart += ' browser --- dashboard;\n\n'
+    flowchart += ' browser --- ui;\n\n'
 
     flowchart += 'subgraph "LAN&nbsp;"\n\n'
 
     flowchart += '    subgraph "Node-RED&nbsp;"\n'
-    flowchart += '      dashboard --- flows\n'
+    flowchart += '      ui --- flows\n'
     flowchart += '    end\n\n'
 
     let index = 0
@@ -183,7 +183,7 @@ function refreshControls() {
 
 async function drawDiagram() {
 
-    const { svg, bindFunctions } = await mermaid.render('dashboard', renderDiagram())
+    const { svg, bindFunctions } = await mermaid.render('ui', renderDiagram())
 
     diagram.value.innerHTML = svg
     bindFunctions?.(diagram.value)

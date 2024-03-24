@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/dashboard/',
+    path: '/ui/',
     component: () => import('@/layouts/default/Default.vue'),
     children: [
       {

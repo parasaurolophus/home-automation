@@ -6,7 +6,7 @@ graph TB
 
         subgraph "Node-RED"
 
-            dashboard[Dashboard]
+            ui[UI]
             flows[Automation Flows]
 
         end
@@ -20,9 +20,9 @@ graph TB
 
     end
 
-    browser -- HTTP --- dashboard
+    browser -- HTTP --- ui
     browser -- WebSocket --- flows
-    dashboard -- WebSocket --- flows
+    ui -- WebSocket --- flows
     flows -- HTTP --- groundFloorHueBridge
     flows -- HTTP --- basementHueBridge
     flows -- HTTP --- powerviewHub

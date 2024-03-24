@@ -29,9 +29,9 @@
 </style>
 
 <script setup>
-import AlertComponent from '@/components/dashboard/AlertComponent.vue'
-import ConnectionsDiagramComponent from '@/components/dashboard/ConnectionsDiagramComponent.vue'
-import SettingsComponent from '@/components/dashboard/SettingsComponent.vue'
-import TimerComponent from '@/components/dashboard/TimerComponent.vue'
-import TriggerComponent from '@/components/dashboard/TriggerComponent.vue'
+import AlertComponent from '@/components/ui/AlertComponent.vue'
+import ConnectionsDiagramComponent from '@/components/ui/ConnectionsDiagramComponent.vue'
+import SettingsComponent from '@/components/ui/SettingsComponent.vue'
+import TimerComponent from '@/components/ui/TimerComponent.vue'
+import TriggerComponent from '@/components/ui/TriggerComponent.vue'
 </script>
