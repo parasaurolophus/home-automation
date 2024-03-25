@@ -3,10 +3,10 @@
         <v-row>
             <v-col v-for="(room, index) in hub" :key="index">
                 <fieldset :disabled="websocketStatus != 1">
-                    <legend>{{ room.name }}</legend>
-                    <v-btn v-for="(scene, index) in room.scenes" :key="index"
+                    <legend>{{ room.title }}</legend>
+                    <v-btn v-for="(scene, index) in room.children" :key="index"
                         @click="websocketPublish({ payload: scene.id, topic: 'put/powerview/scene' })">
-                        {{ scene.name }}
+                        {{ scene.title }}
                     </v-btn>
                 </fieldset>
             </v-col>

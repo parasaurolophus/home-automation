@@ -48,6 +48,9 @@
                 </v-row>
                 <v-row>
                     <v-col>
+                        <PowerViewTreeComponent :hub="powerviewModel" />
+                    </v-col>
+                    <v-col>
                         <HueTreeComponent />
                     </v-col>
                 </v-row>
@@ -69,6 +72,7 @@ import DashboardComponent from '@/components/ui/DashboardComponent.vue'
 import MetadataComponent from '@/components/metadata/MetadataComponent.vue'
 import MermaidComponent from '@/components/MermaidComponent.vue'
 import HueTreeComponent from '@/components/controls/HueTreeComponent.vue'
+import PowerViewTreeComponent from '@/components/controls/PowerViewTreeComponent.vue'
 
 const hueModels = inject('hueModels')
 const powerviewModel = inject('powerviewModel')
