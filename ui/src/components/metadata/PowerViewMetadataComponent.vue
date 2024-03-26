@@ -6,7 +6,7 @@
                 <v-row>
                     <v-col v-for="(room, index) in hub" :key="index">
                         <fieldset>
-                            <legend>{{ room.name }}</legend>
+                            <legend>{{ room.title }}</legend>
                             <table>
                                 <tr>
                                     <th>id</th>
@@ -17,9 +17,9 @@
                                     </td>
                                 </tr>
                                 <tr v-for="(scene, index) in room.scenes" :key="index">
-                                    <th>{{ scene.name }}</th>
+                                    <th>{{ scene.title }}</th>
                                     <td>
-                                        <button :onclick="onScene" :value="scene.id + '|' + scene.name">
+                                        <button :onclick="onScene" :value="scene.id + '|' + scene.title">
                                             {{ scene.id }}
                                         </button>
                                     </td>

@@ -24,7 +24,7 @@ registerPlugins(app)
 
 // cached payloads of hue/{address}/model messages as they arrive
 // (see hueModels)
-let cachedHueModels = {}
+const cachedHueModels = {}
 
 // items for v-select corresponding to settings/bedtime messages
 // in SettingsComponent.vue (see settingsBedtime)
@@ -67,8 +67,8 @@ app.provide('hueBridges', hueBridges)
 // on contents of cachedHueModels, updated
 // each time a hue/{address}/model event
 // message is received
-const hueModels = ref([])
-app.provide('hueModels', hueModels)
+const hueModel = ref([])
+app.provide('hueModel', hueModel)
 
 // model for PowerViewControls.vue, updated
 // each time a powerview/model event message
@@ -378,11 +378,16 @@ function connectWS() {
 
         }
 
+        if (msg.topic == 'hue/model') {
+
+            hueModel.value = msg.payload
+            return
+        }
+
         if (msg.topic == 'hue/bridges') {
 
             hueBridges.value = msg.payload
             return
-
         }
 
         if (msg.topic == 'debug/automation/trigger') {
@@ -470,28 +475,6 @@ function connectWS() {
         if (Array.isArray(matches) && (matches.length == 2)) {
 
             hueKeys.value[matches[1]] = msg.payload
-            return
-
-        }
-
-        matches = /^hue\/([^/]+)\/model$/.exec(msg.topic)
-
-        if (Array.isArray(matches) && (matches.length == 2)) {
-
-            cachedHueModels[matches[1]] = msg.payload
-            const sorted = []
-
-            for (let label in cachedHueModels) {
-
-                sorted.push(cachedHueModels[label])
-
-            }
-
-            sorted.sort((a, b) => {
-                return a.title.localeCompare(b.title)
-            })
-
-            hueModels.value = sorted
             return
 
         }

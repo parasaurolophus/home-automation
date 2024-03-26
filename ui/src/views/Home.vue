@@ -14,7 +14,7 @@
         <v-window-item value="hue">
             <v-container>
                 <v-row>
-                    <v-col v-for="(bridge, index) in hueModels" :key="index">
+                    <v-col v-for="(bridge, index) in hueModel" :key="index">
                         <HueControlsComponent :bridge="bridge" />
                     </v-col>
                 </v-row>
@@ -74,7 +74,7 @@ import MermaidComponent from '@/components/MermaidComponent.vue'
 import HueTreeComponent from '@/components/controls/HueTreeComponent.vue'
 import PowerViewTreeComponent from '@/components/controls/PowerViewTreeComponent.vue'
 
-const hueModels = inject('hueModels')
+const hueModel = inject('hueModel')
 const powerviewModel = inject('powerviewModel')
 const tab = ref(null)
 

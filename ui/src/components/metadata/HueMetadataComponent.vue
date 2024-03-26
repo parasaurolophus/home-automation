@@ -6,7 +6,7 @@
         </v-card-title>
         <v-card-text>
             <fieldset v-for="(group, index) in bridge.groups" :key="index">
-                <legend>{{ group.name }}</legend>
+                <legend>{{ group.title }}</legend>
                 <table>
                     <tr>
                         <th>type</th>
@@ -16,16 +16,16 @@
                         <th>grouped_light</th>
                         <td>
                             <button :onclick="onGroupedLight"
-                                :value="bridge.address + '|' + group.grouped_light.id + '|' + group.name">
+                                :value="bridge.address + '|' + group.grouped_light.id + '|' + group.title">
                                 {{ group.grouped_light.id }}
                             </button>
                         </td>
                     </tr>
                     <tr v-for="(scene, index) in group.scenes" :key="index">
-                        <th>{{ scene.metadata.name }}</th>
+                        <th>{{ scene.title }}</th>
                         <td>
                             <button :onclick="onScene"
-                                :value="bridge.address + '|' + scene.id + '|' + group.name + '/' + scene.metadata.name">
+                                :value="bridge.address + '|' + scene.id + '|' + group.title + '/' + scene.title">
                                 {{ scene.id }}
                             </button>
                         </td>

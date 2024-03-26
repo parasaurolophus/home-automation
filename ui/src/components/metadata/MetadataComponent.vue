@@ -9,7 +9,7 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col v-for="(bridge, index) in hueModels" :key="index">
+            <v-col v-for="(bridge, index) in hueModel" :key="index">
                 <HueMetadataComponent :bridge="bridge" />
             </v-col>
         </v-row>
@@ -30,7 +30,7 @@ const showAlert = ref(false)
 const alertMessage = ref('')
 
 const powerviewModel = inject('powerviewModel')
-const hueModels = inject('hueModels')
+const hueModel = inject('hueModel')
 
 provide('showMetadataExample', (message) => {
 

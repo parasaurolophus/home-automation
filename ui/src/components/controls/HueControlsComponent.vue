@@ -2,8 +2,8 @@
     <v-card>
         <v-card-title>{{ bridge.title }}</v-card-title>
         <v-card-text>
-            <fieldset v-for="(group, index) in bridge.groups" :key="index" :disabled="websocketStatus != 1">
-                <legend>{{ group.name }}</legend>
+            <fieldset v-for="(group, index) in bridge.children" :key="index" :disabled="websocketStatus != 1">
+                <legend>{{ group.title }}</legend>
                 <v-switch v-model="group.grouped_light.on.on"
                     @change="websocketPublish({ payload: { on: { on: group.grouped_light.on.on } }, topic: group.value, method: 'PUT' })">
                     <template v-slot:label>
@@ -11,9 +11,9 @@
                         <span v-else>Off</span>
                     </template>
                 </v-switch>
-                <v-btn v-for="(scene, index) in group.scenes" :key="index"
+                <v-btn v-for="(scene, index) in group.children" :key="index"
                     @click="websocketPublish({ payload: { recall: { action: 'active' } }, topic: scene.value, method: 'PUT' })">
-                    {{ scene.metadata.name }}
+                    {{ scene.title }}
                 </v-btn>
             </fieldset>
         </v-card-text>
