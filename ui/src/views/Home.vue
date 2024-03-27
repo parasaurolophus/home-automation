@@ -43,6 +43,16 @@
             <v-container>
                 <v-row>
                     <v-col>
+                        <table>
+                            <tr v-for="(icon, index) in icons" :key="index">
+                                <th>{{ icon }}</th>
+                                <td><v-icon :icon="icon"></v-icon></td>
+                            </tr>
+                        </table>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
                         <MermaidComponent diagram-url="/ui/diagram.mmd" />
                     </v-col>
                 </v-row>
@@ -51,7 +61,7 @@
                         <PowerViewTreeComponent :hub="powerviewModel" />
                     </v-col>
                     <v-col>
-                        <HueTreeComponent />
+                        <HueTreeComponent :bridges="hueModel" />
                     </v-col>
                 </v-row>
             </v-container>
@@ -77,5 +87,13 @@ import PowerViewTreeComponent from '@/components/controls/PowerViewTreeComponent
 const hueModel = inject('hueModel')
 const powerviewModel = inject('powerviewModel')
 const tab = ref(null)
-
+const icons = ref([
+    'mdi-home',
+    'mdi-blinds',
+    'mdi-blinds-open',
+    'mdi-lightbulb',
+    'mdi-lightbulb-multiple',
+    'mdi-lightbulb-group',
+    'mdi-lightbulb-on'
+])
 </script>

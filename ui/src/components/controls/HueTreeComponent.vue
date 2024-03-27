@@ -1,12 +1,18 @@
 <template>
-    <v-treeview :items="hueModel" density="compact" activatable>
-    </v-treeview>
+    <fieldset>
+        <legend>Lighting</legend>
+        <v-treeview v-model="tree" :items="bridges" activatable>
+        </v-treeview>
+    </fieldset>
 </template>
 
 <script setup>
-import { inject } from 'vue'
+import { ref } from 'vue'
 import { VTreeview } from 'vuetify/lib/labs/components.mjs'
 
-const hueModel = inject('hueModel')
+defineProps({
+    bridges: Object
+})
 
+const tree = ref([])
 </script>
