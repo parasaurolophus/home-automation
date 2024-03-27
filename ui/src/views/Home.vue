@@ -6,7 +6,7 @@
         <v-tab value="powerview">Window Shades</v-tab>
         <v-tab value="dashboard">Dashboard</v-tab>
         <v-tab value="metadata">Metadata</v-tab>
-        <v-tab value="example">Example</v-tab>
+        <v-tab value="examples">Examples</v-tab>
     </v-tabs>
 
     <v-window v-model="tab">
@@ -39,18 +39,8 @@
             <MetadataComponent />
         </v-window-item>
 
-        <v-window-item value="example">
+        <v-window-item value="examples">
             <v-container>
-                <v-row>
-                    <v-col>
-                        <table>
-                            <tr v-for="(icon, index) in icons" :key="index">
-                                <th>{{ icon }}</th>
-                                <td><v-icon :icon="icon"></v-icon></td>
-                            </tr>
-                        </table>
-                    </v-col>
-                </v-row>
                 <v-row>
                     <v-col>
                         <MermaidComponent diagram-url="/ui/diagram.mmd" />
@@ -87,13 +77,4 @@ import PowerViewTreeComponent from '@/components/controls/PowerViewTreeComponent
 const hueModel = inject('hueModel')
 const powerviewModel = inject('powerviewModel')
 const tab = ref(null)
-const icons = ref([
-    'mdi-home',
-    'mdi-blinds',
-    'mdi-blinds-open',
-    'mdi-lightbulb',
-    'mdi-lightbulb-multiple',
-    'mdi-lightbulb-group',
-    'mdi-lightbulb-on'
-])
 </script>
