@@ -2,41 +2,65 @@
 <template>
 
     <v-tabs v-model="tab">
-        <v-tab value="hue">Lighting</v-tab>
-        <v-tab value="powerview">Window Shades</v-tab>
         <v-tab value="dashboard">Dashboard</v-tab>
-        <v-tab value="metadata">Metadata</v-tab>
         <v-tab value="examples">Examples</v-tab>
     </v-tabs>
 
     <v-window v-model="tab">
 
-        <v-window-item value="hue">
-            <v-container>
-                <v-row>
-                    <v-col v-for="(bridge, index) in hueModel" :key="index">
-                        <HueControlsComponent :bridge="bridge" />
-                    </v-col>
-                </v-row>
-            </v-container>
-        </v-window-item>
+        <v-window-item value="dashboard">
 
-        <v-window-item value="powerview">
             <v-container>
                 <v-row>
                     <v-col>
-                        <PowerViewControlsComponent :hub="powerviewModel" />
+                        <AlertComponent />
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="4">
+                        <SettingsComponent />
+                    </v-col>
+                    <v-col>
+                        <ConnectionsDiagramComponent />
                     </v-col>
                 </v-row>
             </v-container>
-        </v-window-item>
 
-        <v-window-item value="dashboard">
-            <DashboardComponent />
-        </v-window-item>
+            <v-expansion-panels>
+                <v-expansion-panel title="Lighting">
+                    <v-expansion-panel-text>
+                        <template v-for="(bridge, index) in hueModel" :key="index">
+                            <HueControlsComponent :bridge="bridge" />
+                        </template>
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+            </v-expansion-panels>
 
-        <v-window-item value="metadata">
-            <MetadataComponent />
+            <v-expansion-panels>
+                <v-expansion-panel title="Window Shades">
+                    <v-expansion-panel-text>
+                        <PowerViewControlsComponent :hub="powerviewModel" />
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+            </v-expansion-panels>
+
+            <v-expansion-panels>
+                <v-expansion-panel title="Debug">
+                    <v-expansion-panel-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="4">
+                                    <TimerComponent />
+                                </v-col>
+                                <v-col>
+                                    <TriggerComponent />
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+            </v-expansion-panels>
+
         </v-window-item>
 
         <v-window-item value="examples">
@@ -66,10 +90,14 @@
 
 <script setup>
 import { inject, ref } from 'vue'
+import AlertComponent from '@/components/ui/AlertComponent.vue'
+import ConnectionsDiagramComponent from '@/components/ui/ConnectionsDiagramComponent.vue'
 import HueControlsComponent from '@/components/controls/HueControlsComponent.vue'
 import PowerViewControlsComponent from '@/components/controls/PowerViewControlsComponent.vue'
-import DashboardComponent from '@/components/ui/DashboardComponent.vue'
-import MetadataComponent from '@/components/metadata/MetadataComponent.vue'
+import SettingsComponent from '@/components/ui/SettingsComponent.vue'
+import TimerComponent from '@/components/ui/TimerComponent.vue'
+import TriggerComponent from '@/components/ui/TriggerComponent.vue'
+
 import MermaidComponent from '@/components/MermaidComponent.vue'
 import HueTreeComponent from '@/components/controls/HueTreeComponent.vue'
 import PowerViewTreeComponent from '@/components/controls/PowerViewTreeComponent.vue'
