@@ -20,10 +20,6 @@
     </v-card>
 </template>
 
-<style scoped>
-/* */
-</style>
-
 <script setup>
 import { inject } from 'vue'
 

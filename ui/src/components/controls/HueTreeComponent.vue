@@ -5,26 +5,19 @@
             <template #prepend="{ item }">
                 <v-switch v-if="item.category == 'group'" v-model="item.on"
                     @change="websocketPublish({ payload: { on: { on: item.on } }, topic: item.topic, method: 'PUT' })">
-                    <template #label>{{ item.title }}</template>
                 </v-switch>
-                <v-btn v-else-if="item.category == 'scene'"
+                <v-btn v-else-if="item.category == 'scene'" prepend-icon="mdi-lightbulb-group"
                     @click="websocketPublish({ payload: { recall: { action: 'active' } }, topic: item.topic, method: 'PUT' })">
                     {{ item.title }}
                 </v-btn>
                 <span v-if="['group', 'scene'].includes(item.category)">&nbsp;</span>
             </template>
             <template #title="{ item }">
-                <span v-if="!['group', 'scene'].includes(item.category)" class="group-title">{{ item.title }}</span>
+                <span v-if="item.category != 'scene'">{{ item.title }}</span>
             </template>
         </v-treeview>
     </fieldset>
 </template>
-
-<style scoped>
-.group-title {
-    font-style: italic;
-}
-</style>
 
 <script setup>
 import { inject } from 'vue'
