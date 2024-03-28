@@ -3,9 +3,14 @@
         <legend>Lighting</legend>
         <v-treeview :items="bridges" open-strategy="single" activatable active-strategy="single-leaf" density="compact">
             <template #prepend="{ item }">
-                <v-switch v-if="item.category == 'group'" v-model="item.on"
+                <!-- <v-switch v-if="item.category == 'group'" v-model="item.on"
                     @change="websocketPublish({ payload: { on: { on: item.on } }, topic: item.topic, method: 'PUT' })">
-                </v-switch>
+                </v-switch> -->
+                <v-btn v-if="item.category == 'group'"
+                    :prepend-icon="item.on ? 'mdi-lightbulb' : 'mdi-lightbulb-off'"
+                    @click="websocketPublish({ payload: { on: { on: false } }, topic: item.topic, method: 'PUT' })">
+                    {{ item.title }}
+                </v-btn>
                 <v-btn v-else-if="item.category == 'scene'" prepend-icon="mdi-lightbulb-group"
                     @click="websocketPublish({ payload: { recall: { action: 'active' } }, topic: item.topic, method: 'PUT' })">
                     {{ item.title }}
@@ -13,7 +18,7 @@
                 <span v-if="['group', 'scene'].includes(item.category)">&nbsp;</span>
             </template>
             <template #title="{ item }">
-                <span v-if="item.category != 'scene'">{{ item.title }}</span>
+                <span v-if="!['group', 'scene'].includes(item.category)">{{ item.title }}</span>
             </template>
         </v-treeview>
     </fieldset>
