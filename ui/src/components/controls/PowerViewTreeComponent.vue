@@ -1,25 +1,35 @@
 <template>
     <fieldset>
         <legend>Shades</legend>
-        <v-treeview v-model="tree" :items="hub" activatable active-strategy="single-leaf" density="compact">
-            <template v-slot:append="{ item }">
-                <v-btn v-if="item.category == 'scene'"
-                    @click="websocketPublish({ payload: item.id, topic: 'put/powerview/scene' })">
-                    activate
-                </v-btn>
+        <v-treeview :items="hub" open-strategy="single" activatable active-strategy="single-leaf" density="compact">
+            <template #prepend="{ item }">
+                <template v-if="item.category == 'scene'">
+                    <v-btn @click="websocketPublish({ payload: item.id, topic: 'put/powerview/scene' })">
+                        {{ item.title }}
+                    </v-btn>
+                    <span>&nbsp;</span>
+                </template>
+            </template>
+            <template #title="{ item }">
+                <span v-if="item.category != 'scene'" class="room-title">{{ item.title }}</span>
             </template>
         </v-treeview>
     </fieldset>
 </template>
 
+<style scoped>
+.room-title {
+    font-style: italic;
+}
+</style>
+
 <script setup>
-import { inject, ref } from 'vue'
+import { inject } from 'vue'
 import { VTreeview } from 'vuetify/lib/labs/components.mjs'
 
-defineProps({
-    hub: Object
+const props = defineProps({
+    hub: Array
 })
 
 const websocketPublish = inject('websocketPublish')
-const tree = ref([])
 </script>

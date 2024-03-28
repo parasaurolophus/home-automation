@@ -5,7 +5,7 @@
             <v-row>
                 <v-col>
                     <v-switch v-model="settingsLighting">
-                        <template v-slot:label>
+                        <template #label>
                             Lighting automation
                             {{ settingsLighting ? 'enabled' : 'disabled' }}
                             ({{ settingsLightingLabel }})
@@ -16,7 +16,7 @@
             <v-row>
                 <v-col>
                     <v-switch v-model="settingsShades">
-                        <template v-slot:label>
+                        <template #label>
                             Window shades automation
                             {{ settingsShades ? 'enabled' : 'disabled' }}
                             ({{ settingsShadesLabel }})

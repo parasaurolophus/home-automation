@@ -6,7 +6,7 @@
                 <legend>{{ group.title }}</legend>
                 <v-switch v-model="group.on"
                     @change="websocketPublish({ payload: { on: { on: group.on } }, topic: group.topic, method: 'PUT' })">
-                    <template v-slot:label>
+                    <template #label>
                         <span v-if="group.state">On</span>
                         <span v-else>Off</span>
                     </template>
