@@ -3,12 +3,12 @@
         <v-expansion-panel v-for="(room, index) in powerviewModel" :key="index" :disabled="websocketStatus != 1">
             <v-expansion-panel-title>{{ room.title }}</v-expansion-panel-title>
             <v-expansion-panel-text>
-                <v-btn-group>
-                    <v-btn v-for="(scene, index) in room.children" :key="index"
-                        @click="websocketPublish({ payload: scene.id, topic: 'put/powerview/scene' })">
+                <template v-for="(scene, index) in room.children" :key="index">
+                    <template v-if="index > 0">&nbsp;</template>
+                    <v-btn @click="websocketPublish({ payload: scene.id, topic: 'put/powerview/scene' })">
                         {{ scene.title }}
                     </v-btn>
-                </v-btn-group>
+                </template>
             </v-expansion-panel-text>
         </v-expansion-panel>
     </v-expansion-panels>

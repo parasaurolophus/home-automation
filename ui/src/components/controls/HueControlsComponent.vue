@@ -12,16 +12,17 @@
                             {{ group.title }}
                         </v-expansion-panel-title>
                         <v-expansion-panel-text>
-                            <v-btn-group>
+                            <v-btn
+                                @click="websocketPublish({ payload: { on: { on: false } }, topic: group.topic, method: 'PUT' })">
+                                Off
+                            </v-btn>
+                            <template v-for="(scene, index) in group.children" :key="index">
+                                &nbsp;
                                 <v-btn
-                                    @click="websocketPublish({ payload: { on: { on: false } }, topic: group.topic, method: 'PUT' })">
-                                    Off
-                                </v-btn>
-                                <v-btn v-for="(scene, index) in group.children" :key="index"
                                     @click="websocketPublish({ payload: { recall: { action: 'active' } }, topic: scene.topic, method: 'PUT' })">
                                     {{ scene.title }}
                                 </v-btn>
-                            </v-btn-group>
+                            </template>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>

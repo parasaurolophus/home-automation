@@ -167,7 +167,6 @@ function renderDiagram() {
     }
 
     flowchart += '  end\n'
-
     return flowchart
 
 }
@@ -184,7 +183,6 @@ async function drawDiagram() {
 
     diagram.value.innerHTML = svg
     bindFunctions?.(diagram.value)
-
 }
 
 mermaid.flowchartConfig = { width: '100%' }

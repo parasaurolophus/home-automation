@@ -33,6 +33,7 @@ const bedtimeOptions = ref([
     { label: '10PM', hour: 22 },
     { label: '11PM', hour: 23 },
 ])
+
 app.provide('bedtimeOptions', bedtimeOptions)
 
 // model for settings/bedtime messages
@@ -40,20 +41,17 @@ app.provide('bedtimeOptions', bedtimeOptions)
 // one of the bedtimeOptions)
 const settingsBedtime = ref(bedtimeOptions.value[0])
 app.provide('settingsBedtime', settingsBedtime)
-const settingsBedtimeLabel = ref('')
-app.provide('settingsBedtimeLabel', settingsBedtimeLabel)
+
+const currentBedtime = ref(0)
+app.provide('currentBedtime', currentBedtime)
 
 // model for settings/lighting messages
 const settingsLighting = ref(false)
 app.provide('settingsLighting', settingsLighting)
-const settingsLightingLabel = ref('')
-app.provide('settingsLightingLabel', settingsLightingLabel)
 
 // model for settings/shades messages
 const settingsShades = ref(false)
 app.provide('settingsShades', settingsShades)
-const settingsShadesLabel = ref('')
-app.provide('settingsShadesLabel', settingsShadesLabel)
 
 // models for alerts
 const alerts = ref([])
@@ -100,6 +98,9 @@ app.provide('trigger', trigger)
 // model for hue/{address}/key messages
 const hueKeys = ref({})
 app.provide('hueKeys', hueKeys)
+
+const settingsOpened = ref(undefined)
+app.provide('settingsOpened', settingsOpened)
 
 //////////////////////////////////////////////////////////////////////////////
 // get hue keys then invoke after()
@@ -339,7 +340,6 @@ function connectWS() {
         if (msg.topic == 'settings/lighting') {
 
             settingsLighting.value = msg.payload
-            settingsLightingLabel.value = msg.label
             return
 
         }
@@ -347,7 +347,6 @@ function connectWS() {
         if (msg.topic == 'settings/shades') {
 
             settingsShades.value = msg.payload
-            settingsShadesLabel.value = msg.label
             return
 
         }
@@ -359,7 +358,6 @@ function connectWS() {
                 if (option.hour == msg.payload) {
 
                     settingsBedtime.value = option
-                    settingsBedtimeLabel.value = msg.label
                     return
 
                 }
@@ -395,6 +393,12 @@ function connectWS() {
             trigger.value = msg.payload
             return
 
+        }
+
+        if (msg.topic == 'debug/timer/time/bedtime') {
+
+            currentBedtime.value = msg.payload
+            return
         }
 
         if (/^.+\/error$/.exec(msg.topic)) {

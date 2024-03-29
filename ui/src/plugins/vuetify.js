@@ -19,19 +19,12 @@ export default createVuetify({
         defaultTheme: 'dark'
     },
     defaults: {
-        VBtnGroup: {
-            divided: true,
-            variant: 'elevated',
-            elevation: 12,
-            VBtn: {
-                variant: 'elevated',
-                elevation: 12,
-                color: 'primary',
-            }
+        VAlert: {
+            variant: 'tonal',
         },
         VBtn: {
-            variant: 'elevated',
-            elevation: 12,
+            flat: true,
+            variant: 'flat',
             color: 'primary',
         },
         VSwitch: {
@@ -39,11 +32,5 @@ export default createVuetify({
             inset: true,
             'hide-details': true,
         },
-        VAlert: {
-            variant: 'tonal',
-        },
-        VContainer: {
-            fluid: true,
-        }
     }
 })
