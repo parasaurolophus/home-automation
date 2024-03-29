@@ -1,5 +1,5 @@
 <template>
-    <v-expansion-panels variant="popout">
+    <v-expansion-panels>
         <v-expansion-panel v-for="(room, index) in powerviewModel" :key="index" :disabled="websocketStatus != 1">
             <v-expansion-panel-title>{{ room.title }}</v-expansion-panel-title>
             <v-expansion-panel-text>

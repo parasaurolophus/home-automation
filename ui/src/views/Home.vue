@@ -3,7 +3,7 @@
 
     <AlertComponent />
 
-    <v-expansion-panels variant="popout" v-model="settingsOpened">
+    <v-expansion-panels v-model="settingsOpened">
 
         <v-expansion-panel title="Connections" value="connections">
             <v-expansion-panel-text eager>
@@ -35,6 +35,12 @@
             </v-expansion-panel-text>
         </v-expansion-panel>
 
+        <v-expansion-panel title="Metadata" value="metadata">
+            <v-expansion-panel-text>
+                <MetadataComponent />
+            </v-expansion-panel-text>
+        </v-expansion-panel>
+
     </v-expansion-panels>
 
 </template>
@@ -45,6 +51,7 @@ import AlertComponent from '@/components/AlertComponent.vue'
 import ConnectionsDiagramComponent from '@/components/ConnectionsDiagramComponent.vue'
 import DebugComponent from '@/components/DebugComponent.vue'
 import HueControlsComponent from '@/components/HueControlsComponent.vue'
+import MetadataComponent from '@/components/MetadataComponent.vue'
 import PowerViewControlsComponent from '@/components/PowerViewControlsComponent.vue'
 import SettingsComponent from '@/components/SettingsComponent.vue'
 

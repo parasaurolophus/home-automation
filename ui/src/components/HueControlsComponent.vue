@@ -1,9 +1,9 @@
 <template>
-    <v-expansion-panels variant="popout">
+    <v-expansion-panels>
         <v-expansion-panel v-for="(bridge, bridgeIndex) in hueModel" :key="bridgeIndex">
             <v-expansion-panel-title>{{ bridge.title }}</v-expansion-panel-title>
             <v-expansion-panel-text>
-                <v-expansion-panels variant="popout">
+                <v-expansion-panels>
                     <v-expansion-panel v-for="(group, groupIndex) in bridge.children" :key="groupIndex"
                         :disabled="websocketStatus != 1">
                         <v-expansion-panel-title>

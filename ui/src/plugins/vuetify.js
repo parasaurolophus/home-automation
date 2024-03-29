@@ -27,6 +27,9 @@ export default createVuetify({
             variant: 'flat',
             color: 'primary',
         },
+        VExpansionPanels: {
+            variant: 'popout',
+        },
         VSwitch: {
             color: 'primary',
             inset: true,
