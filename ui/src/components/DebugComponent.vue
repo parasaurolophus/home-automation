@@ -12,6 +12,6 @@
 </template>
 
 <script setup>
-import TimerComponent from '@/components/ui/TimerComponent.vue'
-import TriggerComponent from '@/components/ui/TriggerComponent.vue'
+import TimerComponent from '@/components/TimerComponent.vue'
+import TriggerComponent from '@/components/TriggerComponent.vue'
 </script>

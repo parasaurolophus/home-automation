@@ -41,12 +41,12 @@
 
 <script setup>
 import { inject } from 'vue'
-import AlertComponent from '@/components/ui/AlertComponent.vue'
-import ConnectionsDiagramComponent from '@/components/ui/ConnectionsDiagramComponent.vue'
-import DebugComponent from '@/components/ui/DebugComponent.vue'
-import HueControlsComponent from '@/components/controls/HueControlsComponent.vue'
-import PowerViewControlsComponent from '@/components/controls/PowerViewControlsComponent.vue'
-import SettingsComponent from '@/components/ui/SettingsComponent.vue'
+import AlertComponent from '@/components/AlertComponent.vue'
+import ConnectionsDiagramComponent from '@/components/ConnectionsDiagramComponent.vue'
+import DebugComponent from '@/components/DebugComponent.vue'
+import HueControlsComponent from '@/components/HueControlsComponent.vue'
+import PowerViewControlsComponent from '@/components/PowerViewControlsComponent.vue'
+import SettingsComponent from '@/components/SettingsComponent.vue'
 
 const settingsOpened = inject('settingsOpened')
 </script>
