@@ -19,23 +19,26 @@ export default createVuetify({
         defaultTheme: 'dark'
     },
     defaults: {
-        VCard: {
-            flat: true,
-            rounded: 0
+        VBtnGroup: {
+            divided: true,
+            variant: 'elevated',
+            elevation: 12,
+        },
+        VBtn: {
+            variant: 'elevated',
+            elevation: 12,
+            color: 'primary',
         },
         VSwitch: {
             color: 'primary',
             inset: true,
-            'hide-details': true
+            'hide-details': true,
         },
         VAlert: {
-            variant: 'tonal'
-        },
-        VAppBar: {
-            flat: true
+            variant: 'tonal',
         },
         VContainer: {
-            fluid: true
+            fluid: true,
         }
     }
 })

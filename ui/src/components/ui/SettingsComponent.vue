@@ -1,53 +1,47 @@
 <template>
-    <fieldset :disabled="websocketStatus != 1">
-        <legend>Settings</legend>
-        <v-container>
-            <v-row>
-                <v-col>
-                    <v-switch v-model="settingsLighting">
-                        <template #label>
-                            Lighting automation
-                            {{ settingsLighting ? 'enabled' : 'disabled' }}
-                            ({{ settingsLightingLabel }})
-                        </template>
-                    </v-switch>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col>
-                    <v-switch v-model="settingsShades">
-                        <template #label>
-                            Window shades automation
-                            {{ settingsShades ? 'enabled' : 'disabled' }}
-                            ({{ settingsShadesLabel }})
-                        </template>
-                    </v-switch>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col>
-                    <div>
-                        Bedtime automation will be triggered at a randomly chosen time each day that is up to 30 minutes
-                        before or after the hour selected here:
-                    </div>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col cols="4">
-                    <v-select v-model="settingsBedtime" :items="bedtimeOptions" item-title="label" item-value="hour"
-                        return-object single-line />
-                </v-col>
-                <v-col>
-                    ({{ settingsBedtimeLabel }})
-                </v-col>
-            </v-row>
-        </v-container>
-    </fieldset>
+    <v-container>
+        <v-row align-items="end">
+            <v-col>
+                Lighting automation
+                {{ settingsLighting ? 'enabled' : 'disabled' }}
+            </v-col>
+            <v-col>
+                Window shades automation
+                {{ settingsShades ? 'enabled' : 'disabled' }}
+            </v-col>
+            <v-col>
+                Bedtime automation will be triggered at a randomly chosen time each day that is up to 30 minutes before
+                or after the hour selected here:
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col>
+                <v-switch v-model="settingsLighting">
+                </v-switch>
+            </v-col>
+            <v-col>
+                <v-switch v-model="settingsShades">
+                </v-switch>
+            </v-col>
+            <v-col>
+                <v-select v-model="settingsBedtime" :items="bedtimeOptions" item-title="label" item-value="hour"
+                    return-object single-line>
+                </v-select>
+            </v-col>
+        </v-row>
+        <v-row align-items="start">
+            <v-col>
+                ({{ settingsLightingLabel }})
+            </v-col>
+            <v-col>
+                ({{ settingsShadesLabel }})
+            </v-col>
+            <v-col>
+                ({{ settingsBedtimeLabel }})
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
-
-<style scoped>
-/*  */
-</style>
 
 <script setup>
 import { inject, watch } from 'vue'
@@ -60,7 +54,6 @@ const settingsBedtime = inject('settingsBedtime')
 const settingsBedtimeLabel = inject('settingsBedtimeLabel')
 const bedtimeOptions = inject('bedtimeOptions')
 const websocketPublish = inject('websocketPublish')
-const websocketStatus = inject('websocketStatus')
 
 watch(settingsLighting, function lightingEnabledChanged(enabled) {
 

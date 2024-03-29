@@ -1,9 +1,6 @@
 <template>
-    <fieldset>
-        <legend>Connections</legend>
-        <pre ref="diagram"></pre>
-        <v-btn @click="refreshControls">Refresh Controls</v-btn>
-    </fieldset>
+    <pre ref="diagram"></pre>
+    <v-btn @click="refreshControls">Refresh Controls</v-btn>
 </template>
 
 <style scoped>

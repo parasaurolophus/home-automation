@@ -1,69 +1,52 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
 
-    <v-container>
-        <v-row>
-            <v-col>
-                <AlertComponent />
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col cols="4">
-                <SettingsComponent />
-            </v-col>
-            <v-col>
+    <AlertComponent />
+
+    <v-expansion-panels variant="popout" v-model="opened">
+
+        <v-expansion-panel title="Connections" value="connections">
+            <v-expansion-panel-text eager>
                 <ConnectionsDiagramComponent />
-            </v-col>
-        </v-row>
-    </v-container>
-
-    <v-expansion-panels>
-        <v-expansion-panel title="Lighting">
-            <v-expansion-panel-text>
-                <template v-for="(bridge, index) in hueModel" :key="index">
-                    <HueControlsComponent :bridge="bridge" />
-                </template>
             </v-expansion-panel-text>
         </v-expansion-panel>
-    </v-expansion-panels>
 
-    <v-expansion-panels>
-        <v-expansion-panel title="Window Shades">
+        <v-expansion-panel title="Settings" value="settings">
             <v-expansion-panel-text>
-                <PowerViewControlsComponent :hub="powerviewModel" />
+                <SettingsComponent />
             </v-expansion-panel-text>
         </v-expansion-panel>
-    </v-expansion-panels>
 
-    <v-expansion-panels>
-        <v-expansion-panel title="Debug">
+        <v-expansion-panel title="Lighting" value="lighting">
             <v-expansion-panel-text>
-                <v-container>
-                    <v-row>
-                        <v-col cols="4">
-                            <TimerComponent />
-                        </v-col>
-                        <v-col>
-                            <TriggerComponent />
-                        </v-col>
-                    </v-row>
-                </v-container>
+                <HueControlsComponent />
             </v-expansion-panel-text>
         </v-expansion-panel>
+
+        <v-expansion-panel title="Window Shades" value="shades">
+            <v-expansion-panel-text>
+                <PowerViewControlsComponent />
+            </v-expansion-panel-text>
+        </v-expansion-panel>
+
+        <v-expansion-panel title="Debug" value="debug">
+            <v-expansion-panel-text>
+                <DebugComponent />
+            </v-expansion-panel-text>
+        </v-expansion-panel>
+
     </v-expansion-panels>
 
 </template>
 
 <script setup>
-import { inject } from 'vue'
+import { ref } from 'vue'
 import AlertComponent from '@/components/ui/AlertComponent.vue'
 import ConnectionsDiagramComponent from '@/components/ui/ConnectionsDiagramComponent.vue'
+import DebugComponent from '@/components/ui/DebugComponent.vue'
 import HueControlsComponent from '@/components/controls/HueControlsComponent.vue'
 import PowerViewControlsComponent from '@/components/controls/PowerViewControlsComponent.vue'
 import SettingsComponent from '@/components/ui/SettingsComponent.vue'
-import TimerComponent from '@/components/ui/TimerComponent.vue'
-import TriggerComponent from '@/components/ui/TriggerComponent.vue'
 
-const hueModel = inject('hueModel')
-const powerviewModel = inject('powerviewModel')
+const opened = ref("connections")
 </script>
