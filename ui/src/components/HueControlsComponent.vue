@@ -12,13 +12,12 @@
                             {{ group.title }}
                         </v-expansion-panel-title>
                         <v-expansion-panel-text>
-                            <v-btn
+                            <v-btn class="spaced-out"
                                 @click="websocketPublish({ payload: { on: { on: false } }, topic: group.topic, method: 'PUT' })">
                                 Off
                             </v-btn>
                             <template v-for="(scene, index) in group.children" :key="index">
-                                &nbsp;
-                                <v-btn
+                                <v-btn class="spaced-out"
                                     @click="websocketPublish({ payload: { recall: { action: 'active' } }, topic: scene.topic, method: 'PUT' })">
                                     {{ scene.title }}
                                 </v-btn>
@@ -30,6 +29,12 @@
         </v-expansion-panel>
     </v-expansion-panels>
 </template>
+
+<style scoped>
+.spaced-out {
+    margin: 0 0.5rem 0 0.5rem;
+}
+</style>
 
 <script setup>
 import { inject } from 'vue'
