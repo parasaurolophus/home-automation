@@ -23,6 +23,11 @@ export default createVuetify({
             divided: true,
             variant: 'elevated',
             elevation: 12,
+            VBtn: {
+                variant: 'elevated',
+                elevation: 12,
+                color: 'primary',
+            }
         },
         VBtn: {
             variant: 'elevated',
