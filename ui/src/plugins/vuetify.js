@@ -23,15 +23,22 @@ export default createVuetify({
             variant: 'tonal',
         },
         VBtn: {
-            flat: true,
-            variant: 'flat',
-            color: 'primary',
+            color: 'secondary',
+        },
+        VBtnToggle: {
+            color: 'secondary',
+            rounded: 'pill',
+            divided: true,
+            VBtn: {
+                flat: true,
+                variant: 'flat'
+            },
         },
         VExpansionPanels: {
             variant: 'popout',
         },
         VSwitch: {
-            color: 'primary',
+            color: 'secondary',
             inset: true,
             'hide-details': true,
         },
