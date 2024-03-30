@@ -29,12 +29,6 @@
             </v-expansion-panel-text>
         </v-expansion-panel>
 
-        <v-expansion-panel title="Debug" value="debug">
-            <v-expansion-panel-text>
-                <DebugComponent />
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
     </v-expansion-panels>
 
 </template>
@@ -43,7 +37,6 @@
 import { inject } from 'vue'
 import AlertComponent from '@/components/AlertComponent.vue'
 import ConnectionsDiagramComponent from '@/components/ConnectionsDiagramComponent.vue'
-import DebugComponent from '@/components/DebugComponent.vue'
 import HueControlsComponent from '@/components/HueControlsComponent.vue'
 import PowerViewControlsComponent from '@/components/PowerViewControlsComponent.vue'
 import SettingsComponent from '@/components/SettingsComponent.vue'

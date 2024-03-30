@@ -14,12 +14,12 @@ const diagram = ref(null)
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
 const hueBridges = inject('hueBridges')
-const hueKeys = inject('hueKeys')
-const createHueKey = inject('createHueKey')
+const hueModel = inject('hueModel')
 const powerviewModel = inject('powerviewModel')
 const powerviewStatus = inject('powerviewStatus')
+const showAlert = inject('showAlert')
 
-function findBridge(address) {
+function findHueBridge(address) {
 
     for (let bridge of hueBridges.value) {
 
@@ -30,53 +30,23 @@ function findBridge(address) {
         }
     }
 
-    return null
+    return undefined
 
 }
 
-function hueClickedHandler(address) {
+function findHueBridgeModel(address) {
 
-    const bridge = findBridge(address)
-    const key = hueKeys.value[address]
+    for (let bridge of hueModel.value) {
 
-    if (!bridge) {
-
-        websocketPublish({
-            topic: 'hue/bridge/error',
-            payload: 'No Hue Bridge found for ' + address
-        })
-
-        return
-
+        if (bridge.id == address) {
+            return bridge
+        }
     }
 
-    const bridgeInfo = {}
-
-    for (let property in bridge) {
-
-        const value = bridge[property]
-
-        bridgeInfo[property] = value
-
-    }
-
-    if (key) {
-
-        bridgeInfo.key = key
-
-    }
-
-    websocketPublish({
-        topic: 'hue/bridge/info',
-        payload: bridgeInfo
-    })
-
-    if (!key) {
-
-        alert('Press button on top of bridge ' + address + ' before proceeding...')
-        createHueKey(address)
-
-    }
+    const message = 'no model found for hue bridge with address ' + address
+    console.log(message)
+    showAlert('warning', 'hue bridge metadata', message)
+    return undefined
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -173,15 +143,28 @@ watch(theme.global.current, drawDiagram)
 watch(powerviewStatus, drawDiagram)
 
 ////////////////////////////////////////////////////////////////////////////////
-// TO DO: investigate ways to have the mermaid diagram invoke
-// hueClickedHandler() directly rather than using indirection through index.html
+// TO DO: investigate ways to have the mermaid diagram invoke these directly
+// rather than using indirection through index.html
 ////////////////////////////////////////////////////////////////////////////////
 
 // eslint-disable-next-line no-global-assign, no-undef
-hueBridgeNodeClicked = hueClickedHandler
+hueBridgeNodeClicked = (address) => {
+    const bridge = findHueBridge(address)
+    if (bridge) {
+        const text = JSON.stringify(bridge, undefined, 4)
+        const model = findHueBridgeModel(address)
+        if (model) {
+            showAlert('info', model.title, text)
+            return
+        }
+        showAlert('warning', 'hue bridge ' + address, text)
+        return
+    }
+    showAlert('warning', 'hue bridge not found', 'no metadata found for hue bridge with address ' + address)
+}
 
 // eslint-disable-next-line no-global-assign, no-undef
-powerviewHubNodeClicked = () => alert('powerview node clicked')
+powerviewHubNodeClicked = () => showAlert('info', 'powerview hub', JSON.stringify(powerviewModel.value, undefined, 4))
 
 // eslint-disable-next-line no-global-assign, no-undef
 flowsNodeClicked = () => websocketPublish({ payload: new Date().getTime(), topic: 'controls/refresh' })

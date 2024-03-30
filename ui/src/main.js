@@ -80,96 +80,8 @@ app.provide('powerviewModel', powerviewModel)
 const powerviewStatus = ref(0)
 app.provide('powerviewStatus', powerviewStatus)
 
-const timerValues = ref([])
-app.provide('timerValues', timerValues)
-
-// model for timer event debugging output
-const timerTime = ref('')
-app.provide('timerTime', timerTime)
-
-// model for timer theme debugging output
-const timerTheme = ref('')
-app.provide('timerTheme', timerTheme)
-
-// model for trigger event debugging output
-const trigger = ref("none received since\npage last reloaded")
-app.provide('trigger', trigger)
-
-// model for hue/{address}/key messages
-const hueKeys = ref({})
-app.provide('hueKeys', hueKeys)
-
 const settingsOpened = ref(undefined)
 app.provide('settingsOpened', settingsOpened)
-
-//////////////////////////////////////////////////////////////////////////////
-// get hue keys then invoke after()
-//////////////////////////////////////////////////////////////////////////////
-
-function getHueKeys(after) {
-
-    const matches = /^([^:]+):\/\/([^:]+).*$/.exec(window.location)
-    let url = 'http://127.0.0.1:1880/hue-keys'
-
-    if (Array.isArray(matches) && (matches.length == 3)) {
-
-        url = matches[1] + '://' + matches[2] + ':1880/hue-keys'
-
-    }
-
-    const request = new Request(url)
-
-    fetch(request)
-
-        .then((response) => {
-
-            if (!response.ok) {
-
-                console.log(response)
-                alerts.value.push({
-                    show: true,
-                    title: 'error getting hue keys',
-                    type: 'error',
-                    text: JSON.stringify(response, undefined, 1)
-                })
-                return null
-
-            }
-
-            return response.blob()
-
-        })
-
-        .then(async (blob) => {
-
-            if (blob) {
-
-                hueKeys.value = JSON.parse(await blob.text())
-
-            } else {
-
-                console.log('hue-keys blob is null')
-
-            }
-
-            after()
-
-        })
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// Trigger the Hue key creation flow
-//////////////////////////////////////////////////////////////////////////////
-
-function createHueKey(address) {
-
-    websocketPublish({
-        payload: address,
-        topic: 'put/hue/create-key'
-    })
-}
-
-app.provide('createHueKey', createHueKey)
 
 //////////////////////////////////////////////////////////////////////////////
 // monitor websocket readyState
@@ -185,6 +97,17 @@ app.provide('websocketStatus', websocketStatus)
 // using a websocket
 //////////////////////////////////////////////////////////////////////////////
 
+function showAlert(type, title, text) {
+    alerts.value.push({
+        show: true,
+        type: type,
+        title: title,
+        text: text,
+    })
+}
+
+app.provide('showAlert', showAlert)
+
 // send the given message to the back end using the websocket connection
 function websocketPublish(msg) {
 
@@ -193,12 +116,7 @@ function websocketPublish(msg) {
         const text = JSON.stringify(msg, undefined, 1)
 
         console.log('websocket closed when attempting to send:\n' + text)
-        alerts.value.push({
-            show: true,
-            title: 'websocket closed',
-            type: 'warning',
-            text: text
-        })
+        showAlert('warning', 'websocket closed', text)
         return
 
     }
@@ -294,12 +212,7 @@ function connectWS() {
         const text = JSON.stringify(event, undefined, 1)
 
         console.log(text)
-        alerts.value.push({
-            show: true,
-            title: 'ws.onerror',
-            type: 'error',
-            text: text
-        })
+        showAlert('error', 'ws.onerror', text)
 
     }
 
@@ -312,14 +225,14 @@ function connectWS() {
 
         if (msg.topic == 'timer/time') {
 
-            timerTime.value = msg.payload
+            console.log(JSON.stringify(msg, undefined, 4))
             return
 
         }
 
-        if (msg.topic == 'debug/timer/theme') {
+        if (msg.topic == 'current/timer/theme') {
 
-            timerTheme.value = msg.payload
+            console.log(JSON.stringify(msg, undefined, 4))
             return
         }
 
@@ -366,12 +279,7 @@ function connectWS() {
             const text = JSON.stringify(msg.payload, undefined, 1)
 
             console.log('no bedtime option found matching ' + text)
-            alerts.value.push({
-                show: true,
-                title: 'Invalid settings/bedtime payload',
-                type: 'error',
-                text: text
-            })
+            showAlert('error', 'Invalid settings/bedtime payloader', text)
             return
 
         }
@@ -388,14 +296,14 @@ function connectWS() {
             return
         }
 
-        if (msg.topic == 'debug/automation/trigger') {
+        if (msg.topic == 'automation/trigger') {
 
-            trigger.value = msg.payload
+            console.log(JSON.stringify(msg, undefined, 4))
             return
 
         }
 
-        if (msg.topic == 'debug/timer/time/bedtime') {
+        if (msg.topic == 'current/timer/time/bedtime') {
 
             currentBedtime.value = msg.payload
             return
@@ -408,12 +316,7 @@ function connectWS() {
 
             if (msg.payload !== '') {
 
-                alerts.value.push({
-                    show: true,
-                    title: msg.topic,
-                    type: 'error',
-                    text: text
-                })
+                showAlert('error', msg.topic, text)
             }
 
             return
@@ -427,12 +330,7 @@ function connectWS() {
 
             if (msg.payload !== '') {
 
-                alerts.value.push({
-                    show: true,
-                    title: msg.topic,
-                    type: 'warning',
-                    text: text
-                })
+                showAlert('warning', msg.topic, text)
             }
 
             return
@@ -446,31 +344,19 @@ function connectWS() {
 
             if (msg.payload !== '') {
 
-                alerts.value.push({
-                    show: true,
-                    title: msg.topic,
-                    type: 'info',
-                    text: text
-                })
+                showAlert('info', msg.topic, text)
             }
 
             return
 
         }
 
-        let matches = /^debug\/timer\/time\/([^/]+)$/.exec(msg.topic)
+        let matches = /^current\/timer\/time\/([^/]+)$/.exec(msg.topic)
 
         if (Array.isArray(matches) && (matches.length == 2)) {
 
-            if (msg.payload === '') {
-
-                timerValues.value = timerValues.value.filter(pair => pair[0] != matches[1])
-                return
-            }
-
-            const pairs = timerValues.value.filter(pair => pair[0] != matches[1]).concat([[matches[1], msg.payload]])
-            pairs.sort((a, b) => a[1] - b[1])
-            timerValues.value = pairs
+            msg.at = new Date(msg.at).toLocaleString()
+            console.log(JSON.stringify(msg, undefined, 4))
             return
         }
 
@@ -485,7 +371,7 @@ function connectWS() {
     }
 }
 
-getHueKeys(connectWS)
+connectWS()
 
 //////////////////////////////////////////////////////////////////////////////
 
