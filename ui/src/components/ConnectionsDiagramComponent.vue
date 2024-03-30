@@ -1,11 +1,6 @@
 <template>
     <pre ref="diagram"></pre>
-    <v-btn @click="refreshControls">Refresh Controls</v-btn>
 </template>
-
-<style scoped>
-/* */
-</style>
 
 <script setup>
 import { onMounted, ref, inject, watch } from 'vue'
@@ -24,11 +19,6 @@ const createHueKey = inject('createHueKey')
 const powerviewModel = inject('powerviewModel')
 const powerviewStatus = inject('powerviewStatus')
 
-///////////////////////////////////////////////////////////////////////////////
-// TO DO: investigate ways to have the mermaid diagram invoke clickedHandler()
-// directly rather than using indirection through index.html
-///////////////////////////////////////////////////////////////////////////////
-
 function findBridge(address) {
 
     for (let bridge of hueBridges.value) {
@@ -44,7 +34,7 @@ function findBridge(address) {
 
 }
 
-function clickedHandler(address) {
+function hueClickedHandler(address) {
 
     const bridge = findBridge(address)
     const key = hueKeys.value[address]
@@ -89,9 +79,6 @@ function clickedHandler(address) {
     }
 }
 
-// eslint-disable-next-line no-global-assign, no-undef
-hueBridgeNodeClicked = clickedHandler
-
 ///////////////////////////////////////////////////////////////////////////////
 
 function renderDiagram() {
@@ -104,10 +91,7 @@ function renderDiagram() {
 
     let flowchart = ''
 
-    flowchart += '---\n'
-    flowchart += 'title: Internet\n'
-    flowchart += '---\n'
-    flowchart += 'flowchart LR\n\n'
+    flowchart += 'flowchart TB\n\n'
 
     flowchart += '  %%%%{init: { '
     flowchart += '"theme": ' + themeName + ', '
@@ -127,17 +111,17 @@ function renderDiagram() {
 
     const flowsClassName = websocketStatus.value == 0 ? 'yellow' : websocketStatus.value == 1 ? 'green' : 'red'
 
-    flowchart += '  browser["browser&nbsp;"]\n'
     flowchart += '  ui["ui&nbsp;"]\n'
     flowchart += '  flows["flows&nbsp;\n(' + flowsStatus + ')&nbsp;"]\n'
-    flowchart += '  class flows ' + flowsClassName + '\n\n'
-
-    flowchart += ' browser --- ui;\n\n'
+    flowchart += '  class flows ' + flowsClassName + '\n'
+    flowchart += '  click flows call flowsNodeClicked()\n\n'
 
     flowchart += 'subgraph "LAN&nbsp;"\n\n'
 
     flowchart += '    subgraph "Node-RED&nbsp;"\n'
     flowchart += '      ui --- flows\n'
+    flowchart += '      class ui green\n'
+    flowchart += '      click ui call uiNodeClicked()\n'
     flowchart += '    end\n\n'
 
     let index = 0
@@ -162,18 +146,13 @@ function renderDiagram() {
 
         const className = powerviewStatus.value === 0 ? 'yellow' : powerviewStatus.value === 1 ? 'green' : 'red'
         flowchart += '    flows --- powerview["PowerView&nbsp;"]\n'
-        flowchart += 'class powerview ' + className + '\n\n'
+        flowchart += '    class powerview ' + className + '\n'
+        flowchart += '    click powerview call powerviewHubNodeClicked()\n\n'
 
     }
 
     flowchart += '  end\n'
     return flowchart
-
-}
-
-function refreshControls() {
-
-    websocketPublish({ payload: new Date().getTime(), topic: 'controls/refresh' })
 
 }
 
@@ -192,4 +171,21 @@ watch(websocketStatus, drawDiagram)
 watch(hueBridges, drawDiagram)
 watch(theme.global.current, drawDiagram)
 watch(powerviewStatus, drawDiagram)
+
+////////////////////////////////////////////////////////////////////////////////
+// TO DO: investigate ways to have the mermaid diagram invoke
+// hueClickedHandler() directly rather than using indirection through index.html
+////////////////////////////////////////////////////////////////////////////////
+
+// eslint-disable-next-line no-global-assign, no-undef
+hueBridgeNodeClicked = hueClickedHandler
+
+// eslint-disable-next-line no-global-assign, no-undef
+powerviewHubNodeClicked = () => alert('powerview node clicked')
+
+// eslint-disable-next-line no-global-assign, no-undef
+flowsNodeClicked = () => websocketPublish({ payload: new Date().getTime(), topic: 'controls/refresh' })
+
+// eslint-disable-next-line no-global-assign, no-undef
+uiNodeClicked = () => alert('ui node clicked')
 </script>
