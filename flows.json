@@ -492,11 +492,12 @@
             "4e40e2700edff9ec",
             "ebfab5beb0190193",
             "97566d661d35c324",
-            "0cd6a253ead58c18"
+            "0cd6a253ead58c18",
+            "d79bfbc558832ea5"
         ],
         "x": 14,
         "y": 399,
-        "w": 1132,
+        "w": 1252,
         "h": 162
     },
     {
@@ -4606,7 +4607,7 @@
         "y": 480,
         "wires": [
             [
-                "4e40e2700edff9ec"
+                "d79bfbc558832ea5"
             ]
         ]
     },
@@ -4837,7 +4838,7 @@
         "name": "",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1020,
+        "x": 1140,
         "y": 480,
         "wires": []
     },
@@ -4924,6 +4925,27 @@
         "wires": [
             [
                 "eb7123132bce19c7"
+            ]
+        ]
+    },
+    {
+        "id": "d79bfbc558832ea5",
+        "type": "rbe",
+        "z": "40413194443e96c6",
+        "g": "9823c620ddf3d6e0",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 970,
+        "y": 480,
+        "wires": [
+            [
+                "4e40e2700edff9ec"
             ]
         ]
     }
