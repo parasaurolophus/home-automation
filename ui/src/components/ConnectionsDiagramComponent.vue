@@ -53,10 +53,10 @@ function buildDiagram() {
     flowchart += '        subgraph Node-RED\n'
     flowchart += '            ui["Vuetify-based UI"]\n'
     flowchart += '            class ui green\n'
-    flowchart += '            click ui call uiNodeClicked()\n'
+    flowchart += '            click ui call uiNodeClicked() "Nothing to see here"\n'
     flowchart += '            flow["Node-RED Flow\n(' + flowStatus + ')"]\n'
     flowchart += '            class flow ' + flowClassName + '\n'
-    flowchart += '            click flow call flowNodeClicked()\n'
+    flowchart += '            click flow call flowNodeClicked() "Reset WebSocket connection"\n'
     flowchart += '            ui <-- WebSocket --> flow\n'
     flowchart += '        end\n'
     let bridgeNumber = 1
@@ -74,7 +74,7 @@ function buildDiagram() {
         const bridgeName = 'hue_bridge_' + bridgeNumber
         flowchart += '        ' + bridgeName + '["' + bridgeTitle + ' Hue Bridge\n(' + bridgeStatus + ')"]\n'
         flowchart += '        class ' + bridgeName + ' ' + bridgeClassName + '\n'
-        flowchart += '        click ' + bridgeName + ' call hueBridgeNodeClicked("' + bridge.address + '")\n'
+        flowchart += '        click ' + bridgeName + ' call hueBridgeNodeClicked("' + bridge.address + '") "Display Hue Bridge mDNS metadata"\n'
         flowchart += '        flow <-- WiFi --> ' + bridgeName + '\n'
         if (model?.children && model.children.length > 0) {
             const devicesName = 'hue_devices_' + bridgeNumber
@@ -95,7 +95,7 @@ function buildDiagram() {
         flowchart += '        powerview_shades([PowerView Shades])\n'
         flowchart += '        flow <-- WiFi --> powerview_hub\n'
         flowchart += '        powerview_hub <-- Bluetooth --> powerview_shades\n'
-        flowchart += '        click powerview_hub call powerviewHubNodeClicked()\n'
+        flowchart += '        click powerview_hub call powerviewHubNodeClicked() "Display PowerView controls model"\n'
     }
     flowchart += '    end\n'
     return flowchart
