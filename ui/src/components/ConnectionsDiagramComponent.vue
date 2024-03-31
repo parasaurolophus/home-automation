@@ -12,11 +12,21 @@ const theme = useTheme()
 const diagram = ref(null)
 
 const hueModel = inject('hueModel')
+const hueBridges = inject('hueBridges')
 const powerviewModel = inject('powerviewModel')
 const powerviewStatus = inject('powerviewStatus')
 const showAlert = inject('showAlert')
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
+
+function findHueModel(address) {
+    for (let model of hueModel.value) {
+        if (model.id == address) {
+            return model
+        }
+    }
+    return undefined
+}
 
 function buildDiagram() {
     const themeName = (theme.global.current.value.dark ? '"dark"' : '"light"')
@@ -50,20 +60,22 @@ function buildDiagram() {
     flowchart += '            ui <-- WebSocket --> flow\n'
     flowchart += '        end\n'
     let counter = 0
-    for (let model of hueModel.value) {
-        const bridgeStatus = model.status == -1 ? 'uninitialized' :
-            model.status == 0 ? 'connecting' :
-                model.status == 1 ? 'connected' :
+    for (let bridge of hueBridges.value) {
+        const model = findHueModel(bridge.address)
+        const bridgeTitle = model ? model.title : bridge.address
+        const bridgeStatus = bridge.status == -1 ? 'uninitialized' :
+            bridge.status == 0 ? 'connecting' :
+                bridge.status == 1 ? 'connected' :
                     'disconnected'
-        const bridgeClassName = model.status == -1 ? 'gray' :
-            model.status == 0 ? 'yellow' :
-                model.status == 1 ? 'green' :
+        const bridgeClassName = bridge.status == -1 ? 'gray' :
+            bridge.status == 0 ? 'yellow' :
+                bridge.status == 1 ? 'green' :
                     'red'
         const bridgeName = 'hue_bridge' + counter
         const lightsName = 'hue_lights' + counter
-        flowchart += '        ' + bridgeName + '["' + model.title + ' Hue Bridge\n(' + bridgeStatus + ')"]\n'
+        flowchart += '        ' + bridgeName + '["' + bridgeTitle + ' Hue Bridge\n(' + bridgeStatus + ')"]\n'
         flowchart += '        class ' + bridgeName + ' ' + bridgeClassName + '\n'
-        flowchart += '        click ' + bridgeName + ' call hueBridgeNodeClicked("' + model.id + '")\n'
+        flowchart += '        click ' + bridgeName + ' call hueBridgeNodeClicked("' + bridge.address + '")\n'
         flowchart += '        ' + lightsName + '([Hue Lights])\n'
         flowchart += '        flow <-- WiFi --> ' + bridgeName + '\n'
         flowchart += '        ' + bridgeName + '<-- Zigbee --> ' + lightsName + '\n'
@@ -100,7 +112,7 @@ async function renderMermaid() {
 mermaid.flowchartConfig = { width: '100%' }
 mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' })
 onMounted(renderMermaid)
-watch(hueModel, renderMermaid)
+watch(hueBridges, renderMermaid)
 watch(powerviewModel, renderMermaid)
 watch(websocketStatus, renderMermaid)
 watch(powerviewStatus, renderMermaid)
@@ -110,26 +122,16 @@ watch(powerviewStatus, renderMermaid)
 // rather than using indirection through index.html
 ////////////////////////////////////////////////////////////////////////////////
 
-function findHueModel(address) {
-
-    for (let model of hueModel.value) {
-
-        if (model.id == address) {
-            return model
-        }
-    }
-    return undefined
-}
-
 // eslint-disable-next-line no-global-assign, no-undef
 hueBridgeNodeClicked = (address) => {
-    const model = findHueModel(address)
-    if (model) {
-        const text = JSON.stringify(model, undefined, 4)
-        showAlert('info', model.title, text)
-        return
+    for (let bridge of hueBridges.value) {
+        if (bridge.address == address) {
+            const text = JSON.stringify(bridge, undefined, 4)
+            showAlert('info', 'hue bridge ' + bridge.address, text)
+            return
+        }
     }
-    showAlert('warning', 'hue bridge ' + address, 'no model found for ' + address)
+    showAlert('warning', 'hue bridge ' + address, 'no metadata found for ' + address)
 }
 
 // eslint-disable-next-line no-global-assign, no-undef
