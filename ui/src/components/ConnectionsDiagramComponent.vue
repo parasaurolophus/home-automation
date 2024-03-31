@@ -59,10 +59,10 @@ function buildDiagram() {
     flowchart += '            click flow call flowNodeClicked()\n'
     flowchart += '            ui <-- WebSocket --> flow\n'
     flowchart += '        end\n'
-    let counter = 0
+    let bridgeNumber = 1
     for (let bridge of hueBridges.value) {
         const model = findHueModel(bridge.address)
-        const bridgeTitle = model ? model.title : bridge.address
+        const bridgeTitle = model?.title ?? bridge.address
         const bridgeStatus = bridge.status == -1 ? 'uninitialized' :
             bridge.status == 0 ? 'connecting' :
                 bridge.status == 1 ? 'connected' :
@@ -71,15 +71,17 @@ function buildDiagram() {
             bridge.status == 0 ? 'yellow' :
                 bridge.status == 1 ? 'green' :
                     'red'
-        const bridgeName = 'hue_bridge' + counter
-        const lightsName = 'hue_lights' + counter
+        const bridgeName = 'hue_bridge_' + bridgeNumber
         flowchart += '        ' + bridgeName + '["' + bridgeTitle + ' Hue Bridge\n(' + bridgeStatus + ')"]\n'
         flowchart += '        class ' + bridgeName + ' ' + bridgeClassName + '\n'
         flowchart += '        click ' + bridgeName + ' call hueBridgeNodeClicked("' + bridge.address + '")\n'
-        flowchart += '        ' + lightsName + '([Hue Lights])\n'
         flowchart += '        flow <-- WiFi --> ' + bridgeName + '\n'
-        flowchart += '        ' + bridgeName + '<-- Zigbee --> ' + lightsName + '\n'
-        counter += 1
+        if (model?.children && model.children.length > 0) {
+            const devicesName = 'hue_devices_' + bridgeNumber
+            flowchart += '        ' + devicesName + '([Hue Devices])\n'
+            flowchart += '        ' + bridgeName + '<-- Zigbee --> ' + devicesName + '\n'
+        }
+        bridgeNumber += 1
     }
     if (powerviewModel.value.length > 0) {
         const powerviewClassName = powerviewStatus.value === 0 ? 'yellow' :
@@ -126,8 +128,13 @@ watch(powerviewStatus, renderMermaid)
 hueBridgeNodeClicked = (address) => {
     for (let bridge of hueBridges.value) {
         if (bridge.address == address) {
+            const model = findHueModel(address)
             const text = JSON.stringify(bridge, undefined, 4)
-            showAlert('info', 'hue bridge ' + bridge.address, text)
+            if (model) {
+                showAlert('info', 'Hue Bridge ' + model.title, text)
+            } else {
+                showAlert('warning','Hue Bridge ' + bridge.address, text)
+            }
             return
         }
     }
@@ -135,11 +142,11 @@ hueBridgeNodeClicked = (address) => {
 }
 
 // eslint-disable-next-line no-global-assign, no-undef
-powerviewHubNodeClicked = () => showAlert('info', 'powerview hub', JSON.stringify(powerviewModel.value, undefined, 4))
+powerviewHubNodeClicked = () => showAlert('info', 'PowerView Hub', JSON.stringify(powerviewModel.value, undefined, 4))
 
 // eslint-disable-next-line no-global-assign, no-undef
 flowNodeClicked = () => websocketPublish({ payload: new Date().getTime(), topic: 'controls/refresh' })
 
 // eslint-disable-next-line no-global-assign, no-undef
-uiNodeClicked = () => alert('ui node clicked')
+uiNodeClicked = () => showAlert('info', 'nothing to see here', 'ui node clicked')
 </script>
