@@ -368,23 +368,6 @@ function connectWS() {
             return
 
         }
-
-        matches = /^hue\/(.+)\/status$/.exec(msg.topic)
-
-        if (Array.isArray(matches) && (matches.length == 2)) {
-            for (let bridge of hueBridges.value) {
-                if (bridge.address == matches[1]) {
-                    bridge.status = msg.payload
-                }
-            }
-            for (let model of hueModel.value) {
-                if (model.address == matches[1]) {
-                    model.status = msg.payload
-                }
-            }
-            return
-
-        }
     }
 }
 
