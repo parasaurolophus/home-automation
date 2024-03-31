@@ -118,6 +118,7 @@ watch(hueBridges, renderMermaid)
 watch(powerviewModel, renderMermaid)
 watch(websocketStatus, renderMermaid)
 watch(powerviewStatus, renderMermaid)
+watch(theme.global.current, renderMermaid)
 
 ////////////////////////////////////////////////////////////////////////////////
 // TO DO: investigate ways to have the mermaid diagram invoke these directly

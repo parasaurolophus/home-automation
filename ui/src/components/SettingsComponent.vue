@@ -8,8 +8,8 @@
                     </template>
                 </v-switch>
                 Lighting automation
-                <span v-if="settingsLighting" :style="'color:' + secondaryColor">enabled</span>
-                <span v-else :style="'color:' + primaryColor">disabled</span>
+                <v-chip v-if="settingsLighting" variant="text" color="secondary">enabled</v-chip>
+                <v-chip v-else variant="text" color="primary">disabled</v-chip>
             </v-col>
             <v-col class="align-center">
                 <v-btn-toggle mandatory v-model="bedtimeToggle">
@@ -17,12 +17,12 @@
                         {{ item.label }}
                     </v-btn>
                 </v-btn-toggle>
-                <div :style="'color:' + secondaryColor + ';'">
-                    {{ new Date(currentBedtime).toLocaleString() }}
-                </div>
                 Bedtime automation will be triggered at a randomly chosen time each day that is up to 30 minutes before
                 or after the
-                hour selected here
+                hour selected here; currently
+                <v-chip variant="text" color="secondary">
+                    {{ new Date(currentBedtime).toLocaleString() }}
+                </v-chip>
             </v-col>
             <v-col class="align-right">
                 <v-switch v-model="settingsShades" class="align-right">
@@ -32,8 +32,8 @@
                     </template>
                 </v-switch>
                 Shades automation
-                <span v-if="settingsShades" :style="'color:' + secondaryColor">enabled</span>
-                <span v-else :style="'color:' + primaryColor">disabled</span>
+                <v-chip v-if="settingsShades" variant="text" color="secondary">enabled</v-chip>
+                <v-chip v-else variant="text" color="primary">disabled</v-chip>
             </v-col>
         </v-row>
     </v-container>
@@ -57,11 +57,7 @@
 
 <script setup>
 import { inject, ref, watch } from 'vue'
-import { useTheme } from 'vuetify'
 
-const theme = useTheme()
-const primaryColor = theme.global.current.value.colors.primary
-const secondaryColor = theme.global.current.value.colors.secondary
 const settingsLighting = inject('settingsLighting')
 const settingsShades = inject('settingsShades')
 const settingsBedtime = inject('settingsBedtime')
