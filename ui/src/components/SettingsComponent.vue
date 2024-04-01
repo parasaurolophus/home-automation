@@ -21,7 +21,7 @@
                 or after the
                 hour selected here; currently
                 <v-chip variant="text" color="secondary">
-                    {{ new Date(currentBedtime).toLocaleString() }}
+                    {{ currentBedtime() }}
                 </v-chip>
             </v-col>
             <v-col class="align-right">
@@ -63,7 +63,7 @@ const settingsShades = inject('settingsShades')
 const settingsBedtime = inject('settingsBedtime')
 const bedtimeOptions = inject('bedtimeOptions')
 const websocketPublish = inject('websocketPublish')
-const currentBedtime = inject('currentBedtime')
+const timerTime = inject('timerTime')
 
 const bedtimeToggle = ref(settingsBedtime.value.hour - bedtimeOptions.value[0].hour)
 
@@ -92,4 +92,13 @@ watch(bedtimeToggle, () => {
 
     websocketPublish({ payload: option.hour, topic: 'settings/bedtime', retain: true, label: 'user' })
 })
+
+function currentBedtime() {
+
+    if (Object.prototype.hasOwnProperty.call(timerTime.value, 'bedtime')) {
+        return new Date(timerTime.value.bedtime).toLocaleString()
+    }
+
+    return 'unknown'
+}
 </script>

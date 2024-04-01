@@ -35,9 +35,6 @@ app.provide('bedtimeOptions', bedtimeOptions)
 const settingsBedtime = ref(bedtimeOptions.value[0])
 app.provide('settingsBedtime', settingsBedtime)
 
-const currentBedtime = ref(0)
-app.provide('currentBedtime', currentBedtime)
-
 const settingsLighting = ref(false)
 app.provide('settingsLighting', settingsLighting)
 
@@ -58,6 +55,15 @@ app.provide('powerviewModel', powerviewModel)
 
 const powerviewStatus = ref(0)
 app.provide('powerviewStatus', powerviewStatus)
+
+const timerTheme = ref('')
+app.provide('timerTheme', timerTheme)
+
+const automationTrigger = ref('automationTrigger')
+app.provide('automationTrigger', automationTrigger)
+
+const timerTime = ref({})
+app.provide('timerTime', timerTime)
 
 //////////////////////////////////////////////////////////////////////////////
 // monitor websocket readyState
@@ -94,11 +100,9 @@ function websocketPublish(msg) {
         console.log('websocket closed when attempting to send:\n' + text)
         showAlert('warning', 'websocket closed', text)
         return
-
     }
 
     ws.send(JSON.stringify(msg))
-
 }
 
 app.provide('websocketPublish', websocketPublish)
@@ -127,7 +131,6 @@ function connectWS() {
         if ((ws.readyState === 0) || (ws.readyState === 1)) {
 
             return
-
         }
     }
 
@@ -136,7 +139,6 @@ function connectWS() {
 
         clearInterval(wsReadyStateTimer)
         wsReadyStateTimer = null
-
     }
 
     // stop the current reconnect timer
@@ -144,7 +146,6 @@ function connectWS() {
 
         clearInterval(wsReconnectTimer)
         wsReconnectTimer = null
-
     }
 
     // open a new websocket connection
@@ -154,7 +155,6 @@ function connectWS() {
     if (Array.isArray(matches) && (matches.length == 3)) {
 
         url = ((matches[1] == 'https') ? 'wss' : 'ws') + '://' + matches[2] + ':1880/broker'
-
     }
 
     ws = new WebSocket(url)
@@ -170,7 +170,6 @@ function connectWS() {
 
         websocketStatus.value = ws.readyState
         wsReadyStateTimer = setInterval(() => { websocketStatus.value = ws.readyState }, 1000)
-
     }
 
     // cancel the websocket status timer
@@ -179,7 +178,6 @@ function connectWS() {
         clearInterval(wsReadyStateTimer)
         wsReadyStateTimer = null
         websocketStatus.value = ws.readyState
-
     }
 
     // log errors
@@ -189,7 +187,6 @@ function connectWS() {
 
         console.log(text)
         showAlert('error', 'ws.onerror', text)
-
     }
 
     // update models based on messages received from the back end
@@ -203,12 +200,29 @@ function connectWS() {
 
             console.log(JSON.stringify(msg, undefined, 4))
             return
+        }
 
+        if (msg.topic == 'automation/trigger') {
+
+            console.log(JSON.stringify(msg, undefined, 4))
+            return
+        }
+
+        if (msg.topic == 'current/automation/trigger') {
+
+            automationTrigger.value = msg.payload
+            return
+        }
+
+        if (msg.topic == 'timer/theme') {
+
+            console.log(JSON.stringify(msg, undefined, 4))
+            return
         }
 
         if (msg.topic == 'current/timer/theme') {
 
-            console.log(JSON.stringify(msg, undefined, 4))
+            timerTheme.value = msg.payload
             return
         }
 
@@ -272,20 +286,7 @@ function connectWS() {
             return
         }
 
-        if (msg.topic == 'automation/trigger') {
-
-            console.log(JSON.stringify(msg, undefined, 4))
-            return
-
-        }
-
-        if (msg.topic == 'current/timer/time/bedtime') {
-
-            currentBedtime.value = msg.payload
-            return
-        }
-
-        if (/^.+\/error$/.exec(msg.topic)) {
+        if (/.+\/error$/.exec(msg.topic)) {
 
             const text = JSON.stringify(msg.payload, undefined, 1)
             console.log(text)
@@ -299,7 +300,7 @@ function connectWS() {
 
         }
 
-        if (/^.+\/warning$/.exec(msg.topic)) {
+        if (/.+\/warning$/.exec(msg.topic)) {
 
             const text = JSON.stringify(msg.payload, undefined, 1)
             console.log(text)
@@ -313,7 +314,7 @@ function connectWS() {
 
         }
 
-        if (/^.+\/info$/.exec(msg.topic)) {
+        if (/.+\/info$/.exec(msg.topic)) {
 
             const text = JSON.stringify(msg.payload, undefined, 1)
             console.log(text)
@@ -331,18 +332,8 @@ function connectWS() {
 
         if (Array.isArray(matches) && (matches.length == 2)) {
 
-            msg.at = new Date(msg.at).toLocaleString()
-            console.log(JSON.stringify(msg, undefined, 4))
+            timerTime.value[matches[1]] = msg.payload
             return
-        }
-
-        matches = /^hue\/(.+)\/key$/.exec(msg.topic)
-
-        if (Array.isArray(matches) && (matches.length == 2)) {
-
-            hueKeys.value[matches[1]] = msg.payload
-            return
-
         }
     }
 }

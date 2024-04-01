@@ -1,5 +1,20 @@
 <template>
-    <pre ref="diagram"></pre>
+    <v-container>
+        <v-row>
+            <v-col>
+                <pre ref="diagram"></pre>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col><v-spacer /></v-col>
+            <v-col v-for="(bridge, index) in hueBridges" :key="index">
+                <v-btn @click="websocketPublish({ topic: 'delete/hue/bridge', payload: bridge.address })">
+                    Delete {{ bridgeName(bridge) }} Hue Bridge
+                </v-btn>
+            </v-col>
+            <v-col><v-spacer /></v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script setup>
@@ -18,6 +33,7 @@ const powerviewStatus = inject('powerviewStatus')
 const showAlert = inject('showAlert')
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
+const timerTheme = inject('timerTheme')
 
 function findHueModel(address) {
     for (let model of hueModel.value) {
@@ -26,6 +42,11 @@ function findHueModel(address) {
         }
     }
     return undefined
+}
+
+function bridgeName(bridge) {
+    const model = findHueModel(bridge.address)
+    return model?.title ?? bridge.address
 }
 
 function buildDiagram() {
@@ -134,7 +155,7 @@ hueBridgeNodeClicked = (address) => {
             if (model) {
                 showAlert('info', 'Hue Bridge ' + model.title, text)
             } else {
-                showAlert('warning','Hue Bridge ' + bridge.address, text)
+                showAlert('warning', 'Hue Bridge ' + bridge.address, text)
             }
             return
         }
