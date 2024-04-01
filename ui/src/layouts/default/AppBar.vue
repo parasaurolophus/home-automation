@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar class="app-bar">
+    <v-app-bar class="app-bar" density="compact" extension-height="96">
         <v-app-bar-title>Home Automation</v-app-bar-title>
         <template #extension>
             <app-bar-extension />

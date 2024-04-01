@@ -2,22 +2,40 @@
     <v-container>
         <v-row>
             <v-col>
-                Bedtime
-                <v-chip variant="text" color="secondary">
-                    {{ timerString('bedtime') }}
-                </v-chip>
+                <v-card density="compact">
+                    <v-card-title>
+                        Bedtime
+                    </v-card-title>
+                    <v-card-text>
+                        <v-chip variant="text" color="secondary">
+                            {{ timerString('bedtime') }}
+                        </v-chip>
+                    </v-card-text>
+                </v-card>
             </v-col>
             <v-col>
-                Lighting Automation
-                <v-chip variant="text" :color="settingsLighting ? 'secondary' : 'primary'">
-                    {{ settingsLighting ? 'enabled' : 'disabled' }}
-                </v-chip>
+                <v-card density="compact">
+                    <v-card-title>
+                        Lighting Automation
+                    </v-card-title>
+                    <v-card-text>
+                        <v-chip variant="text" :color="settingsLighting ? 'secondary' : 'primary'">
+                            {{ settingsLighting ? 'enabled' : 'disabled' }}
+                        </v-chip>
+                    </v-card-text>
+                </v-card>
             </v-col>
             <v-col>
-                Shades Automation
-                <v-chip variant="text" :color="settingsShades ? 'secondary' : 'primary'">
-                    {{ settingsShades ? 'enabled' : 'disabled' }}
-                </v-chip>
+                <v-card density="compact">
+                    <v-card-title>
+                        Shades Automation
+                    </v-card-title>
+                    <v-card-text>
+                        <v-chip variant="text" :color="settingsShades ? 'secondary' : 'primary'">
+                            {{ settingsShades ? 'enabled' : 'disabled' }}
+                        </v-chip>
+                    </v-card-text>
+                </v-card>
             </v-col>
             <v-col><v-spacer /></v-col>
         </v-row>
