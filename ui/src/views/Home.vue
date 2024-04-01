@@ -1,25 +1,25 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
 
-    <AlertComponent />
+    <alerts-pop-up />
 
     <v-expansion-panels>
 
+        <v-expansion-panel title="Status" value="status">
+            <v-expansion-panel-text eager>
+                <connection-diagram />
+            </v-expansion-panel-text>
+        </v-expansion-panel>
+
         <v-expansion-panel title="Lighting" value="lighting">
             <v-expansion-panel-text>
-                <HueControlsComponent />
+                <hue-control-panels />
             </v-expansion-panel-text>
         </v-expansion-panel>
 
         <v-expansion-panel title="Window Shades" value="shades">
             <v-expansion-panel-text>
-                <PowerViewControlsComponent />
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-        <v-expansion-panel title="Status" value="status">
-            <v-expansion-panel-text eager>
-                <StatusComponent />
+                <power-view-control-panel />
             </v-expansion-panel-text>
         </v-expansion-panel>
 
@@ -28,8 +28,8 @@
 </template>
 
 <script setup>
-import AlertComponent from '@/components/AlertComponent.vue'
-import StatusComponent from '@/components/StatusComponent.vue'
-import HueControlsComponent from '@/components/HueControlsComponent.vue'
-import PowerViewControlsComponent from '@/components/PowerViewControlsComponent.vue'
+import AlertsPopUp from '@/components/AlertsPopUp.vue'
+import ConnectionDiagram from '@/components/ConnectionDiagram.vue'
+import HueControlPanels from '@/components/HueControlPanels.vue'
+import PowerViewControlPanel from '@/components/PowerViewControlPanel.vue'
 </script>

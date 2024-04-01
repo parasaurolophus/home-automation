@@ -1,43 +1,10 @@
 <template>
-    <v-app-bar class="app-bar" extension-height="96">
+    <v-app-bar class="app-bar">
         <v-app-bar-title>Home Automation</v-app-bar-title>
         <template #extension>
-            <v-container>
-                <v-row>
-                    <v-col>
-                        <v-card>
-                            <v-card-title>Bedtime</v-card-title>
-                            <v-card-text>
-                                {{ timerString('bedtime') }}
-                            </v-card-text>
-                        </v-card>
-                    </v-col>
-                    <v-col>
-                        <v-card>
-                            <v-card-title>Lighting Automation</v-card-title>
-                            <v-card-text>
-                                {{ settingsLighting ? 'enabled' : 'disabled' }}
-                            </v-card-text>
-                        </v-card>
-                    </v-col>
-                    <v-col>
-                        <v-card>
-                            <v-card-title>Shades Automation</v-card-title>
-                            <v-card-text>
-                                {{ settingsShades ? 'enabled' : 'disabled' }}
-                            </v-card-text>
-                        </v-card>
-                    </v-col>
-                    <v-col><v-spacer /></v-col>
-                </v-row>
-            </v-container>
+            <app-bar-extension />
         </template>
-        <v-btn-toggle mandatory v-model="bedtimeIndex">
-            <v-btn v-for="(item, index) in bedtimeOptions" :key="index"
-                @click="websocketPublish({ payload: bedtimeOptions[index].hour, topic: 'settings/bedtime', retain: true, label: 'user' })">
-                {{ item.label }}
-            </v-btn>
-        </v-btn-toggle>
+        <bedtime-selector/>
         <div class="align-center">
             <v-switch v-model="settingsLighting" class="align-center">
                 <template #prepend>
@@ -54,10 +21,7 @@
                 </template>
             </v-switch>
         </div>
-        <v-btn-toggle v-model="selectedTheme" mandatory>
-            <v-btn icon="mdi-weather-night" @click="setTheme('dark')" />
-            <v-btn icon="mdi-weather-sunny" @click="setTheme('light')" />
-        </v-btn-toggle>
+        <theme-selector />
     </v-app-bar>
 </template>
 
@@ -74,37 +38,11 @@
 </style>
 
 <script setup>
-import { inject, ref, watch } from 'vue'
-import { useTheme } from 'vuetify'
+import { inject } from 'vue'
+import AppBarExtension from '@/components/AppBarExtension.vue'
+import ThemeSelector from '@/components/ThemeSelector.vue'
+import BedtimeSelector from '@/components/BedtimeSelector.vue'
 
-const theme = useTheme()
-const bedtimeOptions = inject('bedtimeOptions')
-const settingsBedtime = inject('settingsBedtime')
 const settingsLighting = inject('settingsLighting')
 const settingsShades = inject('settingsShades')
-const timerTime = inject('timerTime')
-const websocketPublish = inject('websocketPublish')
-
-const selectedTheme = ref(theme.global.name.value == 'dark' ? 0 : 1)
-const bedtimeIndex = ref(settingsBedtime.value.hour - bedtimeOptions.value[0].hour)
-
-function setTheme(name) {
-    theme.global.name.value = name
-}
-
-watch(settingsBedtime, selectedBedtimeHour)
-
-function selectedBedtimeHour() {
-    const option = bedtimeOptions.value[0]
-    const bedtime = settingsBedtime.value
-    const selected = bedtime.hour - option.hour
-    bedtimeIndex.value = selected
-}
-
-function timerString(name) {
-    if (Object.prototype.hasOwnProperty.call(timerTime.value, name)) {
-        return new Date(timerTime.value[name]).toLocaleString()
-    }
-    return 'unknown'
-}
 </script>
