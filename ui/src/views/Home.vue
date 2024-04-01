@@ -5,7 +5,7 @@
 
     <v-expansion-panels>
 
-        <v-expansion-panel title="Status" value="status">
+        <v-expansion-panel title="Connections" value="status">
             <v-expansion-panel-text eager>
                 <connection-diagram />
             </v-expansion-panel-text>

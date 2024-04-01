@@ -4,7 +4,7 @@
         <template #extension>
             <app-bar-extension />
         </template>
-        <bedtime-selector />
+        <bedtime-settings />
         <lighting-automation-settings />
         <shades-automation-settings />
         <theme-selector />
@@ -13,7 +13,7 @@
 
 <script setup>
 import AppBarExtension from '@/components/AppBarExtension.vue'
-import BedtimeSelector from '@/components/BedtimeSelector.vue'
+import BedtimeSettings from '@/components/BedtimeSettings.vue'
 import LightingAutomationSettings from '@/components/LightingAutomationSettings.vue'
 import ShadesAutomationSettings from '@/components/ShadesAutomationSettings.vue'
 import ThemeSelector from '@/components/ThemeSelector.vue'
