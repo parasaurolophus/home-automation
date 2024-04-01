@@ -42,5 +42,10 @@ export default createVuetify({
             inset: true,
             'hide-details': true,
         },
+        VAppBar: {
+            VChip: {
+                rounded: "pill",
+            }
+        },
     }
 })

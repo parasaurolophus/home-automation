@@ -33,7 +33,6 @@ const powerviewStatus = inject('powerviewStatus')
 const showAlert = inject('showAlert')
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
-const timerTheme = inject('timerTheme')
 
 function findHueModel(address) {
     for (let model of hueModel.value) {
