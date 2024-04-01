@@ -22,10 +22,6 @@ registerPlugins(app)
 // back end using a websocket
 //////////////////////////////////////////////////////////////////////////////
 
-// cached payloads of hue/{address}/model messages as they arrive
-// (see hueModels)
-const cachedHueModels = {}
-
 // items for v-select corresponding to settings/bedtime messages
 // in SettingsComponent.vue (see settingsBedtime)
 const bedtimeOptions = ref([
@@ -36,52 +32,32 @@ const bedtimeOptions = ref([
 
 app.provide('bedtimeOptions', bedtimeOptions)
 
-// model for settings/bedtime messages
-// (the value of this must match the .hour of
-// one of the bedtimeOptions)
 const settingsBedtime = ref(bedtimeOptions.value[0])
 app.provide('settingsBedtime', settingsBedtime)
 
 const currentBedtime = ref(0)
 app.provide('currentBedtime', currentBedtime)
 
-// model for settings/lighting messages
 const settingsLighting = ref(false)
 app.provide('settingsLighting', settingsLighting)
 
-// model for settings/shades messages
 const settingsShades = ref(false)
 app.provide('settingsShades', settingsShades)
 
-// models for alerts
 const alerts = ref([])
 app.provide('alerts', alerts)
 
-// model for HueBridgesComponent.vue
 const hueBridges = ref([])
 app.provide('hueBridges', hueBridges)
 
-// model for HueControlsComponent.vue, based
-// on contents of cachedHueModels, updated
-// each time a hue/{address}/model event
-// message is received
 const hueModel = ref([])
 app.provide('hueModel', hueModel)
 
-// model for PowerViewControls.vue, updated
-// each time a powerview/model event message
-// is received
 const powerviewModel = ref([])
 app.provide('powerviewModel', powerviewModel)
 
-// model for ConnectionsDiagramComponent.vue,
-// update each time a powerview/status event
-// message is received
 const powerviewStatus = ref(0)
 app.provide('powerviewStatus', powerviewStatus)
-
-const settingsOpened = ref(undefined)
-app.provide('settingsOpened', settingsOpened)
 
 //////////////////////////////////////////////////////////////////////////////
 // monitor websocket readyState

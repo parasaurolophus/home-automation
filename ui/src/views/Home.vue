@@ -3,7 +3,7 @@
 
     <AlertComponent />
 
-    <v-expansion-panels v-model="settingsOpened">
+    <v-expansion-panels>
 
         <v-expansion-panel title="Connections" value="connections">
             <v-expansion-panel-text eager>
@@ -34,12 +34,9 @@
 </template>
 
 <script setup>
-import { inject } from 'vue'
 import AlertComponent from '@/components/AlertComponent.vue'
 import ConnectionsDiagramComponent from '@/components/ConnectionsDiagramComponent.vue'
 import HueControlsComponent from '@/components/HueControlsComponent.vue'
 import PowerViewControlsComponent from '@/components/PowerViewControlsComponent.vue'
 import SettingsComponent from '@/components/SettingsComponent.vue'
-
-const settingsOpened = inject('settingsOpened')
 </script>
