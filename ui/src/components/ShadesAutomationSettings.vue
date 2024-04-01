@@ -2,8 +2,8 @@
     <div class="align-center">
         <v-switch v-model="settingsShades" class="align-center" density="compact">
             <template #label>
-                <v-icon v-if="settingsShades" color="secondary" icon="mdi-blinds-open" />
-                <v-icon v-else color="primary" icon="mdi-blinds" />
+                <v-icon v-if="settingsShades" color="primary" icon="mdi-blinds-open" />
+                <v-icon v-else color="secondary" icon="mdi-blinds" />
             </template>
         </v-switch>
     </div>

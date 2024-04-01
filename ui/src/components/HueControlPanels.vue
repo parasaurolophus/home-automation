@@ -7,7 +7,7 @@
                     <v-expansion-panel v-for="(group, groupIndex) in bridge.children" :key="groupIndex"
                         :disabled="websocketStatus != 1">
                         <v-expansion-panel-title>
-                            <v-icon :color="group.on ? 'secondary' : 'primary'"
+                            <v-icon :color="group.on ? 'primary' : 'secondary'"
                                 :icon="group.on ? 'mdi-lightbulb-on' : 'mdi-lightbulb'"></v-icon>
                             {{ group.title }}
                         </v-expansion-panel-title>

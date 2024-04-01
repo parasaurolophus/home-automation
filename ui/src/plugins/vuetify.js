@@ -23,10 +23,10 @@ export default createVuetify({
             variant: 'tonal',
         },
         VBtn: {
-            color: 'secondary',
+            color: 'primary',
         },
         VBtnToggle: {
-            color: 'secondary',
+            color: 'primary',
             rounded: 'pill',
             divided: true,
             VBtn: {
@@ -38,7 +38,7 @@ export default createVuetify({
             variant: 'popout',
         },
         VSwitch: {
-            color: 'secondary',
+            color: 'primary',
             inset: true,
             'hide-details': true,
         },

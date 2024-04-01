@@ -5,7 +5,7 @@
                 Bedtime
             </v-list-item-title>
             <v-list-item-subtitle>
-                <v-chip variant="text" color="secondary" density="compact">
+                <v-chip variant="text" color="primary" density="compact">
                     {{ timerString('bedtime') }}
                 </v-chip>
             </v-list-item-subtitle>
@@ -18,7 +18,7 @@
                 Lighting Automation
             </v-list-item-title>
             <v-list-item-subtitle>
-                <v-chip variant="text" :color="settingsLighting ? 'secondary' : 'primary'" density="compact">
+                <v-chip variant="text" :color="settingsLighting ? 'primary' : 'secondary'" density="compact">
                     {{ settingsLighting ? 'enabled' : 'disabled' }}
                 </v-chip>
             </v-list-item-subtitle>
@@ -31,7 +31,7 @@
                 Shades Automation
             </v-list-item-title>
             <v-list-item-subtitle>
-                <v-chip variant="text" :color="settingsShades ? 'secondary' : 'primary'" density="compact">
+                <v-chip variant="text" :color="settingsShades ? 'primary' : 'secondary'" density="compact">
                     {{ settingsShades ? 'enabled' : 'disabled' }}
                 </v-chip>
             </v-list-item-subtitle>
