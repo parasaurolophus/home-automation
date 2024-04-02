@@ -36,7 +36,7 @@ graph TB
         huebridge -- "SSE" --> eventsource
         huebridge -- "mDNS" --> dnssd
         huedevice <-- "Zigbee" --> huebridge
-        pvhub <--> pvdevice
+        pvhub <-- Bluetooth --> pvdevice
 
         click flows "https://github.com/parasaurolophus/home-automation" _blank
         click dnssd "https://flows.nodered.org/node/@parasaurolophus/node-red-dnssd" _blank
