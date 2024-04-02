@@ -41,9 +41,6 @@
 
 <script setup>
 import { inject } from 'vue'
-import BedtimeSettings from '@/components/BedtimeSettings.vue'
-import LightingAutomationSettings from '@/components/LightingAutomationSettings.vue'
-import ShadesAutomationSettings from '@/components/ShadesAutomationSettings.vue'
 
 const settingsLighting = inject('settingsLighting')
 const settingsShades = inject('settingsShades')

@@ -1,32 +1,83 @@
 <template>
-    <router-view />
+  <v-app>
+    <v-main>
+
+      <v-app-bar class="app-bar">
+        <v-app-bar-title>Home Automation</v-app-bar-title>
+        <theme-selector />
+      </v-app-bar>
+
+      <alerts-pop-up />
+
+      <v-expansion-panels>
+
+        <v-expansion-panel title="Connections" value="status">
+          <v-expansion-panel-text>
+            <connection-diagram />
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
+        <v-expansion-panel title="Settings" value="settings">
+          <v-expansion-panel-text>
+            <v-container>
+              <v-row>
+                <v-col>
+                  <settings-list />
+                </v-col>
+                <v-col>
+                  <times-list />
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
+        <v-expansion-panel title="Lighting" value="lighting">
+          <v-expansion-panel-text>
+            <hue-control-panels />
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
+        <v-expansion-panel title="Window Shades" value="shades">
+          <v-expansion-panel-text>
+            <power-view-control-panel />
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
+        <v-expansion-panel title="Debug" value="debug">
+          <v-expansion-panel-text>
+            <v-container>
+              <v-row>
+                <v-col>
+                  <all-times-list />
+                </v-col>
+                <v-col>
+                  <automation-trigger />
+                  <v-card title="Test Icon">
+                    <v-card-subtitle>
+                      <v-btn href="https://pictogrammers.com/library/mdi/" variant="text">
+                        https://pictogrammers.com/library/mdi/
+                      </v-btn>
+                    </v-card-subtitle>
+                    <v-card-text>
+                      <v-text-field v-model="testIcon" :prepend-icon="testIcon" />
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
+      </v-expansion-panels>
+    </v-main>
+
+    <AppFooter />
+  </v-app>
 </template>
 
-<style>
-fieldset {
-    margin: 0 0 1rem 0;
-}
-
-fieldset>* {
-    margin: 0.25rem;
-}
-
-body {
-    padding: 1rem;
-
-}
-
-th,
-td {
-    margin: 1px;
-    padding: 1px 0.5rem 1px 0.5rem;
-}
-
-th {
-    text-align: right;
-}
-</style>
-
 <script setup>
-  //
+import { ref } from 'vue'
+
+const testIcon = ref('mdi-home-automation')
 </script>
