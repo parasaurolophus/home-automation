@@ -10,6 +10,8 @@
 
     <v-navigation-drawer v-model="displayMenu">
         <settings-list />
+        <v-divider />
+        <times-list />
     </v-navigation-drawer>
 
 </template>

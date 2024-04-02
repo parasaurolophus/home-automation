@@ -13,12 +13,6 @@
           </v-expansion-panel-text>
         </v-expansion-panel>
 
-        <v-expansion-panel title="Settings" value="settings">
-          <v-expansion-panel-text>
-            <times-list />
-          </v-expansion-panel-text>
-        </v-expansion-panel>
-
         <v-expansion-panel title="Lighting" value="lighting">
           <v-expansion-panel-text>
             <hue-control-panels />
