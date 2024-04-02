@@ -20,32 +20,41 @@ export default createVuetify({
     },
     defaults: {
         VAlert: {
+            density: 'compact',
             variant: 'tonal',
         },
         VBtn: {
+            density: 'compact',
             color: 'primary',
         },
         VBtnToggle: {
+            density: 'compact',
             color: 'primary',
             rounded: 'pill',
             divided: true,
             VBtn: {
+                density: 'compact',
                 flat: true,
                 variant: 'flat'
             },
         },
+        VCard: {
+            density: 'compact',
+        },
         VExpansionPanels: {
             variant: 'popout',
         },
+        VList: {
+            density: 'compact',
+        },
+        VListItem: {
+            density: 'compact',
+        },
         VSwitch: {
+            density: 'compact',
             color: 'primary',
             inset: true,
             'hide-details': true,
-        },
-        VAppBar: {
-            VChip: {
-                rounded: "pill",
-            }
         },
     }
 })

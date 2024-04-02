@@ -13,7 +13,16 @@
 
         <v-expansion-panel title="Settings" value="settings">
             <v-expansion-panel-text>
-                <settings-list />
+                <v-container>
+                    <v-row>
+                        <v-col>
+                            <settings-list />
+                        </v-col>
+                        <v-col>
+                            <times-list />
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-expansion-panel-text>
         </v-expansion-panel>
 
@@ -29,14 +38,32 @@
             </v-expansion-panel-text>
         </v-expansion-panel>
 
+        <v-expansion-panel title="Debug" value="debug">
+            <v-expansion-panel-text>
+                <v-container>
+                    <v-row>
+                        <v-col>
+                            <all-times-list />
+                        </v-col>
+                        <v-col>
+                            <automation-trigger />
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-expansion-panel-text>
+        </v-expansion-panel>
+
     </v-expansion-panels>
 
 </template>
 
 <script setup>
 import AlertsPopUp from '@/components/AlertsPopUp.vue'
+import AllTimesList from '@/components/AllTimesList.vue'
+import AutomationTrigger from '@/components/AutomationTrigger.vue'
 import ConnectionDiagram from '@/components/ConnectionDiagram.vue'
 import HueControlPanels from '@/components/HueControlPanels.vue'
 import PowerViewControlPanel from '@/components/PowerViewControlPanel.vue'
 import SettingsList from '@/components/SettingsList.vue'
+import TimesList from '@/components/TimesList.vue'
 </script>

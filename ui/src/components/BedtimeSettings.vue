@@ -1,6 +1,6 @@
 <template>
-    <v-btn-toggle mandatory v-model="bedtimeIndex" density="compact">
-        <v-btn v-for="(item, index) in bedtimeOptions" :key="index" density="compact"
+    <v-btn-toggle mandatory v-model="bedtimeIndex">
+        <v-btn v-for="(item, index) in bedtimeOptions" :key="index"
             @click="websocketPublish({ payload: bedtimeOptions[index].hour, topic: 'settings/bedtime', retain: true, label: 'user' })">
             {{ item.label }}
         </v-btn>

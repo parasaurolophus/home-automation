@@ -1,11 +1,10 @@
 <template>
-    <v-list density="compact">
-        <v-list-item density="compact">
-            <v-list-item-title>
-                Bedtime
-            </v-list-item-title>
+
+    <v-list>
+
+        <v-list-item title="Bedtime">
             <v-list-item-subtitle>
-                <v-chip variant="text" color="primary" density="compact">
+                <v-chip variant="text" color="primary">
                     {{ timerString('bedtime') }}
                 </v-chip>
             </v-list-item-subtitle>
@@ -13,12 +12,10 @@
                 <bedtime-settings />
             </v-list-item-action>
         </v-list-item>
-        <v-list-item density="compact">
-            <v-list-item-title>
-                Lighting Automation
-            </v-list-item-title>
+
+        <v-list-item title="Lighting Automation">
             <v-list-item-subtitle>
-                <v-chip variant="text" :color="settingsLighting ? 'primary' : 'secondary'" density="compact">
+                <v-chip variant="text" :color="settingsLighting ? 'primary' : 'secondary'">
                     {{ settingsLighting ? 'enabled' : 'disabled' }}
                 </v-chip>
             </v-list-item-subtitle>
@@ -26,12 +23,10 @@
                 <lighting-automation-settings />
             </v-list-item-action>
         </v-list-item>
-        <v-list-item density="compact">
-            <v-list-item-title>
-                Shades Automation
-            </v-list-item-title>
+
+        <v-list-item title="Shades Automation">
             <v-list-item-subtitle>
-                <v-chip variant="text" :color="settingsShades ? 'primary' : 'secondary'" density="compact">
+                <v-chip variant="text" :color="settingsShades ? 'primary' : 'secondary'">
                     {{ settingsShades ? 'enabled' : 'disabled' }}
                 </v-chip>
             </v-list-item-subtitle>
@@ -39,7 +34,9 @@
                 <shades-automation-settings />
             </v-list-item-action>
         </v-list-item>
+
     </v-list>
+
 </template>
 
 <script setup>

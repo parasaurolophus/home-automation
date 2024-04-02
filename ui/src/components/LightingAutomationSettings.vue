@@ -1,6 +1,6 @@
 <template>
     <div class="align-center">
-        <v-switch v-model="settingsLighting" class="align-center" density="compact">
+        <v-switch v-model="settingsLighting" class="align-center">
             <template #label>
                 <v-icon v-if="settingsLighting" color="primary" icon="mdi-lightbulb-on" />
                 <v-icon v-else color="secondary" icon="mdi-lightbulb" />

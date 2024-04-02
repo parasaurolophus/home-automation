@@ -611,23 +611,20 @@
             "679d6a0d2002bcb7",
             "839872dec0a80cfa",
             "48891106bb0c15f3",
-            "2faadc63ef5e77d2",
             "6d027828f94cb558",
             "97324173f5cd31d1",
             "befa2aee7b7c68f0",
-            "cc0f759f7fc83125",
             "f0fd3673cca0dbde",
             "bc4239a2638e560d",
             "e471a1ddbc9ef198",
             "0a76f5d385da96d7",
             "9c763cec842003b4",
             "11cc62548c1ebf9e",
-            "8f3017ac0fd35db7",
             "b5eb05ffb31db5ed",
             "c8fb3c01f10259ca"
         ],
         "x": 14,
-        "y": 319,
+        "y": 299,
         "w": 1372,
         "h": 282,
         "info": "Activate the corresponding PowerView scene upon receipt of of each\n`automation/trigger` event"
@@ -656,7 +653,7 @@
             "244e029d9a276e82"
         ],
         "x": 14,
-        "y": 619,
+        "y": 599,
         "w": 772,
         "h": 202,
         "info": "Handle lighting automation trigger events\n\n| Bridge | Address |\n|-|-|\n| Basement | 192.168.1.34 |\n| Ground Floor | 192.168.1.12 |\n\n| Room / Zone   | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n\nTo turn off the _Exterior_ zone and activate the _Nightlight_ scene in each of the _Main Bathroom_ and _Main Floor_:\n\n```json\n[\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\n        \"payload\": {\n            \"on\": {\n                \"on\": false\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/48c39b9f-1599-4a5c-b7f6-bad6cad4029a\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    }\n]\n```"
@@ -676,8 +673,8 @@
         "nodes": [
             "b044e7bab42607f8"
         ],
-        "x": 874,
-        "y": 639,
+        "x": 914,
+        "y": 679,
         "w": 452,
         "h": 82
     },
@@ -2072,7 +2069,7 @@
         "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "timer",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst events = [{ cancel: true }]\nconst currentTimes = []\n\nsuncalc.addTime(40, \"midday\", \"ignore1\")\nsuncalc.addTime(45, \"ignore2\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (Object.prototype.hasOwnProperty.call(times, key)) {\n\n        const time = times[key].getTime()\n\n        const message = {\n            topic: 'timer/time',\n            payload: key,\n            at: time,\n        }\n\n        currentTimes.push(message)\n\n        if (time > now) {\n            events.push(message)\n        }\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate(),\n    hour).getTime() + offset\n\nconst bedtimeEvent = {\n    payload: 'bedtime',\n    topic: 'timer/time',\n    at: bedtime\n}\n\ncurrentTimes.push(bedtimeEvent)\n\nif (bedtime > now) {\n\n    events.push(bedtimeEvent)\n}\n\nevents.sort((a, b) => {\n\n    if (!Object.prototype.hasOwnProperty.call(a, 'at')) {\n        return b\n    }\n\n    if (!Object.prototype.hasOwnProperty.call(b, 'at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nevents.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [\n    events,\n    currentTimes,\n    {\n        topic: 'current/timer/theme',\n        payload: theme,\n        retain: true\n    }]\n",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst events = [{ cancel: true }]\nconst currentTimes = []\n\nsuncalc.addTime(40, \"midday\", \"ignore2\")\nsuncalc.addTime(45, \"ignore1\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (Object.prototype.hasOwnProperty.call(times, key)) {\n\n        const time = times[key].getTime()\n\n        const message = {\n            topic: 'timer/time',\n            payload: key,\n            at: time,\n        }\n\n        currentTimes.push(message)\n\n        if (time > now) {\n            events.push(message)\n        }\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate(),\n    hour).getTime() + offset\n\nconst bedtimeEvent = {\n    payload: 'bedtime',\n    topic: 'timer/time',\n    at: bedtime\n}\n\ncurrentTimes.push(bedtimeEvent)\n\nif (bedtime > now) {\n\n    events.push(bedtimeEvent)\n}\n\nevents.sort((a, b) => {\n\n    if (!Object.prototype.hasOwnProperty.call(a, 'at')) {\n        return b\n    }\n\n    if (!Object.prototype.hasOwnProperty.call(b, 'at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nevents.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [\n    events,\n    currentTimes,\n    {\n        topic: 'current/timer/theme',\n        payload: theme,\n        retain: true\n    }]\n",
         "outputs": 3,
         "timeout": "",
         "noerr": 0,
@@ -2547,7 +2544,7 @@
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 460,
+        "y": 440,
         "wires": [
             [
                 "0a76f5d385da96d7"
@@ -2586,7 +2583,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 460,
+        "y": 440,
         "wires": [
             [
                 "679d6a0d2002bcb7"
@@ -2623,32 +2620,6 @@
         "info": "Set `msg.payload` to the scene id for _Open All Shades_."
     },
     {
-        "id": "2faadc63ef5e77d2",
-        "type": "trigger",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "",
-        "op1": "",
-        "op2": "",
-        "op1type": "nul",
-        "op2type": "pay",
-        "duration": "15",
-        "extend": false,
-        "overrideDelay": false,
-        "units": "min",
-        "reset": "",
-        "bytopic": "all",
-        "topic": "topic",
-        "outputs": 1,
-        "x": 850,
-        "y": 540,
-        "wires": [
-            [
-                "cc0f759f7fc83125"
-            ]
-        ]
-    },
-    {
         "id": "6d027828f94cb558",
         "type": "link out",
         "z": "94027c46c4bfae12",
@@ -2659,7 +2630,7 @@
             "97324173f5cd31d1"
         ],
         "x": 550,
-        "y": 480,
+        "y": 460,
         "wires": [],
         "l": true
     },
@@ -2693,22 +2664,7 @@
             "97324173f5cd31d1"
         ],
         "x": 560,
-        "y": 400,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "cc0f759f7fc83125",
-        "type": "link out",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "dusk",
-        "mode": "link",
-        "links": [
-            "f0fd3673cca0dbde"
-        ],
-        "x": 990,
-        "y": 540,
+        "y": 380,
         "wires": [],
         "l": true
     },
@@ -2720,7 +2676,8 @@
         "name": "close all",
         "links": [
             "cc0f759f7fc83125",
-            "bc4239a2638e560d"
+            "bc4239a2638e560d",
+            "b5eb05ffb31db5ed"
         ],
         "x": 720,
         "y": 500,
@@ -2742,7 +2699,7 @@
             "f0fd3673cca0dbde"
         ],
         "x": 560,
-        "y": 560,
+        "y": 540,
         "wires": [],
         "l": true
     },
@@ -2775,7 +2732,7 @@
             "e471a1ddbc9ef198"
         ],
         "x": 560,
-        "y": 360,
+        "y": 340,
         "wires": [],
         "l": true
     },
@@ -2808,26 +2765,8 @@
             "9c763cec842003b4"
         ],
         "x": 560,
-        "y": 440,
+        "y": 420,
         "wires": [],
-        "l": true
-    },
-    {
-        "id": "8f3017ac0fd35db7",
-        "type": "link in",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "dusk",
-        "links": [
-            "b5eb05ffb31db5ed"
-        ],
-        "x": 710,
-        "y": 540,
-        "wires": [
-            [
-                "2faadc63ef5e77d2"
-            ]
-        ],
         "l": true
     },
     {
@@ -2838,10 +2777,11 @@
         "name": "dusk",
         "mode": "link",
         "links": [
-            "8f3017ac0fd35db7"
+            "8f3017ac0fd35db7",
+            "f0fd3673cca0dbde"
         ],
         "x": 550,
-        "y": 520,
+        "y": 500,
         "wires": [],
         "l": true
     },
@@ -2871,7 +2811,7 @@
             }
         ],
         "x": 540,
-        "y": 660,
+        "y": 640,
         "wires": []
     },
     {
@@ -2906,7 +2846,7 @@
         "repair": false,
         "outputs": 4,
         "x": 530,
-        "y": 720,
+        "y": 700,
         "wires": [
             [
                 "1cb0a0826e19ac25"
@@ -2937,7 +2877,7 @@
             }
         ],
         "x": 550,
-        "y": 780,
+        "y": 760,
         "wires": []
     },
     {
@@ -2954,7 +2894,7 @@
             }
         ],
         "x": 690,
-        "y": 660,
+        "y": 640,
         "wires": []
     },
     {
@@ -2971,7 +2911,7 @@
             }
         ],
         "x": 700,
-        "y": 700,
+        "y": 680,
         "wires": []
     },
     {
@@ -2988,7 +2928,7 @@
             }
         ],
         "x": 690,
-        "y": 740,
+        "y": 720,
         "wires": []
     },
     {
@@ -3005,7 +2945,7 @@
             }
         ],
         "x": 700,
-        "y": 780,
+        "y": 760,
         "wires": []
     },
     {
@@ -3022,7 +2962,7 @@
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 720,
+        "y": 700,
         "wires": [
             [
                 "870608ff910feb60"
@@ -3049,7 +2989,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 720,
+        "y": 700,
         "wires": [
             [
                 "5e838b011b496bb4"
@@ -3063,8 +3003,8 @@
         "g": "f33001c4a3f90bd3",
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
-        "x": 1100,
-        "y": 680,
+        "x": 1140,
+        "y": 720,
         "wires": []
     },
     {
@@ -3088,15 +3028,15 @@
         "type": "function",
         "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
-        "name": "debug trigger",
-        "func": "const debug = RED.util.cloneMessage(msg)\n\ndebug.topic = 'current/' + debug.topic\ndebug.retain = true\ndebug.payload.timestamp = new Date().toLocaleString()\n\nreturn [\n    [msg, debug]\n]\n",
+        "name": "current trigger",
+        "func": "const current = RED.util.cloneMessage(msg)\n\ncurrent.topic = 'current/' + current.topic\ncurrent.retain = true\ncurrent.payload.timestamp = new Date().toLocaleString()\n\nreturn [\n    [msg, current]\n]\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1190,
+        "x": 1200,
         "y": 60,
         "wires": [
             [
