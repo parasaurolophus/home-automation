@@ -583,7 +583,8 @@
             "0c57cb4bce44a11a",
             "3cbcdb02b5e451a3",
             "499de1cc5ab65c53",
-            "869ada541db92710"
+            "869ada541db92710",
+            "0580b1033d32bb56"
         ],
         "x": 14,
         "y": 19,
@@ -2131,10 +2132,10 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 80,
+        "y": 60,
         "wires": [
             [
-                "e6fc90237bd5a5e9"
+                "0580b1033d32bb56"
             ]
         ]
     },
@@ -2300,8 +2301,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 270,
-        "y": 80,
+        "x": 390,
+        "y": 60,
         "wires": [
             [
                 "0816fe94f5858846"
@@ -3062,6 +3063,61 @@
         "wires": [
             [
                 "0c57cb4bce44a11a"
+            ]
+        ]
+    },
+    {
+        "id": "f601922468356c43",
+        "type": "debug",
+        "z": "94027c46c4bfae12",
+        "name": "published",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 1180,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "ab8585ee6337176a",
+        "type": "complete",
+        "z": "94027c46c4bfae12",
+        "name": "publish",
+        "scope": [
+            "0c57cb4bce44a11a"
+        ],
+        "uncaught": false,
+        "x": 1050,
+        "y": 620,
+        "wires": [
+            [
+                "f601922468356c43"
+            ]
+        ]
+    },
+    {
+        "id": "0580b1033d32bb56",
+        "type": "rbe",
+        "z": "94027c46c4bfae12",
+        "g": "b10eb6ebfd377efe",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 230,
+        "y": 60,
+        "wires": [
+            [
+                "e6fc90237bd5a5e9"
             ]
         ]
     },

@@ -22,22 +22,12 @@ registerPlugins(app)
 // back end using a websocket
 //////////////////////////////////////////////////////////////////////////////
 
-// items for v-select corresponding to settings/bedtime messages
-// in SettingsComponent.vue (see settingsBedtime)
-const bedtimeOptions = ref([
-    { label: '9PM', hour: 21 },
-    { label: '10PM', hour: 22 },
-    { label: '11PM', hour: 23 },
-])
-
-app.provide('bedtimeOptions', bedtimeOptions)
-
-const settingsBedtime = ref(bedtimeOptions.value[0])
+const settingsBedtime = ref(21)
 app.provide('settingsBedtime', settingsBedtime)
 
 watch(settingsBedtime, () => websocketPublish({
     topic: 'settings/bedtime',
-    payload: settingsBedtime.value.hour,
+    payload: settingsBedtime.value,
     retain: true,
     label: 'user',
 }))
@@ -59,6 +49,7 @@ watch(settingsShades, () => websocketPublish({
     topic: 'settings/shades',
     payload: settingsShades.value,
     retain: true,
+    label: 'user',
 }))
 
 const alerts = ref([])
@@ -257,41 +248,30 @@ function connectWS() {
 
             powerviewStatus.value = msg.payload
             return
-
         }
 
         if (msg.topic == 'settings/lighting') {
 
-            settingsLighting.value = msg.payload
+            if (settingsLighting.value != msg.payload) {
+                settingsLighting.value = msg.payload
+            }
             return
-
         }
 
         if (msg.topic == 'settings/shades') {
 
-            settingsShades.value = msg.payload
+            if (settingsShades.value != msg.payload) {
+                settingsShades.value = msg.payload
+            }
             return
-
         }
 
         if (msg.topic == 'settings/bedtime') {
 
-            for (let option of bedtimeOptions.value) {
-
-                if (option.hour == msg.payload) {
-
-                    settingsBedtime.value = option
-                    return
-
-                }
+            if (settingsBedtime.value != msg.payload) {
+                settingsBedtime.value = msg.payload
             }
-
-            const text = JSON.stringify(msg.payload, undefined, 1)
-
-            console.log('no bedtime option found matching ' + text)
-            showAlert('error', 'Invalid settings/bedtime payload', text)
             return
-
         }
 
         if (msg.topic == 'hue/model') {

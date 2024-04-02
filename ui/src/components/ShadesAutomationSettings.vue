@@ -1,12 +1,12 @@
 <template>
-    <div class="align-center">
+    <!-- <div class="align-center"> -->
         <v-switch v-model="settingsShades" class="align-center">
             <template #label>
                 <v-icon v-if="settingsShades" color="primary" icon="mdi-blinds-open" />
                 <v-icon v-else color="secondary" icon="mdi-blinds" />
             </template>
         </v-switch>
-    </div>
+    <!-- </div> -->
 </template>
 
 <style scoped>
@@ -16,9 +16,9 @@
     align-content: center;
 }
 
-.align-center>* {
+/* .align-center>* {
     margin: 0 0.5rem 0 0.5rem;
-}
+} */
 </style>
 
 <script setup>
