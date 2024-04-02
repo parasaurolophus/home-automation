@@ -20,7 +20,6 @@ export default createVuetify({
   },
   defaults: {
     VAlert: {
-      density: 'compact',
       variant: 'tonal',
     },
     VBtn: {
