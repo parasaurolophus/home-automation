@@ -2,11 +2,7 @@
   <v-app>
     <v-main>
 
-      <v-app-bar class="app-bar">
-        <v-app-bar-title>Home Automation</v-app-bar-title>
-        <theme-selector />
-      </v-app-bar>
-
+      <home-automation-app-bar />
       <alerts-pop-up />
 
       <v-expansion-panels>
@@ -19,16 +15,7 @@
 
         <v-expansion-panel title="Settings" value="settings">
           <v-expansion-panel-text>
-            <v-container>
-              <v-row>
-                <v-col>
-                  <settings-list />
-                </v-col>
-                <v-col>
-                  <times-list />
-                </v-col>
-              </v-row>
-            </v-container>
+            <times-list />
           </v-expansion-panel-text>
         </v-expansion-panel>
 

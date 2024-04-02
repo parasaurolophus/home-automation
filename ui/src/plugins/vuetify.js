@@ -19,6 +19,12 @@ export default createVuetify({
     defaultTheme: 'dark',
   },
   defaults: {
+    VAppBar: {
+      density: 'compact',
+    },
+    VAppBarNavIcon: {
+      density: 'compact',
+    },
     VAlert: {
       variant: 'tonal',
     },
