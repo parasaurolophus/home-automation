@@ -1,7 +1,6 @@
 <template>
     <v-btn-toggle mandatory v-model="bedtimeIndex">
-        <v-btn v-for="(item, index) in bedtimeOptions" :key="index"
-            @click="websocketPublish({ payload: bedtimeOptions[index].hour, topic: 'settings/bedtime', retain: true, label: 'user' })">
+        <v-btn v-for="(item, index) in bedtimeOptions" :key="index" @click="settingsBedtime = bedtimeOptions[index]">
             {{ item.label }}
         </v-btn>
     </v-btn-toggle>
@@ -10,7 +9,6 @@
 <script setup>
 import { inject, ref, watch } from 'vue'
 
-const websocketPublish = inject('websocketPublish')
 const bedtimeOptions = inject('bedtimeOptions')
 const settingsBedtime = inject('settingsBedtime')
 

@@ -11,7 +11,7 @@ import { registerPlugins } from '@/plugins'
 import App from './App.vue'
 
 // Composables
-import { createApp, ref } from 'vue'
+import { createApp, ref, watch } from 'vue'
 
 const app = createApp(App)
 
@@ -35,11 +35,31 @@ app.provide('bedtimeOptions', bedtimeOptions)
 const settingsBedtime = ref(bedtimeOptions.value[0])
 app.provide('settingsBedtime', settingsBedtime)
 
+watch(settingsBedtime, () => websocketPublish({
+    topic: 'settings/bedtime',
+    payload: settingsBedtime.value.hour,
+    retain: true,
+    label: 'user',
+}))
+
 const settingsLighting = ref(false)
 app.provide('settingsLighting', settingsLighting)
 
+watch(settingsLighting, () => websocketPublish({
+    topic: 'settings/lighting',
+    payload: settingsLighting.value,
+    retain: true,
+    label: 'user',
+}))
+
 const settingsShades = ref(false)
 app.provide('settingsShades', settingsShades)
+
+watch(settingsShades, () => websocketPublish({
+    topic: 'settings/shades',
+    payload: settingsShades.value,
+    retain: true,
+}))
 
 const alerts = ref([])
 app.provide('alerts', alerts)
@@ -269,7 +289,7 @@ function connectWS() {
             const text = JSON.stringify(msg.payload, undefined, 1)
 
             console.log('no bedtime option found matching ' + text)
-            showAlert('error', 'Invalid settings/bedtime payloader', text)
+            showAlert('error', 'Invalid settings/bedtime payload', text)
             return
 
         }
