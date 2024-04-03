@@ -9,7 +9,7 @@
     </v-app-bar>
 
     <v-navigation-drawer v-model="displayMenu">
-        <settings-list />
+        <settings-controls />
         <v-divider />
         <times-list />
     </v-navigation-drawer>

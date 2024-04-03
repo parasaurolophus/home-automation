@@ -5,7 +5,7 @@
         <v-list-item title="Bedtime">
             <v-list-item-subtitle>
                 <v-chip variant="text" color="primary">
-                    {{ timerString('bedtime') }}
+                    {{ new Date(timerTime.bedtime).toLocaleString() }}
                 </v-chip>
             </v-list-item-subtitle>
             <v-list-item-action>
@@ -45,11 +45,4 @@ import { inject } from 'vue'
 const settingsLighting = inject('settingsLighting')
 const settingsShades = inject('settingsShades')
 const timerTime = inject('timerTime')
-
-function timerString(name) {
-    if (Object.prototype.hasOwnProperty.call(timerTime.value, name)) {
-        return new Date(timerTime.value[name]).toLocaleString()
-    }
-    return 'unknown'
-}
 </script>
