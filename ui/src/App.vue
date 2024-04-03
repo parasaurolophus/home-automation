@@ -7,12 +7,6 @@
 
       <v-expansion-panels>
 
-        <v-expansion-panel title="Connections" value="status">
-          <v-expansion-panel-text>
-            <connection-diagram />
-          </v-expansion-panel-text>
-        </v-expansion-panel>
-
         <v-expansion-panel title="Lighting" value="lighting">
           <v-expansion-panel-text>
             <hue-control-panels />
@@ -22,6 +16,12 @@
         <v-expansion-panel title="Window Shades" value="shades">
           <v-expansion-panel-text>
             <power-view-control-panel />
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
+        <v-expansion-panel title="Connections" value="status">
+          <v-expansion-panel-text>
+            <connection-diagram />
           </v-expansion-panel-text>
         </v-expansion-panel>
 
