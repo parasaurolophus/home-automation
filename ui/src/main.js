@@ -76,6 +76,33 @@ app.provide('automationTrigger', automationTrigger)
 const timerTime = ref({})
 app.provide('timerTime', timerTime)
 
+const nextTime = ref(null)
+app.provide('nextTime', nextTime)
+
+function updateNextTime() {
+    const date = new Date()
+    const now = date.getTime()
+    const times = []
+    for (let label in timerTime.value) {
+        times.push({
+            time: timerTime.value[label],
+            label: label,
+        })
+    }
+    times.sort((a, b) => a.time - b.time)
+    for (let time of times) {
+        if (time.time > now) {
+            if (nextTime.value?.time != time.time) {
+                nextTime.value = time
+            }
+            return
+        }
+    }
+    nextTime.value = null
+    console.log('no trigger time found at ' + date.toLocaleString())
+    console.log(JSON.stringify(timerTime.value, undefined, 4))
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // monitor websocket readyState
 //////////////////////////////////////////////////////////////////////////////
@@ -209,7 +236,7 @@ function connectWS() {
 
         if (msg.topic == 'timer/time') {
 
-            console.log(JSON.stringify(msg, undefined, 4))
+            setTimeout(updateNextTime, 1000)
             return
         }
 
@@ -333,6 +360,7 @@ function connectWS() {
         if (Array.isArray(matches) && (matches.length == 2)) {
 
             timerTime.value[matches[1]] = msg.payload
+            updateNextTime()
             return
         }
     }
