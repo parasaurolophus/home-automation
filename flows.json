@@ -3065,40 +3065,6 @@
         ]
     },
     {
-        "id": "f601922468356c43",
-        "type": "debug",
-        "z": "94027c46c4bfae12",
-        "name": "published",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": true,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "counter",
-        "x": 1180,
-        "y": 620,
-        "wires": []
-    },
-    {
-        "id": "ab8585ee6337176a",
-        "type": "complete",
-        "z": "94027c46c4bfae12",
-        "name": "publish",
-        "scope": [
-            "0c57cb4bce44a11a"
-        ],
-        "uncaught": false,
-        "x": 1050,
-        "y": 620,
-        "wires": [
-            [
-                "f601922468356c43"
-            ]
-        ]
-    },
-    {
         "id": "0580b1033d32bb56",
         "type": "rbe",
         "z": "94027c46c4bfae12",
