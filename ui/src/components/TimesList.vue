@@ -2,9 +2,9 @@
 
     <v-list>
 
-        <v-list-item title="Theme">
+        <v-list-item title="Theme" :append-icon="timerThemeIcons[timerTheme] ?? standardTimerThemeIcon">
             <v-list-item-subtitle>
-                <v-chip variant="text" color="primary">
+                <v-chip variant="text">
                     {{ timerTheme }}
                 </v-chip>
             </v-list-item-subtitle>
@@ -13,83 +13,21 @@
             </div>
         </v-list-item>
 
-        <v-divider inset></v-divider>
-
-        <v-list-item title="Sunrise">
-            <v-list-item-subtitle>
-                <v-chip variant="text" color="primary">
-                    {{ new Date(timerTime.sunrise).toLocaleString() }}
-                </v-chip>
-            </v-list-item-subtitle>
-            <div class="notes">
-                Lights off, morning shades
-            </div>
-        </v-list-item>
-
-        <v-divider inset></v-divider>
-
-        <v-list-item title="Midday">
-            <v-list-item-subtitle>
-                <v-chip variant="text" color="primary">
-                    {{ new Date(timerTime.midday).toLocaleString() }}
-                </v-chip>
-            </v-list-item-subtitle>
-            <div class="notes">
-                All shades open
-            </div>
-        </v-list-item>
-
-        <v-divider inset></v-divider>
-
-        <v-list-item title="Afternoon">
-            <v-list-item-subtitle>
-                <v-chip variant="text" color="primary">
-                    {{ new Date(timerTime.afternoon).toLocaleString() }}
-                </v-chip>
-            </v-list-item-subtitle>
-            <div class="notes">
-                Afternoon shades
-            </div>
-        </v-list-item>
-
-        <v-divider inset></v-divider>
-
-        <v-list-item title="Sunset">
-            <v-list-item-subtitle>
-                <v-chip variant="text" color="primary">
-                    {{ new Date(timerTime.sunset).toLocaleString() }}
-                </v-chip>
-            </v-list-item-subtitle>
-            <div class="notes">
-                Evening lights, all shades open
-            </div>
-        </v-list-item>
-
-        <v-divider inset></v-divider>
-
-        <v-list-item title="Dusk">
-            <v-list-item-subtitle>
-                <v-chip variant="text" color="primary">
-                    {{ new Date(timerTime.dusk).toLocaleString() }}
-                </v-chip>
-            </v-list-item-subtitle>
-            <div class="notes">
-                All shades closed
-            </div>
-        </v-list-item>
-
-        <v-divider inset></v-divider>
-
-        <v-list-item title="Bedtime">
-            <v-list-item-subtitle>
-                <v-chip variant="text" color="primary">
-                    {{ new Date(timerTime.bedtime).toLocaleString() }}
-                </v-chip>
-            </v-list-item-subtitle>
-            <div class="notes">
-                Nightlights, all shades closed
-            </div>
-        </v-list-item>
+        <template v-for="(itemTime, index) in itemTimes" :key="index">
+            <template v-if="nextTrigger && timerTime && timerTime[itemTime.key]">
+                <v-divider inset />
+                <v-list-item :title="itemTime.title">
+                    <v-list-item-subtitle>
+                        <v-chip variant="text" :color="chipColor(itemTime)">
+                            {{ new Date(timerTime[itemTime.key]).toLocaleString() }}
+                        </v-chip>
+                    </v-list-item-subtitle>
+                    <div class="notes">
+                        {{ itemTime.notes }}
+                    </div>
+                </v-list-item>
+            </template>
+        </template>
 
     </v-list>
 
@@ -105,8 +43,56 @@
 </style>
 
 <script setup>
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 
+const nextTrigger = inject('nextTrigger')
+const standardTimerThemeIcon = inject('standardTimerThemeIcon')
 const timerTime = inject('timerTime')
 const timerTheme = inject('timerTheme')
+const timerThemeIcons = inject('timerThemeIcons')
+
+const itemTimes = ref([
+    {
+        title: 'Sunrise',
+        key: 'sunrise',
+        notes: 'all lights off, morning shades',
+    },
+    {
+        title: 'Midday',
+        key: 'midday',
+        notes: 'all shades open',
+    },
+    {
+        title: 'Afternoon',
+        key: 'afternoon',
+        notes: 'afternoon shades',
+    },
+    {
+        title: 'Sunset',
+        key: 'sunset',
+        notes: 'evening lights, all shades open',
+    },
+    {
+        title: 'Dusk',
+        key: 'dusk',
+        notes: 'all shades closed',
+    },
+    {
+        title: 'Bedtime',
+        key: 'bedtime',
+        notes: 'night lights, all shades closed',
+    },
+])
+
+function chipColor(itemTime) {
+    const nextTime = nextTrigger.value.time
+    const selectedTime = timerTime.value[itemTime.key]
+    if (selectedTime == nextTime) {
+        return 'primary'
+    }
+    if (selectedTime < nextTime) {
+        return 'secondary'
+    }
+    return false
+}
 </script>

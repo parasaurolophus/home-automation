@@ -22,9 +22,10 @@
         <v-icon :color="settingsShades ? 'primary' : 'secondary'">
             {{ settingsShades ? 'mdi-blinds-open' : 'mdi-blinds' }}
         </v-icon>
-        <v-icon color="primary">
+        <v-icon>
             {{ timerThemeIcons[timerTheme] ?? standardTimerThemeIcon }}
         </v-icon>
+        <v-divider vertical />
         <theme-selector />
     </v-app-bar>
 
