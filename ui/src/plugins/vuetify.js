@@ -19,44 +19,28 @@ export default createVuetify({
     defaultTheme: 'dark',
   },
   defaults: {
-    VAppBar: {
-      density: 'compact',
-    },
-    VAppBarNavIcon: {
+    global: {
       density: 'compact',
     },
     VAlert: {
       variant: 'tonal',
     },
     VBtn: {
-      density: 'compact',
       color: 'primary',
     },
     VBtnToggle: {
-      density: 'compact',
       color: 'primary',
       rounded: 'pill',
       divided: true,
       VBtn: {
-        density: 'compact',
         flat: true,
         variant: 'flat'
       },
     },
-    VCard: {
-      density: 'compact',
-    },
     VExpansionPanels: {
       variant: 'popout',
     },
-    VList: {
-      density: 'compact',
-    },
-    VListItem: {
-      density: 'compact',
-    },
     VSwitch: {
-      density: 'compact',
       color: 'primary',
       inset: true,
       'hide-details': true,
