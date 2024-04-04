@@ -67,19 +67,30 @@ app.provide('powerviewModel', powerviewModel)
 const powerviewStatus = ref(0)
 app.provide('powerviewStatus', powerviewStatus)
 
-const timerTheme = ref('')
+const timerTheme = ref(null)
 app.provide('timerTheme', timerTheme)
 
-const automationTrigger = ref('automationTrigger')
+const automationTrigger = ref(null)
 app.provide('automationTrigger', automationTrigger)
 
 const timerTime = ref({})
 app.provide('timerTime', timerTime)
 
-const nextTime = ref(null)
-app.provide('nextTime', nextTime)
+const timerThemeIcons = ref({
+    tribal: 'mdi-firework',
+    spooky: 'mdi-halloween',
+    jolly: 'mdi-string-lights',
+})
 
-function updateNextTime() {
+app.provide('timerThemeIcons', timerThemeIcons)
+
+const standardTimerThemeIcon = ref('mdi-lightbulb-group')
+app.provide('standardTimerThemeIcon', standardTimerThemeIcon)
+
+const nextTrigger = ref(null)
+app.provide('nextTrigger', nextTrigger)
+
+function updateNextTrigger() {
     const date = new Date()
     const now = date.getTime()
     const times = []
@@ -92,13 +103,13 @@ function updateNextTime() {
     times.sort((a, b) => a.time - b.time)
     for (let time of times) {
         if (time.time > now) {
-            if (nextTime.value?.time != time.time) {
-                nextTime.value = time
+            if (nextTrigger.value?.time != time.time) {
+                nextTrigger.value = time
             }
             return
         }
     }
-    nextTime.value = null
+    nextTrigger.value = null
     console.log('no trigger time found at ' + date.toLocaleString())
     console.log(JSON.stringify(timerTime.value, undefined, 4))
 }
@@ -236,7 +247,7 @@ function connectWS() {
 
         if (msg.topic == 'timer/time') {
 
-            setTimeout(updateNextTime, 1000)
+            console.log(JSON.stringify(msg, undefined, 4))
             return
         }
 
@@ -249,6 +260,7 @@ function connectWS() {
         if (msg.topic == 'current/automation/trigger') {
 
             automationTrigger.value = msg.payload
+            updateNextTrigger()
             return
         }
 
@@ -360,7 +372,7 @@ function connectWS() {
         if (Array.isArray(matches) && (matches.length == 2)) {
 
             timerTime.value[matches[1]] = msg.payload
-            updateNextTime()
+            updateNextTrigger()
             return
         }
     }

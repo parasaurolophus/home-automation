@@ -1,15 +1,30 @@
 <template>
 
-    <v-app-bar class="app-bar">
+    <v-app-bar class="app-bar" title="Home Automation" extended>
         <template #prepend>
-            <v-app-bar-nav-icon @click.stop="displayMenu = !displayMenu"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon @click.stop="displayMenu = !displayMenu">
+            </v-app-bar-nav-icon>
         </template>
-        <v-app-bar-title>Home Automation</v-app-bar-title>
-        <v-chip v-if="nextTime">
-            {{ nextTime.label }}:
-            {{ new Date(nextTime.time).toLocaleString() }}
-        </v-chip>
-        <v-chip>{{ timerTheme }}</v-chip>
+        <template #extension>
+            <v-spacer />
+            <v-chip v-if="automationTrigger" color="secondary">
+                {{ automationTrigger['timer/time'] ?? 'no time specified' }}
+                {{ automationTrigger.timestamp }}
+            </v-chip>
+            <v-chip v-if="nextTrigger" color="primary">
+                {{ nextTrigger.label }}
+                {{ new Date(nextTrigger.time).toLocaleString() }}
+            </v-chip>
+        </template>
+        <v-icon :color="settingsLighting ? 'primary' : 'secondary'">
+            {{ settingsLighting ? 'mdi-lightbulb-on' : 'mdi-lightbulb' }}
+        </v-icon>
+        <v-icon :color="settingsShades ? 'primary' : 'secondary'">
+            {{ settingsShades ? 'mdi-blinds-open' : 'mdi-blinds' }}
+        </v-icon>
+        <v-icon color="primary">
+            {{ timerThemeIcons[timerTheme] ?? standardTimerThemeIcon }}
+        </v-icon>
         <theme-selector />
     </v-app-bar>
 
@@ -24,8 +39,13 @@
 <script setup>
 import { inject, ref } from 'vue'
 
+const automationTrigger = inject('automationTrigger')
+const nextTrigger = inject('nextTrigger')
+const settingsLighting = inject('settingsLighting')
+const settingsShades = inject('settingsShades')
+const standardTimerThemeIcon = inject('standardTimerThemeIcon')
 const timerTheme = inject('timerTheme')
-const nextTime = inject('nextTime')
+const timerThemeIcons = inject('timerThemeIcons')
 
 const displayMenu = ref(false)
 </script>
