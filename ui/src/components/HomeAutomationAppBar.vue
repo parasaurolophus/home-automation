@@ -9,7 +9,7 @@
             <v-spacer />
             <v-chip v-if="automationTrigger" color="secondary">
                 {{ automationTrigger['timer/time'] ?? 'no time specified' }}
-                {{ automationTrigger.timestamp }}
+                {{ new Date(automationTrigger.at).toLocaleString() }}
             </v-chip>
             <v-chip v-if="nextTrigger" color="primary">
                 {{ nextTrigger.label }}

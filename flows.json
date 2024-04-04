@@ -570,21 +570,21 @@
             "0497e0ed333e8f23",
             "8624deaf4bee22fa",
             "47acab248c4d8501",
-            "0816fe94f5858846",
             "9977146ce026810e",
             "106ee66b66de58ab",
             "6792ab0a12231e4e",
-            "21c4dba2bb5d0e54",
-            "7cf8caea790c9792",
             "e6fc90237bd5a5e9",
             "c3cac0049cccb7e7",
             "c79b769649c2b419",
             "189c38230a6eb7a0",
             "0c57cb4bce44a11a",
             "3cbcdb02b5e451a3",
-            "499de1cc5ab65c53",
             "869ada541db92710",
-            "0580b1033d32bb56"
+            "0580b1033d32bb56",
+            "499de1cc5ab65c53",
+            "0816fe94f5858846",
+            "21c4dba2bb5d0e54",
+            "7cf8caea790c9792"
         ],
         "x": 14,
         "y": 19,
@@ -2101,27 +2101,6 @@
         "info": "# Input\n\n- `msg.payload.now` - timestamp at which flows started and again each day\n   at 1am\n\n- `msg.payload.settings/bedtime` - _bedtime_ value selected by a user\n  on the dashboard\n\n# Output\n\nUp to five 'timer/time` messages per day and one `timer/theme` message.\n\n# Details\n\n## Time\n\nWhen the output `msg.topic` is `timer/time`, `msg.payload` will be one\nof:\n\n- `sunrise`\n- `midday`\n- `afternoon`\n- `sunset`\n- `bedtime`\n\nIn addition, `msg.at` will be set to the timestamp at which the\ncorresponding event message should actually be published. See the\ndocumentation for the following `delay until` function node for\ninformation on when the `timer/time` events will actually fire based\non their values for `msg.at`.\n\n## Theme\n\nWhen the output `msg.topic` is `timer/theme`, `msg.payload` will be one\nof the following values based on the date:\n\n- `tribal`\n- `spooky`\n- `jolly`\n- `standard`"
     },
     {
-        "id": "0816fe94f5858846",
-        "type": "rbe",
-        "z": "94027c46c4bfae12",
-        "g": "b10eb6ebfd377efe",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 730,
-        "y": 60,
-        "wires": [
-            [
-                "21c4dba2bb5d0e54"
-            ]
-        ]
-    },
-    {
         "id": "9977146ce026810e",
         "type": "websocket in",
         "z": "94027c46c4bfae12",
@@ -2154,8 +2133,7 @@
         "y": 100,
         "wires": [
             [
-                "0816fe94f5858846",
-                "0c57cb4bce44a11a"
+                "0816fe94f5858846"
             ]
         ],
         "outputLabels": [
@@ -2202,76 +2180,6 @@
         "wires": [
             [
                 "869ada541db92710"
-            ]
-        ]
-    },
-    {
-        "id": "21c4dba2bb5d0e54",
-        "type": "join",
-        "z": "94027c46c4bfae12",
-        "g": "b10eb6ebfd377efe",
-        "name": "",
-        "mode": "custom",
-        "build": "object",
-        "property": "payload",
-        "propertyType": "msg",
-        "key": "topic",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "accumulate": true,
-        "timeout": "",
-        "count": "1",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "",
-        "reduceFixup": "",
-        "x": 850,
-        "y": 60,
-        "wires": [
-            [
-                "7cf8caea790c9792"
-            ]
-        ],
-        "info": "Block `automation/trigger` until after all three of `settings/shades`,\n`settings/lighting` and `timer/theme` have all been received."
-    },
-    {
-        "id": "7cf8caea790c9792",
-        "type": "change",
-        "z": "94027c46c4bfae12",
-        "g": "b10eb6ebfd377efe",
-        "name": "automation/trigger",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "automation/trigger",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "retain",
-                "pt": "msg",
-                "to": "false",
-                "tot": "bool"
-            },
-            {
-                "t": "delete",
-                "p": "_session",
-                "pt": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1010,
-        "y": 60,
-        "wires": [
-            [
-                "499de1cc5ab65c53"
             ]
         ]
     },
@@ -3023,27 +2931,6 @@
         "l": true
     },
     {
-        "id": "499de1cc5ab65c53",
-        "type": "function",
-        "z": "94027c46c4bfae12",
-        "g": "b10eb6ebfd377efe",
-        "name": "current trigger",
-        "func": "const current = RED.util.cloneMessage(msg)\n\ncurrent.topic = 'current/' + current.topic\ncurrent.retain = true\ncurrent.payload.timestamp = new Date().toLocaleString()\n\nreturn [\n    [msg, current]\n]\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1200,
-        "y": 60,
-        "wires": [
-            [
-                "0c57cb4bce44a11a"
-            ]
-        ]
-    },
-    {
         "id": "869ada541db92710",
         "type": "rbe",
         "z": "94027c46c4bfae12",
@@ -3082,6 +2969,119 @@
         "wires": [
             [
                 "e6fc90237bd5a5e9"
+            ]
+        ]
+    },
+    {
+        "id": "499de1cc5ab65c53",
+        "type": "function",
+        "z": "94027c46c4bfae12",
+        "g": "b10eb6ebfd377efe",
+        "name": "current trigger",
+        "func": "const current = RED.util.cloneMessage(msg)\nconst messages = []\n\nif (msg.payload['timer/time']) {\n    messages.push(msg)\n}\n\nconst now = new Date()\ncurrent.topic = 'current/' + current.topic\ncurrent.retain = true\ncurrent.payload.at = now.getTime()\nmessages.push(current)\n\nreturn [messages]\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1200,
+        "y": 60,
+        "wires": [
+            [
+                "0c57cb4bce44a11a"
+            ]
+        ]
+    },
+    {
+        "id": "0816fe94f5858846",
+        "type": "rbe",
+        "z": "94027c46c4bfae12",
+        "g": "b10eb6ebfd377efe",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 730,
+        "y": 80,
+        "wires": [
+            [
+                "21c4dba2bb5d0e54",
+                "0c57cb4bce44a11a"
+            ]
+        ]
+    },
+    {
+        "id": "21c4dba2bb5d0e54",
+        "type": "join",
+        "z": "94027c46c4bfae12",
+        "g": "b10eb6ebfd377efe",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "1",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 850,
+        "y": 60,
+        "wires": [
+            [
+                "7cf8caea790c9792"
+            ]
+        ],
+        "info": "Block `automation/trigger` until after all three of `settings/shades`,\n`settings/lighting` and `timer/theme` have all been received."
+    },
+    {
+        "id": "7cf8caea790c9792",
+        "type": "change",
+        "z": "94027c46c4bfae12",
+        "g": "b10eb6ebfd377efe",
+        "name": "automation/trigger",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "automation/trigger",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "retain",
+                "pt": "msg",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "delete",
+                "p": "_session",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1010,
+        "y": 60,
+        "wires": [
+            [
+                "499de1cc5ab65c53"
             ]
         ]
     },
