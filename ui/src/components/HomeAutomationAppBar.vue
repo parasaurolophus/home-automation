@@ -5,23 +5,13 @@
             <v-app-bar-nav-icon @click.stop="displayMenu = !displayMenu">
             </v-app-bar-nav-icon>
         </template>
-        <v-icon :color="settingsLighting ? 'primary' : 'secondary'">
-            {{ settingsLighting ? 'mdi-lightbulb-on' : 'mdi-lightbulb' }}
-        </v-icon>
-        <v-icon :color="settingsShades ? 'primary' : 'secondary'">
-            {{ settingsShades ? 'mdi-blinds-open' : 'mdi-blinds' }}
-        </v-icon>
-        <v-icon>
-            {{ timerThemeIcons[timerTheme] ?? standardTimerThemeIcon }}
-        </v-icon>
-        <v-divider vertical />
         <theme-selector />
     </v-app-bar>
 
     <v-navigation-drawer v-model="displayMenu">
-        <settings-controls />
+        <SettingsControls />
         <v-divider />
-        <times-list />
+        <TimesList />
     </v-navigation-drawer>
 
 </template>
@@ -29,8 +19,6 @@
 <script setup>
 import { inject, ref } from 'vue'
 
-const settingsLighting = inject('settingsLighting')
-const settingsShades = inject('settingsShades')
 const standardTimerThemeIcon = inject('standardTimerThemeIcon')
 const timerTheme = inject('timerTheme')
 const timerThemeIcons = inject('timerThemeIcons')
