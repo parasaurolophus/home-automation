@@ -1,12 +1,10 @@
 <template>
-    <!-- <div class="align-center"> -->
-        <v-switch v-model="settingsLighting" class="align-center">
-            <template #label>
-                <v-icon v-if="settingsLighting" color="primary" icon="mdi-lightbulb-on" />
-                <v-icon v-else color="secondary" icon="mdi-lightbulb" />
-            </template>
-        </v-switch>
-    <!-- </div> -->
+    <v-switch v-model="settingsLighting" class="align-center">
+        <template #label>
+            <v-icon v-if="settingsLighting" color="primary" icon="mdi-lightbulb-on" />
+            <v-icon v-else color="secondary" icon="mdi-lightbulb" />
+        </template>
+    </v-switch>
 </template>
 
 <style scoped>
@@ -15,10 +13,6 @@
     display: flex;
     align-content: center;
 }
-
-/* .align-center>* {
-    margin: 0 0.5rem 0 0.5rem;
-} */
 </style>
 
 <script setup>
