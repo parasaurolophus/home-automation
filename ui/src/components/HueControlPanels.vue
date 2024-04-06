@@ -14,7 +14,7 @@
                         <v-expansion-panel-text>
                             <v-btn class="spaced-out"
                                 @click="websocketPublish({ payload: { on: { on: false } }, topic: group.topic, method: 'PUT' })">
-                                Off
+                                {{ group.title }} Off
                             </v-btn>
                             <v-btn class="spaced-out" v-for="(scene, index) in group.children" :key="index"
                                 @click="websocketPublish({ payload: { recall: { action: 'active' } }, topic: scene.topic, method: 'PUT' })">
