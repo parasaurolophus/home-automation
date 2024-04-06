@@ -5,10 +5,10 @@ import BedtimeSettings from './BedtimeSettings.vue';
     <v-container>
         <v-row>
             <v-col>
-                <BedtimeSettings />
+                <LightingAutomationSettings />
             </v-col>
             <v-col>
-                <LightingAutomationSettings />
+                <BedtimeSettings />
             </v-col>
             <v-col>
                 <ShadesAutomationSettings />

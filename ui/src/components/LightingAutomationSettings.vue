@@ -14,10 +14,20 @@
             </v-card-subtitle>
         </v-card-item>
         <v-card-text>
-            <v-switch v-model="settingsLighting" />
+            <v-switch v-model="settingsLighting" class="align-center" />
         </v-card-text>
     </v-card>
 </template>
+
+<style scoped>
+.align-center {
+    height: 100%;
+    align-self: center;
+    align-items: center;
+    align-content: center;
+    display: flex;
+}
+</style>
 
 <script setup>
 import { computed, inject } from 'vue'
