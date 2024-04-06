@@ -9,6 +9,12 @@
 
       <v-expansion-panels>
 
+        <v-expansion-panel title="Settings" value="settings">
+          <v-expansion-panel-text>
+            <SettingsPanel />
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
         <v-expansion-panel title="Lighting" value="lighting">
           <v-expansion-panel-text>
             <HueControlPanels />

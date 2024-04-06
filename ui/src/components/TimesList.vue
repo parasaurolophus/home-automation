@@ -3,8 +3,11 @@
     <v-list>
 
         <v-list-item title="Theme">
+            <template #append>
+                <v-icon :color="timerThemeColor" :icon="timerThemeIcon" />
+            </template>
             <v-list-item-subtitle>
-                <v-chip variant="text">
+                <v-chip :color="timerThemeColor">
                     {{ timerTheme }}
                 </v-chip>
             </v-list-item-subtitle>
@@ -18,8 +21,8 @@
                 <v-divider inset />
                 <v-list-item :title="itemTime.title">
                     <v-list-item-subtitle>
-                        <v-chip variant="text" :color="chipColor(itemTime)">
-                            {{ new Date(timerTime[itemTime.key]).toLocaleString() }}
+                        <v-chip :color="chipColor(itemTime)">
+                            {{ localeTime(timerTime[itemTime.key]) }}
                         </v-chip>
                     </v-list-item-subtitle>
                     <div class="notes">
@@ -43,12 +46,17 @@
 </style>
 
 <script setup>
-import { inject, ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 
+const computeTimerThemeColor = inject('computeTimerThemeColor')
+const computeTimerThemeIcon = inject('computeTimerThemeIcon')
 const automationTrigger = inject('automationTrigger')
 const nextTrigger = inject('nextTrigger')
 const timerTime = inject('timerTime')
 const timerTheme = inject('timerTheme')
+
+const timerThemeColor = computed(computeTimerThemeColor)
+const timerThemeIcon = computed(computeTimerThemeIcon)
 
 const itemTimes = ref([
     {
@@ -93,5 +101,9 @@ function chipColor(itemTime) {
         return 'secondary'
     }
     return false
+}
+
+function localeTime(timestamp) {
+    return new Date(timestamp).toLocaleString()
 }
 </script>

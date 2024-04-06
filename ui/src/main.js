@@ -85,17 +85,6 @@ app.provide('automationTrigger', automationTrigger)
 const timerTime = ref({})
 app.provide('timerTime', timerTime)
 
-const timerThemeIcons = ref({
-    tribal: 'mdi-firework',
-    spooky: 'mdi-halloween',
-    jolly: 'mdi-string-lights',
-})
-
-app.provide('timerThemeIcons', timerThemeIcons)
-
-const standardTimerThemeIcon = ref('mdi-lightbulb-group')
-app.provide('standardTimerThemeIcon', standardTimerThemeIcon)
-
 const nextTrigger = ref(null)
 app.provide('nextTrigger', nextTrigger)
 
@@ -121,6 +110,68 @@ function updateNextTrigger() {
     nextTrigger.value = null
     console.log('no trigger time found at ' + date.toLocaleString())
     console.log(JSON.stringify(timerTime.value, undefined, 4))
+}
+
+function computeTimerThemeColor() {
+    return timerTheme.value == 'tribal' ? 'blue-darken-3' :
+        timerTheme.value == 'spooky' ? 'orange-darken-3' :
+            timerTheme.value == 'jolly' ? 'light-green-darken-3' :
+                'amber'
+}
+
+app.provide('computeTimerThemeColor', computeTimerThemeColor)
+
+function computeTimerThemeIcon() {
+    return timerTheme.value == 'tribal' ? 'mdi-firework' :
+        timerTheme.value == 'spooky' ? 'mdi-halloween' :
+            timerTheme.value == 'jolly' ? 'mdi-string-lights' :
+                'mdi-lightbulb-group'
+}
+
+app.provide('computeTimerThemeIcon', computeTimerThemeIcon)
+
+function computeShadesColor() {
+    return computeSettingsColor(settingsShades.value)
+}
+
+app.provide('computeShadesColor', computeShadesColor)
+
+function computeShadesIcon() {
+    return settingsShades.value ? 'mdi-blinds-open' : 'mdi-blinds'
+}
+
+app.provide('computeShadesIcon', computeShadesIcon)
+
+function computeShadesText() {
+    return computeSettingsText(settingsShades.value)
+}
+
+app.provide('computeShadesText', computeShadesText)
+
+function computeLightingColor() {
+    return computeSettingsColor(settingsLighting.value)
+}
+
+app.provide('computeLightingColor', computeLightingColor)
+
+function computeLightingIcon() {
+    return settingsLighting.value ? 'mdi-lightbulb-on' : 'mdi-lightbulb'
+}
+
+app.provide('computeLightingIcon', computeLightingIcon)
+
+function computeLightingText() {
+    return computeSettingsText(settingsLighting.value)
+}
+
+app.provide('computeLightingText', computeLightingText)
+
+function computeSettingsColor(value) {
+    return value ? 'primary' : 'secondary'
+}
+
+function computeSettingsText(value) {
+    return value ? 'enabled' : 'disabled'
 }
 
 //////////////////////////////////////////////////////////////////////////////

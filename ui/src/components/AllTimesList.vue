@@ -1,22 +1,26 @@
 <template>
 
-    <v-list>
+    <v-defaults-provider :defaults="{ VChip: { color: 'primary' } }">
 
-        <v-list-item title="current/timer/theme">
-            <v-list-item-subtitle>
-                <v-chip variant="text" color="primary" :text="timerTheme" />
-            </v-list-item-subtitle>
-        </v-list-item>
+        <v-list>
 
-        <v-list-item v-for="(time, index) in sorted" :key="index" :title="'current/timer/time/' + time.name">
-            <v-list-item-subtitle>
-                <v-chip variant="text" color="primary">
-                    {{ new Date(time.time).toLocaleString() }}
-                </v-chip>
-            </v-list-item-subtitle>
-        </v-list-item>
+            <v-list-item title="current/timer/theme">
+                <v-list-item-subtitle>
+                    <v-chip :text="timerTheme" />
+                </v-list-item-subtitle>
+            </v-list-item>
 
-    </v-list>
+            <v-list-item v-for="(time, index) in sorted" :key="index" :title="'current/timer/time/' + time.name">
+                <v-list-item-subtitle>
+                    <v-chip>
+                        {{ localeTime(time.time) }}
+                    </v-chip>
+                </v-list-item-subtitle>
+            </v-list-item>
+
+        </v-list>
+
+    </v-defaults-provider>
 
 </template>
 
@@ -39,5 +43,9 @@ function sortTimes() {
     }
     s.sort((a, b) => a.time - b.time)
     sorted.value = s
+}
+
+function localeTime(time) {
+    return new Date(time).toLocaleString()
 }
 </script>

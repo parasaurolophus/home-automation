@@ -9,19 +9,13 @@
     </v-app-bar>
 
     <v-navigation-drawer v-model="displayMenu">
-        <SettingsControls />
-        <v-divider />
         <TimesList />
     </v-navigation-drawer>
 
 </template>
 
 <script setup>
-import { inject, ref } from 'vue'
-
-const standardTimerThemeIcon = inject('standardTimerThemeIcon')
-const timerTheme = inject('timerTheme')
-const timerThemeIcons = inject('timerThemeIcons')
+import { ref } from 'vue'
 
 const displayMenu = ref(false)
 </script>

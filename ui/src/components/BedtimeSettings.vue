@@ -1,15 +1,38 @@
 <template>
-    <v-btn-toggle mandatory v-model="bedtimeIndex">
-        <v-btn v-for="(item, index) in bedtimeOptions" :key="index" @click="updateSettingsBedtime(index)">
-            {{ item.label }}
-        </v-btn>
-    </v-btn-toggle>
+    <v-defaults-provider :defaults="{ VChip: { color: 'primary' } }">
+        <v-card>
+            <v-card-item>
+                <template #append>
+                    <v-icon :color="themeColor" :icon="themeIcon" />
+                </template>
+                <v-card-title>Bedtime</v-card-title>
+                <v-card-subtitle>
+                    <v-chip>
+                        {{ new Date(timerTime.bedtime).toLocaleString() }}
+                    </v-chip>
+                </v-card-subtitle>
+            </v-card-item>
+            <v-card-text>
+                <v-btn-toggle mandatory v-model="bedtimeIndex">
+                    <v-btn v-for="(item, index) in bedtimeOptions" :key="index" @click="updateSettingsBedtime(index)">
+                        {{ item.label }}
+                    </v-btn>
+                </v-btn-toggle>
+            </v-card-text>
+        </v-card>
+    </v-defaults-provider>
 </template>
 
 <script setup>
-import { inject, onMounted, ref, watch } from 'vue'
+import { computed, inject, onMounted, ref, watch } from 'vue'
 
+const computeTimerThemeColor = inject('computeTimerThemeColor')
+const computeTimerThemeIcon = inject('computeTimerThemeIcon')
 const settingsBedtime = inject('settingsBedtime')
+const timerTime = inject('timerTime')
+
+const themeColor = computed(computeTimerThemeColor)
+const themeIcon = computed(computeTimerThemeIcon)
 
 // items for v-select corresponding to settings/bedtime messages
 // in SettingsComponent.vue (see settingsBedtime)

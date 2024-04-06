@@ -37,6 +37,9 @@ export default createVuetify({
         variant: 'flat'
       },
     },
+    VChip: {
+      variant: 'text',
+    },
     VExpansionPanels: {
       variant: 'popout',
     },

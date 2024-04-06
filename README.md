@@ -647,3 +647,27 @@ which the sun never reaches an altitude of 0.9 radians
 deliberately varies each day. It will be sent at a time
 that is up to 30 minutes before or after the time selected
 by a user on the dashboard.
+
+## Colors
+
+### Status Indicator Colors
+
+| Active    | Inactive    |
+|-----------|-------------|
+| `primary` | `secondary` |
+
+### Tribal Colors
+
+Bureau of Educational and Cultural Affairs style guidelines
+
+| Pantone Identifier | R    | G    | B    | Hex         | C    | M    | Y    | K    |
+|--------------------|------|------|------|-------------|------|------|------|------|
+| White              | 1.00 | 1.00 | 1.00 | `#FFFFFF`   | 0.00 | 0.00 | 0.00 | 0.00 |
+| PMS 193C           | 0.72 | 0.10 | 0.26 | `#B31942`   | 0.00 | 1.00 | 0.66 | 0.13 |
+| PMS 282C           | 0.04 | 0.19 | 0.38 | `#0A3161`   | 1.00 | 0.68 | 0.00 | 0.54 |
+
+### Timer Theme Colors
+
+| Standard | Tribal          | Spooky            | Jolly                  |
+|----------|-----------------|-------------------|------------------------|
+| `amber`  | `blue-darken-3` | `orange-darken-3` | `light-green-darken-3` |
