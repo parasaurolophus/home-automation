@@ -2,7 +2,7 @@
 
     <v-list>
 
-        <v-list-item title="Theme" :append-icon="timerThemeIcons[timerTheme] ?? standardTimerThemeIcon">
+        <v-list-item title="Theme">
             <v-list-item-subtitle>
                 <v-chip variant="text">
                     {{ timerTheme }}
@@ -16,7 +16,7 @@
         <template v-for="(itemTime, index) in itemTimes" :key="index">
             <template v-if="automationTrigger && nextTrigger && timerTime && timerTime[itemTime.key]">
                 <v-divider inset />
-                <v-list-item :title="itemTime.title" :append-icon="itemIcon(itemTime)">
+                <v-list-item :title="itemTime.title">
                     <v-list-item-subtitle>
                         <v-chip variant="text" :color="chipColor(itemTime)">
                             {{ new Date(timerTime[itemTime.key]).toLocaleString() }}
@@ -45,12 +45,10 @@
 <script setup>
 import { inject, ref } from 'vue'
 
-const automationTrigger=inject('automationTrigger')
+const automationTrigger = inject('automationTrigger')
 const nextTrigger = inject('nextTrigger')
-const standardTimerThemeIcon = inject('standardTimerThemeIcon')
 const timerTime = inject('timerTime')
 const timerTheme = inject('timerTheme')
-const timerThemeIcons = inject('timerThemeIcons')
 
 const itemTimes = ref([
     {
@@ -93,15 +91,6 @@ function chipColor(itemTime) {
     }
     if (selectedTime < nextTime) {
         return 'secondary'
-    }
-    return false
-}
-
-function itemIcon(itemTime) {
-    const triggerTime = automationTrigger.value.at
-    const selectedTime = timerTime.value[itemTime.key]
-    if (selectedTime == triggerTime) {
-        return 'mdi-cogs'
     }
     return false
 }

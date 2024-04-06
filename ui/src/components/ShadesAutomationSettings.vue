@@ -1,10 +1,5 @@
 <template>
-    <v-switch v-model="settingsShades" class="align-center">
-        <template #label>
-            <v-icon v-if="settingsShades" color="primary" icon="mdi-blinds-open" />
-            <v-icon v-else color="secondary" icon="mdi-blinds" />
-        </template>
-    </v-switch>
+    <v-switch v-model="settingsShades" class="align-center" />
 </template>
 
 <style scoped>

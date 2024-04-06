@@ -7,9 +7,12 @@
                 <v-chip variant="text" color="primary">
                     {{ new Date(timerTime.bedtime).toLocaleString() }}
                 </v-chip>
+                <template v-if="settingsBedtimeLabel">
+                    ({{ settingsBedtimeLabel }})
+                </template>
             </v-list-item-subtitle>
             <v-list-item-action>
-                <bedtime-settings />
+                <BedtimeSettings />
             </v-list-item-action>
         </v-list-item>
 
@@ -18,9 +21,12 @@
                 <v-chip variant="text" :color="settingsLighting ? 'primary' : 'secondary'">
                     {{ settingsLighting ? 'enabled' : 'disabled' }}
                 </v-chip>
+                <template v-if="settingsLightingLabel">
+                    ({{ settingsLightingLabel }})
+                </template>
             </v-list-item-subtitle>
             <v-list-item-action>
-                <lighting-automation-settings />
+                <LightingAutomationSettings />
             </v-list-item-action>
         </v-list-item>
 
@@ -29,9 +35,12 @@
                 <v-chip variant="text" :color="settingsShades ? 'primary' : 'secondary'">
                     {{ settingsShades ? 'enabled' : 'disabled' }}
                 </v-chip>
+                <template v-if="settingsShadesLabel">
+                    ({{ settingsShadesLabel }})
+                </template>
             </v-list-item-subtitle>
             <v-list-item-action>
-                <shades-automation-settings />
+                <ShadesAutomationSettings />
             </v-list-item-action>
         </v-list-item>
 
@@ -42,7 +51,10 @@
 <script setup>
 import { inject } from 'vue'
 
+const settingsBedtimeLabel = inject('settingsBedtimeLabel')
 const settingsLighting = inject('settingsLighting')
+const settingsLightingLabel = inject('settingsLightingLabel')
 const settingsShades = inject('settingsShades')
+const settingsShadesLabel = inject('settingsShadesLabel')
 const timerTime = inject('timerTime')
 </script>

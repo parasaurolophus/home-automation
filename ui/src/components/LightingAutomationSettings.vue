@@ -1,10 +1,5 @@
 <template>
-    <v-switch v-model="settingsLighting" class="align-center">
-        <template #label>
-            <v-icon v-if="settingsLighting" color="primary" icon="mdi-lightbulb-on" />
-            <v-icon v-else color="secondary" icon="mdi-lightbulb" />
-        </template>
-    </v-switch>
+    <v-switch v-model="settingsLighting" class="align-center" />
 </template>
 
 <style scoped>
