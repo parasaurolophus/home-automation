@@ -61,7 +61,8 @@ function updateBedtimeIndex() {
     const selected = settingsBedtime.value - bedtimeOptions[0].hour
 
     if (selected < 0 || selected >= bedtimeOptions.length) {
-        console.log('unsupported settingsBedtime value: ' + settingsBedtime.value)
+        console.error('unsupported settingsBedtime value: ' + settingsBedtime.value)
+        console.
         return
     }
 

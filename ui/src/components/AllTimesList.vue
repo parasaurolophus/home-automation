@@ -14,6 +14,9 @@
             </v-list-item>
 
             <v-list-item v-for="(time, index) in sorted" :key="index" :title="'current/timer/time/' + time.name">
+                <template #append>
+                    <v-icon :icon="timerTimeIcon(time.name)"/>
+                </template>
                 <v-list-item-subtitle>
                     <v-chip>
                         {{ localeString(time.time) }}
@@ -34,6 +37,7 @@ const timerTime = inject('timerTime')
 const timerTheme = inject('timerTheme')
 const timerThemeColor = inject('timerThemeColor')
 const timerThemeIcon = inject('timerThemeIcon')
+const timerTimeIcon = inject('timerTimeIcon')
 
 const sorted = ref([])
 

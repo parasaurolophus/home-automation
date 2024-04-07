@@ -108,24 +108,44 @@ function updateNextTrigger() {
         }
     }
     nextTrigger.value = null
-    console.log('no trigger time found at ' + date.toLocaleString())
-    console.log(JSON.stringify(timerTime.value, undefined, 4))
+    console.error(
+        'no trigger time found at ' + date.toLocaleString(),
+        JSON.stringify(timerTime.value, undefined, 4),
+    )
 }
 
-function timerThemeColor() {
-    return timerTheme.value == 'tribal' ? 'blue-darken-3' :
-        timerTheme.value == 'spooky' ? 'orange-darken-3' :
-            timerTheme.value == 'jolly' ? 'light-green-darken-3' :
-                'amber'
+function timerThemeColor(value) {
+    if (!value) {
+        value = timerTheme.value
+    }
+    switch (value) {
+        case 'tribal':
+            return 'blue-darken-3'
+        case 'spooky':
+            return 'orange-darken-3'
+        case 'jolly':
+            return 'light-green-darken-3'
+        default:
+            return 'amber'
+    }
 }
 
 app.provide('timerThemeColor', timerThemeColor)
 
-function timerThemeIcon() {
-    return timerTheme.value == 'tribal' ? 'mdi-firework' :
-        timerTheme.value == 'spooky' ? 'mdi-halloween' :
-            timerTheme.value == 'jolly' ? 'mdi-string-lights' :
-                'mdi-lightbulb-group'
+function timerThemeIcon(value) {
+    if (!value) {
+        value = timerTheme.value
+    }
+    switch (value) {
+        case 'tribal':
+            return 'mdi-firework'
+        case 'spooky':
+            return 'mdi-halloween'
+        case 'jolly':
+            return 'mdi-string-lights'
+        default:
+            return 'mdi-lightbulb-group'
+    }
 }
 
 app.provide('timerThemeIcon', timerThemeIcon)
@@ -146,13 +166,37 @@ function settingsColor(value) {
     return value ? 'primary' : 'secondary'
 }
 
-app.provide('settingsColor',settingsColor)
+app.provide('settingsColor', settingsColor)
 
 function settingsText(value) {
     return value ? 'enabled' : 'disabled'
 }
 
 app.provide('settingsText', settingsText)
+
+function timerTimeIcon(value) {
+    if (!value) {
+        value = timerTime.value
+    }
+    switch (value) {
+        case 'sunrise':
+            return 'mdi-weather-sunset-up'
+        case 'midday':
+            return 'mdi-sun-angle-outline'
+        case 'afternoon':
+            return 'mdi-sun-angle'
+        case 'sunset':
+            return 'mdi-weather-sunset-down'
+        case 'dusk':
+            return 'mdi-blinds'
+        case 'bedtime':
+            return 'mdi-weather-night'
+        default:
+            return 'mdi-cog-off'
+    }
+}
+
+app.provide('timerTimeIcon', timerTimeIcon)
 
 //////////////////////////////////////////////////////////////////////////////
 // monitor websocket readyState
@@ -183,7 +227,7 @@ app.provide('showAlert', showAlert)
 function websocketPublish(msg) {
     if (ws === null) {
         const text = JSON.stringify(msg, undefined, 1)
-        console.log('websocket closed when attempting to send:\n' + text)
+        console.warn('websocket closed when attempting to send:\n' + text)
         showAlert('warning', 'websocket closed', text)
         return
     }
@@ -261,7 +305,7 @@ function connectWS() {
     // log errors
     ws.onerror = (event) => {
         const text = JSON.stringify(event, undefined, 1)
-        console.log(text)
+        console.error(text)
         showAlert('error', 'ws.onerror', text)
     }
 
@@ -270,21 +314,10 @@ function connectWS() {
         // node-red's msg object is received as a JSON
         // string in event.data
         const msg = JSON.parse(event.data)
-        if (msg.topic == 'timer/time') {
-            console.log(JSON.stringify(msg, undefined, 4))
-            return
-        }
-        if (msg.topic == 'automation/trigger') {
-            console.log(JSON.stringify(msg, undefined, 4))
-            return
-        }
+        console.log(JSON.stringify(msg, undefined, 4))
         if (msg.topic == 'current/automation/trigger') {
             automationTrigger.value = msg.payload
             updateNextTrigger()
-            return
-        }
-        if (msg.topic == 'timer/theme') {
-            console.log(JSON.stringify(msg, undefined, 4))
             return
         }
         if (msg.topic == 'current/timer/theme') {
@@ -330,7 +363,7 @@ function connectWS() {
         }
         if (/.+\/error$/.exec(msg.topic)) {
             const text = JSON.stringify(msg.payload, undefined, 1)
-            console.log(text)
+            console.error(text)
             if (msg.payload !== '') {
                 showAlert('error', msg.topic, text)
             }
@@ -338,7 +371,7 @@ function connectWS() {
         }
         if (/.+\/warning$/.exec(msg.topic)) {
             const text = JSON.stringify(msg.payload, undefined, 1)
-            console.log(text)
+            console.warn(text)
             if (msg.payload !== '') {
                 showAlert('warning', msg.topic, text)
             }

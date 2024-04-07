@@ -20,8 +20,11 @@
             <template v-if="automationTrigger && nextTrigger && timerTime && timerTime[itemTime.key]">
                 <v-divider inset />
                 <v-list-item :title="itemTime.title">
+                    <template #append>
+                        <v-icon :icon="timerTimeIcon(itemTime.key)" :color="itemColor(itemTime)" />
+                    </template>
                     <v-list-item-subtitle>
-                        <v-chip :color="chipColor(itemTime)">
+                        <v-chip :color="itemColor(itemTime)">
                             {{ localeTime(timerTime[itemTime.key]) }}
                         </v-chip>
                     </v-list-item-subtitle>
@@ -54,6 +57,7 @@ const timerTime = inject('timerTime')
 const timerTheme = inject('timerTheme')
 const timerThemeColor = inject('timerThemeColor')
 const timerThemeIcon = inject('timerThemeIcon')
+const timerTimeIcon = inject('timerTimeIcon')
 
 const itemTimes = ref([
     {
@@ -88,7 +92,7 @@ const itemTimes = ref([
     },
 ])
 
-function chipColor(itemTime) {
+function itemColor(itemTime) {
     const nextTime = nextTrigger.value.time
     const selectedTime = timerTime.value[itemTime.key]
     if (selectedTime == nextTime) {
