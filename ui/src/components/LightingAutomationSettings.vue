@@ -2,14 +2,14 @@
     <v-card>
         <v-card-item>
             <template #append>
-                <v-icon :color="lightingColor" :icon="lightingIcon" />
+                <v-icon :color="settingsColor(settingsLighting)" :icon="lightingSettingsIcon()" />
             </template>
             <v-card-title>
                 Lighting Automation
             </v-card-title>
             <v-card-subtitle>
-                <v-chip :color="lightingColor">
-                    {{ lightingText }}
+                <v-chip :color="settingsColor(settingsLighting)">
+                    {{ settingsText(settingsLighting) }}
                 </v-chip>
             </v-card-subtitle>
         </v-card-item>
@@ -30,14 +30,10 @@
 </style>
 
 <script setup>
-import { computed, inject } from 'vue'
+import { inject } from 'vue'
 
-const computeLightingColor = inject('computeLightingColor')
-const computeLightingIcon = inject('computeLightingIcon')
-const computeLightingText = inject('computeLightingText')
+const lightingSettingsIcon = inject('lightingSettingsIcon')
+const settingsColor = inject('settingsColor')
 const settingsLighting = inject('settingsLighting')
-
-const lightingColor = computed(computeLightingColor)
-const lightingIcon = computed(computeLightingIcon)
-const lightingText = computed(computeLightingText)
+const settingsText = inject('settingsText')
 </script>

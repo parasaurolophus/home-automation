@@ -8,7 +8,7 @@
                 <AutomationTrigger />
                 <v-card title="Test Icon">
                     <v-card-subtitle>
-                        <v-btn href="https://pictogrammers.com/library/mdi/" variant="text">
+                        <v-btn href="https://pictogrammers.com/library/mdi/" variant="plain">
                             https://pictogrammers.com/library/mdi/
                         </v-btn>
                     </v-card-subtitle>

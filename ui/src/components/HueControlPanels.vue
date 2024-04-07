@@ -7,17 +7,15 @@
                     <v-expansion-panel v-for="(group, groupIndex) in bridge.children" :key="groupIndex"
                         :disabled="websocketStatus != 1">
                         <v-expansion-panel-title>
-                            <v-icon :color="group.on ? 'primary' : 'secondary'"
-                                :icon="group.on ? 'mdi-lightbulb-on' : 'mdi-lightbulb'"></v-icon>
+                            <v-icon :color="groupColor(group)" :icon="groupIcon(group)"></v-icon>
                             {{ group.title }}
                         </v-expansion-panel-title>
                         <v-expansion-panel-text>
-                            <v-btn class="spaced-out"
-                                @click="websocketPublish({ payload: { on: { on: false } }, topic: group.topic, method: 'PUT' })">
+                            <v-btn @click="sendGroupOff(group)" class="spaced-out">
                                 {{ group.title }} Off
                             </v-btn>
-                            <v-btn class="spaced-out" v-for="(scene, index) in group.children" :key="index"
-                                @click="websocketPublish({ payload: { recall: { action: 'active' } }, topic: scene.topic, method: 'PUT' })">
+                            <v-btn v-for="(scene, index) in group.children" :key="index"
+                                @click="sendActivateScene(scene)" class="spaced-out">
                                 {{ scene.title }}
                             </v-btn>
                         </v-expansion-panel-text>
@@ -40,4 +38,20 @@ import { inject } from 'vue'
 const hueModel = inject('hueModel')
 const websocketStatus = inject('websocketStatus')
 const websocketPublish = inject('websocketPublish')
+
+function groupColor(group) {
+    group.on ? 'primary' : 'secondary'
+}
+
+function groupIcon(group) {
+    group.on ? 'mdi-lightbulb-on' : 'mdi-lightbulb'
+}
+
+function sendGroupOff(group) {
+    websocketPublish({ payload: { on: { on: false } }, topic: group.topic, method: 'PUT' })
+}
+
+function sendActivateScene(scene) {
+    websocketPublish({ payload: { recall: { action: 'active' } }, topic: scene.topic, method: 'PUT' })
+}
 </script>

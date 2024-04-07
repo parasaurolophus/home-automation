@@ -4,10 +4,10 @@
 
         <v-list-item title="Theme">
             <template #append>
-                <v-icon :color="timerThemeColor" :icon="timerThemeIcon" />
+                <v-icon :color="timerThemeColor()" :icon="timerThemeIcon()" />
             </template>
             <v-list-item-subtitle>
-                <v-chip :color="timerThemeColor">
+                <v-chip :color="timerThemeColor()">
                     {{ timerTheme }}
                 </v-chip>
             </v-list-item-subtitle>
@@ -46,17 +46,14 @@
 </style>
 
 <script setup>
-import { computed, inject, ref } from 'vue'
+import { inject, ref } from 'vue'
 
-const computeTimerThemeColor = inject('computeTimerThemeColor')
-const computeTimerThemeIcon = inject('computeTimerThemeIcon')
 const automationTrigger = inject('automationTrigger')
 const nextTrigger = inject('nextTrigger')
 const timerTime = inject('timerTime')
 const timerTheme = inject('timerTheme')
-
-const timerThemeColor = computed(computeTimerThemeColor)
-const timerThemeIcon = computed(computeTimerThemeIcon)
+const timerThemeColor = inject('timerThemeColor')
+const timerThemeIcon = inject('timerThemeIcon')
 
 const itemTimes = ref([
     {

@@ -5,7 +5,7 @@
             <v-app-bar-nav-icon @click.stop="displayMenu = !displayMenu">
             </v-app-bar-nav-icon>
         </template>
-        <theme-selector />
+        <ThemeSelector />
     </v-app-bar>
 
     <v-navigation-drawer v-model="displayMenu">

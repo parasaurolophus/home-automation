@@ -76,7 +76,7 @@ app.provide('powerviewModel', powerviewModel)
 const powerviewStatus = ref(0)
 app.provide('powerviewStatus', powerviewStatus)
 
-const timerTheme = ref(null)
+const timerTheme = ref('')
 app.provide('timerTheme', timerTheme)
 
 const automationTrigger = ref(null)
@@ -112,67 +112,47 @@ function updateNextTrigger() {
     console.log(JSON.stringify(timerTime.value, undefined, 4))
 }
 
-function computeTimerThemeColor() {
+function timerThemeColor() {
     return timerTheme.value == 'tribal' ? 'blue-darken-3' :
         timerTheme.value == 'spooky' ? 'orange-darken-3' :
             timerTheme.value == 'jolly' ? 'light-green-darken-3' :
                 'amber'
 }
 
-app.provide('computeTimerThemeColor', computeTimerThemeColor)
+app.provide('timerThemeColor', timerThemeColor)
 
-function computeTimerThemeIcon() {
+function timerThemeIcon() {
     return timerTheme.value == 'tribal' ? 'mdi-firework' :
         timerTheme.value == 'spooky' ? 'mdi-halloween' :
             timerTheme.value == 'jolly' ? 'mdi-string-lights' :
                 'mdi-lightbulb-group'
 }
 
-app.provide('computeTimerThemeIcon', computeTimerThemeIcon)
+app.provide('timerThemeIcon', timerThemeIcon)
 
-function computeShadesColor() {
-    return computeSettingsColor(settingsShades.value)
-}
-
-app.provide('computeShadesColor', computeShadesColor)
-
-function computeShadesIcon() {
+function shadesSettingsIcon() {
     return settingsShades.value ? 'mdi-blinds-open' : 'mdi-blinds'
 }
 
-app.provide('computeShadesIcon', computeShadesIcon)
+app.provide('shadesSettingsIcon', shadesSettingsIcon)
 
-function computeShadesText() {
-    return computeSettingsText(settingsShades.value)
-}
-
-app.provide('computeShadesText', computeShadesText)
-
-function computeLightingColor() {
-    return computeSettingsColor(settingsLighting.value)
-}
-
-app.provide('computeLightingColor', computeLightingColor)
-
-function computeLightingIcon() {
+function lightingSettingsIcon() {
     return settingsLighting.value ? 'mdi-lightbulb-on' : 'mdi-lightbulb'
 }
 
-app.provide('computeLightingIcon', computeLightingIcon)
+app.provide('lightingSettingsIcon', lightingSettingsIcon)
 
-function computeLightingText() {
-    return computeSettingsText(settingsLighting.value)
-}
-
-app.provide('computeLightingText', computeLightingText)
-
-function computeSettingsColor(value) {
+function settingsColor(value) {
     return value ? 'primary' : 'secondary'
 }
 
-function computeSettingsText(value) {
+app.provide('settingsColor',settingsColor)
+
+function settingsText(value) {
     return value ? 'enabled' : 'disabled'
 }
+
+app.provide('settingsText', settingsText)
 
 //////////////////////////////////////////////////////////////////////////////
 // monitor websocket readyState

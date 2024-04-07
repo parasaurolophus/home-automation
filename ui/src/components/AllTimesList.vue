@@ -5,15 +5,18 @@
         <v-list>
 
             <v-list-item title="current/timer/theme">
+                <template #append>
+                    <v-icon :color="timerThemeColor()" :icon="timerThemeIcon()" />
+                </template>
                 <v-list-item-subtitle>
-                    <v-chip :text="timerTheme" />
+                    <v-chip :color="timerThemeColor()" :text="timerTheme" />
                 </v-list-item-subtitle>
             </v-list-item>
 
             <v-list-item v-for="(time, index) in sorted" :key="index" :title="'current/timer/time/' + time.name">
                 <v-list-item-subtitle>
                     <v-chip>
-                        {{ localeTime(time.time) }}
+                        {{ localeString(time.time) }}
                     </v-chip>
                 </v-list-item-subtitle>
             </v-list-item>
@@ -29,6 +32,8 @@ import { inject, onMounted, ref, watch } from 'vue'
 
 const timerTime = inject('timerTime')
 const timerTheme = inject('timerTheme')
+const timerThemeColor = inject('timerThemeColor')
+const timerThemeIcon = inject('timerThemeIcon')
 
 const sorted = ref([])
 
@@ -45,7 +50,7 @@ function sortTimes() {
     sorted.value = s
 }
 
-function localeTime(time) {
+function localeString(time) {
     return new Date(time).toLocaleString()
 }
 </script>

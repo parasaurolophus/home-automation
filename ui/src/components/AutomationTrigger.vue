@@ -1,16 +1,20 @@
 <template>
     <v-card title="current/automation/trigger">
         <v-card-subtitle>
-            {{ new Date(automationTrigger.at).toLocaleString() }}
+            {{ localeString }}
         </v-card-subtitle>
         <v-card-text>
-            <pre>{{ JSON.stringify(automationTrigger, undefined, 4) }}</pre>
+            <pre>{{ stringified }}</pre>
         </v-card-text>
     </v-card>
 </template>
 
 <script setup>
-import { inject } from 'vue'
+import { computed, inject } from 'vue'
 
 const automationTrigger = inject('automationTrigger')
+
+const stringified = computed(() => JSON.stringify(automationTrigger.value, undefined, 4))
+
+const localeString = computed(() => new Date(automationTrigger.value.at).toLocaleString())
 </script>

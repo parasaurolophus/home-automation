@@ -3,12 +3,12 @@
         <v-card>
             <v-card-item>
                 <template #append>
-                    <v-icon :color="themeColor" :icon="themeIcon" />
+                    <v-icon :color="timerThemeColor()" :icon="timerThemeIcon()" />
                 </template>
                 <v-card-title>Bedtime</v-card-title>
                 <v-card-subtitle>
                     <v-chip>
-                        {{ new Date(timerTime.bedtime).toLocaleString() }}
+                        {{ localeString }}
                     </v-chip>
                 </v-card-subtitle>
             </v-card-item>
@@ -26,13 +26,12 @@
 <script setup>
 import { computed, inject, onMounted, ref, watch } from 'vue'
 
-const computeTimerThemeColor = inject('computeTimerThemeColor')
-const computeTimerThemeIcon = inject('computeTimerThemeIcon')
+const timerThemeColor = inject('timerThemeColor')
+const timerThemeIcon = inject('timerThemeIcon')
 const settingsBedtime = inject('settingsBedtime')
 const timerTime = inject('timerTime')
 
-const themeColor = computed(computeTimerThemeColor)
-const themeIcon = computed(computeTimerThemeIcon)
+const localeString = computed(() => new Date(timerTime.value.bedtime).toLocaleString())
 
 // items for v-select corresponding to settings/bedtime messages
 // in SettingsComponent.vue (see settingsBedtime)

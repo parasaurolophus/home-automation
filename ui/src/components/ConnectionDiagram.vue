@@ -8,7 +8,7 @@
         <v-row>
             <v-col><v-spacer /></v-col>
             <v-col v-for="(bridge, index) in hueBridges" :key="index">
-                <v-btn @click="websocketPublish({ topic: 'delete/hue/bridge', payload: bridge.address })">
+                <v-btn @click="deleteBridge(bridge)">
                     Delete {{ bridgeName(bridge) }} Hue Bridge
                 </v-btn>
             </v-col>
@@ -46,6 +46,10 @@ function findHueModel(address) {
 function bridgeName(bridge) {
     const model = findHueModel(bridge.address)
     return model?.title ?? bridge.address
+}
+
+function deleteBridge(bridge) {
+    websocketPublish({ topic: 'delete/hue/bridge', payload: bridge.address })
 }
 
 function buildDiagram() {
