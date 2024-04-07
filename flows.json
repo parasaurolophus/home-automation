@@ -442,7 +442,7 @@
         ],
         "x": 14,
         "y": 299,
-        "w": 852,
+        "w": 772,
         "h": 82,
         "info": "Dynamically create dashboard buttons corresponding to each scene\ndiscovered by querying a _PowerView_ hub."
     },
@@ -468,7 +468,7 @@
         ],
         "x": 14,
         "y": 159,
-        "w": 912,
+        "w": 832,
         "h": 122
     },
     {
@@ -491,15 +491,18 @@
             "99ab390e30a9d634",
             "62d44392a9aac7fc",
             "4e40e2700edff9ec",
-            "ebfab5beb0190193",
-            "97566d661d35c324",
             "0cd6a253ead58c18",
-            "d79bfbc558832ea5"
+            "d79bfbc558832ea5",
+            "6f2f585231fae444",
+            "252d3138fb69feda",
+            "c5657c312f2d863d",
+            "2c5074b7b8f1ca08",
+            "ca279d867d35ce0e"
         ],
         "x": 14,
         "y": 399,
-        "w": 1252,
-        "h": 162
+        "w": 1232,
+        "h": 202
     },
     {
         "id": "4893dd6a2321040d",
@@ -546,12 +549,14 @@
             "1b10e2f1524c44ef",
             "e450663aac44ed28",
             "032d5842e53c6015",
-            "9cb4a587d2d04193"
+            "9cb4a587d2d04193",
+            "f10654d209693151",
+            "64920acb8075c32e"
         ],
         "x": 14,
         "y": 19,
         "w": 712,
-        "h": 202,
+        "h": 282,
         "info": "Broadcast messages received from any client to all clients. Note that\nall properties other than `msg._session` and `msg.retain` are\ntransmitted directly from the publisher to all subscribers.\n\n- Removes `msg._session` entirely, in the case of initially published\n  messages.\n\n- Handles `msg.topic` and `msg.retain` in a fashion inspired by MQTT.\n\nIf a client publishes a message with `msg.retain` set to `true`, the\n`retain` function node saves a clone of the message in flow context\nusing a file-system backed context store using `msg.topic` as the key.\nIt then sets `msg.retain` to `false` before broadcasting the message\nto subscribed clients.\n\nEach time a client connects, the `retained` function node sends that\nclient all currently stored messages with `msg.retain` set to `true`.\n\nRetained messages' contents can be updated by sending subsequent\nmessages with the same `msg.topic` and `msg.retain` set to `true`.\n\nRetained messages can be deleted by sending subsequent messages with\nthe same `msg.topic`, `msg.retain` set to `true` and `msg.payload`\nset to the empty string (`''`)."
     },
     {
@@ -806,17 +811,15 @@
         "h": 282
     },
     {
-        "id": "ebfab5beb0190193",
+        "id": "c5657c312f2d863d",
         "type": "junction",
         "z": "40413194443e96c6",
         "g": "9823c620ddf3d6e0",
-        "x": 440,
-        "y": 480,
+        "x": 1060,
+        "y": 560,
         "wires": [
             [
-                "02eec7feccc1567d",
-                "07a492e2d29b5dd3",
-                "0cd6a253ead58c18"
+                "4e40e2700edff9ec"
             ]
         ]
     },
@@ -1888,8 +1891,8 @@
         "scope": [
             "e1c10e3b6608de71"
         ],
-        "x": 140,
-        "y": 180,
+        "x": 120,
+        "y": 220,
         "wires": [
             [
                 "5f09f67803464fe9"
@@ -1914,11 +1917,12 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 280,
-        "y": 180,
+        "x": 260,
+        "y": 220,
         "wires": [
             [
-                "1b10e2f1524c44ef"
+                "1b10e2f1524c44ef",
+                "64920acb8075c32e"
             ]
         ]
     },
@@ -1998,6 +2002,47 @@
         "wires": [
             [
                 "e450663aac44ed28"
+            ]
+        ]
+    },
+    {
+        "id": "f10654d209693151",
+        "type": "link out",
+        "z": "e1d7dd3bdd3cf24a",
+        "g": "165c6266935e206f",
+        "name": "client connected",
+        "mode": "link",
+        "links": [
+            "6f2f585231fae444"
+        ],
+        "x": 600,
+        "y": 260,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "64920acb8075c32e",
+        "type": "delay",
+        "z": "e1d7dd3bdd3cf24a",
+        "g": "165c6266935e206f",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 430,
+        "y": 260,
+        "wires": [
+            [
+                "f10654d209693151"
             ]
         ]
     },
@@ -4325,7 +4370,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 750,
+        "x": 670,
         "y": 340,
         "wires": [
             []
@@ -4452,7 +4497,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 850,
+        "x": 890,
         "y": 480,
         "wires": [
             [
@@ -4481,7 +4526,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 730,
+        "x": 770,
         "y": 480,
         "wires": [
             [
@@ -4523,7 +4568,7 @@
                 "type": "str"
             }
         ],
-        "x": 570,
+        "x": 610,
         "y": 440,
         "wires": [
             [
@@ -4564,7 +4609,7 @@
                 "type": "str"
             }
         ],
-        "x": 570,
+        "x": 610,
         "y": 480,
         "wires": [
             [
@@ -4590,7 +4635,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 360,
+        "x": 280,
         "y": 340,
         "wires": [
             [
@@ -4616,11 +4661,12 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 340,
-        "y": 460,
+        "x": 260,
+        "y": 520,
         "wires": [
             [
-                "ebfab5beb0190193"
+                "252d3138fb69feda",
+                "2c5074b7b8f1ca08"
             ]
         ]
     },
@@ -4640,10 +4686,10 @@
         "type": "websocket in",
         "z": "40413194443e96c6",
         "g": "9cf0457b813ca743",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 140,
+        "x": 100,
         "y": 340,
         "wires": [
             [
@@ -4656,11 +4702,11 @@
         "type": "websocket in",
         "z": "40413194443e96c6",
         "g": "9823c620ddf3d6e0",
-        "name": "",
+        "name": "subscribe",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 140,
-        "y": 460,
+        "x": 100,
+        "y": 520,
         "wires": [
             [
                 "99ab390e30a9d634"
@@ -4672,10 +4718,10 @@
         "type": "websocket out",
         "z": "40413194443e96c6",
         "g": "cb106476337f4d38",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 800,
+        "x": 760,
         "y": 240,
         "wires": []
     },
@@ -4684,11 +4730,11 @@
         "type": "websocket out",
         "z": "40413194443e96c6",
         "g": "9823c620ddf3d6e0",
-        "name": "",
+        "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1140,
-        "y": 480,
+        "x": 1160,
+        "y": 520,
         "wires": []
     },
     {
@@ -4703,41 +4749,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
+        "x": 480,
         "y": 340,
         "wires": [
             [
                 "2bf099ec37e84bbc"
-            ]
-        ]
-    },
-    {
-        "id": "97566d661d35c324",
-        "type": "inject",
-        "z": "40413194443e96c6",
-        "g": "9823c620ddf3d6e0",
-        "name": "every 10 seconds",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "10",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "10",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 330,
-        "y": 500,
-        "wires": [
-            [
-                "ebfab5beb0190193"
             ]
         ]
     },
@@ -4769,7 +4785,7 @@
                 "type": "str"
             }
         ],
-        "x": 570,
+        "x": 610,
         "y": 520,
         "wires": [
             [
@@ -4790,11 +4806,104 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 970,
+        "x": 1010,
         "y": 480,
         "wires": [
             [
                 "4e40e2700edff9ec"
+            ]
+        ]
+    },
+    {
+        "id": "6f2f585231fae444",
+        "type": "link in",
+        "z": "40413194443e96c6",
+        "g": "9823c620ddf3d6e0",
+        "name": "client connected",
+        "links": [
+            "f10654d209693151"
+        ],
+        "x": 260,
+        "y": 440,
+        "wires": [
+            [
+                "252d3138fb69feda"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "252d3138fb69feda",
+        "type": "trigger",
+        "z": "40413194443e96c6",
+        "g": "9823c620ddf3d6e0",
+        "name": "",
+        "op1": "",
+        "op2": "",
+        "op1type": "nul",
+        "op2type": "date",
+        "duration": "5",
+        "extend": true,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 440,
+        "y": 480,
+        "wires": [
+            [
+                "02eec7feccc1567d",
+                "07a492e2d29b5dd3",
+                "0cd6a253ead58c18"
+            ]
+        ]
+    },
+    {
+        "id": "2c5074b7b8f1ca08",
+        "type": "function",
+        "z": "40413194443e96c6",
+        "g": "9823c620ddf3d6e0",
+        "name": "powerview status",
+        "func": "return {\n    payload: 0,\n    topic: 'powerview/status'\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 560,
+        "wires": [
+            [
+                "ca279d867d35ce0e"
+            ]
+        ]
+    },
+    {
+        "id": "ca279d867d35ce0e",
+        "type": "trigger",
+        "z": "40413194443e96c6",
+        "g": "9823c620ddf3d6e0",
+        "name": "",
+        "op1": "",
+        "op2": "",
+        "op1type": "nul",
+        "op2type": "pay",
+        "duration": "1",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 640,
+        "y": 560,
+        "wires": [
+            [
+                "c5657c312f2d863d"
             ]
         ]
     }

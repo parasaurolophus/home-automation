@@ -5,6 +5,20 @@
                 <AllTimesList />
             </v-col>
             <v-col>
+                <v-list title="Timer Themes">
+                    <v-list-item v-for="(theme, index) in allThemes" :key="index">
+                        <template #append>
+                            <v-icon :color="timerThemeColor(theme)" :icon="timerThemeIcon(theme)" />
+                        </template>
+                        <v-chip :color="timerThemeColor(theme)" variant="text">
+                            {{ theme }}
+                        </v-chip>
+                    </v-list-item>
+                </v-list>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col>
                 <AutomationTrigger />
                 <v-card title="Test Icon">
                     <v-card-subtitle>
@@ -16,20 +30,6 @@
                         <v-text-field v-model="testIcon" :prepend-icon="testIcon" />
                     </v-card-text>
                 </v-card>
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col>
-                <v-list title="Timer Themes">
-                    <v-list-item v-for="(theme, index) in allThemes" :key="index">
-                        <template #append>
-                            <v-icon :color="timerThemeColor(theme)" :icon="timerThemeIcon(theme)" />
-                        </template>
-                        <v-chip :color="timerThemeColor(theme)" variant="text">
-                            {{ theme }}
-                        </v-chip>
-                    </v-list-item>
-                </v-list>
             </v-col>
         </v-row>
     </v-container>
