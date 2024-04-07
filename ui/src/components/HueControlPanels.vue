@@ -7,7 +7,7 @@
                     <v-expansion-panel v-for="(group, groupIndex) in bridge.children" :key="groupIndex"
                         :disabled="websocketStatus != 1">
                         <v-expansion-panel-title>
-                            <v-icon :color="groupColor(group)" :icon="groupIcon(group)"></v-icon>
+                            <v-icon :color="groupColor(group)" :icon="groupIcon(group)" />
                             {{ group.title }}
                         </v-expansion-panel-title>
                         <v-expansion-panel-text>
@@ -40,11 +40,11 @@ const websocketStatus = inject('websocketStatus')
 const websocketPublish = inject('websocketPublish')
 
 function groupColor(group) {
-    group.on ? 'primary' : 'secondary'
+    return group.on ? 'primary' : 'secondary'
 }
 
 function groupIcon(group) {
-    group.on ? 'mdi-lightbulb-on' : 'mdi-lightbulb'
+    return group.on ? 'mdi-lightbulb-on' : 'mdi-lightbulb'
 }
 
 function sendGroupOff(group) {
