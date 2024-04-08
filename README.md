@@ -13,39 +13,43 @@ graph TB
 
     subgraph "Home LAN"
 
-        huebridge["Philips Hue Bridge(s)"]
-        huedevice["Philips Hue Lights\nand Accessories"]
-        pvhub["PowerView Hub"]
-        pvdevice["Hunter-Douglas Window Coverings"]
+        proxy["Reverse Proxy"]
+        vue["Vue / Vuetify\nWeb App"]
 
         subgraph nodered["Node-RED"]
 
-            vue["Vue / Vuetify\nWeb App"]
             flows["Flows\nhttps://github.com/parasaurolophus/home-automation"]
             dnssd["@parasaurolophus/nodered-dnssd"]
             eventsource["@parasaurolophus/nodered-eventsource"]
 
-            vue <-- "WebSocket" --> flows
-            dnssd --> flows
-            eventsource --> flows
-
         end
 
-        flows -- HTTP --> pvhub
-        flows -- "HTTPS" --> huebridge
-        huebridge -- "SSE" --> eventsource
-        huebridge -- "mDNS" --> dnssd
-        huedevice <-- "Zigbee" --> huebridge
-        pvhub <-- Bluetooth --> pvdevice
-
-        click flows "https://github.com/parasaurolophus/home-automation" _blank
-        click dnssd "https://flows.nodered.org/node/@parasaurolophus/node-red-dnssd" _blank
-        click eventsource "https://flows.nodered.org/node/@parasaurolophus/node-red-eventsource" _blank
-        click vue "https://github.com/parasaurolophus/home-automation/tree/main/dashboard" _blank
+        pvhub["PowerView Hub"]
+        pvdevice["Hunter-Douglas Window Coverings"]
+        huebridge["Philips Hue Bridge(s)"]
+        huedevice["Philips Hue Lights\nand Accessories"]
 
     end
 
-    browser <-- "HTTPS /\nWebSocket" ----> vue
+    browser <-- "HTTPS /\nWebSocket" --> proxy
+    proxy <-- "HTTPS /\nWebSocket" --> vue
+    vue <-- "WebSocket" --> flows
+
+    flows <--> dnssd
+    flows <--> eventsource
+
+    flows <-- HTTP --> pvhub
+    pvhub <-- Bluetooth --> pvdevice
+
+    flows <-- "HTTPS" --> huebridge
+    eventsource <-- "SSE" --> huebridge
+    dnssd <-- "mDNS" --> huebridge
+    huebridge <-- "Zigbee" --> huedevice
+
+    click flows "https://github.com/parasaurolophus/home-automation" _blank
+    click dnssd "https://flows.nodered.org/node/@parasaurolophus/node-red-dnssd" _blank
+    click eventsource "https://flows.nodered.org/node/@parasaurolophus/node-red-eventsource" _blank
+    click vue "https://github.com/parasaurolophus/home-automation/tree/main/dashboard" _blank
 ```
 
 - <https://github.com/parasaurolophus/home-automation>
