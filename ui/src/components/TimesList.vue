@@ -4,12 +4,10 @@
 
         <v-list-item title="Theme">
             <template #append>
-                <v-icon :color="timerThemeColor()" :icon="timerThemeIcon()" />
+                <v-icon :icon="timerThemeIcon()" />
             </template>
             <v-list-item-subtitle>
-                <v-chip :color="timerThemeColor()">
-                    {{ timerTheme }}
-                </v-chip>
+                {{ timerTheme }}
             </v-list-item-subtitle>
             <div class="notes">
                 Evening lighting theme
@@ -17,16 +15,14 @@
         </v-list-item>
 
         <template v-for="(itemTime, index) in itemTimes" :key="index">
-            <template v-if="automationTrigger && nextTrigger && timerTime && timerTime[itemTime.key]">
+            <template v-if="automationTrigger && timerTime && timerTime[itemTime.key]">
                 <v-divider inset />
                 <v-list-item :title="itemTime.title">
                     <template #append>
-                        <v-icon :icon="timerTimeIcon(itemTime.key)" :color="itemColor(itemTime)" />
+                        <v-icon :icon="timerTimeIcon" />
                     </template>
                     <v-list-item-subtitle>
-                        <v-chip :color="itemColor(itemTime)">
-                            {{ localeTime(timerTime[itemTime.key]) }}
-                        </v-chip>
+                        {{ localeTime(timerTime[itemTime.key]) }}
                     </v-list-item-subtitle>
                     <div class="notes">
                         {{ itemTime.notes }}
@@ -49,15 +45,12 @@
 </style>
 
 <script setup>
-import { inject, ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 
 const automationTrigger = inject('automationTrigger')
-const nextTrigger = inject('nextTrigger')
 const timerTime = inject('timerTime')
 const timerTheme = inject('timerTheme')
-const timerThemeColor = inject('timerThemeColor')
 const timerThemeIcon = inject('timerThemeIcon')
-const timerTimeIcon = inject('timerTimeIcon')
 
 const itemTimes = ref([
     {
@@ -92,19 +85,27 @@ const itemTimes = ref([
     },
 ])
 
-function itemColor(itemTime) {
-    const nextTime = nextTrigger.value.time
-    const selectedTime = timerTime.value[itemTime.key]
-    if (selectedTime == nextTime) {
-        return 'primary'
-    }
-    if (selectedTime < nextTime) {
-        return 'secondary'
-    }
-    return false
-}
-
 function localeTime(timestamp) {
     return new Date(timestamp).toLocaleString()
 }
+
+const timerTimeIcon = computed(() => {
+    switch (timerTime.value) {
+        case 'sunrise':
+            return 'mdi-weather-sunset-up'
+        case 'midday':
+            return 'mdi-sun-angle-outline'
+        case 'afternoon':
+            return 'mdi-sun-angle'
+        case 'sunset':
+            return 'mdi-weather-sunset-down'
+        case 'dusk':
+            return 'mdi-blinds'
+        case 'bedtime':
+            return 'mdi-weather-night'
+        default:
+            return 'mdi-cog-off'
+    }
+})
+
 </script>

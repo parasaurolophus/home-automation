@@ -17,11 +17,6 @@ const app = createApp(App)
 
 registerPlugins(app)
 
-//////////////////////////////////////////////////////////////////////////////
-// provide models for ui components based on messages received from the
-// back end using a websocket
-//////////////////////////////////////////////////////////////////////////////
-
 const settingsBedtime = ref(21)
 app.provide('settingsBedtime', settingsBedtime)
 
@@ -85,53 +80,6 @@ app.provide('automationTrigger', automationTrigger)
 const timerTime = ref({})
 app.provide('timerTime', timerTime)
 
-const nextTrigger = ref(null)
-app.provide('nextTrigger', nextTrigger)
-
-function updateNextTrigger() {
-    const date = new Date()
-    const now = date.getTime()
-    const times = []
-    for (let label in timerTime.value) {
-        times.push({
-            time: timerTime.value[label],
-            label: label,
-        })
-    }
-    times.sort((a, b) => a.time - b.time)
-    for (let time of times) {
-        if (time.time > now) {
-            if (nextTrigger.value?.time != time.time) {
-                nextTrigger.value = time
-            }
-            return
-        }
-    }
-    nextTrigger.value = null
-    console.error(
-        'no trigger time found at ' + date.toLocaleString(),
-        JSON.stringify(timerTime.value, undefined, 4),
-    )
-}
-
-function timerThemeColor(value) {
-    if (!value) {
-        value = timerTheme.value
-    }
-    switch (value) {
-        case 'tribal':
-            return 'blue-darken-3'
-        case 'spooky':
-            return 'orange-darken-3'
-        case 'jolly':
-            return 'light-green-darken-3'
-        default:
-            return 'amber'
-    }
-}
-
-app.provide('timerThemeColor', timerThemeColor)
-
 function timerThemeIcon(value) {
     if (!value) {
         value = timerTheme.value
@@ -150,53 +98,16 @@ function timerThemeIcon(value) {
 
 app.provide('timerThemeIcon', timerThemeIcon)
 
-function shadesSettingsIcon() {
-    return settingsShades.value ? 'mdi-blinds-open' : 'mdi-blinds'
+function showAlert(type, title, text) {
+    alerts.value.push({
+        show: true,
+        type: type,
+        title: new Date().toLocaleString() + '\t| ' + title,
+        text: text,
+    })
 }
 
-app.provide('shadesSettingsIcon', shadesSettingsIcon)
-
-function lightingSettingsIcon() {
-    return settingsLighting.value ? 'mdi-lightbulb-on' : 'mdi-lightbulb'
-}
-
-app.provide('lightingSettingsIcon', lightingSettingsIcon)
-
-function settingsColor(value) {
-    return value ? 'primary' : 'secondary'
-}
-
-app.provide('settingsColor', settingsColor)
-
-function settingsText(value) {
-    return value ? 'enabled' : 'disabled'
-}
-
-app.provide('settingsText', settingsText)
-
-function timerTimeIcon(value) {
-    if (!value) {
-        value = timerTime.value
-    }
-    switch (value) {
-        case 'sunrise':
-            return 'mdi-weather-sunset-up'
-        case 'midday':
-            return 'mdi-sun-angle-outline'
-        case 'afternoon':
-            return 'mdi-sun-angle'
-        case 'sunset':
-            return 'mdi-weather-sunset-down'
-        case 'dusk':
-            return 'mdi-blinds'
-        case 'bedtime':
-            return 'mdi-weather-night'
-        default:
-            return 'mdi-cog-off'
-    }
-}
-
-app.provide('timerTimeIcon', timerTimeIcon)
+app.provide('showAlert', showAlert)
 
 //////////////////////////////////////////////////////////////////////////////
 // monitor websocket readyState
@@ -211,17 +122,6 @@ app.provide('websocketStatus', websocketStatus)
 // provide the function for ui components to send messages to the back end
 // using a websocket
 //////////////////////////////////////////////////////////////////////////////
-
-function showAlert(type, title, text) {
-    alerts.value.push({
-        show: true,
-        type: type,
-        title: new Date().toLocaleString() + '\t| ' + title,
-        text: text,
-    })
-}
-
-app.provide('showAlert', showAlert)
 
 // send the given message to the back end using the websocket connection
 function websocketPublish(msg) {
@@ -317,7 +217,6 @@ function connectWS() {
         console.log(JSON.stringify(msg, undefined, 4))
         if (msg.topic == 'current/automation/trigger') {
             automationTrigger.value = msg.payload
-            updateNextTrigger()
             return
         }
         if (msg.topic == 'current/timer/theme') {
@@ -388,7 +287,6 @@ function connectWS() {
         let matches = /^current\/timer\/time\/([^/]+)$/.exec(msg.topic)
         if (Array.isArray(matches) && (matches.length == 2)) {
             timerTime.value[matches[1]] = msg.payload
-            updateNextTrigger()
             return
         }
     }
