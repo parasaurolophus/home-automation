@@ -585,14 +585,13 @@
             "3cbcdb02b5e451a3",
             "869ada541db92710",
             "0580b1033d32bb56",
-            "499de1cc5ab65c53",
             "0816fe94f5858846",
             "21c4dba2bb5d0e54",
             "7cf8caea790c9792"
         ],
         "x": 14,
         "y": 19,
-        "w": 1372,
+        "w": 1272,
         "h": 202,
         "info": "Subscribe to settings change events. Send `automation/trigger` events up\nto five times per day, at: sunrise, the start of midday, the start of\nafternoon, sunset and bedtime.\n\n- The times for sunrise and sunset are obtained directly from\n  [`suncalc.getTimes()`](https://github.com/mourner/suncalc#sunlight-times)\n\n- The times for midday and afternoon are determined using the position\n  of the sun over the course of the current day as reported by\n  [`suncalc.getPosition()`](https://github.com/mourner/suncalc#sun-position)\n\n- The time for bedtime varies randomly each day, as described below\n\nThe `${LATITUDE}` and `${LONGITUDE}` environment variables must be set\nto the home's geographic coordinates for use with `suncalc`.\n\nMidday starts when the sun first reaches an altitude of 0.8 radians. No\nmidday will be sent on a given day if the sun never reaches that\naltitude for the specified `${LATITUDE}`.\n\nAfternoon starts when the sun's azimuth is greater than 0 and its\naltitude first drops below 0.8 radians. For days on which the altitude\nnever reaches 0.8, this will be as soon after sunrise as the sun starts\nto shine more from the west than the east.\n\nBedtime is randomized each day, constrained to be within &PlusMinus;30\nminutes of the value for `settings/bedtime`.\n\nNote that the inclusion of midday and afternoon and the rules for\ndetermining when they occur on a given day were determined empirically\nfor a particular house with 4 parallel walls, aligned more or less\nexactly with the cardinal compass directions at a particular latitude.\nIt is also influenced by the size of that house's rather substantial\neaves shading the east- and west-facing windows. They might need\nadjustment or an entirely different set of events for a different\nstructure at a different location. The goal of all this is to trigger\nautomation to control lighting and motorized window coverings in such\na way that maximizes the times of day at which the view of the outside\nworld can be enjoyed while optimizing the lighting and window coverings\nfor comfort and energy efficiency during times of day when the sun\nshines too directly into the windows. "
     },
@@ -629,7 +628,7 @@
             "c8fb3c01f10259ca"
         ],
         "x": 14,
-        "y": 299,
+        "y": 239,
         "w": 1372,
         "h": 282,
         "info": "Activate the corresponding PowerView scene upon receipt of of each\n`automation/trigger` event"
@@ -658,7 +657,7 @@
             "244e029d9a276e82"
         ],
         "x": 14,
-        "y": 599,
+        "y": 539,
         "w": 772,
         "h": 202,
         "info": "Handle lighting automation trigger events\n\n| Bridge | Address |\n|-|-|\n| Basement | 192.168.1.34 |\n| Ground Floor | 192.168.1.12 |\n\n| Room / Zone   | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n\nTo turn off the _Exterior_ zone and activate the _Nightlight_ scene in each of the _Main Bathroom_ and _Main Floor_:\n\n```json\n[\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\n        \"payload\": {\n            \"on\": {\n                \"on\": false\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/48c39b9f-1599-4a5c-b7f6-bad6cad4029a\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    }\n]\n```"
@@ -679,7 +678,7 @@
             "b044e7bab42607f8"
         ],
         "x": 914,
-        "y": 679,
+        "y": 619,
         "w": 452,
         "h": 82
     },
@@ -2066,7 +2065,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 290,
+        "x": 310,
         "y": 140,
         "wires": [
             [
@@ -2097,7 +2096,7 @@
         "topic": "now",
         "payload": "",
         "payloadType": "date",
-        "x": 140,
+        "x": 160,
         "y": 160,
         "wires": [
             [
@@ -2250,7 +2249,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 980,
+        "x": 880,
         "y": 180,
         "wires": [
             [
@@ -2267,7 +2266,7 @@
         "scope": [
             "0c57cb4bce44a11a"
         ],
-        "x": 670,
+        "x": 570,
         "y": 180,
         "wires": [
             [
@@ -2293,7 +2292,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 820,
+        "x": 720,
         "y": 180,
         "wires": [
             [
@@ -2309,7 +2308,7 @@
         "name": "publish",
         "server": "",
         "client": "b46802b9cb5603b3",
-        "x": 1300,
+        "x": 1200,
         "y": 120,
         "wires": []
     },
@@ -2334,7 +2333,7 @@
         "to": "",
         "reg": false,
         "x": 900,
-        "y": 380,
+        "y": 320,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2363,7 +2362,7 @@
         "to": "",
         "reg": false,
         "x": 890,
-        "y": 420,
+        "y": 360,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2392,7 +2391,7 @@
         "to": "",
         "reg": false,
         "x": 890,
-        "y": 500,
+        "y": 440,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2428,7 +2427,7 @@
         "to": "",
         "reg": false,
         "x": 1140,
-        "y": 440,
+        "y": 380,
         "wires": [
             [
                 "c8fb3c01f10259ca"
@@ -2449,7 +2448,7 @@
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 440,
+        "y": 380,
         "wires": [
             [
                 "0a76f5d385da96d7"
@@ -2488,7 +2487,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 440,
+        "y": 380,
         "wires": [
             [
                 "679d6a0d2002bcb7"
@@ -2516,7 +2515,7 @@
         "to": "",
         "reg": false,
         "x": 890,
-        "y": 460,
+        "y": 400,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2535,7 +2534,7 @@
             "97324173f5cd31d1"
         ],
         "x": 550,
-        "y": 460,
+        "y": 400,
         "wires": [],
         "l": true
     },
@@ -2550,7 +2549,7 @@
             "befa2aee7b7c68f0"
         ],
         "x": 730,
-        "y": 460,
+        "y": 400,
         "wires": [
             [
                 "48891106bb0c15f3"
@@ -2569,7 +2568,7 @@
             "97324173f5cd31d1"
         ],
         "x": 560,
-        "y": 380,
+        "y": 320,
         "wires": [],
         "l": true
     },
@@ -2585,7 +2584,7 @@
             "b5eb05ffb31db5ed"
         ],
         "x": 720,
-        "y": 500,
+        "y": 440,
         "wires": [
             [
                 "db4f7c2c93cd8f30"
@@ -2604,7 +2603,7 @@
             "f0fd3673cca0dbde"
         ],
         "x": 560,
-        "y": 540,
+        "y": 480,
         "wires": [],
         "l": true
     },
@@ -2618,7 +2617,7 @@
             "0a76f5d385da96d7"
         ],
         "x": 720,
-        "y": 380,
+        "y": 320,
         "wires": [
             [
                 "6a9ac472018c38ea"
@@ -2637,7 +2636,7 @@
             "e471a1ddbc9ef198"
         ],
         "x": 560,
-        "y": 340,
+        "y": 280,
         "wires": [],
         "l": true
     },
@@ -2651,7 +2650,7 @@
             "11cc62548c1ebf9e"
         ],
         "x": 720,
-        "y": 420,
+        "y": 360,
         "wires": [
             [
                 "9e961b1409432775"
@@ -2670,7 +2669,7 @@
             "9c763cec842003b4"
         ],
         "x": 560,
-        "y": 420,
+        "y": 360,
         "wires": [],
         "l": true
     },
@@ -2686,7 +2685,7 @@
             "f0fd3673cca0dbde"
         ],
         "x": 550,
-        "y": 500,
+        "y": 440,
         "wires": [],
         "l": true
     },
@@ -2699,7 +2698,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 1300,
-        "y": 440,
+        "y": 380,
         "wires": []
     },
     {
@@ -2716,7 +2715,7 @@
             }
         ],
         "x": 540,
-        "y": 640,
+        "y": 580,
         "wires": []
     },
     {
@@ -2751,7 +2750,7 @@
         "repair": false,
         "outputs": 4,
         "x": 530,
-        "y": 700,
+        "y": 640,
         "wires": [
             [
                 "1cb0a0826e19ac25"
@@ -2782,7 +2781,7 @@
             }
         ],
         "x": 550,
-        "y": 760,
+        "y": 700,
         "wires": []
     },
     {
@@ -2799,7 +2798,7 @@
             }
         ],
         "x": 690,
-        "y": 640,
+        "y": 580,
         "wires": []
     },
     {
@@ -2816,7 +2815,7 @@
             }
         ],
         "x": 700,
-        "y": 680,
+        "y": 620,
         "wires": []
     },
     {
@@ -2833,7 +2832,7 @@
             }
         ],
         "x": 690,
-        "y": 720,
+        "y": 660,
         "wires": []
     },
     {
@@ -2850,7 +2849,7 @@
             }
         ],
         "x": 700,
-        "y": 760,
+        "y": 700,
         "wires": []
     },
     {
@@ -2867,7 +2866,7 @@
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 700,
+        "y": 640,
         "wires": [
             [
                 "870608ff910feb60"
@@ -2894,7 +2893,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 100,
-        "y": 700,
+        "y": 640,
         "wires": [
             [
                 "5e838b011b496bb4"
@@ -2909,7 +2908,7 @@
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
         "x": 1140,
-        "y": 720,
+        "y": 660,
         "wires": []
     },
     {
@@ -2923,7 +2922,7 @@
             "0dfcf308245816ba",
             "08b9165876ab2131"
         ],
-        "x": 300,
+        "x": 320,
         "y": 180,
         "wires": [],
         "l": true
@@ -2941,7 +2940,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 1130,
+        "x": 1030,
         "y": 180,
         "wires": [
             [
@@ -2967,27 +2966,6 @@
         "wires": [
             [
                 "e6fc90237bd5a5e9"
-            ]
-        ]
-    },
-    {
-        "id": "499de1cc5ab65c53",
-        "type": "function",
-        "z": "94027c46c4bfae12",
-        "g": "b10eb6ebfd377efe",
-        "name": "current trigger",
-        "func": "const current = RED.util.cloneMessage(msg)\nconst messages = []\n\nif (msg.payload['timer/time']) {\n    messages.push(msg)\n}\n\nconst now = new Date()\ncurrent.topic = 'current/' + current.topic\ncurrent.retain = true\ncurrent.payload.at = now.getTime()\nmessages.push(current)\n\nreturn [messages]\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1180,
-        "y": 60,
-        "wires": [
-            [
-                "0c57cb4bce44a11a"
             ]
         ]
     },
@@ -3028,7 +3006,7 @@
         "joinerType": "str",
         "accumulate": true,
         "timeout": "",
-        "count": "1",
+        "count": "4",
         "reduceRight": false,
         "reduceExp": "",
         "reduceInit": "",
@@ -3079,7 +3057,7 @@
         "y": 60,
         "wires": [
             [
-                "499de1cc5ab65c53"
+                "0c57cb4bce44a11a"
             ]
         ]
     },
