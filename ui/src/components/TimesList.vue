@@ -15,7 +15,7 @@
         </v-list-item>
 
         <template v-for="(itemTime, index) in itemTimes" :key="index">
-            <template v-if="automationTrigger && timerTime && timerTime[itemTime.key]">
+            <template v-if="timerTime && timerTime[itemTime.key]">
                 <v-divider inset />
                 <v-list-item :title="itemTime.title">
                     <template #append>
@@ -47,7 +47,6 @@
 <script setup>
 import { computed, inject, ref } from 'vue'
 
-const automationTrigger = inject('automationTrigger')
 const timerTime = inject('timerTime')
 const timerTheme = inject('timerTheme')
 const timerThemeIcon = inject('timerThemeIcon')

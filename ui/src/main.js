@@ -20,9 +20,6 @@ registerPlugins(app)
 const settingsBedtime = ref(21)
 app.provide('settingsBedtime', settingsBedtime)
 
-const settingsBedtimeLabel = ref(null)
-app.provide('settingsBedtimeLabel', settingsBedtimeLabel)
-
 watch(settingsBedtime, () => websocketPublish({
     topic: 'settings/bedtime',
     payload: settingsBedtime.value,
@@ -33,9 +30,6 @@ watch(settingsBedtime, () => websocketPublish({
 const settingsLighting = ref(false)
 app.provide('settingsLighting', settingsLighting)
 
-const settingsLightingLabel = ref(null)
-app.provide('settingsLightingLabel', settingsLightingLabel)
-
 watch(settingsLighting, () => websocketPublish({
     topic: 'settings/lighting',
     payload: settingsLighting.value,
@@ -45,9 +39,6 @@ watch(settingsLighting, () => websocketPublish({
 
 const settingsShades = ref(false)
 app.provide('settingsShades', settingsShades)
-
-const settingsShadesLabel = ref(null)
-app.provide('settingsShadesLabel', settingsShadesLabel)
 
 watch(settingsShades, () => websocketPublish({
     topic: 'settings/shades',
@@ -73,9 +64,6 @@ app.provide('powerviewStatus', powerviewStatus)
 
 const timerTheme = ref('')
 app.provide('timerTheme', timerTheme)
-
-const automationTrigger = ref(null)
-app.provide('automationTrigger', automationTrigger)
 
 const timerTime = ref({})
 app.provide('timerTime', timerTime)
@@ -215,10 +203,6 @@ function connectWS() {
         // string in event.data
         const msg = JSON.parse(event.data)
         console.log(JSON.stringify(msg, undefined, 4))
-        if (msg.topic == 'current/automation/trigger') {
-            automationTrigger.value = msg.payload
-            return
-        }
         if (msg.topic == 'current/timer/theme') {
             timerTheme.value = msg.payload
             return
@@ -232,21 +216,18 @@ function connectWS() {
             return
         }
         if (msg.topic == 'settings/lighting') {
-            settingsLightingLabel.value = msg.label
             if (settingsLighting.value != msg.payload) {
                 settingsLighting.value = msg.payload
             }
             return
         }
         if (msg.topic == 'settings/shades') {
-            settingsShadesLabel.value = msg.label
             if (settingsShades.value != msg.payload) {
                 settingsShades.value = msg.payload
             }
             return
         }
         if (msg.topic == 'settings/bedtime') {
-            settingsBedtimeLabel.value = msg.label
             if (settingsBedtime.value != msg.payload) {
                 settingsBedtime.value = msg.payload
             }
