@@ -62,15 +62,12 @@ app.provide('powerviewModel', powerviewModel)
 const powerviewStatus = ref(0)
 app.provide('powerviewStatus', powerviewStatus)
 
-const timerTheme = ref('')
-app.provide('timerTheme', timerTheme)
-
-const timerTime = ref({})
-app.provide('timerTime', timerTime)
+const timerModel = ref({})
+app.provide('timerModel', timerModel)
 
 function timerThemeIcon(value) {
     if (!value) {
-        value = timerTheme.value
+        value = timerModel.value.theme || 'standard'
     }
     switch (value) {
         case 'tribal':
@@ -203,8 +200,8 @@ function connectWS() {
         // string in event.data
         const msg = JSON.parse(event.data)
         console.log(JSON.stringify(msg, undefined, 4))
-        if (msg.topic == 'current/timer/theme') {
-            timerTheme.value = msg.payload
+        if (msg.topic == 'timer/model') {
+            timerModel.value = msg.payload
             return
         }
         if (msg.topic == 'powerview/model') {
@@ -263,11 +260,6 @@ function connectWS() {
             if (msg.payload !== '') {
                 showAlert('info', msg.topic, text)
             }
-            return
-        }
-        let matches = /^current\/timer\/time\/([^/]+)$/.exec(msg.topic)
-        if (Array.isArray(matches) && (matches.length == 2)) {
-            timerTime.value[matches[1]] = msg.payload
             return
         }
     }

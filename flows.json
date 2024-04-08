@@ -577,7 +577,6 @@
             "47acab248c4d8501",
             "9977146ce026810e",
             "106ee66b66de58ab",
-            "6792ab0a12231e4e",
             "e6fc90237bd5a5e9",
             "c3cac0049cccb7e7",
             "c79b769649c2b419",
@@ -594,7 +593,7 @@
         "x": 14,
         "y": 19,
         "w": 1372,
-        "h": 262,
+        "h": 202,
         "info": "Subscribe to settings change events. Send `automation/trigger` events up\nto five times per day, at: sunrise, the start of midday, the start of\nafternoon, sunset and bedtime.\n\n- The times for sunrise and sunset are obtained directly from\n  [`suncalc.getTimes()`](https://github.com/mourner/suncalc#sunlight-times)\n\n- The times for midday and afternoon are determined using the position\n  of the sun over the course of the current day as reported by\n  [`suncalc.getPosition()`](https://github.com/mourner/suncalc#sun-position)\n\n- The time for bedtime varies randomly each day, as described below\n\nThe `${LATITUDE}` and `${LONGITUDE}` environment variables must be set\nto the home's geographic coordinates for use with `suncalc`.\n\nMidday starts when the sun first reaches an altitude of 0.8 radians. No\nmidday will be sent on a given day if the sun never reaches that\naltitude for the specified `${LATITUDE}`.\n\nAfternoon starts when the sun's azimuth is greater than 0 and its\naltitude first drops below 0.8 radians. For days on which the altitude\nnever reaches 0.8, this will be as soon after sunrise as the sun starts\nto shine more from the west than the east.\n\nBedtime is randomized each day, constrained to be within &PlusMinus;30\nminutes of the value for `settings/bedtime`.\n\nNote that the inclusion of midday and afternoon and the rules for\ndetermining when they occur on a given day were determined empirically\nfor a particular house with 4 parallel walls, aligned more or less\nexactly with the cardinal compass directions at a particular latitude.\nIt is also influenced by the size of that house's rather substantial\neaves shading the east- and west-facing windows. They might need\nadjustment or an entirely different set of events for a different\nstructure at a different location. The goal of all this is to trigger\nautomation to control lighting and motorized window coverings in such\na way that maximizes the times of day at which the view of the outside\nworld can be enjoyed while optimizing the lighting and window coverings\nfor comfort and energy efficiency during times of day when the sun\nshines too directly into the windows. "
     },
     {
@@ -2113,8 +2112,8 @@
         "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "timer",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst events = [{ cancel: true }]\nconst currentTimes = []\n\nsuncalc.addTime(50, \"midday\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (Object.prototype.hasOwnProperty.call(times, key)) {\n\n        const time = times[key].getTime()\n\n        const message = {\n            topic: 'timer/time',\n            payload: key,\n            at: time,\n        }\n\n        currentTimes.push(message)\n\n        if (time > now) {\n            events.push(message)\n        }\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate(),\n    hour).getTime() + offset\n\nconst bedtimeEvent = {\n    payload: 'bedtime',\n    topic: 'timer/time',\n    at: bedtime\n}\n\ncurrentTimes.push(bedtimeEvent)\n\nif (bedtime > now) {\n\n    events.push(bedtimeEvent)\n}\n\nevents.sort((a, b) => {\n\n    if (!Object.prototype.hasOwnProperty.call(a, 'at')) {\n        return b\n    }\n\n    if (!Object.prototype.hasOwnProperty.call(b, 'at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nevents.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [\n    events,\n    currentTimes,\n    {\n        topic: 'current/timer/theme',\n        payload: theme,\n        retain: true\n    }]\n",
-        "outputs": 3,
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst timerModel = {}\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst events = [{ cancel: true }]\n\ntimerModel.times = []\n\nsuncalc.addTime(50, \"midday\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (Object.prototype.hasOwnProperty.call(times, key)) {\n\n        const time = times[key].getTime()\n\n        const message = {\n            topic: 'timer/time',\n            payload: key,\n            at: time,\n        }\n\n        timerModel.times.push({\n            title: key,\n            timestamp: time,\n        })\n\n        if (time > now) {\n            events.push(message)\n        }\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate(),\n    hour).getTime() + offset\n\nconst bedtimeEvent = {\n    payload: 'bedtime',\n    topic: 'timer/time',\n    at: bedtime\n}\n\ntimerModel.times.push({\n    title: 'bedtime',\n    timestamp: bedtime,\n})\n\nif (bedtime > now) {\n\n    events.push(bedtimeEvent)\n}\n\nevents.sort((a, b) => {\n\n    if (!Object.prototype.hasOwnProperty.call(a, 'at')) {\n        return b\n    }\n\n    if (!Object.prototype.hasOwnProperty.call(b, 'at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nevents.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\ntimerModel.times.sort((a, b) => a.timestamp - b.timestamp)\ntimerModel.theme = theme\n\nreturn [\n    events,\n    {\n        payload: timerModel,\n        topic: 'timer/model',\n        retain: true,\n    },\n]\n",
+        "outputs": 2,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
@@ -2132,16 +2131,12 @@
                 "106ee66b66de58ab"
             ],
             [
-                "6792ab0a12231e4e"
-            ],
-            [
-                "869ada541db92710"
+                "0c57cb4bce44a11a"
             ]
         ],
         "outputLabels": [
             "events",
-            "current times",
-            "current theme"
+            "timer model"
         ],
         "info": "# Input\n\n- `msg.payload.now` - timestamp at which flows started and again each day\n   at 1am\n\n- `msg.payload.settings/bedtime` - _bedtime_ value selected by a user\n  on the dashboard\n\n# Output\n\nUp to five 'timer/time` messages per day and one `timer/theme` message.\n\n# Details\n\n## Time\n\nWhen the output `msg.topic` is `timer/time`, `msg.payload` will be one\nof:\n\n- `sunrise`\n- `midday`\n- `afternoon`\n- `sunset`\n- `bedtime`\n\nIn addition, `msg.at` will be set to the timestamp at which the\ncorresponding event message should actually be published. See the\ndocumentation for the following `delay until` function node for\ninformation on when the `timer/time` events will actually fire based\non their values for `msg.at`.\n\n## Theme\n\nWhen the output `msg.topic` is `timer/theme`, `msg.payload` will be one\nof the following values based on the date:\n\n- `tribal`\n- `spooky`\n- `jolly`\n- `standard`"
     },
@@ -2185,48 +2180,6 @@
             "delayed"
         ],
         "info": "Delay messages until a particular time has been reached.\n\nMessages are passed through unchanged but may be delayed based on the\nvalue of `msg.at`. If `msg.at` is present, it must indicate an\nabsolute time in a format compatible with JavaScript's `new Date(time)`\nconstructor. If that time is in the future, this function will delay\nforwarding the given message until the specified time has been reached.\n\nIf `msg.at` is missing or indicates a time that is the same or earlier\nthan \"now\" (`new Date()` with no argument) then the message is passed\nthrough with no delay.\n\nIf a message arrives with `msg.cancel` set to `true`, all pending\nmessages are canceled without being sent.\n\n> **Warning:** Delays are implemented using `setTimeout()`. This means\nthat while this node will emit messages no earlier than the time\nspecified by `msg.at`, they will actually be delivered some (typically\ntiny) amount of time later based on the overhead of any computer\nprogram combined with the fact that Node-RED flows are intrinsically\nsingle-threaded. Ultra-precise timers require real-time programming\ntechniques driven by specialized hardware.\n\nNote that it would require only a bit more work to support a `msg.flush`\nthat would immediately send all pending messages rather than canceling\nthem, but there is no use case for such a feature in these flows.\n\nCanceling or flushing only a particular message without canceling or\nflushing them all would require a lot more work and a second output.\nThat is far more effort than it is worth given the probable use cases\nfor a node like this in the first place."
-    },
-    {
-        "id": "6792ab0a12231e4e",
-        "type": "change",
-        "z": "94027c46c4bfae12",
-        "g": "b10eb6ebfd377efe",
-        "name": "current",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "'current/' & topic & '/' & payload",
-                "tot": "jsonata"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "at",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "retain",
-                "pt": "msg",
-                "to": "true",
-                "tot": "bool"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 740,
-        "y": 160,
-        "wires": [
-            [
-                "869ada541db92710"
-            ]
-        ]
     },
     {
         "id": "e6fc90237bd5a5e9",
@@ -2297,8 +2250,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 720,
-        "y": 240,
+        "x": 980,
+        "y": 180,
         "wires": [
             [
                 "869ada541db92710"
@@ -2314,8 +2267,8 @@
         "scope": [
             "0c57cb4bce44a11a"
         ],
-        "x": 410,
-        "y": 240,
+        "x": 670,
+        "y": 180,
         "wires": [
             [
                 "189c38230a6eb7a0"
@@ -2340,8 +2293,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 560,
-        "y": 240,
+        "x": 820,
+        "y": 180,
         "wires": [
             [
                 "c3cac0049cccb7e7"
@@ -2357,7 +2310,7 @@
         "server": "",
         "client": "b46802b9cb5603b3",
         "x": 1300,
-        "y": 140,
+        "y": 120,
         "wires": []
     },
     {
@@ -2988,8 +2941,8 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 890,
-        "y": 200,
+        "x": 1130,
+        "y": 180,
         "wires": [
             [
                 "0c57cb4bce44a11a"
@@ -3030,7 +2983,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1200,
+        "x": 1180,
         "y": 60,
         "wires": [
             [
@@ -3051,7 +3004,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 730,
+        "x": 710,
         "y": 80,
         "wires": [
             [
@@ -3081,7 +3034,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 850,
+        "x": 830,
         "y": 60,
         "wires": [
             [
@@ -3122,7 +3075,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1010,
+        "x": 990,
         "y": 60,
         "wires": [
             [

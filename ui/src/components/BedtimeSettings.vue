@@ -26,9 +26,16 @@ import { computed, inject, onMounted, ref, watch } from 'vue'
 
 const timerThemeIcon = inject('timerThemeIcon')
 const settingsBedtime = inject('settingsBedtime')
-const timerTime = inject('timerTime')
+const timerModel = inject('timerModel')
 
-const localeString = computed(() => new Date(timerTime.value.bedtime).toLocaleString())
+const localeString = computed(() => {
+    for (let time of timerModel.value.times) {
+        if (time.title == 'bedtime') {
+            return new Date(time.timestamp).toLocaleString()
+        }
+    }
+    return 'bedtime not specified'
+})
 
 // items for v-select corresponding to settings/bedtime messages
 // in SettingsComponent.vue (see settingsBedtime)

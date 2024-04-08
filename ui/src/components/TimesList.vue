@@ -7,7 +7,7 @@
                 <v-icon :icon="timerThemeIcon()" />
             </template>
             <v-list-item-subtitle>
-                {{ timerTheme }}
+                {{ timerModel.theme }}
             </v-list-item-subtitle>
             <div class="notes">
                 Evening lighting theme
@@ -15,20 +15,18 @@
         </v-list-item>
 
         <template v-for="(itemTime, index) in itemTimes" :key="index">
-            <template v-if="timerTime && timerTime[itemTime.key]">
-                <v-divider inset />
-                <v-list-item :title="itemTime.title">
-                    <template #append>
-                        <v-icon :icon="timerTimeIcon" />
-                    </template>
-                    <v-list-item-subtitle>
-                        {{ localeTime(timerTime[itemTime.key]) }}
-                    </v-list-item-subtitle>
-                    <div class="notes">
-                        {{ itemTime.notes }}
-                    </div>
-                </v-list-item>
-            </template>
+            <v-divider inset />
+            <v-list-item :title="itemTime.title">
+                <template #append>
+                    <v-icon :icon="timerTimeIcon(itemTime.key)" />
+                </template>
+                <v-list-item-subtitle>
+                    {{ localeTime(itemTime.key) }}
+                </v-list-item-subtitle>
+                <div class="notes">
+                    {{ itemTime.notes }}
+                </div>
+            </v-list-item>
         </template>
 
     </v-list>
@@ -45,10 +43,9 @@
 </style>
 
 <script setup>
-import { computed, inject, ref } from 'vue'
+import { inject, ref } from 'vue'
 
-const timerTime = inject('timerTime')
-const timerTheme = inject('timerTheme')
+const timerModel = inject('timerModel')
 const timerThemeIcon = inject('timerThemeIcon')
 
 const itemTimes = ref([
@@ -84,12 +81,16 @@ const itemTimes = ref([
     },
 ])
 
-function localeTime(timestamp) {
-    return new Date(timestamp).toLocaleString()
+function localeTime(title) {
+    for (let time of timerModel.value.times) {
+        if (time.title == title) {
+            return new Date(time.timestamp).toLocaleString()
+        }
+    }
 }
 
-const timerTimeIcon = computed(() => {
-    switch (timerTime.value) {
+function timerTimeIcon(key) {
+    switch (key) {
         case 'sunrise':
             return 'mdi-weather-sunset-up'
         case 'midday':
@@ -105,6 +106,6 @@ const timerTimeIcon = computed(() => {
         default:
             return 'mdi-cog-off'
     }
-})
+}
 
 </script>
