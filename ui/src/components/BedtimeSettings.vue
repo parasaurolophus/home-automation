@@ -29,12 +29,16 @@ const settingsBedtime = inject('settingsBedtime')
 const timerModel = inject('timerModel')
 
 const localeString = computed(() => {
-    for (let time of timerModel.value.times) {
-        if (time.title == 'bedtime') {
-            return new Date(time.timestamp).toLocaleString()
+    if (timerModel.value.times) {
+        for (let time of timerModel.value.times) {
+            if (time.title == 'bedtime') {
+                return new Date(time.timestamp).toLocaleString()
+            }
         }
     }
-    return 'bedtime not specified'
+    const message = 'bedtime not specified'
+    console.warn(message)
+    return message
 })
 
 // items for v-select corresponding to settings/bedtime messages

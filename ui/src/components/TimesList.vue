@@ -81,12 +81,17 @@ const itemTimes = ref([
     },
 ])
 
-function localeTime(title) {
-    for (let time of timerModel.value.times) {
-        if (time.title == title) {
-            return new Date(time.timestamp).toLocaleString()
+function localeTime(key) {
+    if (timerModel.value.times) {
+        for (let time of timerModel.value.times) {
+            if (time.title == key) {
+                return new Date(time.timestamp).toLocaleString()
+            }
         }
     }
+    const message = key + ' not specified'
+    console.warn(message)
+    return message
 }
 
 function timerTimeIcon(key) {
