@@ -7,13 +7,11 @@
                     <v-expansion-panel v-for="(group, groupIndex) in bridge.children" :key="groupIndex"
                         :disabled="websocketStatus != 1">
                         <v-expansion-panel-title>
-                            <v-icon :color="groupColor(group)" :icon="groupIcon(group)" />
-                            {{ group.title }}
+                            <v-switch v-model="group.on" @click.stop.prevent="toggleGroup(group)">
+                                <template #label>{{ group.title }}</template>
+                            </v-switch>
                         </v-expansion-panel-title>
                         <v-expansion-panel-text>
-                            <v-btn @click="sendGroupOff(group)" class="spaced-out">
-                                {{ group.title }} Off
-                            </v-btn>
                             <v-btn v-for="(scene, index) in group.children" :key="index"
                                 @click="sendActivateScene(scene)" class="spaced-out">
                                 {{ scene.title }}
@@ -39,16 +37,8 @@ const hueModel = inject('hueModel')
 const websocketStatus = inject('websocketStatus')
 const websocketPublish = inject('websocketPublish')
 
-function groupColor(group) {
-    return group.on ? 'primary' : 'secondary'
-}
-
-function groupIcon(group) {
-    return group.on ? 'mdi-lightbulb-on' : 'mdi-lightbulb'
-}
-
-function sendGroupOff(group) {
-    websocketPublish({ payload: { on: { on: false } }, topic: group.topic, method: 'PUT' })
+function toggleGroup(group) {
+    websocketPublish({ payload: { on: { on: !group.on } }, topic: group.topic, method: 'PUT' })
 }
 
 function sendActivateScene(scene) {
