@@ -14,7 +14,7 @@
             </v-card-subtitle>
         </v-card-item>
         <v-card-text>
-            <v-switch v-model="settingsShades" class="align-center" />
+            <v-switch v-model="settingsShades" class="align-center" @click.stop.prevent="clicked" />
         </v-card-text>
     </v-card>
 </template>
@@ -33,8 +33,18 @@
 import { computed, inject } from 'vue'
 
 const settingsShades = inject('settingsShades')
+const websocketPublish = inject('websocketPublish')
 
 const settingsColor = computed(() => settingsShades.value ? 'primary' : 'secondary')
 const settingsIcon = computed(() => settingsShades.value ? 'mdi-blinds-open' : 'mdi-blinds')
 const settingsText = computed(() => settingsShades.value ? 'enabled' : 'disabled')
+
+function clicked() {
+    websocketPublish({
+        payload: !settingsShades.value,
+        topic: 'settings/shades',
+        retain: true,
+        label: 'user',
+    })
+}
 </script>

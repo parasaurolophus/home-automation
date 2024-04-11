@@ -14,7 +14,7 @@
             </v-card-subtitle>
         </v-card-item>
         <v-card-text>
-            <v-switch v-model="settingsLighting" class="align-center" />
+            <v-switch v-model="settingsLighting" class="align-center" @click.stop.prevent="clicked" />
         </v-card-text>
     </v-card>
 </template>
@@ -33,8 +33,18 @@
 import { computed, inject } from 'vue'
 
 const settingsLighting = inject('settingsLighting')
+const websocketPublish = inject('websocketPublish')
 
-const settingsColor = computed(()=> settingsLighting.value ? 'primary' : 'secondary')
+const settingsColor = computed(() => settingsLighting.value ? 'primary' : 'secondary')
 const settingsIcon = computed(() => settingsLighting.value ? 'mdi-lightbulb-on' : 'mdi-lightbulb')
-const settingsText = computed(()=> settingsLighting.value ? 'enabled' : 'disabled')
+const settingsText = computed(() => settingsLighting.value ? 'enabled' : 'disabled')
+
+function clicked() {
+    websocketPublish({
+        payload: !settingsLighting.value,
+        topic: 'settings/lighting',
+        retain: true,
+        label: 'user',
+    })
+}
 </script>

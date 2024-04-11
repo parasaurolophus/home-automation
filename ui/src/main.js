@@ -30,22 +30,8 @@ watch(settingsBedtime, () => websocketPublish({
 const settingsLighting = ref(false)
 app.provide('settingsLighting', settingsLighting)
 
-watch(settingsLighting, () => websocketPublish({
-    topic: 'settings/lighting',
-    payload: settingsLighting.value,
-    retain: true,
-    label: 'user',
-}))
-
 const settingsShades = ref(false)
 app.provide('settingsShades', settingsShades)
-
-watch(settingsShades, () => websocketPublish({
-    topic: 'settings/shades',
-    payload: settingsShades.value,
-    retain: true,
-    label: 'user',
-}))
 
 const alerts = ref([])
 app.provide('alerts', alerts)
