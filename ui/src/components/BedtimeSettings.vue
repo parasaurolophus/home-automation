@@ -27,6 +27,7 @@ import { computed, inject, onMounted, ref, watch } from 'vue'
 const timerThemeIcon = inject('timerThemeIcon')
 const settingsBedtime = inject('settingsBedtime')
 const timerModel = inject('timerModel')
+const websocketPublish = inject('websocketPublish')
 
 const localeString = computed(() => {
     if (timerModel.value.times) {
@@ -74,13 +75,21 @@ function updateBedtimeIndex() {
             return
     }
 
-    bedtimeIndex.value = selected
+    if (bedtimeIndex.value != selected) {
+        bedtimeIndex.value = selected
+    }
 }
 
 function updateSettingsBedtime(selected) {
 
     if (settingsBedtime.value != bedtimeOptions[selected].hour) {
         settingsBedtime.value = bedtimeOptions[selected].hour
+        websocketPublish({
+            topic: 'settings/bedtime',
+            payload: settingsBedtime.value,
+            retain: true,
+            label: 'user',
+        })
     }
 }
 </script>

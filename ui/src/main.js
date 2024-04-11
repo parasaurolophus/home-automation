@@ -20,13 +20,6 @@ registerPlugins(app)
 const settingsBedtime = ref(21)
 app.provide('settingsBedtime', settingsBedtime)
 
-watch(settingsBedtime, () => websocketPublish({
-    topic: 'settings/bedtime',
-    payload: settingsBedtime.value,
-    retain: true,
-    label: 'user',
-}))
-
 const settingsLighting = ref(false)
 app.provide('settingsLighting', settingsLighting)
 
