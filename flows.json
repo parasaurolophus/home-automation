@@ -809,6 +809,29 @@
         "h": 282
     },
     {
+        "id": "c84ef40283d32b57",
+        "type": "group",
+        "z": "d3b34304591c64d7",
+        "name": "motion and temperature events",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "35ac2cce031a639d",
+            "b00d8e1f3f8c1126",
+            "6b865fe89e89c4ea",
+            "937569dd41946b4e"
+        ],
+        "x": 854,
+        "y": 499,
+        "w": 512,
+        "h": 162
+    },
+    {
         "id": "c5657c312f2d863d",
         "type": "junction",
         "z": "40413194443e96c6",
@@ -1068,7 +1091,7 @@
         "z": "85ed27d795e6e866",
         "g": "96971e50c13ead01",
         "name": "persist data",
-        "func": "const address = env.get('ADDRESS')\nconst key = '$parent.hue'\nconst hue = flow.get(key) || {}\nconst bridge = hue[address] || {}\nconst TOPIC = 'hue/' + address\nconst resources = {}\nconst data = JSON.parse(msg.payload.data)\nconst messages = []\n\nresources.payload = bridge.resources || {}\n\nfor (let datum of data) {\n\n    for (let value of datum.data) {\n\n        const message = {\n            topic: TOPIC + '/resource/' + value.type + '/' + value.id,\n            retain: false\n        }\n\n        const category = resources.payload[value.type] || {}\n        let resource = category[value.id] || {}\n\n        switch (datum.type) {\n\n            case 'add':\n            case 'update':\n\n                for (let property in value) {\n\n                    resource[property] = value[property]\n                }\n\n                category[value.id] = message.payload = resource\n                break\n\n            case 'delete':\n\n                delete category[value.id]\n                message.payload = ''\n                break\n\n            default:\n\n                node.warn(JSON.stringify(datum, undefined, 1))\n                break\n\n        }\n\n        resources.payload[value.type] = category\n        messages.push(message)\n\n    }\n}\n\nbridge.resources = resources.payload\nhue[address] = bridge\nflow.set(key, hue)\nreturn [resources, messages]\n",
+        "func": "const address = env.get('ADDRESS')\nconst key = '$parent.hue'\nconst hue = flow.get(key) || {}\nconst bridge = hue[address] || {}\nconst TOPIC = 'hue/' + address\nconst resources = {}\nconst data = JSON.parse(msg.payload.data)\nconst messages = []\n\nresources.payload = bridge.resources || {}\n\nfunction findOwner(resource) {\n    const owner = resource.owner\n    if (!owner) {\n        return null\n    }\n    if (!owner.rid) {\n        return null\n    }\n    if (!owner.rtype) {\n        return null\n    }\n    const owners = resources.payload[owner.rtype]\n    if (!owners) {\n        return null\n    }\n    for (let id in owners) {\n        if (id == owner.rid) {\n            return owners[id]\n        }\n    }\n    return null\n}\n\nfor (let datum of data) {\n\n    for (let value of datum.data) {\n\n        const message = {\n            topic: TOPIC + '/resource/' + value.type + '/' + value.id,\n            retain: false\n        }\n\n        const category = resources.payload[value.type] || {}\n        const resource = category[value.id] || {}\n\n        if (!resource.metadata) {\n            const owner = findOwner(resource)\n            if (owner?.metadata) {\n                resource.metadata = owner.metadata\n            }\n        }\n\n        switch (datum.type) {\n\n            case 'add':\n            case 'update':\n\n                for (let property in value) {\n\n                    resource[property] = value[property]\n                }\n\n                category[value.id] = message.payload = resource\n                break\n\n            case 'delete':\n\n                delete category[value.id]\n                message.payload = ''\n                break\n\n            default:\n\n                node.error(JSON.stringify(datum, undefined, 1))\n                break\n\n        }\n\n        resources.payload[value.type] = category\n        messages.push(message)\n\n    }\n}\n\nbridge.resources = resources.payload\nhue[address] = bridge\nflow.set(key, hue)\nreturn [resources, messages]\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -1087,7 +1110,7 @@
         ],
         "outputLabels": [
             "resources",
-            ""
+            "messages"
         ]
     },
     {
@@ -1229,7 +1252,7 @@
         "z": "85ed27d795e6e866",
         "g": "96971e50c13ead01",
         "name": "model",
-        "func": "const ADDRESS = env.get('ADDRESS')\nconst PUT = 'put/hue/' + ADDRESS + '/resource'\n\nconst bridge = {\n    children: [],\n    title: env.get('TITLE'),\n    id: ADDRESS,\n    category: 'bridge'\n}\n\nfunction findOwner(grouped_light) {\n\n    const groups = msg.payload[grouped_light.owner.rtype] || {}\n\n    if (Object.prototype.hasOwnProperty.call(groups, grouped_light.owner.rid)) {\n\n        return groups[grouped_light.owner.rid]\n\n    }\n\n    return null\n}\n\nfunction findScenes(owner) {\n\n    const scenes = []\n\n    for (let sceneId in msg.payload.scene) {\n\n        const scene = msg.payload.scene[sceneId]\n\n        if (scene.group.rid == owner.id) {\n\n            scenes.push({\n                title: scene.metadata.name,\n                id: scene.id,\n                topic: PUT + '/scene/' + scene.id,\n                category: 'scene'\n            })\n\n        }\n    }\n\n    scenes.sort((a, b) => a.title.localeCompare(b.title))\n    return scenes\n}\n\nfor (let grouped_light_id in msg.payload.grouped_light) {\n\n    const grouped_light = msg.payload.grouped_light[grouped_light_id]\n    const owner = findOwner(grouped_light)\n\n    if (owner == null) {\n        node.warn(JSON.stringify(grouped_light, undefined, 1))\n        continue\n    }\n\n    const scenes = findScenes(owner)\n\n    bridge.children.push({\n        id: grouped_light_id,\n        children: scenes,\n        title: (owner.metadata ? owner.metadata.name : 'All Lights'),\n        topic: PUT + '/grouped_light/' + grouped_light.id,\n        on: grouped_light.on.on,\n        category: 'group'\n    })\n}\n\nbridge.children.sort((a, b) => a.title.localeCompare(b.title))\n\nconst hue = flow.get('$parent.hue') || {}\nconst model = hue.model || []\nlet found = false\n\nfor (let b of model) {\n\n    if (b.id == ADDRESS) {\n\n        found = true\n\n        for (let key in bridge) {\n            if (Object.prototype.hasOwnProperty.call(bridge, key)) {\n                b[key] = bridge[key]\n            }\n        }\n\n        break\n    }\n}\n\nif (!found) {\n\n    model.push(bridge)\n    model.sort((a, b) => a.title.localeCompare(b.title))\n}\n\nhue.model = model\nflow.set('$parent.hue', hue)\n\nreturn {\n    payload: model,\n    topic: 'hue/model',\n    retain: true\n}\n",
+        "func": "const ADDRESS = env.get('ADDRESS')\nconst PUT = 'put/hue/' + ADDRESS + '/resource'\n\nconst bridge = {\n    children: [],\n    title: env.get('TITLE'),\n    id: ADDRESS,\n    category: 'bridge'\n}\n\nfunction findOwner(grouped_light) {\n\n    const groups = msg.payload[grouped_light.owner.rtype] || {}\n\n    if (Object.prototype.hasOwnProperty.call(groups, grouped_light.owner.rid)) {\n\n        return groups[grouped_light.owner.rid]\n\n    }\n\n    return null\n}\n\nfunction findScenes(owner) {\n\n    const scenes = []\n\n    for (let sceneId in msg.payload.scene) {\n\n        const scene = msg.payload.scene[sceneId]\n\n        if (scene.group.rid == owner.id) {\n\n            scenes.push({\n                title: scene.metadata.name,\n                id: scene.id,\n                topic: PUT + '/scene/' + scene.id,\n                category: 'scene'\n            })\n\n        }\n    }\n\n    scenes.sort((a, b) => a.title.localeCompare(b.title))\n    return scenes\n}\n\nfor (let grouped_light_id in msg.payload.grouped_light) {\n\n    const grouped_light = msg.payload.grouped_light[grouped_light_id]\n    const owner = findOwner(grouped_light)\n\n    if (owner == null) {\n        continue\n    }\n\n    const scenes = findScenes(owner)\n\n    bridge.children.push({\n        id: grouped_light_id,\n        children: scenes,\n        title: (owner.metadata ? owner.metadata.name : 'All Lights'),\n        topic: PUT + '/grouped_light/' + grouped_light.id,\n        on: grouped_light.on.on,\n        category: 'group'\n    })\n}\n\nbridge.children.sort((a, b) => a.title.localeCompare(b.title))\n\nconst hue = flow.get('$parent.hue') || {}\nconst model = hue.model || []\nlet found = false\n\nfor (let b of model) {\n\n    if (b.id == ADDRESS) {\n\n        found = true\n\n        for (let key in bridge) {\n            if (Object.prototype.hasOwnProperty.call(bridge, key)) {\n                b[key] = bridge[key]\n            }\n        }\n\n        break\n    }\n}\n\nif (!found) {\n\n    model.push(bridge)\n    model.sort((a, b) => a.title.localeCompare(b.title))\n}\n\nhue.model = model\nflow.set('$parent.hue', hue)\n\nreturn {\n    payload: model,\n    topic: 'hue/model',\n    retain: true\n}\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -4278,6 +4301,200 @@
         "x": 390,
         "y": 440,
         "wires": []
+    },
+    {
+        "id": "35ac2cce031a639d",
+        "type": "websocket in",
+        "z": "d3b34304591c64d7",
+        "g": "c84ef40283d32b57",
+        "name": "subscribe",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 940,
+        "y": 580,
+        "wires": [
+            [
+                "b00d8e1f3f8c1126",
+                "6b865fe89e89c4ea"
+            ]
+        ]
+    },
+    {
+        "id": "b00d8e1f3f8c1126",
+        "type": "function",
+        "z": "d3b34304591c64d7",
+        "g": "c84ef40283d32b57",
+        "name": "temperatures",
+        "func": "const re = /^hue\\/([^/]+)\\/resource\\/temperature\\/([^/]+)$/\nconst matches = re.exec(msg.topic)\n\nif (!(Array.isArray(matches) && (matches.length == 3))) {\n    return null\n}\n\nif (!msg.payload.metadata?.name) {\n    return null\n}\n\nif (!msg.payload.temperature?.temperature) {\n    return null\n}\n\nreturn {\n    payload: {\n        name: msg.payload.metadata.name,\n        temperature: msg.payload.temperature.temperature * 1.8 + 32,\n    },\n    topic: 'temperature/' + matches[1] + '/' + matches[2],\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 540,
+        "wires": [
+            [
+                "937569dd41946b4e"
+            ]
+        ]
+    },
+    {
+        "id": "6b865fe89e89c4ea",
+        "type": "function",
+        "z": "d3b34304591c64d7",
+        "g": "c84ef40283d32b57",
+        "name": "motions",
+        "func": "const re = /^hue\\/([^/]+)\\/resource\\/motion\\/([^/]+)$/\nconst matches = re.exec(msg.topic)\n\nif (!(Array.isArray(matches) && (matches.length == 3))) {\n    return null\n}\n\nif (!msg.payload.metadata?.name) {\n    return null\n}\n\nif (!msg.payload.motion) {\n    return null\n}\n\nif (!Object.prototype.hasOwnProperty.call(msg.payload.motion, 'motion')) {\n    return null\n}\n\nreturn {\n    payload: {\n        name: msg.payload.metadata.name,\n        motion: msg.payload.motion.motion,\n    },\n    topic: 'motion/' + matches[1] + '/' + matches[2],\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1100,
+        "y": 620,
+        "wires": [
+            [
+                "937569dd41946b4e"
+            ]
+        ]
+    },
+    {
+        "id": "937569dd41946b4e",
+        "type": "websocket out",
+        "z": "d3b34304591c64d7",
+        "g": "c84ef40283d32b57",
+        "name": "publish",
+        "server": "",
+        "client": "b46802b9cb5603b3",
+        "x": 1280,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "ef1673510c5094fd",
+        "type": "function",
+        "z": "d3b34304591c64d7",
+        "name": "hue resource",
+        "func": "const request = RED.util.cloneMessage(msg)\nlet hue = flow.get('hue') || {}\nlet resource = {}\n\ndelete hue.model\n\nfor (let bridge of Object.getOwnPropertyNames(hue)) {\n    resource[bridge] = hue[bridge]\n}\n\nif (msg.req.params.bridge) {\n    resource = resource[msg.req.params.bridge] || {}\n}\n\nif (msg.req.params.kind) {\n    resource = resource.resources[msg.req.params.kind] || {}\n}\n\nif (msg.req.params.id) {\n    resource = resource[msg.req.params.id] || {}\n}\n\nmsg.statusCode = 200\nmsg.payload = resource\nreturn [msg, request]\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 860,
+        "wires": [
+            [
+                "5d7c2d790a017e33"
+            ],
+            [
+                "2f9b89f593a167fd"
+            ]
+        ],
+        "outputLabels": [
+            "response",
+            "request"
+        ]
+    },
+    {
+        "id": "5d7c2d790a017e33",
+        "type": "http response",
+        "z": "d3b34304591c64d7",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1050,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "2f9b89f593a167fd",
+        "type": "debug",
+        "z": "d3b34304591c64d7",
+        "name": "request",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 1060,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "2531906e5d7e3f2f",
+        "type": "http in",
+        "z": "d3b34304591c64d7",
+        "name": "",
+        "url": "/hue/resource/:bridge/:kind/:id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 620,
+        "y": 920,
+        "wires": [
+            [
+                "ef1673510c5094fd"
+            ]
+        ]
+    },
+    {
+        "id": "20cabbc9632b455c",
+        "type": "http in",
+        "z": "d3b34304591c64d7",
+        "name": "",
+        "url": "/hue/resource/:bridge/:kind",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 630,
+        "y": 880,
+        "wires": [
+            [
+                "ef1673510c5094fd"
+            ]
+        ]
+    },
+    {
+        "id": "5117451aa8a97568",
+        "type": "http in",
+        "z": "d3b34304591c64d7",
+        "name": "",
+        "url": "/hue/resource/:bridge",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 650,
+        "y": 840,
+        "wires": [
+            [
+                "ef1673510c5094fd"
+            ]
+        ]
+    },
+    {
+        "id": "95d9034dcf45d2ba",
+        "type": "http in",
+        "z": "d3b34304591c64d7",
+        "name": "",
+        "url": "/hue/resource",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 670,
+        "y": 800,
+        "wires": [
+            [
+                "ef1673510c5094fd"
+            ]
+        ]
     },
     {
         "id": "9b22e1e38e67938b",

@@ -17,6 +17,12 @@ const app = createApp(App)
 
 registerPlugins(app)
 
+const temperatures = ref({})
+app.provide('temperatures', temperatures)
+
+const motions = ref({})
+app.provide('motions', motions)
+
 const settingsBedtime = ref(21)
 app.provide('settingsBedtime', settingsBedtime)
 
@@ -178,7 +184,6 @@ function connectWS() {
         // node-red's msg object is received as a JSON
         // string in event.data
         const msg = JSON.parse(event.data)
-        console.log(JSON.stringify(msg, undefined, 4))
         if (msg.topic == 'timer/model') {
             timerModel.value = msg.payload
             return
@@ -239,6 +244,19 @@ function connectWS() {
             if (msg.payload !== '') {
                 showAlert('info', msg.topic, text)
             }
+            return
+        }
+        if (msg.topic == 'motion/192.168.1.12/c6364a48-37ca-4c42-8ed2-e513ebae48aa' && msg.payload.motion) {
+            const message = JSON.stringify(msg, undefined, 4)
+            console.warn(message)
+            showAlert('warning', msg.topic, message)
+        }
+        if (/^motion\//.exec(msg.topic)) {
+            motions.value[msg.payload.name] = msg
+            return
+        }
+        if (/^temperature\//.exec(msg.topic)) {
+            temperatures.value[msg.payload.name] = msg
             return
         }
     }
