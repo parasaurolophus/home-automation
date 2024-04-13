@@ -79,6 +79,11 @@ const itemTimes = ref([
         key: 'bedtime',
         notes: 'night lights, all shades closed',
     },
+    {
+        title: 'Midnight',
+        key: 'midnight',
+        notes: 'night lights, all shades closed',
+    },
 ])
 
 function localeTime(key) {
@@ -107,6 +112,7 @@ function timerTimeIcon(key) {
         case 'dusk':
             return 'mdi-blinds'
         case 'bedtime':
+        case 'midnight':
             return 'mdi-weather-night'
         default:
             return 'mdi-cog-off'

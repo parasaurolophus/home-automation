@@ -36,10 +36,11 @@
         <v-expansion-panel title="Experimental" value="experimental">
           <v-expansion-panel-text>
             <div class="pad">
-              <v-btn @click="fetchResource()">fetch /hue/resource</v-btn>
-              <v-btn @click="fetchResource('192.168.1.12')">fetch /hue/resource/192.168.1.12</v-btn>
-              <v-btn @click="fetchResource('192.168.1.12/motion')">fetch /hue/resource/192.168.1.12/motion</v-btn>
-              <v-btn @click="fetchResource('192.168.1.12/motion/c6364a48-37ca-4c42-8ed2-e513ebae48aa')">fetch
+              <v-btn @click="fetchResource()">GET /hue/</v-btn>
+              <v-btn @click="fetchResource('192.168.1.12')">GET /hue/192.168.1.12</v-btn>
+              <v-btn @click="fetchResource('192.168.1.12/resource')">GET /hue/192.168.1.12/resource</v-btn>
+              <v-btn @click="fetchResource('192.168.1.12/resource/zone')">GET /hue/192.168.1.12/resource/zone</v-btn>
+              <v-btn @click="fetchResource('192.168.1.12/resource/motion/c6364a48-37ca-4c42-8ed2-e513ebae48aa')">GET
                 /hue/resource/192.168.1.12/motion/c6364a48-37ca-4c42-8ed2-e513ebae48aa</v-btn>
             </div>
           </v-expansion-panel-text>
@@ -54,7 +55,7 @@
 </template>
 
 <style scoped>
-.pad * {
+.pad > * {
   margin: 0.25em;
 }
 </style>
@@ -65,7 +66,7 @@ import { inject } from 'vue'
 const showAlert = inject('showAlert')
 
 async function fetchResource(path) {
-  let url = 'http://127.0.0.1:1880/hue/resource/'
+  let url = 'http://127.0.0.1:1880/hue/'
   if (path) {
     url += path
   }

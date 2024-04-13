@@ -832,6 +832,36 @@
         "h": 162
     },
     {
+        "id": "162cf790a92fa42d",
+        "type": "group",
+        "z": "d3b34304591c64d7",
+        "name": "synchronous API for obtaining hue device states",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "ef1673510c5094fd",
+            "2531906e5d7e3f2f",
+            "20cabbc9632b455c",
+            "5117451aa8a97568",
+            "95d9034dcf45d2ba",
+            "5d7c2d790a017e33",
+            "cf267b27f094a9e6",
+            "5f9af2943e409ff7",
+            "d48278d6c2f53d5c",
+            "026431ca842e6e5d",
+            "ebe70e24d1438eb8"
+        ],
+        "x": 14,
+        "y": 719,
+        "w": 752,
+        "h": 242
+    },
+    {
         "id": "c5657c312f2d863d",
         "type": "junction",
         "z": "40413194443e96c6",
@@ -2134,7 +2164,7 @@
         "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "timer",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst timerModel = {}\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst events = [{ cancel: true }]\n\ntimerModel.times = []\n\nsuncalc.addTime(50, \"midday\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (Object.prototype.hasOwnProperty.call(times, key)) {\n\n        const time = times[key].getTime()\n\n        const message = {\n            topic: 'timer/time',\n            payload: key,\n            at: time,\n        }\n\n        timerModel.times.push({\n            title: key,\n            timestamp: time,\n        })\n\n        if (time > now) {\n            events.push(message)\n        }\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate(),\n    hour).getTime() + offset\n\nconst bedtimeEvent = {\n    payload: 'bedtime',\n    topic: 'timer/time',\n    at: bedtime\n}\n\ntimerModel.times.push({\n    title: 'bedtime',\n    timestamp: bedtime,\n})\n\nif (bedtime > now) {\n\n    events.push(bedtimeEvent)\n}\n\nevents.sort((a, b) => {\n\n    if (!Object.prototype.hasOwnProperty.call(a, 'at')) {\n        return b\n    }\n\n    if (!Object.prototype.hasOwnProperty.call(b, 'at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nevents.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\ntimerModel.times.sort((a, b) => a.timestamp - b.timestamp)\ntimerModel.theme = theme\n\nreturn [\n    events,\n    {\n        payload: timerModel,\n        topic: 'timer/model',\n        retain: true,\n    },\n]\n",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst timerModel = {}\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst events = [{ cancel: true }]\n\ntimerModel.times = []\n\nsuncalc.addTime(50, \"midday\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key in times) {\n\n    if (Object.prototype.hasOwnProperty.call(times, key)) {\n\n        const time = times[key].getTime()\n\n        const message = {\n            topic: 'timer/time',\n            payload: key,\n            at: time,\n        }\n\n        timerModel.times.push({\n            title: key,\n            timestamp: time,\n        })\n\n        if (time > now) {\n            events.push(message)\n        }\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate(),\n    hour).getTime() + offset\n\ntimerModel.times.push({\n    title: 'bedtime',\n    timestamp: bedtime,\n})\n\nevents.push({\n    payload: 'bedtime',\n    topic: 'timer/time',\n    at: bedtime,\n})\n\nconst midnight = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate() + 1)\n\ntimerModel.times.push({\n    title: 'midnight',\n    timestamp: midnight,\n})\n\nevents.push({\n    payload: 'midnight',\n    topic: 'timer/time',\n    at: midnight,\n})\n\nevents.sort((a, b) => {\n\n    if (!Object.prototype.hasOwnProperty.call(a, 'at')) {\n        return b\n    }\n\n    if (!Object.prototype.hasOwnProperty.call(b, 'at')) {\n        return a\n    }\n\n    return a.at - b.at\n})\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nevents.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\ntimerModel.times.sort((a, b) => a.timestamp - b.timestamp)\ntimerModel.theme = theme\n\nreturn [\n    events,\n    {\n        payload: timerModel,\n        topic: 'timer/model',\n        retain: true,\n    },\n]\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -2463,7 +2493,7 @@
         "z": "94027c46c4bfae12",
         "g": "8326ae1a15518f8f",
         "name": "shades automation event",
-        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'retained' });\n    return [null, null, null, null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'different topic' });\n    return [null, null, null, null, null, null]\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'shades disabled' });\n    return [null, null, null, null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [copyMsg(), null, null, null, null, null]\n\n    case 'midday':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, copyMsg(), null, null, null, null]\n\n    case 'afternoon':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, copyMsg(), null, null, null]\n\n    case 'sunset':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, copyMsg(), null, null]\n\n    case 'dusk':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, copyMsg(), null]\n\n    case 'bedtime':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, null, null]\n\n}\n",
+        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'retained' });\n    return [null, null, null, null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'different topic' });\n    return [null, null, null, null, null, null]\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'shades disabled' });\n    return [null, null, null, null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [copyMsg(), null, null, null, null, null]\n\n    case 'midday':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, copyMsg(), null, null, null, null]\n\n    case 'afternoon':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, copyMsg(), null, null, null]\n\n    case 'sunset':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, copyMsg(), null, null]\n\n    case 'dusk':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, copyMsg(), null]\n\n    case 'bedtime':\n    case 'midnight':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, null, null]\n\n}\n",
         "outputs": 6,
         "timeout": "",
         "noerr": 0,
@@ -2881,7 +2911,7 @@
         "z": "94027c46c4bfae12",
         "g": "c2e3e9d2c97df2d0",
         "name": "lighting automation event",
-        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'retain' });\n    return [null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'different topic' });\n    return [null, null, null]\n\n}\n\nif (!msg.payload['settings/lighting']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'lighting disabled' });\n    return [null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [copyMsg(), null, null]\n\n    case 'sunset':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, copyMsg(), null]\n\n    case 'bedtime':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null]\n\n}\n",
+        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'retain' });\n    return [null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'different topic' });\n    return [null, null, null]\n\n}\n\nif (!msg.payload['settings/lighting']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'lighting disabled' });\n    return [null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [copyMsg(), null, null]\n\n    case 'sunset':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, copyMsg(), null]\n\n    case 'bedtime':\n    case 'midnight':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null]\n\n}\n",
         "outputs": 3,
         "timeout": "",
         "noerr": 0,
@@ -2904,7 +2934,8 @@
         "outputLabels": [
             "sunrise",
             "sunset",
-            "bedtime"
+            "bedtime",
+            ""
         ]
     },
     {
@@ -4377,71 +4408,41 @@
         "id": "ef1673510c5094fd",
         "type": "function",
         "z": "d3b34304591c64d7",
-        "name": "hue resource",
-        "func": "const request = RED.util.cloneMessage(msg)\nlet hue = flow.get('hue') || {}\nlet resource = {}\n\ndelete hue.model\n\nfor (let bridge of Object.getOwnPropertyNames(hue)) {\n    resource[bridge] = hue[bridge]\n}\n\nif (msg.req.params.bridge) {\n    resource = resource[msg.req.params.bridge] || {}\n}\n\nif (msg.req.params.kind) {\n    resource = resource.resources[msg.req.params.kind] || {}\n}\n\nif (msg.req.params.id) {\n    resource = resource[msg.req.params.id] || {}\n}\n\nmsg.statusCode = 200\nmsg.payload = resource\nreturn [msg, request]\n",
-        "outputs": 2,
+        "g": "162cf790a92fa42d",
+        "name": "all hue bridges",
+        "func": "let resource = flow.get('hue') || {}\n\ndelete resource.model\nmsg.statusCode = 200\nmsg.payload = resource\nreturn msg\n",
+        "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 860,
+        "x": 460,
+        "y": 760,
         "wires": [
             [
                 "5d7c2d790a017e33"
-            ],
-            [
-                "2f9b89f593a167fd"
             ]
         ],
         "outputLabels": [
-            "response",
-            "request"
+            "response"
         ]
-    },
-    {
-        "id": "5d7c2d790a017e33",
-        "type": "http response",
-        "z": "d3b34304591c64d7",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 1050,
-        "y": 820,
-        "wires": []
-    },
-    {
-        "id": "2f9b89f593a167fd",
-        "type": "debug",
-        "z": "d3b34304591c64d7",
-        "name": "request",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": true,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "counter",
-        "x": 1060,
-        "y": 900,
-        "wires": []
     },
     {
         "id": "2531906e5d7e3f2f",
         "type": "http in",
         "z": "d3b34304591c64d7",
+        "g": "162cf790a92fa42d",
         "name": "",
-        "url": "/hue/resource/:bridge/:kind/:id",
+        "url": "/hue/:bridge/resource/:kind/:id",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 620,
+        "x": 180,
         "y": 920,
         "wires": [
             [
-                "ef1673510c5094fd"
+                "ebe70e24d1438eb8"
             ]
         ]
     },
@@ -4449,16 +4450,17 @@
         "id": "20cabbc9632b455c",
         "type": "http in",
         "z": "d3b34304591c64d7",
+        "g": "162cf790a92fa42d",
         "name": "",
-        "url": "/hue/resource/:bridge/:kind",
+        "url": "/hue/:bridge/resource/:kind",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 630,
+        "x": 190,
         "y": 880,
         "wires": [
             [
-                "ef1673510c5094fd"
+                "026431ca842e6e5d"
             ]
         ]
     },
@@ -4466,16 +4468,17 @@
         "id": "5117451aa8a97568",
         "type": "http in",
         "z": "d3b34304591c64d7",
+        "g": "162cf790a92fa42d",
         "name": "",
-        "url": "/hue/resource/:bridge",
+        "url": "/hue/:bridge",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 650,
-        "y": 840,
+        "x": 240,
+        "y": 800,
         "wires": [
             [
-                "ef1673510c5094fd"
+                "5f9af2943e409ff7"
             ]
         ]
     },
@@ -4483,17 +4486,144 @@
         "id": "95d9034dcf45d2ba",
         "type": "http in",
         "z": "d3b34304591c64d7",
+        "g": "162cf790a92fa42d",
         "name": "",
-        "url": "/hue/resource",
+        "url": "/hue",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 670,
-        "y": 800,
+        "x": 260,
+        "y": 760,
         "wires": [
             [
                 "ef1673510c5094fd"
             ]
+        ]
+    },
+    {
+        "id": "5d7c2d790a017e33",
+        "type": "http response",
+        "z": "d3b34304591c64d7",
+        "g": "162cf790a92fa42d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 690,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "cf267b27f094a9e6",
+        "type": "http in",
+        "z": "d3b34304591c64d7",
+        "g": "162cf790a92fa42d",
+        "name": "",
+        "url": "/hue/:bridge/resource",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 840,
+        "wires": [
+            [
+                "d48278d6c2f53d5c"
+            ]
+        ]
+    },
+    {
+        "id": "5f9af2943e409ff7",
+        "type": "function",
+        "z": "d3b34304591c64d7",
+        "g": "162cf790a92fa42d",
+        "name": "hue bridge",
+        "func": "let resource = flow.get('hue') || {}\n\ndelete resource.model\nresource = resource[msg.req.params.bridge] || {}\nmsg.statusCode = 200\nmsg.payload = resource\nreturn msg\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 800,
+        "wires": [
+            [
+                "5d7c2d790a017e33"
+            ]
+        ],
+        "outputLabels": [
+            "response"
+        ]
+    },
+    {
+        "id": "d48278d6c2f53d5c",
+        "type": "function",
+        "z": "d3b34304591c64d7",
+        "g": "162cf790a92fa42d",
+        "name": "hue bridge resources",
+        "func": "let resource = flow.get('hue') || {}\n\ndelete resource.model\nresource = resource[msg.req.params.bridge] || {}\nresource = resource.resources || {}\nmsg.statusCode = 200\nmsg.payload = resource\nreturn msg\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 840,
+        "wires": [
+            [
+                "5d7c2d790a017e33"
+            ]
+        ],
+        "outputLabels": [
+            "response"
+        ]
+    },
+    {
+        "id": "026431ca842e6e5d",
+        "type": "function",
+        "z": "d3b34304591c64d7",
+        "g": "162cf790a92fa42d",
+        "name": "hue resource kind",
+        "func": "let resource = flow.get('hue') || {}\n\ndelete resource.model\nresource = resource[msg.req.params.bridge] || {}\nresource = resource.resources || {}\nresource = resource[msg.req.params.kind] || {}\nmsg.statusCode = 200\nmsg.payload = resource\nreturn msg\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 880,
+        "wires": [
+            [
+                "5d7c2d790a017e33"
+            ]
+        ],
+        "outputLabels": [
+            "response"
+        ]
+    },
+    {
+        "id": "ebe70e24d1438eb8",
+        "type": "function",
+        "z": "d3b34304591c64d7",
+        "g": "162cf790a92fa42d",
+        "name": "hue resource by id",
+        "func": "let resource = flow.get('hue') || {}\n\ndelete resource.model\nresource = resource[msg.req.params.bridge] || {}\nresource = resource.resources || {}\nresource = resource[msg.req.params.kind] || {}\nresource = resource[msg.req.params.id] || {}\nmsg.statusCode = 200\nmsg.payload = resource\nreturn msg\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 920,
+        "wires": [
+            [
+                "5d7c2d790a017e33"
+            ]
+        ],
+        "outputLabels": [
+            "response"
         ]
     },
     {
