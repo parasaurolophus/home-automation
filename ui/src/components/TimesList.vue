@@ -10,7 +10,7 @@
                 {{ timerModel.theme }}
             </v-list-item-subtitle>
             <div class="notes">
-                Evening lighting theme
+                evening lighting theme
             </div>
         </v-list-item>
 
