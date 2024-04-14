@@ -4,6 +4,7 @@
  * Bootstraps Vuetify and other plugins then mounts the App`
  */
 
+
 // Plugins
 import { registerPlugins } from '@/plugins'
 
@@ -11,17 +12,11 @@ import { registerPlugins } from '@/plugins'
 import App from './App.vue'
 
 // Composables
-import { createApp, ref, watch } from 'vue'
+import { createApp, ref } from 'vue'
 
 const app = createApp(App)
 
 registerPlugins(app)
-
-const temperatures = ref({})
-app.provide('temperatures', temperatures)
-
-const motions = ref({})
-app.provide('motions', motions)
 
 const settingsBedtime = ref(21)
 app.provide('settingsBedtime', settingsBedtime)
@@ -35,11 +30,8 @@ app.provide('settingsShades', settingsShades)
 const alerts = ref([])
 app.provide('alerts', alerts)
 
-const hueBridges = ref([])
+const hueBridges = ref({})
 app.provide('hueBridges', hueBridges)
-
-const hueModel = ref([])
-app.provide('hueModel', hueModel)
 
 const powerviewModel = ref([])
 app.provide('powerviewModel', powerviewModel)
@@ -107,6 +99,44 @@ function websocketPublish(msg) {
 app.provide('websocketPublish', websocketPublish)
 
 ///////////////////////////////////////////////////////////////////////////////
+// handle a hue/:bridge/resource/:kind/:id event
+///////////////////////////////////////////////////////////////////////////////
+
+const hueResources = ref({})
+app.provide('hueResources', hueResources)
+
+function handleHueResource(address, kind, id, payload) {
+
+    const hue = hueResources.value || {}
+    const bridge = hueResources.value[address] || {}
+    const resources = bridge[kind] || {}
+    const resource = resources[id] || {}
+    let update = false
+
+    try {
+
+        for (let property of Object.getOwnPropertyNames(payload)) {
+
+            const value = payload[property]
+
+            if (resource[property] != value) {
+                resource[property] = value
+                update = true
+            }
+        }
+
+    } finally {
+
+        if (update) {
+            resources[id] = resource
+            bridge[kind] = resources
+            hue[address] = bridge
+            hueResources.value = hue
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // connect to the back end using a websocket
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -120,6 +150,12 @@ let wsReadyStateTimer = null
 // timer used to maintain the websocket
 // connection to the back end
 let wsReconnectTimer = null
+
+const messageCount = ref(0)
+app.provide('messageCount', messageCount)
+
+const lastMessage = ref(null)
+app.provide('lastMessage', lastMessage)
 
 // create the ws connection to the back end
 function connectWS() {
@@ -163,7 +199,17 @@ function connectWS() {
     ws.onopen = () => {
         websocketStatus.value = ws.readyState
         wsReadyStateTimer = setInterval(() => { websocketStatus.value = ws.readyState }, 1000)
+        setTimeout(
+            () => {
+                websocketPublish({
+                    payload: new Date().getTime(),
+                    topic: 'controls/refresh',
+                })
+            },
+            1000,
+        )
     }
+
 
     // cancel the websocket status timer
     ws.onclose = () => {
@@ -184,6 +230,12 @@ function connectWS() {
         // node-red's msg object is received as a JSON
         // string in event.data
         const msg = JSON.parse(event.data)
+        messageCount.value += 1
+        lastMessage.value = msg
+        if (msg.topic == 'hue/bridges') {
+            hueBridges.value = msg.payload
+            return
+        }
         if (msg.topic == 'timer/model') {
             timerModel.value = msg.payload
             return
@@ -214,14 +266,6 @@ function connectWS() {
             }
             return
         }
-        if (msg.topic == 'hue/model') {
-            hueModel.value = msg.payload
-            return
-        }
-        if (msg.topic == 'hue/bridges') {
-            hueBridges.value = msg.payload
-            return
-        }
         if (/.+\/error$/.exec(msg.topic)) {
             const text = JSON.stringify(msg.payload, undefined, 1)
             console.error(text)
@@ -246,18 +290,9 @@ function connectWS() {
             }
             return
         }
-        if (msg.topic == 'motion/192.168.1.12/c6364a48-37ca-4c42-8ed2-e513ebae48aa' && msg.payload.motion) {
-            const message = JSON.stringify(msg, undefined, 4)
-            console.warn(message)
-            showAlert('warning', msg.topic, message)
-        }
-        if (/^motion\//.exec(msg.topic)) {
-            motions.value[msg.payload.name] = msg
-            return
-        }
-        if (/^temperature\//.exec(msg.topic)) {
-            temperatures.value[msg.payload.name] = msg
-            return
+        let matches = /^hue\/([^/]+)\/resource\/([^/]+)\/([^/]+)$/.exec(msg.topic)
+        if (matches?.length == 4) {
+            handleHueResource(matches[1], matches[2], matches[3], msg.payload)
         }
     }
 }

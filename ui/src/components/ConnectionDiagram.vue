@@ -9,7 +9,7 @@
             <v-col><v-spacer /></v-col>
             <v-col v-for="(bridge, index) in hueBridges" :key="index">
                 <v-btn @click="deleteBridge(bridge)">
-                    Delete {{ bridgeName(bridge) }} Hue Bridge
+                    Delete {{ bridge.title ?? bridge.address }} Hue Bridge
                 </v-btn>
             </v-col>
             <v-col><v-spacer /></v-col>
@@ -26,27 +26,13 @@ const theme = useTheme()
 
 const diagram = ref(null)
 
-const hueModel = inject('hueModel')
 const hueBridges = inject('hueBridges')
+const hueResources = inject('hueResources')
 const powerviewModel = inject('powerviewModel')
 const powerviewStatus = inject('powerviewStatus')
 const showAlert = inject('showAlert')
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
-
-function findHueModel(address) {
-    for (let model of hueModel.value) {
-        if (model.id == address) {
-            return model
-        }
-    }
-    return undefined
-}
-
-function bridgeName(bridge) {
-    const model = findHueModel(bridge.address)
-    return model?.title ?? bridge.address
-}
 
 function deleteBridge(bridge) {
     websocketPublish({ topic: 'delete/hue/bridge', payload: bridge.address })
@@ -84,9 +70,9 @@ function buildDiagram() {
     flowchart += '            ui <-- WebSocket --> flow\n'
     flowchart += '        end\n'
     let bridgeNumber = 1
-    for (let bridge of hueBridges.value) {
-        const model = findHueModel(bridge.address)
-        const bridgeTitle = model?.title ?? bridge.address
+    for (let address in hueBridges.value) {
+        const bridge = hueBridges.value[address]
+        const bridgeTitle = bridge.title ?? bridge.address
         const bridgeStatus = bridge.status == -1 ? 'uninitialized' :
             bridge.status == 0 ? 'connecting' :
                 bridge.status == 1 ? 'connected' :
@@ -100,7 +86,8 @@ function buildDiagram() {
         flowchart += '        class ' + bridgeName + ' ' + bridgeClassName + '\n'
         flowchart += '        click ' + bridgeName + ' call hueBridgeNodeClicked("' + bridge.address + '") "Display Hue Bridge mDNS metadata"\n'
         flowchart += '        flow <-- WiFi --> ' + bridgeName + '\n'
-        if (model?.children && model.children.length > 0) {
+        const resources = hueResources.value[address]
+        if (resources) {
             const devicesName = 'hue_devices_' + bridgeNumber
             flowchart += '        ' + devicesName + '([Hue Devices])\n'
             flowchart += '        ' + bridgeName + '<-- Zigbee --> ' + devicesName + '\n'
@@ -128,7 +115,6 @@ function buildDiagram() {
 async function renderMermaid() {
 
     const flowchart = buildDiagram()
-    console.log(flowchart)
     const { svg, bindFunctions } = await mermaid.render('ui', flowchart)
 
     diagram.value.innerHTML = svg
@@ -139,6 +125,7 @@ mermaid.flowchartConfig = { width: '100%' }
 mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' })
 onMounted(renderMermaid)
 watch(hueBridges, renderMermaid)
+watch(hueResources, renderMermaid)
 watch(powerviewModel, renderMermaid)
 watch(websocketStatus, renderMermaid)
 watch(powerviewStatus, renderMermaid)
@@ -151,19 +138,13 @@ watch(theme.global.current, renderMermaid)
 
 // eslint-disable-next-line no-global-assign, no-undef
 hueBridgeNodeClicked = (address) => {
-    for (let bridge of hueBridges.value) {
-        if (bridge.address == address) {
-            const model = findHueModel(address)
-            const text = JSON.stringify(bridge, undefined, 4)
-            if (model) {
-                showAlert('info', 'Hue Bridge ' + model.title, text)
-            } else {
-                showAlert('warning', 'Hue Bridge ' + bridge.address, text)
-            }
-            return
-        }
+    const bridge = hueBridges.value[address]
+    if (!bridge) {
+        showAlert('warning', 'Missing Hue Bridge', 'No Hue Bridge found for ' + address)
+        return
     }
-    showAlert('warning', 'hue bridge ' + address, 'no metadata found for ' + address)
+    const text = JSON.stringify(bridge, undefined, 4)
+    showAlert('info', 'Hue Bridge ' + (bridge.title ?? bridge.address), text)
 }
 
 // eslint-disable-next-line no-global-assign, no-undef
