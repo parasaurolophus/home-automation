@@ -7,9 +7,9 @@
         </v-row>
         <v-row>
             <v-col><v-spacer /></v-col>
-            <v-col v-for="(bridge, index) in hueBridges" :key="index">
-                <v-btn @click="deleteBridge(bridge)">
-                    Delete {{ bridge.title ?? bridge.address }} Hue Bridge
+            <v-col v-for="(bridge, address) in hueBridges" :key="address">
+                <v-btn @click="deleteBridge(address)">
+                    Delete {{ bridge.title ?? address }} Hue Bridge
                 </v-btn>
             </v-col>
             <v-col><v-spacer /></v-col>
@@ -34,8 +34,8 @@ const showAlert = inject('showAlert')
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
 
-function deleteBridge(bridge) {
-    websocketPublish({ topic: 'delete/hue/bridge', payload: bridge.address })
+function deleteBridge(address) {
+    websocketPublish({ topic: 'delete/hue/bridge', payload: address })
 }
 
 function buildDiagram() {
@@ -72,7 +72,7 @@ function buildDiagram() {
     let bridgeNumber = 1
     for (let address in hueBridges.value) {
         const bridge = hueBridges.value[address]
-        const bridgeTitle = bridge.title ?? bridge.address
+        const bridgeTitle = bridge.title ?? address
         const bridgeStatus = bridge.status == -1 ? 'uninitialized' :
             bridge.status == 0 ? 'connecting' :
                 bridge.status == 1 ? 'connected' :
@@ -84,7 +84,7 @@ function buildDiagram() {
         const bridgeName = 'hue_bridge_' + bridgeNumber
         flowchart += '        ' + bridgeName + '["' + bridgeTitle + ' Hue Bridge\n(' + bridgeStatus + ')"]\n'
         flowchart += '        class ' + bridgeName + ' ' + bridgeClassName + '\n'
-        flowchart += '        click ' + bridgeName + ' call hueBridgeNodeClicked("' + bridge.address + '") "Display Hue Bridge mDNS metadata"\n'
+        flowchart += '        click ' + bridgeName + ' call hueBridgeNodeClicked("' + address + '") "Display Hue Bridge mDNS metadata"\n'
         flowchart += '        flow <-- WiFi --> ' + bridgeName + '\n'
         const resources = hueResources.value[address]
         if (resources) {
@@ -144,7 +144,7 @@ hueBridgeNodeClicked = (address) => {
         return
     }
     const text = JSON.stringify(bridge, undefined, 4)
-    showAlert('info', 'Hue Bridge ' + (bridge.title ?? bridge.address), text)
+    showAlert('info', 'Hue Bridge ' + (bridge.title ?? address), text)
 }
 
 // eslint-disable-next-line no-global-assign, no-undef
