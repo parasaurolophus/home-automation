@@ -17,16 +17,7 @@
 
         <v-expansion-panel title="Lighting" value="lighting">
           <v-expansion-panel-text>
-            <v-expansion-panels>
-              <v-expansion-panel v-for="(bridge, address) in hueBridges" :key="address">
-                <v-expansion-panel-title>
-                  {{ bridge.title ?? 'Unknown Bridge' }}
-                </v-expansion-panel-title>
-                <v-expansion-panel-text>
-                  <HueControlPanels :address="address" />
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-            </v-expansion-panels>
+            <HueControlPanels />
           </v-expansion-panel-text>
         </v-expansion-panel>
 
@@ -49,9 +40,3 @@
   </v-app>
 
 </template>
-
-<script setup>
-import { inject } from 'vue'
-
-const hueBridges = inject('hueBridges')
-</script>

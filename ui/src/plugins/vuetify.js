@@ -40,9 +40,6 @@ export default createVuetify({
     VChip: {
       variant: 'text',
     },
-    VExpansionPanels: {
-      variant: 'popout',
-    },
     VSwitch: {
       color: 'primary',
       inset: true,

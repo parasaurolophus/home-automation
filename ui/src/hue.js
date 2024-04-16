@@ -2,23 +2,23 @@
 // exported
 ///////////////////////////////////////////////////////////////////////////////
 
-function findGroupedLight(bridge, group) {
+function findGroupedLight(resources, group) {
 
-    if (!bridge) {
+    if (!resources) {
 
-        return
+        return []
     }
 
     if (!group?.id) {
 
-        return undefined
+        return []
     }
 
-    const groupedLights = bridge.grouped_light
+    const groupedLights = resources.grouped_light
 
     if (!groupedLights) {
 
-        return undefined
+        return []
     }
 
     for (let groupedLightId of Object.getOwnPropertyNames(groupedLights)) {
@@ -27,14 +27,14 @@ function findGroupedLight(bridge, group) {
 
         if (groupedLight.owner?.rid == group.id) {
 
-            return groupedLight
+            return [groupedLight]
         }
     }
 
-    return undefined
+    return []
 }
 
-function findScenes(bridge, group) {
+function findScenes(resources, group) {
 
     const result = []
 
@@ -43,7 +43,7 @@ function findScenes(bridge, group) {
         return result
     }
 
-    const scenes = bridge.scene
+    const scenes = resources.scene
 
     if (!scenes) {
 
