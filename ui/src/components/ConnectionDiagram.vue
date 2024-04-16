@@ -5,15 +5,6 @@
                 <pre ref="diagram"></pre>
             </v-col>
         </v-row>
-        <v-row>
-            <v-col><v-spacer /></v-col>
-            <v-col v-for="(bridge, address) in hueBridges" :key="address">
-                <v-btn @click="deleteBridge(address)">
-                    Delete {{ bridge.title ?? address }} Hue Bridge
-                </v-btn>
-            </v-col>
-            <v-col><v-spacer /></v-col>
-        </v-row>
     </v-container>
 </template>
 

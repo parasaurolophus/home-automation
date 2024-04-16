@@ -45,7 +45,20 @@
         "name": "Hue API V2",
         "info": "Encapsulate the flows that interoperate with a given Philips Hue Bridge",
         "category": "hue",
-        "in": [],
+        "in": [
+            {
+                "x": 100,
+                "y": 540,
+                "wires": [
+                    {
+                        "id": "c80702a4056e48bc"
+                    },
+                    {
+                        "id": "c3f7e150dea7e636"
+                    }
+                ]
+            }
+        ],
         "out": [],
         "env": [
             {
@@ -103,8 +116,8 @@
         "color": "#D8BFD8",
         "icon": "font-awesome/fa-lightbulb-o",
         "status": {
-            "x": 740,
-            "y": 580,
+            "x": 700,
+            "y": 560,
             "wires": [
                 {
                     "id": "02be9eee8ee84874",
@@ -301,7 +314,7 @@
             "dfbca0a007fe3ab3"
         ],
         "x": 94,
-        "y": 159,
+        "y": 119,
         "w": 1252,
         "h": 322
     },
@@ -322,14 +335,13 @@
             "f74128d99635d540",
             "226b30949f9a903b",
             "2626ba9e8d396f71",
-            "8a740737e458d634",
             "5f599f1ae1f50d0d",
             "c3be86c162b3618e"
         ],
         "x": 94,
-        "y": 499,
-        "w": 952,
-        "h": 122
+        "y": 459,
+        "w": 1032,
+        "h": 82
     },
     {
         "id": "0fb8e43c903b3506",
@@ -380,15 +392,11 @@
             "153449edfaf38a67",
             "4ab229c77e4ce0fe",
             "5e36497f30cb3265",
-            "6ce6327771b66664",
-            "f564e0e7691828da",
             "3c4dc36276340285",
             "9055d5f42e64e6d0",
-            "531fbb9eb4631e85",
             "f7276019069d50e4",
             "61b951ee531bd93b",
             "c80702a4056e48bc",
-            "33c4ed59427d0318",
             "c3f7e150dea7e636",
             "2387a62701229e79",
             "cfc6efde9b82fdec",
@@ -396,12 +404,17 @@
             "4b9c1c4c1a78af55",
             "0b223f6872d96c8f",
             "61bac2fc2db00e6e",
-            "88e2d6147c1ce9c7"
+            "88e2d6147c1ce9c7",
+            "5739a1b9d914e69f",
+            "6997beff18d8de0d",
+            "918050691aed925f",
+            "d6fa44ad62e938a8",
+            "a21593207d343355"
         ],
         "x": 14,
         "y": 199,
         "w": 1372,
-        "h": 462
+        "h": 442
     },
     {
         "id": "f1e1b4bb5ddac24f",
@@ -418,12 +431,13 @@
         "nodes": [
             "d3686879543e1951",
             "0f699ed605fadf59",
-            "3479fc4d500c7fa3"
+            "3479fc4d500c7fa3",
+            "cd8737251a5d81c2"
         ],
         "x": 94,
-        "y": 639,
-        "w": 432,
-        "h": 122
+        "y": 559,
+        "w": 792,
+        "h": 162
     },
     {
         "id": "9cf0457b813ca743",
@@ -494,7 +508,6 @@
             "99ab390e30a9d634",
             "0cd6a253ead58c18",
             "d79bfbc558832ea5",
-            "6f2f585231fae444",
             "252d3138fb69feda",
             "2c5074b7b8f1ca08",
             "ca279d867d35ce0e",
@@ -527,14 +540,12 @@
             "1b10e2f1524c44ef",
             "e450663aac44ed28",
             "032d5842e53c6015",
-            "9cb4a587d2d04193",
-            "f10654d209693151",
-            "64920acb8075c32e"
+            "9cb4a587d2d04193"
         ],
         "x": 14,
         "y": 19,
         "w": 712,
-        "h": 282,
+        "h": 202,
         "info": "Broadcast messages received from any client to all clients. Note that\nall properties other than `msg._session` and `msg.retain` are\ntransmitted directly from the publisher to all subscribers.\n\n- Removes `msg._session` entirely, in the case of initially published\n  messages.\n\n- Handles `msg.topic` and `msg.retain` in a fashion inspired by MQTT.\n\nIf a client publishes a message with `msg.retain` set to `true`, the\n`retain` function node saves a clone of the message in flow context\nusing a file-system backed context store using `msg.topic` as the key.\nIt then sets `msg.retain` to `false` before broadcasting the message\nto subscribed clients.\n\nEach time a client connects, the `retained` function node sends that\nclient all currently stored messages with `msg.retain` set to `true`.\n\nRetained messages' contents can be updated by sending subsequent\nmessages with the same `msg.topic` and `msg.retain` set to `true`.\n\nRetained messages can be deleted by sending subsequent messages with\nthe same `msg.topic`, `msg.retain` set to `true` and `msg.payload`\nset to the empty string (`''`)."
     },
     {
@@ -555,9 +566,7 @@
             "47acab248c4d8501",
             "106ee66b66de58ab",
             "e6fc90237bd5a5e9",
-            "c3cac0049cccb7e7",
             "3cbcdb02b5e451a3",
-            "869ada541db92710",
             "0580b1033d32bb56",
             "0816fe94f5858846",
             "21c4dba2bb5d0e54",
@@ -565,7 +574,8 @@
             "67ab6a72f0300dd6",
             "5719982d34e4cf54",
             "6752a070cde6d949",
-            "6b128a9892bb5129"
+            "6b128a9892bb5129",
+            "0a8420597a14bc92"
         ],
         "x": 94,
         "y": 19,
@@ -699,8 +709,8 @@
         ],
         "x": 94,
         "y": 19,
-        "w": 732,
-        "h": 122
+        "w": 1132,
+        "h": 82
     },
     {
         "id": "8ff3dbba8ae94edb",
@@ -741,14 +751,13 @@
             "color": "#000000"
         },
         "nodes": [
-            "1d8b910fae3ff2a8",
             "6a55581296547a51",
             "5e9431336f357250",
             "6901706e715ecd86"
         ],
         "x": 94,
         "y": 19,
-        "w": 712,
+        "w": 532,
         "h": 82
     },
     {
@@ -810,8 +819,8 @@
             "a1422d2b99486b36"
         ],
         "x": 14,
-        "y": 319,
-        "w": 932,
+        "y": 239,
+        "w": 812,
         "h": 202
     },
     {
@@ -860,16 +869,6 @@
         "servername": "",
         "verifyservercert": false,
         "alpnprotocol": ""
-    },
-    {
-        "id": "7475374c89bb649d",
-        "type": "websocket-client",
-        "z": "85ed27d795e6e866",
-        "path": "${BROKER_URL}",
-        "tls": "",
-        "wholemsg": "true",
-        "hb": "5",
-        "subprotocol": ""
     },
     {
         "id": "0201d1318d5de5ea",
@@ -1085,7 +1084,8 @@
         "y": 280,
         "wires": [
             [
-                "f7276019069d50e4"
+                "f7276019069d50e4",
+                "a21593207d343355"
             ]
         ],
         "outputLabels": [
@@ -1106,7 +1106,7 @@
         "finalize": "",
         "libs": [],
         "x": 1020,
-        "y": 320,
+        "y": 340,
         "wires": [
             [
                 "61b951ee531bd93b"
@@ -1123,7 +1123,7 @@
         "g": "96971e50c13ead01",
         "name": "",
         "x": 590,
-        "y": 380,
+        "y": 400,
         "wires": [
             [
                 "5e338d73bb5c33fb"
@@ -1157,7 +1157,7 @@
         "to": "",
         "reg": false,
         "x": 990,
-        "y": 380,
+        "y": 400,
         "wires": [
             [
                 "61b951ee531bd93b"
@@ -1185,46 +1185,10 @@
         "to": "",
         "reg": false,
         "x": 990,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
                 "61b951ee531bd93b"
-            ]
-        ]
-    },
-    {
-        "id": "6ce6327771b66664",
-        "type": "complete",
-        "z": "85ed27d795e6e866",
-        "g": "96971e50c13ead01",
-        "name": "format event",
-        "scope": [
-            "d3e5044fe363855b"
-        ],
-        "uncaught": false,
-        "x": 290,
-        "y": 340,
-        "wires": [
-            [
-                "9055d5f42e64e6d0"
-            ]
-        ]
-    },
-    {
-        "id": "f564e0e7691828da",
-        "type": "complete",
-        "z": "85ed27d795e6e866",
-        "g": "96971e50c13ead01",
-        "name": "close",
-        "scope": [
-            "531fbb9eb4631e85"
-        ],
-        "uncaught": false,
-        "x": 90,
-        "y": 280,
-        "wires": [
-            [
-                "5a1b87c5d08fa5d4"
             ]
         ]
     },
@@ -1261,8 +1225,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 400,
-        "y": 580,
+        "x": 360,
+        "y": 560,
         "wires": [
             []
         ]
@@ -1280,8 +1244,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 240,
-        "y": 580,
+        "x": 200,
+        "y": 560,
         "wires": [
             [
                 "2387a62701229e79"
@@ -1297,8 +1261,8 @@
         "scope": [
             "153449edfaf38a67"
         ],
-        "x": 630,
-        "y": 600,
+        "x": 590,
+        "y": 580,
         "wires": [
             [
                 "4b9c1c4c1a78af55"
@@ -1359,8 +1323,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 800,
-        "y": 620,
+        "x": 760,
+        "y": 600,
         "wires": [
             [
                 "0b223f6872d96c8f"
@@ -1380,8 +1344,8 @@
         "septopics": false,
         "property": "payload",
         "topi": "topic",
-        "x": 950,
-        "y": 620,
+        "x": 910,
+        "y": 600,
         "wires": [
             [
                 "61bac2fc2db00e6e"
@@ -1402,7 +1366,7 @@
         "finalize": "",
         "libs": [],
         "x": 430,
-        "y": 340,
+        "y": 360,
         "wires": [
             [
                 "153449edfaf38a67"
@@ -1430,34 +1394,6 @@
         ]
     },
     {
-        "id": "531fbb9eb4631e85",
-        "type": "change",
-        "z": "85ed27d795e6e866",
-        "g": "96971e50c13ead01",
-        "name": "close",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 430,
-        "y": 420,
-        "wires": [
-            [
-                "153449edfaf38a67"
-            ]
-        ]
-    },
-    {
         "id": "f7276019069d50e4",
         "type": "delay",
         "z": "85ed27d795e6e866",
@@ -1476,27 +1412,10 @@
         "allowrate": false,
         "outputs": 1,
         "x": 840,
-        "y": 280,
+        "y": 300,
         "wires": [
             [
                 "5e338d73bb5c33fb"
-            ]
-        ]
-    },
-    {
-        "id": "33c4ed59427d0318",
-        "type": "websocket in",
-        "z": "85ed27d795e6e866",
-        "g": "96971e50c13ead01",
-        "name": "subscribe",
-        "server": "",
-        "client": "7475374c89bb649d",
-        "x": 100,
-        "y": 560,
-        "wires": [
-            [
-                "c80702a4056e48bc",
-                "c3f7e150dea7e636"
             ]
         ]
     },
@@ -1518,12 +1437,12 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 260,
-        "y": 540,
+        "x": 220,
+        "y": 520,
         "wires": [
             [
-                "531fbb9eb4631e85",
-                "88e2d6147c1ce9c7"
+                "88e2d6147c1ce9c7",
+                "5739a1b9d914e69f"
             ]
         ]
     },
@@ -1540,8 +1459,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1070,
-        "y": 620,
+        "x": 1030,
+        "y": 600,
         "wires": [
             [
                 "cfc6efde9b82fdec"
@@ -1561,8 +1480,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1070,
-        "y": 540,
+        "x": 1030,
+        "y": 520,
         "wires": [
             [
                 "cfc6efde9b82fdec"
@@ -1580,8 +1499,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 1260,
-        "y": 580,
+        "x": 1220,
+        "y": 560,
         "wires": [
             []
         ]
@@ -1598,7 +1517,7 @@
         "linkType": "static",
         "timeout": "30",
         "x": 1260,
-        "y": 380,
+        "y": 400,
         "wires": [
             []
         ]
@@ -1619,6 +1538,93 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "5739a1b9d914e69f",
+        "type": "function",
+        "z": "85ed27d795e6e866",
+        "g": "96971e50c13ead01",
+        "name": "close",
+        "func": "return {\n    payload: ''\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 440,
+        "wires": [
+            [
+                "153449edfaf38a67",
+                "6997beff18d8de0d"
+            ]
+        ]
+    },
+    {
+        "id": "6997beff18d8de0d",
+        "type": "link out",
+        "z": "85ed27d795e6e866",
+        "g": "96971e50c13ead01",
+        "name": "closed",
+        "mode": "link",
+        "links": [
+            "918050691aed925f"
+        ],
+        "x": 570,
+        "y": 480,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "918050691aed925f",
+        "type": "link in",
+        "z": "85ed27d795e6e866",
+        "g": "96971e50c13ead01",
+        "name": "closed",
+        "links": [
+            "6997beff18d8de0d"
+        ],
+        "x": 90,
+        "y": 280,
+        "wires": [
+            [
+                "5a1b87c5d08fa5d4"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "d6fa44ad62e938a8",
+        "type": "link in",
+        "z": "85ed27d795e6e866",
+        "g": "96971e50c13ead01",
+        "name": "format event",
+        "links": [
+            "a21593207d343355"
+        ],
+        "x": 290,
+        "y": 360,
+        "wires": [
+            [
+                "9055d5f42e64e6d0"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "a21593207d343355",
+        "type": "link out",
+        "z": "85ed27d795e6e866",
+        "g": "96971e50c13ead01",
+        "name": "format event",
+        "mode": "link",
+        "links": [
+            "d6fa44ad62e938a8"
+        ],
+        "x": 795,
+        "y": 260,
+        "wires": []
     },
     {
         "id": "02eb116aa3a7efad",
@@ -1918,8 +1924,8 @@
         "scope": [
             "e1c10e3b6608de71"
         ],
-        "x": 120,
-        "y": 220,
+        "x": 140,
+        "y": 180,
         "wires": [
             [
                 "5f09f67803464fe9"
@@ -1944,12 +1950,11 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 260,
-        "y": 220,
+        "x": 280,
+        "y": 180,
         "wires": [
             [
-                "1b10e2f1524c44ef",
-                "64920acb8075c32e"
+                "1b10e2f1524c44ef"
             ]
         ]
     },
@@ -2033,47 +2038,6 @@
         ]
     },
     {
-        "id": "f10654d209693151",
-        "type": "link out",
-        "z": "e1d7dd3bdd3cf24a",
-        "g": "165c6266935e206f",
-        "name": "client connected",
-        "mode": "link",
-        "links": [
-            "6f2f585231fae444"
-        ],
-        "x": 600,
-        "y": 260,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "64920acb8075c32e",
-        "type": "delay",
-        "z": "e1d7dd3bdd3cf24a",
-        "g": "165c6266935e206f",
-        "name": "",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 430,
-        "y": 260,
-        "wires": [
-            [
-                "f10654d209693151"
-            ]
-        ]
-    },
-    {
         "id": "12a3d05476ad73da",
         "type": "websocket out",
         "z": "e1d7dd3bdd3cf24a",
@@ -2081,8 +2045,8 @@
         "name": "publish",
         "server": "",
         "client": "0201d1318d5de5ea",
-        "x": 460,
-        "y": 360,
+        "x": 480,
+        "y": 400,
         "wires": []
     },
     {
@@ -2093,7 +2057,7 @@
         "name": "publish to websocket",
         "links": [],
         "x": 130,
-        "y": 360,
+        "y": 400,
         "wires": [
             [
                 "34884244909d9707"
@@ -2107,10 +2071,10 @@
         "z": "e1d7dd3bdd3cf24a",
         "g": "c4e6856650bacfda",
         "name": "",
-        "pauseType": "delay",
+        "pauseType": "rate",
         "timeout": "500",
         "timeoutUnits": "milliseconds",
-        "rate": "1",
+        "rate": "60",
         "nbRateUnits": "1",
         "rateUnits": "second",
         "randomFirst": "1",
@@ -2119,8 +2083,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 310,
-        "y": 360,
+        "x": 320,
+        "y": 400,
         "wires": [
             [
                 "12a3d05476ad73da"
@@ -2132,13 +2096,13 @@
         "type": "complete",
         "z": "e1d7dd3bdd3cf24a",
         "g": "c4e6856650bacfda",
-        "name": "sent to websocket",
+        "name": "publish",
         "scope": [
             "12a3d05476ad73da"
         ],
         "uncaught": false,
-        "x": 630,
-        "y": 360,
+        "x": 610,
+        "y": 400,
         "wires": [
             [
                 "36ae6289c018d25f"
@@ -2150,11 +2114,11 @@
         "type": "link out",
         "z": "e1d7dd3bdd3cf24a",
         "g": "c4e6856650bacfda",
-        "name": "sent to websocket",
+        "name": "published",
         "mode": "return",
         "links": [],
-        "x": 830,
-        "y": 360,
+        "x": 740,
+        "y": 400,
         "wires": [],
         "l": true
     },
@@ -2168,7 +2132,7 @@
             "12a3d05476ad73da"
         ],
         "x": 90,
-        "y": 480,
+        "y": 340,
         "wires": [
             [
                 "f9eefcde1f1bb936"
@@ -2187,7 +2151,7 @@
             "6901706e715ecd86"
         ],
         "x": 390,
-        "y": 480,
+        "y": 340,
         "wires": [],
         "l": true
     },
@@ -2197,10 +2161,10 @@
         "z": "e1d7dd3bdd3cf24a",
         "g": "c4e6856650bacfda",
         "name": "",
-        "pauseType": "delay",
+        "pauseType": "rate",
         "timeout": "500",
         "timeoutUnits": "milliseconds",
-        "rate": "1",
+        "rate": "60",
         "nbRateUnits": "1",
         "rateUnits": "second",
         "randomFirst": "1",
@@ -2209,8 +2173,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 250,
-        "y": 420,
+        "x": 260,
+        "y": 280,
         "wires": [
             [
                 "fa75a07b47d3877f"
@@ -2233,10 +2197,12 @@
             "dfbca0a007fe3ab3",
             "c3be86c162b3618e",
             "4b45acf4dec45b69",
-            "06a2bc05ac2bd7e3"
+            "06a2bc05ac2bd7e3",
+            "cd8737251a5d81c2",
+            "b2bbe27faae5bd67"
         ],
-        "x": 450,
-        "y": 420,
+        "x": 470,
+        "y": 280,
         "wires": [],
         "l": true
     },
@@ -2259,7 +2225,7 @@
         "repair": false,
         "outputs": 1,
         "x": 220,
-        "y": 480,
+        "y": 340,
         "wires": [
             [
                 "baad587deb463e2f"
@@ -2275,7 +2241,7 @@
         "server": "",
         "client": "0201d1318d5de5ea",
         "x": 100,
-        "y": 420,
+        "y": 280,
         "wires": [
             [
                 "424cb93a5108ff2c"
@@ -2383,7 +2349,7 @@
         "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "delay until",
-        "func": "const timers = context.get('timers')\n\nif (msg.cancel) {\n\n    timers.forEach(id => clearTimeout(id))\n    context.set('timers', [])\n\n    node.status({\n        text: 0,\n        shape: 'ring',\n        fill: 'green'\n    })\n\n    return null\n\n}\n\nif (msg.at === undefined) {\n    return msg\n}\n\nconst delay = msg.at - new Date().getTime()\n\nif (delay <= 0) {\n\n    return msg\n\n}\n\nconst id = setTimeout(() => {\n\n    let timers = context.get('timers')\n\n    timers = timers.filter(timer => timer != id)\n    context.set('timers', timers)\n\n    node.status({\n        text: timers.length,\n        shape: 'dot',\n        fill: 'green'\n    })\n\n    node.send(msg)\n\n}, delay)\n\ntimers.push(id)\ncontext.set('timers', timers)\n\nnode.status({\n    text: timers.length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn null",
+        "func": "const timers = context.get('timers')\n\nif (msg.cancel) {\n\n    timers.forEach(id => clearTimeout(id))\n    context.set('timers', [])\n\n    node.status({\n        text: 0,\n        shape: 'ring',\n        fill: 'green'\n    })\n\n    return null\n\n}\n\nconst message = RED.util.cloneMessage(msg)\n\nif (message.at === undefined) {\n    return message\n}\n\nconst delay = message.at - new Date().getTime()\n\nif (delay <= 0) {\n\n    return message\n\n}\n\nconst id = setTimeout(() => {\n\n    let timers = context.get('timers')\n\n    timers = timers.filter(timer => timer != id)\n    context.set('timers', timers)\n\n    node.status({\n        text: timers.length,\n        shape: 'dot',\n        fill: 'green'\n    })\n\n    node.send(message)\n\n}, delay)\n\ntimers.push(id)\ncontext.set('timers', timers)\n\nnode.status({\n    text: timers.length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn null",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -2434,48 +2400,6 @@
             ],
             [
                 "0497e0ed333e8f23"
-            ]
-        ]
-    },
-    {
-        "id": "c3cac0049cccb7e7",
-        "type": "change",
-        "z": "94027c46c4bfae12",
-        "g": "b10eb6ebfd377efe",
-        "name": "controls/refresh",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "date"
-            },
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "controls/refresh",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "retain",
-                "pt": "msg",
-                "to": "false",
-                "tot": "bool"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 960,
-        "y": 180,
-        "wires": [
-            [
-                "869ada541db92710"
             ]
         ]
     },
@@ -3052,27 +2976,6 @@
         "l": true
     },
     {
-        "id": "869ada541db92710",
-        "type": "rbe",
-        "z": "94027c46c4bfae12",
-        "g": "b10eb6ebfd377efe",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 1110,
-        "y": 180,
-        "wires": [
-            [
-                "5719982d34e4cf54"
-            ]
-        ]
-    },
-    {
         "id": "0580b1033d32bb56",
         "type": "rbe",
         "z": "94027c46c4bfae12",
@@ -3229,11 +3132,11 @@
         "links": [
             "baad587deb463e2f"
         ],
-        "x": 780,
+        "x": 900,
         "y": 180,
         "wires": [
             [
-                "c3cac0049cccb7e7"
+                "0a8420597a14bc92"
             ]
         ],
         "l": true
@@ -3291,6 +3194,27 @@
             ]
         ],
         "l": true
+    },
+    {
+        "id": "0a8420597a14bc92",
+        "type": "function",
+        "z": "94027c46c4bfae12",
+        "g": "b10eb6ebfd377efe",
+        "name": "controls/refresh",
+        "func": "return {\n    payload: new Date().getTime(),\n    topic: 'controls/refresh',\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 180,
+        "wires": [
+            [
+                "5719982d34e4cf54"
+            ]
+        ]
     },
     {
         "id": "2b03bb375cf8a67b",
@@ -3599,54 +3523,19 @@
         ]
     },
     {
-        "id": "1d8b910fae3ff2a8",
-        "type": "change",
-        "z": "6057c05b02d1aad0",
-        "g": "571a5373c51d8862",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "status.text",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "status.source.id",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 400,
-        "y": 60,
-        "wires": [
-            [
-                "6a55581296547a51"
-            ]
-        ]
-    },
-    {
         "id": "6a55581296547a51",
         "type": "function",
         "z": "6057c05b02d1aad0",
         "g": "571a5373c51d8862",
         "name": "connected",
-        "func": "const value = msg.payload.trim()\n\nif (value != 'connected') {\n    node.status({ fill: \"grey\", shape: \"dot\", text: value })\n    return null\n}\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: \"connected\" })\n\nreturn {\n    payload: true,\n    topic: 'connected'\n}",
+        "func": "const value = msg.status.text.trim()\n\nif (value != 'connected') {\n    node.status({ fill: \"grey\", shape: \"dot\", text: value })\n    return null\n}\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: value })\n\nreturn {\n    payload: true,\n    topic: value\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 570,
+        "x": 390,
         "y": 60,
         "wires": [
             [
@@ -3666,7 +3555,7 @@
             "46732b168c58f0e7",
             "6e6428d2eeca04bd"
         ],
-        "x": 720,
+        "x": 540,
         "y": 60,
         "wires": [],
         "l": true
@@ -3828,7 +3717,7 @@
         "y": 60,
         "wires": [
             [
-                "1d8b910fae3ff2a8"
+                "6a55581296547a51"
             ]
         ],
         "l": true
@@ -3868,8 +3757,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 590,
-        "y": 540,
+        "x": 670,
+        "y": 500,
         "wires": [
             [
                 "f74128d99635d540"
@@ -3889,8 +3778,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
-        "y": 540,
+        "x": 820,
+        "y": 500,
         "wires": [
             [
                 "5f599f1ae1f50d0d"
@@ -3920,8 +3809,8 @@
                 "type": "str"
             }
         ],
-        "x": 210,
-        "y": 720,
+        "x": 370,
+        "y": 600,
         "wires": []
     },
     {
@@ -3929,7 +3818,7 @@
         "type": "switch",
         "z": "d3b34304591c64d7",
         "g": "23bf1f9635c44cc8",
-        "name": "",
+        "name": "put/hue/create-key",
         "property": "topic",
         "propertyType": "msg",
         "rules": [
@@ -3937,24 +3826,16 @@
                 "t": "eq",
                 "v": "put/hue/create-key",
                 "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "delete/hue/bridge",
-                "vt": "str"
             }
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 2,
-        "x": 310,
-        "y": 560,
+        "outputs": 1,
+        "x": 350,
+        "y": 500,
         "wires": [
             [
                 "2626ba9e8d396f71"
-            ],
-            [
-                "8a740737e458d634"
             ]
         ]
     },
@@ -3981,8 +3862,8 @@
                 "type": "str"
             }
         ],
-        "x": 420,
-        "y": 720,
+        "x": 360,
+        "y": 680,
         "wires": []
     },
     {
@@ -3997,8 +3878,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
-        "y": 540,
+        "x": 520,
+        "y": 500,
         "wires": [
             [
                 "0ed14c935a7933e8"
@@ -4020,7 +3901,7 @@
         "statusVal": "",
         "statusType": "counter",
         "x": 910,
-        "y": 260,
+        "y": 220,
         "wires": []
     },
     {
@@ -4038,7 +3919,7 @@
         "statusVal": "",
         "statusType": "counter",
         "x": 890,
-        "y": 320,
+        "y": 280,
         "wires": []
     },
     {
@@ -4050,7 +3931,7 @@
         "service": "_hue",
         "udp": false,
         "x": 670,
-        "y": 320,
+        "y": 280,
         "wires": [
             [
                 "14b78c9b72d385fd"
@@ -4079,7 +3960,7 @@
             "c37ccd155fd5e0a1"
         ],
         "x": 900,
-        "y": 380,
+        "y": 340,
         "wires": [],
         "l": true
     },
@@ -4098,7 +3979,7 @@
         "statusVal": "",
         "statusType": "counter",
         "x": 880,
-        "y": 440,
+        "y": 400,
         "wires": []
     },
     {
@@ -4124,29 +4005,12 @@
         "payload": "{\"command\":\"list\"}",
         "payloadType": "json",
         "x": 470,
-        "y": 300,
+        "y": 260,
         "wires": [
             [
                 "cb53ddf8e4322675"
             ]
         ]
-    },
-    {
-        "id": "8a740737e458d634",
-        "type": "function",
-        "z": "d3b34304591c64d7",
-        "g": "23bf1f9635c44cc8",
-        "name": "delete hue bridge",
-        "func": "const hue = flow.get('hue')\ndelete hue[msg.payload]\nhue.model = hue.model.filter((bridge) => bridge.address != msg.payload)\nflow.set('hue', hue)\n",
-        "outputs": 0,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 470,
-        "y": 580,
-        "wires": []
     },
     {
         "id": "61819845f9d42866",
@@ -4171,7 +4035,7 @@
         "payload": "{\"command\":\"start\"}",
         "payloadType": "json",
         "x": 470,
-        "y": 340,
+        "y": 300,
         "wires": [
             [
                 "cb53ddf8e4322675"
@@ -4197,7 +4061,7 @@
         "repair": false,
         "outputs": 1,
         "x": 340,
-        "y": 380,
+        "y": 340,
         "wires": [
             [
                 "320b5ada6a9e0666"
@@ -4223,7 +4087,7 @@
         "topic": "topic",
         "outputs": 1,
         "x": 500,
-        "y": 380,
+        "y": 340,
         "wires": [
             [
                 "cb53ddf8e4322675"
@@ -4244,7 +4108,7 @@
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 200,
+        "y": 160,
         "wires": [
             [
                 "854fc957cc0aa798"
@@ -4265,7 +4129,7 @@
         "property": "payload",
         "topi": "topic",
         "x": 1050,
-        "y": 200,
+        "y": 160,
         "wires": [
             [
                 "f7942e350d8c92c6"
@@ -4277,21 +4141,10 @@
         "type": "comment",
         "z": "d3b34304591c64d7",
         "g": "b1c25d211c540da7",
-        "name": "assumes ${GROUND_FLOOR_HUE_ADDRESS} and ${GROUND_FLOOR_HUE_KEY} are defined",
+        "name": "assumes ${GROUND_FLOOR_HUE_ADDRESS}, ${GROUND_FLOOR_HUE_KEY}, ${BASEMENT_HUE_ADDRESS} and ${BASEMENT_HUE_KEY}  are defined",
         "info": "",
-        "x": 460,
+        "x": 660,
         "y": 60,
-        "wires": []
-    },
-    {
-        "id": "1867621f8f44eff1",
-        "type": "comment",
-        "z": "d3b34304591c64d7",
-        "g": "b1c25d211c540da7",
-        "name": "assumes ${BASEMENT_HUE_ADDRESS} and ${BASEMENT_HUE_KEY}  are defined",
-        "info": "",
-        "x": 420,
-        "y": 100,
         "wires": []
     },
     {
@@ -4302,7 +4155,7 @@
         "name": "https://developers.meethue.com/develop/application-design-guidance/hue-bridge-discovery/",
         "info": "",
         "x": 430,
-        "y": 200,
+        "y": 160,
         "wires": []
     },
     {
@@ -4312,8 +4165,8 @@
         "g": "f1e1b4bb5ddac24f",
         "name": "https://developers.meethue.com/develop/hue-api-v2/",
         "info": "",
-        "x": 310,
-        "y": 680,
+        "x": 670,
+        "y": 640,
         "wires": []
     },
     {
@@ -4326,7 +4179,7 @@
             "55739f413f081a30"
         ],
         "x": 480,
-        "y": 260,
+        "y": 220,
         "wires": [
             [
                 "cb53ddf8e4322675"
@@ -4346,7 +4199,7 @@
         "linkType": "static",
         "timeout": "30",
         "x": 1220,
-        "y": 200,
+        "y": 160,
         "wires": [
             []
         ]
@@ -4362,8 +4215,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 920,
-        "y": 540,
+        "x": 1000,
+        "y": 500,
         "wires": [
             []
         ]
@@ -4378,7 +4231,7 @@
             "fa75a07b47d3877f"
         ],
         "x": 180,
-        "y": 380,
+        "y": 340,
         "wires": [
             [
                 "b661bd29497d64ad"
@@ -4396,10 +4249,29 @@
             "fa75a07b47d3877f"
         ],
         "x": 180,
-        "y": 560,
+        "y": 500,
         "wires": [
             [
                 "226b30949f9a903b"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "cd8737251a5d81c2",
+        "type": "link in",
+        "z": "d3b34304591c64d7",
+        "g": "f1e1b4bb5ddac24f",
+        "name": "subscribe",
+        "links": [
+            "fa75a07b47d3877f"
+        ],
+        "x": 180,
+        "y": 640,
+        "wires": [
+            [
+                "d3686879543e1951",
+                "0f699ed605fadf59"
             ]
         ],
         "l": true
@@ -4813,24 +4685,6 @@
                 "b909fe1782b1ee2c"
             ]
         ]
-    },
-    {
-        "id": "6f2f585231fae444",
-        "type": "link in",
-        "z": "40413194443e96c6",
-        "g": "9823c620ddf3d6e0",
-        "name": "client connected",
-        "links": [
-            "f10654d209693151"
-        ],
-        "x": 340,
-        "y": 440,
-        "wires": [
-            [
-                "252d3138fb69feda"
-            ]
-        ],
-        "l": true
     },
     {
         "id": "252d3138fb69feda",
