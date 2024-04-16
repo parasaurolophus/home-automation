@@ -232,10 +232,6 @@ function connectWS() {
         const msg = JSON.parse(event.data)
         messageCount.value += 1
         lastMessage.value = msg
-        if (msg.topic == 'hue/bridges') {
-            hueBridges.value = msg.payload
-            return
-        }
         if (msg.topic == 'timer/model') {
             timerModel.value = msg.payload
             return
@@ -293,6 +289,23 @@ function connectWS() {
         let matches = /^hue\/([^/]+)\/resource\/([^/]+)\/([^/]+)$/.exec(msg.topic)
         if (matches?.length == 4) {
             handleHueResource(matches[1], matches[2], matches[3], msg.payload)
+            return
+        }
+        matches = /^hue\/([^/]+)$/.exec(msg.topic)
+        if (matches?.length == 2) {
+            const bridge = hueBridges.value[matches] || {}
+            for (let property of Object.getOwnPropertyNames(msg.payload)) {
+                bridge[property] = msg.payload[property]
+            }
+            hueBridges.value[matches[1]] = bridge
+            return
+        }
+        matches = /^hue\/([^/]+)\/(title|status)$/.exec(msg.topic)
+        if (matches?.length == 3) {
+            const bridge = hueBridges.value[matches[1]] || {}
+            bridge[matches[2]] = msg.payload
+            hueBridges.value[matches[1]] = bridge
+            return
         }
     }
 }
