@@ -1,11 +1,5 @@
 <template>
-    <v-container>
-        <v-row>
-            <v-col>
-                <pre ref="diagram"></pre>
-            </v-col>
-        </v-row>
-    </v-container>
+    <pre ref="diagram"></pre>
 </template>
 
 <script setup>
@@ -131,7 +125,15 @@ watch(theme.global.current, renderMermaid)
 hueBridgeNodeClicked = (address) => {
     const bridge = hueBridges.value[address]
     if (!bridge) {
-        showAlert('warning', 'Missing Hue Bridge', 'No Hue Bridge found for ' + address)
+        showAlert('error', 'Missing Hue Bridge', 'No Hue Bridge found for ' + address)
+        return
+    }
+    if (!hueResources.value[address]) {
+        websocketPublish({
+            payload: address,
+            topic: 'put/hue/create-key'
+        })
+        showAlert('warning', 'put/hue/create-key', 'Press button on bridge ' + address + ' to create key')
         return
     }
     const text = JSON.stringify(bridge, undefined, 4)

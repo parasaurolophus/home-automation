@@ -336,12 +336,13 @@
             "226b30949f9a903b",
             "2626ba9e8d396f71",
             "5f599f1ae1f50d0d",
-            "c3be86c162b3618e"
+            "c3be86c162b3618e",
+            "3a8dc1c069ac8c20"
         ],
         "x": 94,
         "y": 459,
         "w": 1032,
-        "h": 82
+        "h": 122
     },
     {
         "id": "0fb8e43c903b3506",
@@ -435,7 +436,7 @@
             "cd8737251a5d81c2"
         ],
         "x": 94,
-        "y": 559,
+        "y": 599,
         "w": 792,
         "h": 162
     },
@@ -539,8 +540,8 @@
             "5f09f67803464fe9",
             "1b10e2f1524c44ef",
             "e450663aac44ed28",
-            "032d5842e53c6015",
-            "9cb4a587d2d04193"
+            "9cb4a587d2d04193",
+            "032d5842e53c6015"
         ],
         "x": 14,
         "y": 19,
@@ -2011,32 +2012,6 @@
         "wires": []
     },
     {
-        "id": "032d5842e53c6015",
-        "type": "change",
-        "z": "e1d7dd3bdd3cf24a",
-        "g": "165c6266935e206f",
-        "name": "",
-        "rules": [
-            {
-                "t": "delete",
-                "p": "_session",
-                "pt": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 300,
-        "y": 100,
-        "wires": [
-            [
-                "e450663aac44ed28"
-            ]
-        ]
-    },
-    {
         "id": "12a3d05476ad73da",
         "type": "websocket out",
         "z": "e1d7dd3bdd3cf24a",
@@ -2053,7 +2028,7 @@
         "type": "link in",
         "z": "e1d7dd3bdd3cf24a",
         "g": "c4e6856650bacfda",
-        "name": "publish to websocket",
+        "name": "send to websocket",
         "links": [],
         "x": 130,
         "y": 400,
@@ -2244,6 +2219,32 @@
         "wires": [
             [
                 "12a3d05476ad73da"
+            ]
+        ]
+    },
+    {
+        "id": "032d5842e53c6015",
+        "type": "change",
+        "z": "e1d7dd3bdd3cf24a",
+        "g": "165c6266935e206f",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "_session",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 300,
+        "y": 100,
+        "wires": [
+            [
+                "e450663aac44ed28"
             ]
         ]
     },
@@ -3757,7 +3758,7 @@
         "senderr": false,
         "headers": [],
         "x": 670,
-        "y": 500,
+        "y": 520,
         "wires": [
             [
                 "f74128d99635d540"
@@ -3778,10 +3779,11 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 500,
+        "y": 520,
         "wires": [
             [
-                "5f599f1ae1f50d0d"
+                "5f599f1ae1f50d0d",
+                "3a8dc1c069ac8c20"
             ]
         ]
     },
@@ -3809,7 +3811,7 @@
             }
         ],
         "x": 370,
-        "y": 600,
+        "y": 640,
         "wires": []
     },
     {
@@ -3831,7 +3833,7 @@
         "repair": false,
         "outputs": 1,
         "x": 350,
-        "y": 500,
+        "y": 520,
         "wires": [
             [
                 "2626ba9e8d396f71"
@@ -3862,7 +3864,7 @@
             }
         ],
         "x": 360,
-        "y": 680,
+        "y": 720,
         "wires": []
     },
     {
@@ -3878,7 +3880,7 @@
         "finalize": "",
         "libs": [],
         "x": 520,
-        "y": 500,
+        "y": 520,
         "wires": [
             [
                 "0ed14c935a7933e8"
@@ -4165,7 +4167,7 @@
         "name": "https://developers.meethue.com/develop/hue-api-v2/",
         "info": "",
         "x": 670,
-        "y": 640,
+        "y": 680,
         "wires": []
     },
     {
@@ -4248,7 +4250,7 @@
             "fa75a07b47d3877f"
         ],
         "x": 180,
-        "y": 500,
+        "y": 520,
         "wires": [
             [
                 "226b30949f9a903b"
@@ -4266,7 +4268,7 @@
             "fa75a07b47d3877f"
         ],
         "x": 180,
-        "y": 640,
+        "y": 680,
         "wires": [
             [
                 "d3686879543e1951",
@@ -4274,6 +4276,24 @@
             ]
         ],
         "l": true
+    },
+    {
+        "id": "3a8dc1c069ac8c20",
+        "type": "debug",
+        "z": "d3b34304591c64d7",
+        "g": "23bf1f9635c44cc8",
+        "name": "hue key",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 960,
+        "y": 540,
+        "wires": []
     },
     {
         "id": "9b22e1e38e67938b",

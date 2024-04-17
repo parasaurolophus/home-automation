@@ -183,7 +183,7 @@ function connectWS() {
     const matches = /^([^:]+):\/\/([^:]+).*$/.exec(window.location)
     let url = 'ws://127.0.0.1:1880/broker'
 
-    if (Array.isArray(matches) && (matches.length == 3)) {
+    if (matches?.length == 3) {
         url = ((matches[1] == 'https') ? 'wss' : 'ws') + '://' + matches[2] + ':1880/broker'
     }
 
@@ -305,6 +305,12 @@ function connectWS() {
             const bridge = hueBridges.value[matches[1]] || {}
             bridge[matches[2]] = msg.payload
             hueBridges.value[matches[1]] = bridge
+            return
+        }
+        matches = /^hue\/([^/]+)\/key$/.exec(msg.topic)
+        if (matches?.length == 2) {
+            console.log(msg)
+            showAlert('info', 'hue key for ' + matches[1], JSON.stringify(msg))
             return
         }
     }
