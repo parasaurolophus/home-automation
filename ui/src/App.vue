@@ -33,6 +33,12 @@
           </v-expansion-panel-text>
         </v-expansion-panel>
 
+        <v-expansion-panel title="Debug" value="debug">
+          <v-expansion-panel-text>
+            <DebugTabs />
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
       </v-expansion-panels>
 
     </v-main>
