@@ -12,16 +12,14 @@ const theme = useTheme()
 const diagram = ref(null)
 
 const hueBridges = inject('hueBridges')
+const hueStatus = inject('hueStatus')
+const hueTitle = inject('hueTitle')
 const hueResources = inject('hueResources')
 const powerviewModel = inject('powerviewModel')
 const powerviewStatus = inject('powerviewStatus')
 const showAlert = inject('showAlert')
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
-
-function deleteBridge(address) {
-    websocketPublish({ topic: 'delete/hue/bridge', payload: address })
-}
 
 function buildDiagram() {
     const themeName = (theme.global.current.value.dark ? '"dark"' : '"light"')
@@ -56,15 +54,14 @@ function buildDiagram() {
     flowchart += '        end\n'
     let bridgeNumber = 1
     for (let address in hueBridges.value) {
-        const bridge = hueBridges.value[address]
-        const bridgeTitle = bridge.title ?? address
-        const bridgeStatus = bridge.status == -1 ? 'uninitialized' :
-            bridge.status == 0 ? 'connecting' :
-                bridge.status == 1 ? 'connected' :
+        const bridgeTitle = hueTitle.value[address] ?? address
+        const bridgeStatus = hueStatus.value[address] == -1 ? 'uninitialized' :
+            hueStatus.value[address] == 0 ? 'connecting' :
+                hueStatus.value[address] == 1 ? 'connected' :
                     'disconnected'
-        const bridgeClassName = bridge.status == -1 ? 'gray' :
-            bridge.status == 0 ? 'yellow' :
-                bridge.status == 1 ? 'green' :
+        const bridgeClassName = hueStatus[address] == -1 ? 'gray' :
+            hueStatus.value[address] == 0 ? 'yellow' :
+                hueStatus.value[address] == 1 ? 'green' :
                     'red'
         const bridgeName = 'hue_bridge_' + bridgeNumber
         flowchart += '        ' + bridgeName + '["' + bridgeTitle + ' Hue Bridge\n(' + bridgeStatus + ')"]\n'
@@ -111,6 +108,8 @@ mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' })
 onMounted(renderMermaid)
 watch(hueBridges, renderMermaid)
 watch(hueResources, renderMermaid)
+watch(hueStatus, renderMermaid)
+watch(hueTitle, renderMermaid)
 watch(powerviewModel, renderMermaid)
 watch(websocketStatus, renderMermaid)
 watch(powerviewStatus, renderMermaid)
@@ -137,14 +136,16 @@ hueBridgeNodeClicked = (address) => {
         return
     }
     const text = JSON.stringify(bridge, undefined, 4)
-    showAlert('info', 'Hue Bridge ' + (bridge.title ?? address), text)
+    showAlert('info', 'Hue Bridge ' + (hueTitle[address] ?? address), text)
 }
 
 // eslint-disable-next-line no-global-assign, no-undef
 powerviewHubNodeClicked = () => showAlert('info', 'PowerView Hub', JSON.stringify(powerviewModel.value, undefined, 4))
 
 // eslint-disable-next-line no-global-assign, no-undef
-flowNodeClicked = () => websocketPublish({ payload: new Date().getTime(), topic: 'controls/refresh' })
+flowNodeClicked = () => {
+    websocketPublish({ payload: new Date().getTime(), topic: 'controls/refresh' })
+}
 
 // eslint-disable-next-line no-global-assign, no-undef
 uiNodeClicked = () => showAlert('info', 'nothing to see here', 'ui node clicked')

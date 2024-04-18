@@ -1,7 +1,7 @@
 <template>
     <v-expansion-panels v-for="(bridge, address) in hueBridges" :key="address">
         <v-expansion-panel v-for="(resources, bridgeIndex) in [hueResources[address]]" :key="bridgeIndex"
-            :title="bridge.title ?? 'Unknown Bridge'">
+            :title="hueTitle[address] ?? address">
             <v-expansion-panel-text>
                 <v-expansion-panels>
                     <template v-for="(kind, kindIndex) in ['zone', 'room']" :key="kindIndex">
@@ -49,6 +49,7 @@ import { inject } from 'vue'
 import { findGroupedLight, findScenes } from '@/hue'
 
 const hueBridges = inject('hueBridges')
+const hueTitle=inject('hueTitle')
 const hueResources = inject('hueResources')
 const websocketPublish = inject('websocketPublish')
 

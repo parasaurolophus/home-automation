@@ -33,6 +33,12 @@ app.provide('alerts', alerts)
 const hueBridges = ref({})
 app.provide('hueBridges', hueBridges)
 
+const hueStatus = ref({})
+app.provide('hueStatus', hueStatus)
+
+const hueTitle = ref({})
+app.provide('hueTitle', hueTitle)
+
 const powerviewModel = ref([])
 app.provide('powerviewModel', powerviewModel)
 
@@ -300,11 +306,14 @@ function connectWS() {
             hueBridges.value[matches[1]] = bridge
             return
         }
-        matches = /^hue\/([^/]+)\/(title|status)$/.exec(msg.topic)
-        if (matches?.length == 3) {
-            const bridge = hueBridges.value[matches[1]] || {}
-            bridge[matches[2]] = msg.payload
-            hueBridges.value[matches[1]] = bridge
+        matches = /^hue\/([^/]+)\/status$/.exec(msg.topic)
+        if (matches?.length == 2) {
+            hueStatus.value[matches[1]] = msg.payload
+            return
+        }
+        matches = /^hue\/([^/]+)\/title$/.exec(msg.topic)
+        if (matches?.length == 2) {
+            hueTitle.value[matches[1]] = msg.payload
             return
         }
         matches = /^hue\/([^/]+)\/key$/.exec(msg.topic)
