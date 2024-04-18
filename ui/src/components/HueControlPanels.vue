@@ -3,7 +3,7 @@
         <v-expansion-panel :title="hueTitle[address] ?? address">
             <v-expansion-panel-text>
                 <v-expansion-panels>
-                    <template v-for="(kind, kindIndex) in ['zone', 'room']" :key="kindIndex">
+                    <template v-for="(kind, kindIndex) in ['bridge_home', 'zone', 'room']" :key="kindIndex">
                         <template v-if="hasResourcesOfKind(resources, kind)">
                             <v-expansion-panel v-for="(group, groupId, groupIndex) in resources[kind]"
                                 :key="groupIndex">
@@ -11,7 +11,8 @@
                                     v-for="(groupedLight, groupedLightIndex) in findGroupedLight(resources, group)"
                                     :key="groupedLightIndex">
                                     <v-expansion-panel-title>
-                                        {{ group.metadata?.name ?? group.id ?? groupId }}
+                                        <template v-if="kind == 'bridge_home'">All Lights</template>
+                                        <template v-else>{{ group.metadata?.name ?? group.id ?? groupId }}</template>
                                         <template #actions v-if="groupedLight?.on">
                                             <v-switch v-model="groupedLight.on.on"
                                                 @click.stop.prevent="toggleGroup(address, groupedLight)" />
