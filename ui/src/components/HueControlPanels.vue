@@ -1,7 +1,6 @@
 <template>
-    <v-expansion-panels v-for="(bridge, address) in hueBridges" :key="address">
-        <v-expansion-panel v-for="(resources, bridgeIndex) in [hueResources[address]]" :key="bridgeIndex"
-            :title="hueTitle[address] ?? address">
+    <v-expansion-panels v-for="(resources, address) in hueResources" :key="address">
+        <v-expansion-panel :title="hueTitle[address] ?? address">
             <v-expansion-panel-text>
                 <v-expansion-panels>
                     <template v-for="(kind, kindIndex) in ['zone', 'room']" :key="kindIndex">
@@ -44,13 +43,12 @@
 import { inject } from 'vue'
 import { findGroupedLight, findScenes } from '@/hue'
 
-const hueBridges = inject('hueBridges')
 const hueTitle = inject('hueTitle')
 const hueResources = inject('hueResources')
 const websocketPublish = inject('websocketPublish')
 
 function hasResourcesOfKind(resources, kind) {
-    return resources[kind] && Object.getOwnPropertyNames(resources[kind].length > 0)
+    return resources[kind] && Object.getOwnPropertyNames(resources[kind]).length > 0
 }
 
 function toggleGroup(address, groupedLight) {
