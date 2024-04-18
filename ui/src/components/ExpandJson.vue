@@ -1,8 +1,9 @@
 <template>
+
     <template v-if="Array.isArray(value)">
         <template v-for="(e, i) in value" :key="i">
-            <template v-for="(p) in [appendPath(path, i)]">
-                <v-expansion-panels v-if="Array.isArray(e) || typeof e == 'object'">
+            <template v-for="p in [appendPath(path, i)]">
+                <v-expansion-panels v-if="isStructured(e)">
                     <v-expansion-panel :title="p">
                         <v-expansion-panel-text>
                             <ExpandJson :value="e" :path="p" />
@@ -15,10 +16,11 @@
             </template>
         </template>
     </template>
+
     <template v-else-if="typeof value == 'object'">
         <template v-for="(v, k, i) in value" :key="i">
-            <template v-for="(p) in [appendPath(path, k)]">
-                <v-expansion-panels v-if="Array.isArray(v) || typeof v == 'object'">
+            <template v-for="p in [appendPath(path, k)]">
+                <v-expansion-panels v-if="isStructured(v)">
                     <v-expansion-panel :title="p">
                         <v-expansion-panel-text>
                             <ExpandJson :value="v" :path="p" />
@@ -31,9 +33,11 @@
             </template>
         </template>
     </template>
+
     <template v-else>
         {{ value }}
     </template>
+
 </template>
 
 <style scoped>
@@ -52,6 +56,10 @@ const props = defineProps({
         required: true,
     }
 })
+
+function isStructured(x) {
+    return Array.isArray(x) || typeof x == 'object'
+}
 
 function appendPath(path, selector) {
     const re = /[$_\p{ID_Start}][$\u200c\u200d\p{ID_Continue}]*/u

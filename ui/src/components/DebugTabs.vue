@@ -9,23 +9,18 @@
     <v-window v-model="tab">
         <v-window-item value="0">
             <ExpandJson :value="hueTitle" path="hueTitle"/>
-            <!-- <pre>{{ JSON.stringify(hueBridges, undefined, 4) }}</pre> -->
         </v-window-item>
         <v-window-item value="1">
             <ExpandJson :value="hueStatus" path="hueStatus"/>
-            <!-- <pre>{{ JSON.stringify(hueBridges, undefined, 4) }}</pre> -->
         </v-window-item>
         <v-window-item value="2">
             <ExpandJson :value="hueBridges" path="hueBridges"/>
-            <!-- <pre>{{ JSON.stringify(hueBridges, undefined, 4) }}</pre> -->
         </v-window-item>
         <v-window-item value="3">
             <ExpandJson :value="hueResources" path="hueResources"/>
-            <!-- <pre>{{ JSON.stringify(hueResources, undefined, 4) }}</pre> -->
         </v-window-item>
         <v-window-item value="4">
             <ExpandJson :value="powerviewModel" path="powerviewModel"/>
-            <!-- <pre>{{ JSON.stringify(powerviewModel, undefined, 4) }}</pre> -->
         </v-window-item>
     </v-window>
 </template>
