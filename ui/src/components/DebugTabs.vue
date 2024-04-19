@@ -8,19 +8,19 @@
     </v-tabs>
     <v-window v-model="tab">
         <v-window-item value="0">
-            <ExpandJson :value="hueTitle" path="hueTitle"/>
+            <ExpandObject :value="hueTitle" path="hueTitle"/>
         </v-window-item>
         <v-window-item value="1">
-            <ExpandJson :value="hueStatus" path="hueStatus"/>
+            <ExpandObject :value="hueStatus" path="hueStatus"/>
         </v-window-item>
         <v-window-item value="2">
-            <ExpandJson :value="hueBridges" path="hueBridges"/>
+            <ExpandObject :value="hueBridges" path="hueBridges"/>
         </v-window-item>
         <v-window-item value="3">
-            <ExpandJson :value="hueResources" path="hueResources"/>
+            <ExpandObject :value="hueResources" path="hueResources"/>
         </v-window-item>
         <v-window-item value="4">
-            <ExpandJson :value="powerviewModel" path="powerviewModel"/>
+            <ExpandObject :value="powerviewModel" path="powerviewModel"/>
         </v-window-item>
     </v-window>
 </template>

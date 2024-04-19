@@ -6,13 +6,16 @@
                 <v-expansion-panels v-if="isStructured(e)">
                     <v-expansion-panel :title="p">
                         <v-expansion-panel-text>
-                            <ExpandJson :value="e" :path="p" />
+                            <ExpandObject :value="e" :path="p" />
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>
-                <div v-else>
-                    <span class="label">{{ p }}</span>: {{ e }}
-                </div>
+                <v-container v-else>
+                    <v-row>
+                        <v-col>{{ p }}</v-col>
+                        <v-col>{{ e }}</v-col>
+                    </v-row>
+                </v-container>
             </template>
         </template>
     </template>
@@ -23,13 +26,16 @@
                 <v-expansion-panels v-if="isStructured(v)">
                     <v-expansion-panel :title="p">
                         <v-expansion-panel-text>
-                            <ExpandJson :value="v" :path="p" />
+                            <ExpandObject :value="v" :path="p" />
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>
-                <div v-else>
-                    <span class="label">{{ p }}</span>: {{ v }}
-                </div>
+                <v-container v-else>
+                    <v-row>
+                        <v-col>{{ p }}</v-col>
+                        <v-col>{{ v }}</v-col>
+                    </v-row>
+                </v-container>
             </template>
         </template>
     </template>
@@ -39,12 +45,6 @@
     </template>
 
 </template>
-
-<style scoped>
-.label {
-    font-weight: normal;
-}
-</style>
 
 <script setup>
 const props = defineProps({
