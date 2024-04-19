@@ -45,26 +45,8 @@ app.provide('powerviewModel', powerviewModel)
 const powerviewStatus = ref(0)
 app.provide('powerviewStatus', powerviewStatus)
 
-const timerModel = ref({})
-app.provide('timerModel', timerModel)
-
-function timerThemeIcon(value) {
-    if (!value) {
-        value = timerModel.value.theme || 'standard'
-    }
-    switch (value) {
-        case 'tribal':
-            return 'mdi-firework'
-        case 'spooky':
-            return 'mdi-halloween'
-        case 'jolly':
-            return 'mdi-string-lights'
-        default:
-            return 'mdi-lightbulb-group'
-    }
-}
-
-app.provide('timerThemeIcon', timerThemeIcon)
+const timerTimes = ref({})
+app.provide('timerTimes', timerTimes)
 
 function showAlert(type, title, text) {
     alerts.value.push({
@@ -239,7 +221,7 @@ function connectWS() {
         messageCount.value += 1
         lastMessage.value = msg
         if (msg.topic == 'timer/model') {
-            timerModel.value = msg.payload
+            timerTimes.value = msg.payload
             return
         }
         if (msg.topic == 'powerview/model') {

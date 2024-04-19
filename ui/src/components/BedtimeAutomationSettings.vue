@@ -1,9 +1,6 @@
 <template>
     <v-card>
         <v-card-item>
-            <template #append>
-                <v-icon :icon="timerThemeIcon()" />
-            </template>
             <v-card-title>Bedtime</v-card-title>
             <v-card-subtitle>
                 <v-chip color="primary">
@@ -24,7 +21,6 @@
 <script setup>
 import { computed, inject, onMounted, ref, watch } from 'vue'
 
-const timerThemeIcon = inject('timerThemeIcon')
 const settingsBedtime = inject('settingsBedtime')
 const timerModel = inject('timerModel')
 const websocketPublish = inject('websocketPublish')

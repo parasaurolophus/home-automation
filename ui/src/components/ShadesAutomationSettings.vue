@@ -1,9 +1,6 @@
 <template>
     <v-card>
         <v-card-item>
-            <template #append>
-                <v-icon :color="settingsColor" :icon="settingsIcon" />
-            </template>
             <v-card-title>
                 Shades Automation
             </v-card-title>
@@ -36,7 +33,6 @@ const settingsShades = inject('settingsShades')
 const websocketPublish = inject('websocketPublish')
 
 const settingsColor = computed(() => settingsShades.value ? 'primary' : 'secondary')
-const settingsIcon = computed(() => settingsShades.value ? 'mdi-blinds-open' : 'mdi-blinds')
 const settingsText = computed(() => settingsShades.value ? 'enabled' : 'disabled')
 
 function clicked() {

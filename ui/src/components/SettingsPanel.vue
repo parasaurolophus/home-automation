@@ -8,7 +8,7 @@ import BedtimeSettings from './BedtimeSettings.vue';
                 <LightingAutomationSettings />
             </v-col>
             <v-col>
-                <BedtimeSettings />
+                <BedtimeAutomationSettings />
             </v-col>
             <v-col>
                 <ShadesAutomationSettings />

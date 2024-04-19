@@ -1,9 +1,6 @@
 <template>
     <v-card>
         <v-card-item>
-            <template #append>
-                <v-icon :color="settingsColor" :icon="settingsIcon" />
-            </template>
             <v-card-title>
                 Lighting Automation
             </v-card-title>
@@ -36,7 +33,6 @@ const settingsLighting = inject('settingsLighting')
 const websocketPublish = inject('websocketPublish')
 
 const settingsColor = computed(() => settingsLighting.value ? 'primary' : 'secondary')
-const settingsIcon = computed(() => settingsLighting.value ? 'mdi-lightbulb-on' : 'mdi-lightbulb')
 const settingsText = computed(() => settingsLighting.value ? 'enabled' : 'disabled')
 
 function clicked() {
