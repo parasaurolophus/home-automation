@@ -4,23 +4,27 @@
         <v-tab value="1">hueStatus</v-tab>
         <v-tab value="2">hueBridges</v-tab>
         <v-tab value="3">hueResources</v-tab>
-        <v-tab value="4">powerviewModel</v-tab>
+        <v-tab value="4">search hueResources</v-tab>
+        <v-tab value="5">powerviewModel</v-tab>
     </v-tabs>
     <v-window v-model="tab">
         <v-window-item value="0">
-            <ExpandObject :value="hueTitle" path="hueTitle"/>
+            <ExpandObject :value="hueTitle" path="hueTitle" />
         </v-window-item>
         <v-window-item value="1">
-            <ExpandObject :value="hueStatus" path="hueStatus"/>
+            <ExpandObject :value="hueStatus" path="hueStatus" />
         </v-window-item>
         <v-window-item value="2">
-            <ExpandObject :value="hueBridges" path="hueBridges"/>
+            <ExpandObject :value="hueBridges" path="hueBridges" />
         </v-window-item>
         <v-window-item value="3">
-            <ExpandObject :value="hueResources" path="hueResources"/>
+            <ExpandObject :value="hueResources" path="hueResources" />
         </v-window-item>
         <v-window-item value="4">
-            <ExpandObject :value="powerviewModel" path="powerviewModel"/>
+            <SearchModel v-model="hueResources" />
+        </v-window-item>
+        <v-window-item value="5">
+            <ExpandObject :value="powerviewModel" path="powerviewModel" />
         </v-window-item>
     </v-window>
 </template>
