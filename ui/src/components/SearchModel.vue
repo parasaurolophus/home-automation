@@ -20,7 +20,7 @@ function render() {
 
 onMounted(evaluate)
 watch(filter, evaluate)
-watch(model, evaluate)
+watch(model, evaluate, { deep: true })
 
 async function evaluate() {
     try {

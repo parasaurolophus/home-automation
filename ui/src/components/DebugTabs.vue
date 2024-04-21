@@ -4,8 +4,8 @@
         <v-tab value="1">hueStatus</v-tab>
         <v-tab value="2">hueBridges</v-tab>
         <v-tab value="3">hueResources</v-tab>
-        <v-tab value="4">search hueResources</v-tab>
-        <v-tab value="5">powerviewModel</v-tab>
+        <v-tab value="4">powerviewModel</v-tab>
+        <v-tab value="5">search hueResources</v-tab>
     </v-tabs>
     <v-window v-model="tab">
         <v-window-item value="0">
@@ -21,10 +21,10 @@
             <ExpandObject :value="hueResources" path="hueResources" />
         </v-window-item>
         <v-window-item value="4">
-            <SearchModel v-model="hueResources" />
+            <ExpandObject :value="powerviewModel" path="powerviewModel" />
         </v-window-item>
         <v-window-item value="5">
-            <ExpandObject :value="powerviewModel" path="powerviewModel" />
+            <SearchModel v-model="hueResources" />
         </v-window-item>
     </v-window>
 </template>
