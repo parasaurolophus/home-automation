@@ -9,7 +9,11 @@ import jsonata from 'jsonata'
 
 const model = defineModel()
 
-const filter = ref('$')
+const filter = defineModel('filter', {
+    type: String,
+    default: '$',
+})
+
 const filtered = ref(null)
 
 const rendered = computed(render)
