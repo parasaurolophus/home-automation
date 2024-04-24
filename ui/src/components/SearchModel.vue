@@ -1,5 +1,5 @@
 <template>
-    <v-textarea v-model="filter" label="JSONata" />
+    <v-textarea v-model="filter" label="JSONata" auto-grow />
     <pre>{{ rendered }}</pre>
 </template>
 
@@ -30,15 +30,12 @@ async function evaluate() {
     try {
         const expression = jsonata(filter.value)
         if (expression === undefined) {
-            console.warn(filter.value + ' selected nothing')
             filtered.value = null
             return
         }
-        console.log('expression compiled')
         filtered.value = await expression.evaluate(model.value)
-        console.log('expression evaluated')
     } catch (e) {
-        console.error(e)
+        filtered.value = null
     }
 }
 </script>

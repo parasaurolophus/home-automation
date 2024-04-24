@@ -51,7 +51,7 @@ const powerviewModel = inject('powerviewModel')
 const tab = ref(0)
 
 const hueResourcesFilter = ref(`(
-  $address := '192.168.1.12';
+  $address := '192.168.1.34';
   $kind := 'bridge_home';
   $bridge := $lookup($, $address);
   $groups := $lookup($bridge, $kind).*[];
