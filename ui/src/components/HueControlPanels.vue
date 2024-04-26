@@ -56,14 +56,16 @@ function toggleGroup(address, groupedLight) {
 
     websocketPublish({
         payload: { on: { on: !groupedLight.on.on } },
-        topic: 'put/hue/' + address + '/resource/grouped_light/' + groupedLight.id, method: 'PUT',
+        topic: 'put/hue/' + address + '/resource/grouped_light/' + groupedLight.id,
+        method: 'PUT',
     })
 }
 
 function activateScene(address, scene) {
     websocketPublish({
         payload: { recall: { action: 'active' } },
-        topic: 'put/hue/' + address + '/resource/scene/' + scene.id, method: 'PUT'
+        topic: 'put/hue/' + address + '/resource/scene/' + scene.id,
+        method: 'PUT'
     })
 }
 </script>

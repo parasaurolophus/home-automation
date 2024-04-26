@@ -30,23 +30,35 @@ const tab = ref(0)
 
 const hueResourcesFilter = ref(`(
   $address := '192.168.1.34';
-  $kind := 'bridge_home';
+  $kinds := /^(bridge_home|zone|room)$/;
+  $names := /^(.*)$/;
   $bridge := $lookup($, $address);
-  $groups := $lookup($bridge, $kind).*[];
+  $groups := $sift($bridge, function($v, $k) { $k ~> $kinds }).*.*[];
   $model := $groups.(
       $gid := id;
       {
-          "id": $gid,
-          "type": type,
-          "name": metadata.name,
-          "grouped_light": $bridge.grouped_light.*[owner.rid=$gid].{
-              "grouped_light_id": id,
-              "grouped_light_state": on.on,
-              "scenes": $bridge.scene.*[group.rid=$gid].{
-                "scene_id": id,
-                "scene_name": metadata.name
-              }
-          }
+          'id': $gid,
+          'type': type,
+          'name': metadata.name ? metadata.name : type = 'bridge_home' ? 'All Lights' : '<unnamed>',
+          'grouped_light': $bridge.grouped_light.*[owner.rid=$gid].{
+                'grouped_light_id': id,
+                'grouped_light_state': on.on,
+                'command': {
+                    'topic': 'put/hue/' & $address & '/resource/grouped_light/' & id,
+                    'payload': { 'on': { 'on': $not(on.on) } },
+                    'method': 'PUT'
+                },
+                'scenes': $bridge.scene.*[group.rid=$gid].{
+                    'scene_id': id,
+                    'scene_name': metadata.name,
+                    'command': {
+                        'topic': 'put/hue/' & $address & '/resource/scene/' & id,
+                        'payload': { 'recall': { 'action': 'active' } },
+                        'method': 'PUT'
+                    }
+            }
+        }
       })[];
+      $model[name ~> $names][]
 )`)
 </script>
