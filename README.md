@@ -418,7 +418,7 @@ These Node-RED flows do not directly implement any user interface. Instead, they
 asynchronously send event messages and receive command messages using a
 WebSocket node configured to "listen to" the URI `/broker`. In addition to and
 separate from _flows.json_, the GitHub repository for these flows includes a
-subdirectory, _dashboard_, which implements a "single page web application" that
+subdirectory, '_ui_, which implements a "single page web application" that
 connects to the `/broker` WebSocket listener in Node-RED and presents a user
 inteface composed of [Vuetify 3](https://vuetifyjs.com/) components. They make
 extensive use of [Vue 3](https://vuejs.org) features to implement a highly
@@ -437,12 +437,12 @@ intermingling of front-end and back-end logic directly within the Node-RED
 flows. This is why these flows have no dependency on _node-red-dashboard_ nor
 any of the community supplied packages intended to replace it. All of the
 functionality that would be supplied by any such package is entirely
-encapsulated within the _dashboard/dist_ directory that must be built after
-downloading this repository from GitHub. With the appropriate configuration of
-_settings.js_ as [described above](#dashboardPath.js), you can access
-_dashboard/dist/index.html_ using Node-RED's built-in web server and the web
-page will automatically deduce the correct URL with which to connect to the
-`/broker` WebSocket server implemented by these flows.
+encapsulated within the _ui/dist_ directory that must be built after downloading
+this repository from GitHub. With the appropriate configuration of _settings.js_
+as [described above](#dashboardPath.js), you can access '_ui/dist/index.html_
+using Node-RED's built-in web server and the web page will automatically deduce
+the correct URL with which to connect to the `/broker` WebSocket server
+implemented by these flows.
 
 The reason for this strict separation between view and controller is not a
 dogmatic adherence to theoretical purity in the domain of software architecture.
@@ -450,15 +450,15 @@ The sad truth is that while Node-RED greatly benefits from the culture of an
 open source community, it also suffers from the inevitable shortcomings of all
 such products. (This is not unique to Node-RED nor even to open source software:
 the many challenges of relying on any open source product is a specific example
-of the general [tragedy of the
+of the general principle known as [the tragedy of the
 commons](https://en.wikipedia.org/wiki/Tragedy_of_the_commons) about which
 political and economic theorists have written for centuries.) The
 _node-red-dashboard_ component, supplied by Node-RED's core development team,
 suffers from the kind of "bit rot" that always -- no, really, _always_ --
 infects open source projects' repositories while community-supplied components
-vary widely in their quality. Support by their authors is often intermittent and
-ephemeral. That is why these flows are designed to rely on as few add-on
-components as possible. They use core nodes such as `function` and `http
+vary widely in their quality. Support by their authors is at best intermittent
+and very often ephemeral. That is why these flows are designed to rely on as few
+add-on components as possible. They use core nodes such as `function` and `http
 request` to utilize the various device API's directly rather than using node
 packages that wrap them because this reduces exposure to defects and
 deficiencies in third-party components. The critical bits of functionality that
@@ -466,13 +466,14 @@ are implemented as community supplied node packages were created by the same
 author for the specific needs of accessing the Philips Hue Bridge SSE API from
 within these flows.
 
-(The author feels confident in sufficiently prompt and diligent responses to bug
-reports and feature requests he makes to himself, while having no illusions nor
-unreasonable expectations regarding the priority such issues would be given by
-someone else who created some similar package for their own purposes, who knows
-how long ago, and then moved on to who knows what other projects and interests.)
+> _The author feels confident in sufficiently prompt and diligent responses to
+> bug reports and feature requests he makes to himself, while having no
+> illusions nor unreasonable expectations regarding the priority such issues
+> would be given by someone else who created some similar package for their own
+> purposes, who knows how long ago, and then moved on to who knows what other
+> projects and interests._
 
-Note that once built, the _dashboard/dist_ directory contains only HTML,
+Note that once built, the '_ui/dist_ directory contains only HTML,
 JavaScript, CSS and similar standard web content files. It does not require any
 special code on the web server (_Node-RED_, in this case). It uses only the
 native WebSocket support built into modern web browsers to communicate with the
@@ -482,16 +483,16 @@ into web browsers. _Vue_ does use certain browser features that require it to be
 loaded with a URL beginning with `http://` or `https://`, but it does not
 actually rely on any "server side rendering" code.
 
-> _To emphasize this point, an early version of this repository had a version of
-> the dashboard implemented without the use of any client-side tooling but,
-> rather, hand-crafted HTML, CSS and JavaScript. That version worked fine when
-> opened using `file://` URL, i.e. without being "served" via HTTP at all.
-> Frameworks like_ Vue / Vuetify _provide only "nice to have" features that
-> enhance maintainability and readability of the HTML, not essential features
-> required for core functionality. To be clear, the latter is a feature of such
-> frameworks, not a deficiency. By locating front-end concerns entirely on the
-> client, a distributed system makes optimal use of all the computing and memory
-> resources available to it._
+> _To emphasize this point, an earlier version of this repository had a UI
+> implemented without the use of any client-side tooling but, rather,
+> hand-crafted HTML, CSS and JavaScript. That version worked fine when opened
+> using a `file://` URL, i.e. without being "served" via HTTP at all. Frameworks
+> like_ Vue / Vuetify _provide only "nice to have" features that enhance
+> maintainability and readability of the HTML, not essential features required
+> for core functionality. To be clear, the latter is a feature of such
+> frameworks, not a deficiency. By locating front-end concerns mostly (or,
+> ideally, entirely) on the client, a distributed system makes optimal use of
+> all the computing and memory resources available to it._
 
 ## Theory of Operation
 
@@ -525,55 +526,120 @@ The payload of each `automation/trigger` event has
 
 ### Time
 
-The payload of each `automation/trigger` event has `msg.payload['timer/time']`
-set to one of the following values:
+These flows use [suncalc](https://www.npmjs.com/package/suncalc) and require
+that the `${LATITUDE}` and `${LONGITUDE}` environment variables be set as
+[described above](#environment.js). In particular, each time these flows are
+started, and again every morning at 1AM (local time), these flows invoke
+`suncalc.getTimes()` and the current value of `settings/bedtime` to calculate
+the times at which to send `automation/trigger` events for the coming day. The
+`timer` function node on the _Automation_ flow tab will arrange to send
+`automation/trigger` events at each of the times indicated by the result of
+calling `suncalc.getTimes()` after using `suncalc.addTime()` to include `midday`
+and `afternoon` time slots based on the sun's position in the sky. It also adds
+a `bedtime` time slot by adding or subtracting an offset of up to 1/2 hour that
+is randomly generated each time the `timer` function node is invoked to the
+current value of `settings/bedtime`.
 
-| `msg.payload['timer/time']` | Description                                                                                                                          |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `sunrise`                   | Sent at sunrise<sup>1</sup>                                                                                                          |
-| `midday`                    | Sent if and when the sun first reaches an altitude of 0.9 radians on a given day<sup>2</sup>                                         |
-| `afternoon`                 | Sent when the sun first drops below an altitude of 0.9 after it has reached an azimuth greater than 0.0 (i.e. shining from the west) |
-| `sunset`                    | Sent at sunset                                                                                                                       |
-| `bedtime`                   | Sent at somewhat randomized time each evening<sup>3</sup>                                                                            |
+### Models, Events and Commands
 
-Obviously, the preceding times-of-day rules are designed for a location in the
-northern hemisphere, below the arctic circle. The value of 0.9 radians for the
-thresholds defining `midday` and `afternoon` were determined empirically for a
-particular home, at a particular latitude, with eaves of a particular size over
-windows facing particular directions. The exact values will need adjustment
-based on the circumstances and preferences of the occupants of some other
-building at some different location. The whole approach would have to be
-different for locations at sufficiently extreme latitudes that the sun ever sets
-later than a desirable bedtime or where days and nights sometimes last longer
-than 24 hours.
+As already noted, these flows and their UI are designed according to the MVC
+paradigm. These models are built up and maintained over time based on the
+payloads of various event messages sent by the flows. There are three general
+categories of such events:
 
-Whatever the exact values, the goal is to trigger lighting and window covering
-automation so as to optimize energy usage and comfort in the following ways:
+1. Timer events are used to trigger particular automations at specific times of
+   days, taking into account specific times of year
 
-- Have the windows uncovered as much of the day as practical so as to make the
-  view of the outside world available
-- Have only those windows covered at those times of days when the sun's angle
-  would cause it to shine too directly into the home for comfort and energy
-  efficiency
-- Turn on and off lighting as needed for various activities based on the times
-  at which the sun rises and sets on any given day as well as a desired bedtime
-- Have the bedtime lighting and window covering automation slightly randomized
-  to provide a degree of simulated presence when the home is unoccupied
+2. Settings events reflect user selectable options such as whether or not enable
+   particular types of automation and when to trigger bedtime automations
 
-Notes:
+3. Device state messages are emitted when particular "smart" devices' states
+   change
 
-<sup>1</sup> All times of day and sun coordinates are
-obtained using
-[suncalc](https://www.npmjs.com/package/suncalc) and require that the `${LATITUDE}` and `${LONGITUDE}`
-environment variables be set as
-[described above](#environment.js)
+> These flows also support command messages to control particular devices,
+> activate "scenes" and so on that correspond generally to state change event
+> messages but not always in an exactly 1:1 manner due to idiosyncracies of
+> particular third-party systems. For example, The state of _PowerView_ shades
+> can be queried and controlled synchronously but do not support asynchronous
+> state-change messaging. More subtly, the API exposed by _Hue_ bridges emits a
+> far more rich (and arguably over-engineered) repertoire of state change events
+> than it accepts as commands.
 
-<sup>2</sup> No `midday` event will be sent on days on which the sun never
-reaches an altitude of 0.9 radians
+The general pattern is that the flows emit fairly fine-grained state and
+settings messages asynchronously while the UI consumes such messages in real
+time to build up and maintain the state of in-memory data models which it uses
+to drive the user experience. The state-change messages are generated by the
+flows subscribing to and querying device-specific API's exposed by their
+respective hubs and then broadcasting equivalent messages using the WebSocket
+based "message broker" flow. For example, here is how this pattern is
+implemented for _Hue_ "resources" corresponding to individual lights, rooms and
+zones:
 
-<sup>3</sup> The exact time at which `bedtime` events occur deliberately varies
-each day. It will be sent at a time that is up to 30 minutes before or after the
-time selected by a user in the UI.
+```mermaid
+sequenceDiagram
+
+  actor user as User
+
+  box rgba(255, 255, 255, 0.25) Web Browser
+    participant ui as UI
+  end
+
+  box rgba(255, 0, 0, 0.25) Node-RED Flows
+    participant broker as Broker Flow
+    participant subflow as Bridge Subflow
+  end
+
+  box rgba(0, 0, 255, 0.25) Zigbee Network
+    participant hub as Hue Bridge
+    participant device as Hue Resource(s)
+  end
+
+  user ->> ui: launch
+  ui ->> broker: connect
+  broker ->> subflow: refresh controls
+  subflow ->> hub: query device state
+
+  loop forever
+    par device to user
+      device ->> hub: current state event
+      hub ->> subflow: current state event
+      subflow ->> broker: state message
+      broker ->> ui: state message
+      ui ->> ui: update model
+      ui ->> user: display controls
+    and user to device
+      user ->> ui: change control
+      ui ->> broker: command message
+      broker ->> subflow: command message
+      subflow ->> hub: command
+      hub ->> device: command
+      device ->> device: change state
+    end
+  end
+```
+
+The same pattern could be easily extended to other makes and models of "smart"
+devices, including stand-alone _Zigbee_ or _Z-Wave_ based devices where
+_Node-RED_, itself, is acting as the "hub." This represents what the _Node-RED_
+maintainers refer to as the "closed-loop feedback" pattern and some UI toolkits
+refer to as "controlled components." The state of the controls (failry) reliably
+reflect the current state of the actual devices at the cost of some latency in
+updating the state of the UI to reflect the outcome of user actions. This is
+relevant to components like _Vuetify_ switches whose visual state are intended
+to reflect the actual state of some corresponding device or subsystem.
+_PowerView_ hubs, by contrast, do not emit any asynchronous state change events
+and (officially, at least) support only commands at the "scene" level of their
+internal data model. Such scene activations are represented as stateless button
+controls for both _Hue_ and _PowerView_ control panels in the UI.
+
+Either way, using features of HTML5 as wrapped by the _Vue / Vuetify_ web
+component framework and libraries, the front end not only maintains the
+in-memory model of the state of the controls, it dynamically generates the
+controls themselves based on the current state of the model. This allows the UI
+to adapt automatically to the current configuration of the back end systems. For
+example, there is no need in this implementation to change any UI code if _Hue_
+bridges are added or removed in the back end, lights are added or removed in a
+bridge, scenes are created or deleted, and so on.
 
 ## Colors
 
