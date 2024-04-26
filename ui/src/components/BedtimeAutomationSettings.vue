@@ -1,7 +1,9 @@
 <template>
     <v-card>
         <v-card-item>
-            <v-card-title>Bedtime</v-card-title>
+            <v-card-title>
+                Bedtime
+            </v-card-title>
             <v-card-subtitle>
                 <v-chip color="primary">
                     {{ localeString }}
@@ -19,27 +21,20 @@
 </template>
 
 <script setup>
-import { computed, inject, onMounted, ref, watch } from 'vue'
+import { inject, onMounted, ref, watch } from 'vue'
 
 const settingsBedtime = inject('settingsBedtime')
-const timerModel = inject('timerModel')
+const timerTimes = inject('timerTimes')
 const websocketPublish = inject('websocketPublish')
 
-const localeString = computed(() => {
-    if (timerModel.value.times) {
-        for (let time of timerModel.value.times) {
-            if (time.title == 'bedtime') {
-                return new Date(time.timestamp).toLocaleString()
-            }
-        }
-    }
-    const message = 'bedtime not specified'
-    console.warn(message)
-    return message
-})
+const localeString = ref('broken')
+const bedtimeIndex = ref(0)
 
-// items for v-select corresponding to settings/bedtime messages
-// in SettingsComponent.vue (see settingsBedtime)
+onMounted(mount)
+
+watch(timerTimes, updateLocaleString, { deep: true })
+watch(settingsBedtime, updateBedtimeIndex)
+
 const bedtimeOptions = [
     {
         label: '9PM',
@@ -55,11 +50,10 @@ const bedtimeOptions = [
     },
 ]
 
-const bedtimeIndex = ref(0)
-
-onMounted(updateBedtimeIndex)
-
-watch(settingsBedtime, updateBedtimeIndex)
+function mount() {
+    updateLocaleString()
+    updateBedtimeIndex()
+}
 
 function updateBedtimeIndex() {
 
@@ -87,5 +81,17 @@ function updateSettingsBedtime(selected) {
             label: 'user',
         })
     }
+}
+
+function updateLocaleString() {
+    if (timerTimes.value.times) {
+        for (let time of timerTimes.value.times) {
+            if (time.title == 'bedtime') {
+                localeString.value = new Date(time.timestamp).toLocaleString()
+                return
+            }
+        }
+    }
+    localeString.value = 'not specified'
 }
 </script>
