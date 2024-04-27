@@ -24,7 +24,7 @@
 import { inject, onMounted, ref, watch } from 'vue'
 
 const settingsBedtime = inject('settingsBedtime')
-const timerTimes = inject('timerTimes')
+const timerModel = inject('timerModel')
 const websocketPublish = inject('websocketPublish')
 
 const localeString = ref('broken')
@@ -32,7 +32,7 @@ const bedtimeIndex = ref(0)
 
 onMounted(mount)
 
-watch(timerTimes, updateLocaleString, { deep: true })
+watch(timerModel, updateLocaleString, { deep: true })
 watch(settingsBedtime, updateBedtimeIndex)
 
 const bedtimeOptions = [
@@ -84,14 +84,10 @@ function updateSettingsBedtime(selected) {
 }
 
 function updateLocaleString() {
-    if (timerTimes.value.times) {
-        for (let time of timerTimes.value.times) {
-            if (time.title == 'bedtime') {
-                localeString.value = new Date(time.timestamp).toLocaleString()
-                return
-            }
-        }
+    if (timerModel.value.bedtime) {
+        localeString.value = new Date(timerModel.value.bedtime).toLocaleString()
+    } else {
+        localeString.value = 'not specified'
     }
-    localeString.value = 'not specified'
 }
 </script>

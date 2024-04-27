@@ -42,9 +42,6 @@ app.provide('hueTitle', hueTitle)
 const powerviewStatus = ref(0)
 app.provide('powerviewStatus', powerviewStatus)
 
-const timerTimes = ref({})
-app.provide('timerTimes', timerTimes)
-
 function showAlert(type, title, text) {
     alerts.value.push({
         show: true,
@@ -122,7 +119,7 @@ function handleHueResource(address, kind, id, payload) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// handle a powervies/:kind/:id event
+// handle a powerview/:kind/:id event
 ///////////////////////////////////////////////////////////////////////////////
 
 const powerviewModel = ref({})
@@ -154,6 +151,17 @@ function handlePowerviewResource(kind, id, payload) {
             }
             break
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// handle a timer/model/:label event
+///////////////////////////////////////////////////////////////////////////////
+
+const timerModel = ref({})
+app.provide('timerModel', timerModel)
+
+function handleTimerModel(label, timestamp) {
+    timerModel.value[label] = timestamp
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -252,8 +260,8 @@ function connectWS() {
         const msg = JSON.parse(event.data)
         messageCount.value += 1
         lastMessage.value = msg
-        if (msg.topic == 'timer/model') {
-            timerTimes.value = msg.payload
+        if (msg.topic == 'timer/model/theme') {
+            timerModel.value.theme = msg.payload
             return
         }
         if (msg.topic == 'powerview/status') {
@@ -335,6 +343,11 @@ function connectWS() {
         matches = /^powerview\/([^/]+)\/([^/]+)$/.exec(msg.topic)
         if (matches?.length == 3) {
             handlePowerviewResource(matches[1], matches[2], msg.payload)
+            return
+        }
+        matches = /^timer\/model\/([^/]+)$/.exec(msg.topic)
+        if (matches?.length == 2) {
+            handleTimerModel(matches[1], msg.payload)
             return
         }
     }

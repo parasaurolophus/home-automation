@@ -3,7 +3,7 @@
     <v-list>
 
         <v-list-item title="Theme">
-            <v-list-item-subtitle>{{ timerTimes.theme }}</v-list-item-subtitle>
+            <v-list-item-subtitle>{{ timerModel.theme }}</v-list-item-subtitle>
             <div class="notes">evening lighting theme</div>
         </v-list-item>
 
@@ -34,7 +34,7 @@
 <script setup>
 import { inject } from 'vue'
 
-const timerTimes = inject('timerTimes')
+const timerModel = inject('timerModel')
 
 const itemTimes = [
     {
@@ -75,12 +75,8 @@ const itemTimes = [
 ]
 
 function localeTime(key) {
-    if (timerTimes.value.times) {
-        for (let time of timerTimes.value.times) {
-            if (time.title == key) {
-                return new Date(time.timestamp).toLocaleString()
-            }
-        }
+    if (timerModel.value[key]) {
+        return new Date(timerModel.value[key]).toLocaleString()
     }
     const message = key + ' not specified'
     console.warn(message)
