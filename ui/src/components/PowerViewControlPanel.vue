@@ -1,16 +1,18 @@
 <template>
     <v-expansion-panels>
-        <v-expansion-panel v-for="(room, index) in powerviewModel" :key="index" :disabled="websocketStatus != 1">
-            <v-expansion-panel-title>{{ room.title }}</v-expansion-panel-title>
-            <v-expansion-panel-text>
-                <template v-for="(scene, index) in room.children" :key="index">
-                    <v-btn class="spaced-out"
-                        @click="websocketPublish({ payload: scene.id, topic: 'put/powerview/scene' })">
-                        {{ scene.title }}
-                    </v-btn>
-                </template>
-            </v-expansion-panel-text>
-        </v-expansion-panel>
+        <template v-for="room in powerviewModel" :key="room.name">
+            <v-expansion-panel v-if="room.scenes" :disabled="websocketStatus != 1">
+                <v-expansion-panel-title>{{ room.name }}</v-expansion-panel-title>
+                <v-expansion-panel-text>
+                    <template v-for="scene in room.scenes" :key="scene.name">
+                        <v-btn class="spaced-out"
+                            @click="websocketPublish({ payload: scene.id, topic: 'put/powerview/scene' })">
+                            {{ scene.name }}
+                        </v-btn>
+                    </template>
+                </v-expansion-panel-text>
+            </v-expansion-panel>
+        </template>
     </v-expansion-panels>
 </template>
 

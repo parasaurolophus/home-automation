@@ -21,6 +21,8 @@ const showAlert = inject('showAlert')
 const websocketPublish = inject('websocketPublish')
 const websocketStatus = inject('websocketStatus')
 
+var refreshTimer = null
+
 function buildDiagram() {
     const themeName = (theme.global.current.value.dark ? '"dark"' : '"light"')
     const grayColor = (theme.global.current.value.dark ? '#888888' : '#888888')
@@ -76,7 +78,7 @@ function buildDiagram() {
         }
         bridgeNumber += 1
     }
-    if (powerviewModel.value.length > 0) {
+    if (Object.getOwnPropertyNames(powerviewModel.value).length > 0) {
         const powerviewClassName = powerviewStatus.value === 0 ? 'yellow' :
             powerviewStatus.value === 1 ? 'green' :
                 'red'
@@ -85,35 +87,58 @@ function buildDiagram() {
                 'error'
         flowchart += '        powerview_hub["PowerView Hub\n(' + hubStatus + ')"]\n'
         flowchart += '        class powerview_hub ' + powerviewClassName + '\n'
-        flowchart += '        powerview_shades([PowerView Shades])\n'
         flowchart += '        flow <-- WiFi --> powerview_hub\n'
-        flowchart += '        powerview_hub <-- Bluetooth --> powerview_shades\n'
+        if (hasShades()) {
+            flowchart += '        powerview_shades([PowerView Shades])\n'
+            flowchart += '        powerview_hub <-- Bluetooth --> powerview_shades\n'
+        }
         flowchart += '        click powerview_hub call powerviewHubNodeClicked() "Display PowerView controls model"\n'
     }
     flowchart += '    end\n'
     return flowchart
 }
 
-async function renderMermaid() {
+function hasShades() {
+    for (let roomId of Object.getOwnPropertyNames(powerviewModel.value)) {
+        const room = powerviewModel.value[roomId]
+        if (room.scenes) {
+            return true
+        }
+    }
+    return false
+}
 
+function refreshDiagram() {
+
+    if (refreshTimer !== null) {
+        clearTimeout(refreshTimer)
+    }
+    refreshTimer = setTimeout(
+        () => {
+            refreshTimer = null
+            renderMermaid()
+        },
+        1000)
+}
+
+async function renderMermaid() {
     const flowchart = buildDiagram()
     const { svg, bindFunctions } = await mermaid.render('ui', flowchart)
-
     diagram.value.innerHTML = svg
     bindFunctions?.(diagram.value)
 }
 
 mermaid.flowchartConfig = { width: '100%' }
 mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' })
-onMounted(renderMermaid)
-watch(hueBridges, renderMermaid)
-watch(hueResources, renderMermaid)
-watch(hueStatus, renderMermaid)
-watch(hueTitle, renderMermaid)
-watch(powerviewModel, renderMermaid)
-watch(websocketStatus, renderMermaid)
-watch(powerviewStatus, renderMermaid)
-watch(theme.global.current, renderMermaid)
+onMounted(refreshDiagram)
+watch(hueBridges, refreshDiagram)
+watch(hueResources, refreshDiagram)
+watch(hueStatus, refreshDiagram)
+watch(hueTitle, refreshDiagram)
+watch(powerviewModel, refreshDiagram)
+watch(websocketStatus, refreshDiagram)
+watch(powerviewStatus, refreshDiagram)
+watch(theme.global.current, refreshDiagram)
 
 ////////////////////////////////////////////////////////////////////////////////
 // TO DO: investigate ways to have the mermaid diagram invoke these directly
@@ -144,6 +169,9 @@ powerviewHubNodeClicked = () => showAlert('info', 'PowerView Hub', JSON.stringif
 
 // eslint-disable-next-line no-global-assign, no-undef
 flowNodeClicked = () => {
+    powerviewModel.value = {}
+    hueResources.value = {}
+    renderMermaid()
     websocketPublish({ payload: new Date().getTime(), topic: 'controls/refresh' })
 }
 

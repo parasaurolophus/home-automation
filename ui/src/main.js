@@ -39,9 +39,6 @@ app.provide('hueStatus', hueStatus)
 const hueTitle = ref({})
 app.provide('hueTitle', hueTitle)
 
-const powerviewModel = ref([])
-app.provide('powerviewModel', powerviewModel)
-
 const powerviewStatus = ref(0)
 app.provide('powerviewStatus', powerviewStatus)
 
@@ -121,6 +118,41 @@ function handleHueResource(address, kind, id, payload) {
             hue[address] = bridge
             hueResources.value = hue
         }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// handle a powervies/:kind/:id event
+///////////////////////////////////////////////////////////////////////////////
+
+const powerviewModel = ref({})
+app.provide('powerviewModel', powerviewModel)
+
+function handlePowerviewResource(kind, id, payload) {
+    switch (kind) {
+
+        case 'room':
+            {
+                const room = powerviewModel.value[id] || {}
+                room.id = payload.id
+                room.name = payload.name
+                powerviewModel.value[id] = room
+            }
+            break
+
+        case 'scene':
+            if (!payload.roomId) {
+                console.error(payload)
+                break
+            }
+            {
+                const room = powerviewModel.value[payload.roomId] || {}
+                const scenes = room.scenes || {}
+                scenes[id] = payload
+                room.scenes = scenes
+                powerviewModel.value[payload.roomId] = room
+            }
+            break
     }
 }
 
@@ -224,10 +256,6 @@ function connectWS() {
             timerTimes.value = msg.payload
             return
         }
-        if (msg.topic == 'powerview/model') {
-            powerviewModel.value = msg.payload
-            return
-        }
         if (msg.topic == 'powerview/status') {
             powerviewStatus.value = msg.payload
             return
@@ -302,6 +330,11 @@ function connectWS() {
         if (matches?.length == 2) {
             console.log(msg)
             showAlert('info', 'hue key for ' + matches[1], JSON.stringify(msg))
+            return
+        }
+        matches = /^powerview\/([^/]+)\/([^/]+)$/.exec(msg.topic)
+        if (matches?.length == 3) {
+            handlePowerviewResource(matches[1], matches[2], msg.payload)
             return
         }
     }
