@@ -328,7 +328,7 @@
         "id": "23bf1f9635c44cc8",
         "type": "group",
         "z": "d3b34304591c64d7",
-        "name": "handle commands relating to particular hue bridges",
+        "name": "put a hue bridge into key creation mode",
         "style": {
             "stroke": "none",
             "fill": "#000000",
@@ -3515,7 +3515,7 @@
         "z": "6057c05b02d1aad0",
         "g": "6cbb92fa530f2a8d",
         "name": "default",
-        "func": "const messages = []\nconst message = RED.util.cloneMessage(msg)\nconst count = context.get(\"count\") + 1\n\nmessage.retain = true\nmessage.label = 'default'\nmessages.push(message)\n\nmessages.push({\n    payload: {\n        setting: msg.topic,\n        value: msg.payload\n    },\n    topic: 'settings/default/info'\n})\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: count })\ncontext.set(\"count\", count)\nreturn [messages]\n",
+        "func": "const message = RED.util.cloneMessage(msg)\nconst count = context.get(\"count\") + 1\n\nmessage.retain = true\nmessage.label = 'default'\nnode.status({ fill: \"blue\", shape: \"dot\", text: count })\ncontext.set(\"count\", count)\nreturn message\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
