@@ -1,47 +1,51 @@
 <template>
-
-    <v-app-bar class="app-bar" title="Home Automation">
-        <template #prepend>
-            <v-app-bar-nav-icon @click.stop="displayMenu = !displayMenu">
-            </v-app-bar-nav-icon>
+    <v-app-bar class="app-bar" title="Home Automation" density="comfortable">
+        <template v-if="debugMode">
+            <v-chip color="primary" variant="elevated" rounded="pill">{{ messageCount }}</v-chip>
+            <v-divider vertical />
+            <v-chip :color="statusColor" variant="elevated" rounded="pill">{{ statusText }}</v-chip>
+            <v-divider vertical />
         </template>
-        <div class="pad">{{ messageCount }}</div>
-        <div class="pad">{{ status }}</div>
+        <DebugModeSelector />
+        <v-divider vertical />
         <ThemeSelector />
     </v-app-bar>
-
-    <v-navigation-drawer v-model="displayMenu">
-        <TimesList />
-    </v-navigation-drawer>
-
 </template>
 
 <style scoped>
 .pad {
     margin: 0.25rem;
+    padding: 0.25em;
+    border: solid 1px;
 }
 </style>
 
 <script setup>
-import { computed, inject, ref } from 'vue'
+import { computed, inject } from 'vue'
 
+const debugMode = inject('debugMode')
 const messageCount = inject('messageCount')
 const websocketStatus = inject('websocketStatus')
 
-const displayMenu = ref(false)
-
-const status = computed(() => {
-
+const statusText = computed(() => {
     switch (websocketStatus.value) {
-
         case 0:
             return 'connecting'
-
         case 1:
             return 'connected'
-
         default:
             return 'error'
+    }
+})
+
+const statusColor = computed(() => {
+    switch (websocketStatus.value) {
+        case 0:
+            return 'yellow'
+        case 1:
+            return 'green'
+        default:
+            return 'red'
     }
 })
 </script>

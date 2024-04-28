@@ -185,6 +185,9 @@ app.provide('messageCount', messageCount)
 const lastMessage = ref(null)
 app.provide('lastMessage', lastMessage)
 
+const debugMode=ref(false)
+app.provide('debugMode', debugMode)
+
 // create the ws connection to the back end
 function connectWS() {
 
@@ -260,6 +263,9 @@ function connectWS() {
         const msg = JSON.parse(event.data)
         messageCount.value += 1
         lastMessage.value = msg
+        if (debugMode.value) {
+            console.log(msg)
+        }
         if (msg.topic == 'timer/model/theme') {
             timerModel.value.theme = msg.payload
             return
