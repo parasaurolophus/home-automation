@@ -30,7 +30,6 @@
           </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
-      <pre v-if="debugMode">{{ JSON.stringify(lastMessage, undefined, 4) }}</pre>
     </v-main>
   </v-app>
 </template>
@@ -38,6 +37,5 @@
 <script setup>
 import { inject } from 'vue'
 
-const lastMessage = inject('lastMessage')
 const debugMode = inject('debugMode')
 </script>
