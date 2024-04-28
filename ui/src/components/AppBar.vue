@@ -1,15 +1,26 @@
 <template>
-    <v-app-bar class="app-bar" title="Home Automation" density="comfortable">
-        <template v-if="debugMode">
-            <v-chip color="primary" variant="elevated" rounded="pill">{{ messageCount }}</v-chip>
-            <v-divider vertical />
-            <v-chip :color="statusColor" variant="elevated" rounded="pill">{{ statusText }}</v-chip>
-            <v-divider vertical />
-        </template>
-        <DebugModeSelector />
-        <v-divider vertical />
-        <ThemeSelector />
-    </v-app-bar>
+    <v-defaults-provider :defaults="defaults">
+        <v-app-bar class="app-bar" title="Home Automation" density="comfortable">
+            <v-container>
+                <v-row>
+                    <v-col>
+                        <v-chip v-if="debugMode" color="primary">{{ messageCount }}</v-chip>
+                        <v-spacer v-else />
+                    </v-col>
+                    <v-col>
+                        <v-chip v-if="debugMode" :color="statusColor">{{ statusText }}</v-chip>
+                        <v-spacer v-else />
+                    </v-col>
+                    <v-col>
+                        <DebugModeSelector />
+                    </v-col>
+                    <v-col>
+                        <ThemeSelector />
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-app-bar>
+    </v-defaults-provider>
 </template>
 
 <style scoped>
@@ -21,7 +32,7 @@
 </style>
 
 <script setup>
-import { computed, inject } from 'vue'
+import { computed, inject, ref } from 'vue'
 
 const debugMode = inject('debugMode')
 const messageCount = inject('messageCount')
@@ -47,5 +58,12 @@ const statusColor = computed(() => {
         default:
             return 'red'
     }
+})
+
+const defaults = ref({
+    VChip: {
+        variant: 'elevated',
+        rounded: 'pill',
+    },
 })
 </script>
