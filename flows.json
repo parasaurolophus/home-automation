@@ -40,6 +40,14 @@
         "env": []
     },
     {
+        "id": "3f5fad9f95181352",
+        "type": "tab",
+        "label": "Utilities",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "85ed27d795e6e866",
         "type": "subflow",
         "name": "Hue API V2",
@@ -552,7 +560,7 @@
             "9cb4a587d2d04193",
             "032d5842e53c6015"
         ],
-        "x": 14,
+        "x": 114,
         "y": 19,
         "w": 712,
         "h": 202,
@@ -825,10 +833,60 @@
             "f9eefcde1f1bb936",
             "a1422d2b99486b36"
         ],
-        "x": 14,
+        "x": 114,
         "y": 239,
         "w": 632,
         "h": 202
+    },
+    {
+        "id": "9ac1c7bbc2ab2600",
+        "type": "group",
+        "z": "3f5fad9f95181352",
+        "name": "get hue bridges from dashboard",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "20d040389bc374da",
+            "14578045116ea043",
+            "f0fe0ed56468f28f",
+            "76f7d2f8d66f662f",
+            "2dc5dc7a75187376",
+            "3fad1e16e48b9467"
+        ],
+        "x": 114,
+        "y": 19,
+        "w": 652,
+        "h": 142
+    },
+    {
+        "id": "7b92e2172ff23b26",
+        "type": "group",
+        "z": "3f5fad9f95181352",
+        "name": "get hue resources from dashboard",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "28d83f49fa0ac7db",
+            "f98821f373a40879",
+            "10be187861dc58a6",
+            "799e60e5b80bdd52",
+            "c8d78b1ba83f3520",
+            "9690ddc49d5d2edd"
+        ],
+        "x": 114,
+        "y": 179,
+        "w": 692,
+        "h": 142
     },
     {
         "id": "67ab6a72f0300dd6",
@@ -1905,7 +1963,7 @@
         "name": "",
         "server": "431414ce08ebb3c0",
         "client": "",
-        "x": 110,
+        "x": 210,
         "y": 100,
         "wires": [
             [
@@ -1921,7 +1979,7 @@
         "name": "",
         "server": "431414ce08ebb3c0",
         "client": "",
-        "x": 630,
+        "x": 730,
         "y": 140,
         "wires": []
     },
@@ -1934,7 +1992,7 @@
         "scope": [
             "e1c10e3b6608de71"
         ],
-        "x": 140,
+        "x": 240,
         "y": 180,
         "wires": [
             [
@@ -1960,7 +2018,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 280,
+        "x": 380,
         "y": 180,
         "wires": [
             [
@@ -1980,7 +2038,7 @@
         "initialize": "const retained = flow.get('retained', 'file') || {}\n\nnode.status({\n    text: Object.keys(retained).length,\n    shape: 'ring',\n    fill: 'blue'\n})",
         "finalize": "",
         "libs": [],
-        "x": 440,
+        "x": 540,
         "y": 180,
         "wires": [
             [
@@ -2001,7 +2059,7 @@
         "initialize": "const retained = flow.get('retained', 'file') || {}\n\nnode.status({\n    text: Object.keys(retained).length,\n    shape: 'ring',\n    fill: 'blue'\n})",
         "finalize": "",
         "libs": [],
-        "x": 470,
+        "x": 570,
         "y": 100,
         "wires": [
             [
@@ -2017,7 +2075,7 @@
         "g": "165c6266935e206f",
         "name": "assumes a file-system backed context store named \"file\"",
         "info": "",
-        "x": 240,
+        "x": 340,
         "y": 60,
         "wires": []
     },
@@ -2029,7 +2087,7 @@
         "name": "publish",
         "server": "",
         "client": "0201d1318d5de5ea",
-        "x": 300,
+        "x": 400,
         "y": 400,
         "wires": []
     },
@@ -2039,8 +2097,10 @@
         "z": "e1d7dd3bdd3cf24a",
         "g": "c4e6856650bacfda",
         "name": "send to websocket",
-        "links": [],
-        "x": 130,
+        "links": [
+            "d067db1451aabd34"
+        ],
+        "x": 230,
         "y": 400,
         "wires": [
             [
@@ -2059,7 +2119,7 @@
             "12a3d05476ad73da"
         ],
         "uncaught": false,
-        "x": 430,
+        "x": 530,
         "y": 400,
         "wires": [
             [
@@ -2075,7 +2135,7 @@
         "name": "published",
         "mode": "return",
         "links": [],
-        "x": 560,
+        "x": 660,
         "y": 400,
         "wires": [],
         "l": true
@@ -2089,7 +2149,7 @@
         "scope": [
             "12a3d05476ad73da"
         ],
-        "x": 90,
+        "x": 190,
         "y": 340,
         "wires": [
             [
@@ -2108,7 +2168,7 @@
             "6752a070cde6d949",
             "6901706e715ecd86"
         ],
-        "x": 390,
+        "x": 490,
         "y": 340,
         "wires": [],
         "l": true
@@ -2131,9 +2191,11 @@
             "4b45acf4dec45b69",
             "06a2bc05ac2bd7e3",
             "cd8737251a5d81c2",
-            "b2bbe27faae5bd67"
+            "b2bbe27faae5bd67",
+            "14578045116ea043",
+            "f98821f373a40879"
         ],
-        "x": 290,
+        "x": 390,
         "y": 280,
         "wires": [],
         "l": true
@@ -2156,7 +2218,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 220,
+        "x": 320,
         "y": 340,
         "wires": [
             [
@@ -2172,7 +2234,7 @@
         "name": "subscribe",
         "server": "",
         "client": "0201d1318d5de5ea",
-        "x": 100,
+        "x": 200,
         "y": 280,
         "wires": [
             [
@@ -2198,7 +2260,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 300,
+        "x": 400,
         "y": 100,
         "wires": [
             [
@@ -4716,5 +4778,263 @@
             ]
         ],
         "l": true
+    },
+    {
+        "id": "20d040389bc374da",
+        "type": "inject",
+        "z": "3f5fad9f95181352",
+        "g": "9ac1c7bbc2ab2600",
+        "name": "get/hue/bridges",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "get/hue/bridges",
+        "payload": "",
+        "payloadType": "date",
+        "x": 260,
+        "y": 60,
+        "wires": [
+            [
+                "2dc5dc7a75187376"
+            ]
+        ]
+    },
+    {
+        "id": "14578045116ea043",
+        "type": "link in",
+        "z": "3f5fad9f95181352",
+        "g": "9ac1c7bbc2ab2600",
+        "name": "received from websocket",
+        "links": [
+            "fa75a07b47d3877f"
+        ],
+        "x": 250,
+        "y": 120,
+        "wires": [
+            [
+                "f0fe0ed56468f28f"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "f0fe0ed56468f28f",
+        "type": "switch",
+        "z": "3f5fad9f95181352",
+        "g": "9ac1c7bbc2ab2600",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "hue/bridges",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 430,
+        "y": 120,
+        "wires": [
+            [
+                "76f7d2f8d66f662f"
+            ]
+        ]
+    },
+    {
+        "id": "76f7d2f8d66f662f",
+        "type": "debug",
+        "z": "3f5fad9f95181352",
+        "g": "9ac1c7bbc2ab2600",
+        "name": "hue/bridges",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 570,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "2dc5dc7a75187376",
+        "type": "link call",
+        "z": "3f5fad9f95181352",
+        "g": "9ac1c7bbc2ab2600",
+        "name": "",
+        "links": [
+            "e9717c12f8856b19"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 450,
+        "y": 60,
+        "wires": [
+            [
+                "3fad1e16e48b9467"
+            ]
+        ]
+    },
+    {
+        "id": "3fad1e16e48b9467",
+        "type": "debug",
+        "z": "3f5fad9f95181352",
+        "g": "9ac1c7bbc2ab2600",
+        "name": "get/hue/bridges",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 640,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "28d83f49fa0ac7db",
+        "type": "inject",
+        "z": "3f5fad9f95181352",
+        "g": "7b92e2172ff23b26",
+        "name": "get/hue/resources",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "get/hue/resources",
+        "payload": "",
+        "payloadType": "date",
+        "x": 270,
+        "y": 220,
+        "wires": [
+            [
+                "c8d78b1ba83f3520"
+            ]
+        ]
+    },
+    {
+        "id": "f98821f373a40879",
+        "type": "link in",
+        "z": "3f5fad9f95181352",
+        "g": "7b92e2172ff23b26",
+        "name": "received from websocket",
+        "links": [
+            "fa75a07b47d3877f"
+        ],
+        "x": 250,
+        "y": 280,
+        "wires": [
+            [
+                "10be187861dc58a6"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "10be187861dc58a6",
+        "type": "switch",
+        "z": "3f5fad9f95181352",
+        "g": "7b92e2172ff23b26",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "hue/resources",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 430,
+        "y": 280,
+        "wires": [
+            [
+                "799e60e5b80bdd52"
+            ]
+        ]
+    },
+    {
+        "id": "799e60e5b80bdd52",
+        "type": "debug",
+        "z": "3f5fad9f95181352",
+        "g": "7b92e2172ff23b26",
+        "name": "hue/resources",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 580,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "c8d78b1ba83f3520",
+        "type": "link call",
+        "z": "3f5fad9f95181352",
+        "g": "7b92e2172ff23b26",
+        "name": "",
+        "links": [
+            "e9717c12f8856b19"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 470,
+        "y": 220,
+        "wires": [
+            [
+                "9690ddc49d5d2edd"
+            ]
+        ]
+    },
+    {
+        "id": "9690ddc49d5d2edd",
+        "type": "debug",
+        "z": "3f5fad9f95181352",
+        "g": "7b92e2172ff23b26",
+        "name": "get/hue/resources",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "counter",
+        "x": 670,
+        "y": 220,
+        "wires": []
     }
 ]

@@ -118,7 +118,6 @@ app.provide('powerviewModel', powerviewModel)
 
 function handlePowerviewResource(kind, id, payload) {
     switch (kind) {
-
         case 'room':
             {
                 const room = powerviewModel.value[id] || {}
@@ -127,7 +126,6 @@ function handlePowerviewResource(kind, id, payload) {
                 powerviewModel.value[id] = room
             }
             break
-
         case 'scene':
             if (!payload.roomId) {
                 console.error(payload)
@@ -256,6 +254,14 @@ function connectWS() {
         lastMessage.value = msg
         if (debugMode.value) {
             console.log(msg)
+        }
+        if (msg.topic == 'get/hue/bridges') {
+            websocketPublish({ topic: 'hue/bridges', payload: hueBridges.value })
+            return
+        }
+        if (msg.topic == 'get/hue/resources') {
+            websocketPublish({ topic: 'hue/resources', payload: hueResources.value })
+            return
         }
         if (msg.topic == 'timer/model/theme') {
             timerModel.value.theme = msg.payload
