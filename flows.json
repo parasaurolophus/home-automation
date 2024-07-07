@@ -889,6 +889,28 @@
         "h": 142
     },
     {
+        "id": "1b6a16ac363579bd",
+        "type": "group",
+        "z": "3f5fad9f95181352",
+        "name": "display suncalc times",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "7c9dc406f7498d93",
+            "63b29e7581a0110a",
+            "997ad767b0499a8c"
+        ],
+        "x": 114,
+        "y": 339,
+        "w": 472,
+        "h": 82
+    },
+    {
         "id": "67ab6a72f0300dd6",
         "type": "junction",
         "z": "94027c46c4bfae12",
@@ -5035,6 +5057,80 @@
         "statusType": "counter",
         "x": 670,
         "y": 220,
+        "wires": []
+    },
+    {
+        "id": "7c9dc406f7498d93",
+        "type": "inject",
+        "z": "3f5fad9f95181352",
+        "g": "1b6a16ac363579bd",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 380,
+        "wires": [
+            [
+                "63b29e7581a0110a"
+            ]
+        ]
+    },
+    {
+        "id": "63b29e7581a0110a",
+        "type": "function",
+        "z": "3f5fad9f95181352",
+        "g": "1b6a16ac363579bd",
+        "name": "get times",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst date = new Date(msg.payload)\n\nsuncalc.addTime(45, \"midday\", \"\")\nsuncalc.addTime(65, \"\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let time in times) {\n    const d = times[time]\n    times[time] = d.toLocaleString()\n}\n\nmsg.payload = times\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "suncalc",
+                "module": "suncalc"
+            }
+        ],
+        "x": 360,
+        "y": 380,
+        "wires": [
+            [
+                "997ad767b0499a8c"
+            ]
+        ]
+    },
+    {
+        "id": "997ad767b0499a8c",
+        "type": "debug",
+        "z": "3f5fad9f95181352",
+        "g": "1b6a16ac363579bd",
+        "name": "times",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 490,
+        "y": 380,
         "wires": []
     }
 ]
