@@ -88,35 +88,26 @@ const hueResources = ref({})
 app.provide('hueResources', hueResources)
 
 function handleHueResource(address, kind, id, payload) {
-
     const hue = hueResources.value || {}
     const bridge = hueResources.value[address] || {}
     const resources = bridge[kind] || {}
     const resource = resources[id] || {}
     let update = false
-
-    try {
-
-        for (let property of Object.getOwnPropertyNames(payload)) {
-
-            const value = payload[property]
-
-            if (resource[property] != value) {
-                resource[property] = value
-                update = true
-            }
-        }
-
-    } finally {
-
-        if (update) {
-            resources[id] = resource
-            bridge[kind] = resources
-            hue[address] = bridge
-            hueResources.value = hue
+    for (let property of Object.getOwnPropertyNames(payload)) {
+        const value = payload[property]
+        if (resource[property] != value) {
+            resource[property] = value
+            update = true
         }
     }
+    if (update) {
+        resources[id] = resource
+        bridge[kind] = resources
+        hue[address] = bridge
+        hueResources.value = hue
+    }
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // handle a powerview/:kind/:id event
@@ -185,7 +176,7 @@ app.provide('messageCount', messageCount)
 const lastMessage = ref(null)
 app.provide('lastMessage', lastMessage)
 
-const debugMode=ref(false)
+const debugMode = ref(false)
 app.provide('debugMode', debugMode)
 
 // create the ws connection to the back end
