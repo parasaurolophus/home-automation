@@ -911,6 +911,28 @@
         "h": 82
     },
     {
+        "id": "1ac713685d239c14",
+        "type": "group",
+        "z": "3f5fad9f95181352",
+        "name": "display suncalc times that violate assumptions",
+        "style": {
+            "stroke": "none",
+            "fill": "#000000",
+            "fill-opacity": "0.1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "bed5932db70c120c",
+            "2cc3caf3fc652f5a",
+            "39dd5e70b2e01333"
+        ],
+        "x": 114,
+        "y": 439,
+        "w": 552,
+        "h": 82
+    },
+    {
         "id": "67ab6a72f0300dd6",
         "type": "junction",
         "z": "94027c46c4bfae12",
@@ -5131,6 +5153,80 @@
         "statusType": "auto",
         "x": 490,
         "y": 380,
+        "wires": []
+    },
+    {
+        "id": "bed5932db70c120c",
+        "type": "inject",
+        "z": "3f5fad9f95181352",
+        "g": "1ac713685d239c14",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 480,
+        "wires": [
+            [
+                "2cc3caf3fc652f5a"
+            ]
+        ]
+    },
+    {
+        "id": "2cc3caf3fc652f5a",
+        "type": "function",
+        "z": "3f5fad9f95181352",
+        "g": "1ac713685d239c14",
+        "name": "get bogus times",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HOUR = 60 * MILLIS_PER_MINUTE\nconst MILLIS_PER_DAY = 20 * MILLIS_PER_HOUR\nconst MILLIS_PER_YEAR = 365 * MILLIS_PER_DAY\n\nsuncalc.addTime(45, \"midday\", \"\")\nsuncalc.addTime(65, \"\", \"afternoon\")\n\nconst now = new Date()\nconst date = new Date(\n    now.getFullYear(),\n    1,\n    1,\n    1,\n    1,)\nconst start = date.getTime()\nconst end = start + MILLIS_PER_YEAR\nconst result = []\n\nfor (let time = start; time <= end; time += MILLIS_PER_DAY) {\n    const d = new Date(time)\n    const times = suncalc.getTimes(d, LATITUDE, LONGITUDE)\n    const m = times.midday.getTime()\n    const a = times.afternoon.getTime()\n    if (m >= a) {\n        result.push({\n            midday: times.midday.toLocaleString(),\n            afternoon: times.afternoon.toLocaleString(),\n        })\n    }\n}\n\nmsg.payload = result\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "suncalc",
+                "module": "suncalc"
+            }
+        ],
+        "x": 380,
+        "y": 480,
+        "wires": [
+            [
+                "39dd5e70b2e01333"
+            ]
+        ]
+    },
+    {
+        "id": "39dd5e70b2e01333",
+        "type": "debug",
+        "z": "3f5fad9f95181352",
+        "g": "1ac713685d239c14",
+        "name": "bogus times",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 480,
         "wires": []
     }
 ]
