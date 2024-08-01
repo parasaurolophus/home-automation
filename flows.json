@@ -620,23 +620,13 @@
             "7adca925e9011e2f",
             "679d6a0d2002bcb7",
             "48891106bb0c15f3",
-            "6d027828f94cb558",
-            "97324173f5cd31d1",
-            "befa2aee7b7c68f0",
-            "f0fd3673cca0dbde",
-            "bc4239a2638e560d",
-            "e471a1ddbc9ef198",
-            "0a76f5d385da96d7",
-            "9c763cec842003b4",
-            "11cc62548c1ebf9e",
-            "b5eb05ffb31db5ed",
             "1d43af918b460743",
             "564413ccb5bf6302"
         ],
         "x": 94,
         "y": 279,
-        "w": 1282,
-        "h": 282,
+        "w": 962,
+        "h": 202,
         "info": "Activate the corresponding PowerView scene upon receipt of of each\n`automation/trigger` event"
     },
     {
@@ -663,7 +653,7 @@
             "32b6005aefb60beb"
         ],
         "x": 94,
-        "y": 579,
+        "y": 499,
         "w": 772,
         "h": 202,
         "info": "Handle lighting automation trigger events\n\n| Bridge | Address |\n|-|-|\n| Basement | 192.168.1.34 |\n| Ground Floor | 192.168.1.12 |\n\n| Room / Zone   | Grouped Light Id                     |\n|---------------|--------------------------------------|\n| Main Bathroom | aea74e74-d544-4d08-ad71-3b6665045256 |\n| Main Floor    | 9c1c7975-2f47-4552-bac8-c19b643cd678 |\n| Exterior      | a8498fe0-27a4-446b-9350-d236c7c663e1 |\n\n| Group         | Scene      | Scene Id                             |\n|---------------|------------|--------------------------------------|\n| Exterior      | Bright     | 041b6097-268c-4ea0-9e93-39c5c68ad2a7 |\n| Exterior      | Sunset     | 6918db34-c83f-4e37-9581-8d4255bfd1f8 |\n| Exterior      | Tribal     | e9503c3a-16b3-49ae-a4f9-2f6074d67be0 |\n| Exterior      | Spooky     | 85aef9e7-9805-4f07-afc9-80aa14e7be61 |\n| Exterior      | Jolly      | a1a2735c-def7-4db7-8d8e-bebe2a7e2200 |\n| Main Bathroom | Nightlight | 5d507fb6-89f6-459a-b327-0fffd0c6dc48 |\n| Main Floor    | Bright     | 8c5f011c-bc6f-49a8-8d82-9d1db302c87c |\n| Main Floor    | Sunset     | 6eff0801-01e2-4803-9840-e31c06cee079 |\n| Main Floor    | Nightlight | 48c39b9f-1599-4a5c-b7f6-bad6cad4029a |\n| Main Floor    | Jolly      | 3ac45cbb-21c0-4c2f-8037-c40345537ce2 |\n\nTo turn off the _Exterior_ zone and activate the _Nightlight_ scene in each of the _Main Bathroom_ and _Main Floor_:\n\n```json\n[\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\n        \"payload\": {\n            \"on\": {\n                \"on\": false\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/5d507fb6-89f6-459a-b327-0fffd0c6dc48\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    },\n    {\n        \"topic\": \"put/hue/192.168.1.12/resource/scene/48c39b9f-1599-4a5c-b7f6-bad6cad4029a\",\n        \"payload\": {\n            \"recall\": {\n                \"action\": \"active\"\n            }\n        },\n        \"method\": \"PUT\"\n    }\n]\n```"
@@ -684,7 +674,7 @@
             "b044e7bab42607f8"
         ],
         "x": 914,
-        "y": 639,
+        "y": 559,
         "w": 452,
         "h": 82
     },
@@ -908,28 +898,6 @@
         "x": 114,
         "y": 339,
         "w": 472,
-        "h": 82
-    },
-    {
-        "id": "1ac713685d239c14",
-        "type": "group",
-        "z": "3f5fad9f95181352",
-        "name": "display suncalc times that violate assumptions",
-        "style": {
-            "stroke": "none",
-            "fill": "#000000",
-            "fill-opacity": "0.1",
-            "label": true,
-            "color": "#000000"
-        },
-        "nodes": [
-            "bed5932db70c120c",
-            "2cc3caf3fc652f5a",
-            "39dd5e70b2e01333"
-        ],
-        "x": 114,
-        "y": 439,
-        "w": 552,
         "h": 82
     },
     {
@@ -2379,7 +2347,7 @@
         "z": "94027c46c4bfae12",
         "g": "b10eb6ebfd377efe",
         "name": "timer",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst events = [{ cancel: true }]\n\nsuncalc.addTime(45, \"midday\", \"\")\nsuncalc.addTime(65, \"\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key of Object.getOwnPropertyNames(times)) {\n\n    const time = times[key].getTime()\n\n    events.push({\n        topic: 'timer/model/' + key,\n        payload: time,\n        retain: true,\n    })\n\n    if (time > now) {\n        events.push({\n            topic: 'timer/time',\n            payload: key,\n            at: time,\n        })\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate(),\n    hour).getTime() + offset\n\nevents.push({\n    topic: 'timer/model/bedtime',\n    payload: bedtime,\n    retain: true,\n})\n\nif (bedtime > now) {\n    events.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime,\n    })\n}\n\nconst midnight = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate() + 1,\n    0,\n    1).getTime()\n\nevents.push({\n    topic: 'timer/model/midnight',\n    payload: midnight,\n    retain: true,\n})\n\nif (midnight > now) {\n    events.push({\n        payload: 'midnight',\n        topic: 'timer/time',\n        at: midnight,\n    })\n}\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nevents.push({\n    topic: 'timer/model/theme',\n    payload: theme,\n    retain: true,\n})\n\nevents.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [events]\n",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HALF_HOUR = 30 * MILLIS_PER_MINUTE\nconst MILLIS_PER_HOUR = 2 * MILLIS_PER_HALF_HOUR\n\nconst now = msg.payload.now\nconst hour = msg.payload['settings/bedtime']\nconst date = new Date(now)\nconst events = [{ cancel: true }]\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let key of Object.getOwnPropertyNames(times)) {\n\n    const time = times[key].getTime()\n\n    events.push({\n        topic: 'timer/model/' + key,\n        payload: time,\n        retain: true,\n    })\n\n    if (time > now) {\n        events.push({\n            topic: 'timer/time',\n            payload: key,\n            at: time,\n        })\n    }\n}\n\nconst offset = MILLIS_PER_HALF_HOUR - Math.floor(Math.random() * MILLIS_PER_HOUR)\n\nconst bedtime = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate(),\n    hour).getTime() + offset\n\nevents.push({\n    topic: 'timer/model/bedtime',\n    payload: bedtime,\n    retain: true,\n})\n\nif (bedtime > now) {\n    events.push({\n        payload: 'bedtime',\n        topic: 'timer/time',\n        at: bedtime,\n    })\n}\n\nconst midnight = new Date(\n    date.getFullYear(),\n    date.getMonth(),\n    date.getDate() + 1,\n    0,\n    1).getTime()\n\nevents.push({\n    topic: 'timer/model/midnight',\n    payload: midnight,\n    retain: true,\n})\n\nif (midnight > now) {\n    events.push({\n        payload: 'midnight',\n        topic: 'timer/time',\n        at: midnight,\n    })\n}\n\nconst month = date.getMonth() + 1\nconst day = date.getDate()\nlet theme = 'standard'\n\nif ((month == 7) && (day <= 4)) {\n\n    theme = 'tribal'\n\n} else if (month == 10) {\n\n    theme = 'spooky'\n\n} else if (month == 12) {\n\n    theme = 'jolly'\n\n}\n\nevents.push({\n    topic: 'timer/model/theme',\n    payload: theme,\n    retain: true,\n})\n\nevents.push({\n    payload: theme,\n    topic: 'timer/theme'\n})\n\nreturn [events]\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -2480,8 +2448,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 980,
-        "y": 360,
+        "x": 660,
+        "y": 320,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2509,8 +2477,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 970,
-        "y": 400,
+        "x": 650,
+        "y": 360,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2538,8 +2506,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 970,
-        "y": 480,
+        "x": 650,
+        "y": 440,
         "wires": [
             [
                 "7adca925e9011e2f"
@@ -2574,8 +2542,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1220,
-        "y": 420,
+        "x": 900,
+        "y": 380,
         "wires": [
             [
                 "1d43af918b460743"
@@ -2589,41 +2557,38 @@
         "g": "8326ae1a15518f8f",
         "name": "shades automation event",
         "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'retained' });\n    return [null, null, null, null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'different topic' });\n    return [null, null, null, null, null, null]\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'shades disabled' });\n    return [null, null, null, null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [copyMsg(), null, null, null, null, null]\n\n    case 'midday':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, copyMsg(), null, null, null, null]\n\n    case 'afternoon':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, copyMsg(), null, null, null]\n\n    case 'sunset':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, copyMsg(), null, null]\n\n    case 'dusk':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, copyMsg(), null]\n\n    case 'bedtime':\n    case 'midnight':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, null, null]\n\n}\n",
-        "outputs": 6,
+        "outputs": 5,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 420,
+        "y": 380,
         "wires": [
             [
-                "0a76f5d385da96d7"
+                "6a9ac472018c38ea"
             ],
             [
-                "befa2aee7b7c68f0"
+                "9e961b1409432775"
             ],
             [
-                "11cc62548c1ebf9e"
+                "48891106bb0c15f3"
             ],
             [
-                "6d027828f94cb558"
+                "db4f7c2c93cd8f30"
             ],
             [
-                "b5eb05ffb31db5ed"
-            ],
-            [
-                "bc4239a2638e560d"
+                "db4f7c2c93cd8f30"
             ]
         ],
         "outputLabels": [
             "sunrise",
-            "midday",
-            "afternoon",
+            "solarNoon",
             "sunset",
             "dusk",
-            "bedtime"
+            "bedtime",
+            ""
         ]
     },
     {
@@ -2646,180 +2611,14 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 970,
-        "y": 440,
+        "x": 650,
+        "y": 400,
         "wires": [
             [
                 "7adca925e9011e2f"
             ]
         ],
         "info": "Set `msg.payload` to the scene id for _Open All Shades_."
-    },
-    {
-        "id": "6d027828f94cb558",
-        "type": "link out",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "sunset",
-        "mode": "link",
-        "links": [
-            "97324173f5cd31d1"
-        ],
-        "x": 630,
-        "y": 440,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "97324173f5cd31d1",
-        "type": "link in",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "open all",
-        "links": [
-            "6d027828f94cb558",
-            "befa2aee7b7c68f0"
-        ],
-        "x": 810,
-        "y": 440,
-        "wires": [
-            [
-                "48891106bb0c15f3"
-            ]
-        ],
-        "l": true
-    },
-    {
-        "id": "befa2aee7b7c68f0",
-        "type": "link out",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "midday",
-        "mode": "link",
-        "links": [
-            "97324173f5cd31d1"
-        ],
-        "x": 640,
-        "y": 360,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "f0fd3673cca0dbde",
-        "type": "link in",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "close all",
-        "links": [
-            "cc0f759f7fc83125",
-            "bc4239a2638e560d",
-            "b5eb05ffb31db5ed"
-        ],
-        "x": 800,
-        "y": 480,
-        "wires": [
-            [
-                "db4f7c2c93cd8f30"
-            ]
-        ],
-        "l": true
-    },
-    {
-        "id": "bc4239a2638e560d",
-        "type": "link out",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "bedtime",
-        "mode": "link",
-        "links": [
-            "f0fd3673cca0dbde"
-        ],
-        "x": 640,
-        "y": 520,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "e471a1ddbc9ef198",
-        "type": "link in",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "morning",
-        "links": [
-            "0a76f5d385da96d7"
-        ],
-        "x": 800,
-        "y": 360,
-        "wires": [
-            [
-                "6a9ac472018c38ea"
-            ]
-        ],
-        "l": true
-    },
-    {
-        "id": "0a76f5d385da96d7",
-        "type": "link out",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "sunrise",
-        "mode": "link",
-        "links": [
-            "e471a1ddbc9ef198"
-        ],
-        "x": 640,
-        "y": 320,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "9c763cec842003b4",
-        "type": "link in",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "afternoon",
-        "links": [
-            "11cc62548c1ebf9e"
-        ],
-        "x": 800,
-        "y": 400,
-        "wires": [
-            [
-                "9e961b1409432775"
-            ]
-        ],
-        "l": true
-    },
-    {
-        "id": "11cc62548c1ebf9e",
-        "type": "link out",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "afternoon",
-        "mode": "link",
-        "links": [
-            "9c763cec842003b4"
-        ],
-        "x": 640,
-        "y": 400,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "b5eb05ffb31db5ed",
-        "type": "link out",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "dusk",
-        "mode": "link",
-        "links": [
-            "8f3017ac0fd35db7",
-            "f0fd3673cca0dbde"
-        ],
-        "x": 630,
-        "y": 480,
-        "wires": [],
-        "l": true
     },
     {
         "id": "870608ff910feb60",
@@ -2835,7 +2634,7 @@
             }
         ],
         "x": 620,
-        "y": 620,
+        "y": 540,
         "wires": []
     },
     {
@@ -2870,7 +2669,7 @@
         "repair": false,
         "outputs": 4,
         "x": 610,
-        "y": 680,
+        "y": 600,
         "wires": [
             [
                 "1cb0a0826e19ac25"
@@ -2901,7 +2700,7 @@
             }
         ],
         "x": 630,
-        "y": 740,
+        "y": 660,
         "wires": []
     },
     {
@@ -2918,7 +2717,7 @@
             }
         ],
         "x": 770,
-        "y": 620,
+        "y": 540,
         "wires": []
     },
     {
@@ -2935,7 +2734,7 @@
             }
         ],
         "x": 780,
-        "y": 660,
+        "y": 580,
         "wires": []
     },
     {
@@ -2952,7 +2751,7 @@
             }
         ],
         "x": 770,
-        "y": 700,
+        "y": 620,
         "wires": []
     },
     {
@@ -2969,7 +2768,7 @@
             }
         ],
         "x": 780,
-        "y": 740,
+        "y": 660,
         "wires": []
     },
     {
@@ -2986,7 +2785,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 680,
+        "y": 600,
         "wires": [
             [
                 "870608ff910feb60"
@@ -3013,7 +2812,7 @@
         "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
         "x": 1140,
-        "y": 680,
+        "y": 600,
         "wires": []
     },
     {
@@ -3173,8 +2972,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 1335,
-        "y": 420,
+        "x": 1015,
+        "y": 380,
         "wires": [
             []
         ],
@@ -3226,7 +3025,7 @@
             "fa75a07b47d3877f"
         ],
         "x": 180,
-        "y": 420,
+        "y": 380,
         "wires": [
             [
                 "679d6a0d2002bcb7"
@@ -3244,7 +3043,7 @@
             "fa75a07b47d3877f"
         ],
         "x": 180,
-        "y": 680,
+        "y": 600,
         "wires": [
             [
                 "5e838b011b496bb4"
@@ -5117,7 +4916,7 @@
         "z": "3f5fad9f95181352",
         "g": "1b6a16ac363579bd",
         "name": "get times",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst date = new Date(msg.payload)\n\nsuncalc.addTime(45, \"midday\", \"\")\nsuncalc.addTime(65, \"\", \"afternoon\")\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nfor (let time in times) {\n    const d = times[time]\n    times[time] = d.toLocaleString()\n}\n\nmsg.payload = times\nreturn msg",
+        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst date = new Date(msg.payload)\n\nconst times = suncalc.getTimes(\n    new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        1,\n        1\n    ),\n    LATITUDE,\n    LONGITUDE\n)\n\nconst a = []\n\nfor (let time in times) {\n    const d = times[time]\n    a.push({\n        time: time,\n        date: times[time],\n    })\n}\n\na.sort((a, b) => {\n    return a.date.getTime() - b.date.getTime()\n})\n\na.forEach((e) => {\n    e.date = e.date.toLocaleString()\n})\n\nmsg.payload = a\nreturn msg",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -5153,80 +4952,6 @@
         "statusType": "auto",
         "x": 490,
         "y": 380,
-        "wires": []
-    },
-    {
-        "id": "bed5932db70c120c",
-        "type": "inject",
-        "z": "3f5fad9f95181352",
-        "g": "1ac713685d239c14",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 220,
-        "y": 480,
-        "wires": [
-            [
-                "2cc3caf3fc652f5a"
-            ]
-        ]
-    },
-    {
-        "id": "2cc3caf3fc652f5a",
-        "type": "function",
-        "z": "3f5fad9f95181352",
-        "g": "1ac713685d239c14",
-        "name": "get bogus times",
-        "func": "/*global suncalc*/\n\nconst LATITUDE = env.get('LATITUDE')\nconst LONGITUDE = env.get('LONGITUDE')\n\nconst MILLIS_PER_SECOND = 1000\nconst MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND\nconst MILLIS_PER_HOUR = 60 * MILLIS_PER_MINUTE\nconst MILLIS_PER_DAY = 20 * MILLIS_PER_HOUR\nconst MILLIS_PER_YEAR = 365 * MILLIS_PER_DAY\n\nsuncalc.addTime(45, \"midday\", \"\")\nsuncalc.addTime(65, \"\", \"afternoon\")\n\nconst now = new Date()\nconst date = new Date(\n    now.getFullYear(),\n    1,\n    1,\n    1,\n    1,)\nconst start = date.getTime()\nconst end = start + MILLIS_PER_YEAR\nconst result = []\n\nfor (let time = start; time <= end; time += MILLIS_PER_DAY) {\n    const d = new Date(time)\n    const times = suncalc.getTimes(d, LATITUDE, LONGITUDE)\n    const m = times.midday.getTime()\n    const a = times.afternoon.getTime()\n    if (m >= a) {\n        result.push({\n            midday: times.midday.toLocaleString(),\n            afternoon: times.afternoon.toLocaleString(),\n        })\n    }\n}\n\nmsg.payload = result\nreturn msg",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "suncalc",
-                "module": "suncalc"
-            }
-        ],
-        "x": 380,
-        "y": 480,
-        "wires": [
-            [
-                "39dd5e70b2e01333"
-            ]
-        ]
-    },
-    {
-        "id": "39dd5e70b2e01333",
-        "type": "debug",
-        "z": "3f5fad9f95181352",
-        "g": "1ac713685d239c14",
-        "name": "bogus times",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 550,
-        "y": 480,
         "wires": []
     }
 ]
