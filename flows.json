@@ -618,10 +618,10 @@
             "9e961b1409432775",
             "db4f7c2c93cd8f30",
             "7adca925e9011e2f",
-            "679d6a0d2002bcb7",
             "48891106bb0c15f3",
             "1d43af918b460743",
-            "564413ccb5bf6302"
+            "564413ccb5bf6302",
+            "679d6a0d2002bcb7"
         ],
         "x": 94,
         "y": 279,
@@ -2551,46 +2551,6 @@
         ]
     },
     {
-        "id": "679d6a0d2002bcb7",
-        "type": "function",
-        "z": "94027c46c4bfae12",
-        "g": "8326ae1a15518f8f",
-        "name": "shades automation event",
-        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'retained' });\n    return [null, null, null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'different topic' });\n    return [null, null, null, null, null]\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'shades disabled' });\n    return [null, null, null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [copyMsg(), null, null, null, null]\n\n    case 'solarNoon':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, copyMsg(), null, null, null]\n\n    case 'sunset':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, copyMsg(), null, null]\n\n    case 'dusk':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, copyMsg(), null]\n\n    case 'dusk':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, copyMsg()]\n\n    case 'bedtime':\n    case 'midnight':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null, null, null]\n\n}\n",
-        "outputs": 5,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 370,
-        "y": 380,
-        "wires": [
-            [
-                "6a9ac472018c38ea"
-            ],
-            [
-                "9e961b1409432775"
-            ],
-            [
-                "48891106bb0c15f3"
-            ],
-            [
-                "db4f7c2c93cd8f30"
-            ],
-            [
-                "db4f7c2c93cd8f30"
-            ]
-        ],
-        "outputLabels": [
-            "sunrise",
-            "solarNoon",
-            "sunset",
-            "dusk",
-            "bedtime"
-        ]
-    },
-    {
         "id": "48891106bb0c15f3",
         "type": "change",
         "z": "94027c46c4bfae12",
@@ -2799,8 +2759,7 @@
         "outputLabels": [
             "sunrise",
             "sunset",
-            "bedtime",
-            ""
+            "bedtime"
         ]
     },
     {
@@ -3069,6 +3028,42 @@
             [
                 "5719982d34e4cf54"
             ]
+        ]
+    },
+    {
+        "id": "679d6a0d2002bcb7",
+        "type": "function",
+        "z": "94027c46c4bfae12",
+        "g": "8326ae1a15518f8f",
+        "name": "shades automation event",
+        "func": "function copyMsg() {\n\n    return {\n        payload: msg.payload,\n        topic: msg.topic,\n        retain: false\n    }\n}\n\nif (msg.retain) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'retained' });\n    return [null, null, null, null]\n\n}\n\nif (msg.topic != 'automation/trigger') {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'different topic' });\n    return [null, null, null, null]\n\n}\n\nif (!msg.payload['settings/shades']) {\n\n    node.status({ fill: 'grey', shape: 'dot', text: 'shades disabled' });\n    return [null, null, null, null]\n\n}\n\nswitch (msg.payload['timer/time']) {\n\n    case 'sunrise':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [copyMsg(), null, null, null]\n\n    case 'solarNoon':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, copyMsg(), null, null]\n\n    case 'sunset':\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, copyMsg(), null]\n\n    case 'dusk':\n    case 'bedtime':\n    case 'midnight':\n\n        node.status({ fill: 'blue', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, copyMsg()]\n\n    default:\n\n        node.status({ fill: 'grey', shape: 'dot', text: msg.payload['timer/time'] });\n        return [null, null, null, null]\n\n}\n",
+        "outputs": 4,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 380,
+        "wires": [
+            [
+                "6a9ac472018c38ea"
+            ],
+            [
+                "9e961b1409432775"
+            ],
+            [
+                "48891106bb0c15f3"
+            ],
+            [
+                "db4f7c2c93cd8f30"
+            ]
+        ],
+        "outputLabels": [
+            "sunrise",
+            "solarNoon",
+            "sunset",
+            "night"
         ]
     },
     {
