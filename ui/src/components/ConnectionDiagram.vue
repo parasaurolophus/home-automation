@@ -1,5 +1,18 @@
 <template>
-    <pre ref="diagram"></pre>
+    <v-card>
+        <v-card-text>
+            <pre ref="diagram"></pre>
+        </v-card-text>
+        <v-card-actions>
+            <v-btn @click="onResetConnections()">Reconnect</v-btn>
+            <v-btn v-for="(bridge, address) in hueBridges" @click="onHueBridgeInfo(address)">
+                Hue Bridge {{ hueTitle[address] ?? ('Hue Bridge' + address) }}
+            </v-btn>
+            <v-btn v-if="Object.getOwnPropertyNames(powerviewModel).length > 0" @click="onPowerViewInfo()">
+                PowerView Hub
+            </v-btn>
+        </v-card-actions>
+    </v-card>
 </template>
 
 <script setup>
@@ -48,10 +61,8 @@ function buildDiagram() {
     flowchart += '        subgraph Node-RED\n'
     flowchart += '            ui["Vuetify-based UI"]\n'
     flowchart += '            class ui green\n'
-    flowchart += '            click ui call uiNodeClicked() "Nothing to see here"\n'
     flowchart += '            flow["Node-RED Flow\n(' + flowStatus + ')"]\n'
     flowchart += '            class flow ' + flowClassName + '\n'
-    flowchart += '            click flow call flowNodeClicked() "Reset WebSocket connection"\n'
     flowchart += '            ui <-- WebSocket --> flow\n'
     flowchart += '        end\n'
     let bridgeNumber = 1
@@ -68,7 +79,6 @@ function buildDiagram() {
         const bridgeName = 'hue_bridge_' + bridgeNumber
         flowchart += '        ' + bridgeName + '["' + bridgeTitle + ' Hue Bridge\n(' + bridgeStatus + ')"]\n'
         flowchart += '        class ' + bridgeName + ' ' + bridgeClassName + '\n'
-        flowchart += '        click ' + bridgeName + ' call hueBridgeNodeClicked("' + address + '") "Display Hue Bridge mDNS metadata"\n'
         flowchart += '        flow <-- WiFi --> ' + bridgeName + '\n'
         const resources = hueResources.value[address]
         if (resources) {
@@ -92,7 +102,6 @@ function buildDiagram() {
             flowchart += '        powerview_shades([PowerView Shades])\n'
             flowchart += '        powerview_hub <-- Bluetooth --> powerview_shades\n'
         }
-        flowchart += '        click powerview_hub call powerviewHubNodeClicked() "Display PowerView controls model"\n'
     }
     flowchart += '    end\n'
     return flowchart
@@ -144,8 +153,7 @@ watch(theme.global.current, refreshDiagram)
 // rather than using indirection through index.html
 ////////////////////////////////////////////////////////////////////////////////
 
-// eslint-disable-next-line no-global-assign, no-undef
-hueBridgeNodeClicked = (address) => {
+function onHueBridgeInfo(address) {
     const bridge = hueBridges.value[address]
     if (!bridge) {
         showAlert('error', 'Missing Hue Bridge', 'No Hue Bridge found for ' + address)
@@ -163,17 +171,14 @@ hueBridgeNodeClicked = (address) => {
     showAlert('info', 'Hue Bridge ' + (hueTitle[address] ?? address), text)
 }
 
-// eslint-disable-next-line no-global-assign, no-undef
-powerviewHubNodeClicked = () => showAlert('info', 'PowerView Hub', JSON.stringify(powerviewModel.value, undefined, 4))
+function onPowerViewInfo() {
+    showAlert('info', 'PowerView Hub', JSON.stringify(powerviewModel.value, undefined, 4))
+}
 
-// eslint-disable-next-line no-global-assign, no-undef
-flowNodeClicked = () => {
+function onResetConnections() {
     powerviewModel.value = {}
     hueResources.value = {}
     renderMermaid()
     websocketPublish({ payload: new Date().getTime(), topic: 'controls/refresh' })
 }
-
-// eslint-disable-next-line no-global-assign, no-undef
-uiNodeClicked = () => showAlert('info', 'nothing to see here', 'ui node clicked')
 </script>

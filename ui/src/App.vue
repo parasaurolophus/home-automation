@@ -49,7 +49,6 @@ function initializeMermaid() {
   mermaid.initialize({
     startOnLoad: false,
     theme: theme.global.current.value.dark ? 'dark' : 'light',
-    securityLevel: 'loose',
   })
 }
 </script>
