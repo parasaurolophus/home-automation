@@ -5,6 +5,7 @@
         <v-tab value="2">PowerView Model</v-tab>
         <v-tab value="3">Timer Model</v-tab>
         <v-tab value="4">Last Message</v-tab>
+        <v-tab value="5">Mermaid Test</v-tab>
     </v-tabs>
     <v-window v-model="tab">
         <v-window-item value="0">
@@ -27,17 +28,24 @@
             <v-divider />
             <pre>{{ JSON.stringify(lastMessage, undefined, 4) }}</pre>
         </v-window-item>
+        <v-window-item value="5">
+            <v-divider />
+            <MermaidTest />
+        </v-window-item>
     </v-window>
 </template>
 
 <script setup>
-import { inject, ref } from 'vue'
+import { inject, onMounted, onUpdated, ref } from 'vue'
+import { useTheme } from 'vuetify'
+import mermaid from 'mermaid'
 
 const hueResources = inject('hueResources')
-const lastMessage=inject('lastMessage')
+const lastMessage = inject('lastMessage')
 const powerviewModel = inject('powerviewModel')
 
-const tab = ref(0)
+const tab = ref(null)
+const theme = useTheme()
 
 const hueResourcesFilter = ref(`(
   $address := '192.168.1.34';
@@ -72,4 +80,14 @@ const hueResourcesFilter = ref(`(
       })[];
       $model[name ~> $names][]
 )`)
+
+onMounted(initializeMermaid)
+onUpdated(initializeMermaid)
+
+function initializeMermaid() {
+    mermaid.initialize({
+        startOnLoad: false,
+        theme: theme.global.current.value.dark ? 'dark' : 'light',
+    })
+}
 </script>
