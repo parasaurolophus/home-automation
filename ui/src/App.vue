@@ -35,7 +35,21 @@
 </template>
 
 <script setup>
-import { inject } from 'vue'
+import { inject, onMounted, onUpdated } from 'vue'
+import { useTheme } from 'vuetify'
+import mermaid from 'mermaid'
 
 const debugMode = inject('debugMode')
+const theme = useTheme()
+
+onMounted(initializeMermaid)
+onUpdated(initializeMermaid)
+
+function initializeMermaid() {
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: theme.global.current.value.dark ? 'dark' : 'light',
+    securityLevel: 'loose',
+  })
+}
 </script>

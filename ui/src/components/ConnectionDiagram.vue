@@ -129,7 +129,6 @@ async function renderMermaid() {
 }
 
 mermaid.flowchartConfig = { width: '100%' }
-mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' })
 onMounted(refreshDiagram)
 watch(hueBridges, refreshDiagram)
 watch(hueResources, refreshDiagram)

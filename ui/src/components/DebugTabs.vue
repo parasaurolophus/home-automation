@@ -36,16 +36,13 @@
 </template>
 
 <script setup>
-import { inject, onMounted, onUpdated, ref } from 'vue'
-import { useTheme } from 'vuetify'
-import mermaid from 'mermaid'
+import { inject, ref } from 'vue'
 
 const hueResources = inject('hueResources')
 const lastMessage = inject('lastMessage')
 const powerviewModel = inject('powerviewModel')
 
 const tab = ref(null)
-const theme = useTheme()
 
 const hueResourcesFilter = ref(`(
   $address := '192.168.1.34';
@@ -80,14 +77,4 @@ const hueResourcesFilter = ref(`(
       })[];
       $model[name ~> $names][]
 )`)
-
-onMounted(initializeMermaid)
-onUpdated(initializeMermaid)
-
-function initializeMermaid() {
-    mermaid.initialize({
-        startOnLoad: false,
-        theme: theme.global.current.value.dark ? 'dark' : 'light',
-    })
-}
 </script>
