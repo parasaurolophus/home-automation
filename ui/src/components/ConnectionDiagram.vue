@@ -18,7 +18,7 @@
 <script setup>
 import { onMounted, ref, inject, watch } from 'vue'
 import { useTheme } from 'vuetify'
-import mermaid from 'mermaid'
+import { renderMermaid } from '@/renderMermaid'
 
 const theme = useTheme()
 
@@ -132,16 +132,9 @@ function refreshDiagram() {
     refreshTimer = setTimeout(
         () => {
             refreshTimer = null
-            renderMermaid()
+            renderMermaid('ui', diagram.value, buildDiagram())
         },
         1000)
-}
-
-async function renderMermaid() {
-    const flowchart = buildDiagram()
-    const { svg, bindFunctions } = await mermaid.render('ui', flowchart)
-    diagram.value.innerHTML = svg
-    bindFunctions?.(diagram.value)
 }
 
 onMounted(refreshDiagram)
