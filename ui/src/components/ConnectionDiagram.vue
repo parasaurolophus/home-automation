@@ -1,9 +1,7 @@
 <template>
     <v-card>
         <v-card-text>
-            <v-theme-provider theme="dark" with-background>
-                <pre ref="diagram"></pre>
-            </v-theme-provider>
+            <pre ref="diagram"></pre>
         </v-card-text>
         <v-card-actions>
             <v-btn @click="onResetConnections()">Reconnect</v-btn>
@@ -39,11 +37,11 @@ const websocketStatus = inject('websocketStatus')
 var refreshTimer = null
 
 function buildDiagram() {
-    const themeName = (theme.global.current.value.dark ? '"dark"' : '"light"')
-    const grayColor = (theme.global.current.value.dark ? '#888888' : '#888888')
-    const redColor = (theme.global.current.value.dark ? '#880000' : '#ff0000')
-    const greenColor = (theme.global.current.value.dark ? '#008800' : '#00ff00')
-    const yellowColor = (theme.global.current.value.dark ? '#888800' : '#ffff00')
+    const mermaidTheme = theme.global.current.value.dark ? 'dark' : 'default'
+    const gray = theme.global.current.value.dark ? '#888888' : '#888888'
+    const red = theme.global.current.value.dark ? '#880000' : '#ff0000'
+    const green = theme.global.current.value.dark ? '#008800' : '#00ff00'
+    const yellow = theme.global.current.value.dark ? '#888800' : '#ffff00'
     const flowStatus =
         websocketStatus.value == 0 ? 'connecting' :
             websocketStatus.value == 1 ? 'connected' :
@@ -53,18 +51,21 @@ function buildDiagram() {
         websocketStatus.value == 1 ? 'green' :
             'red'
     let flowchart = ''
+    flowchart += '---\n'
+    flowchart += 'config:\n'
+    flowchart += `  theme: ${mermaidTheme}\n`
+    flowchart += '---\n'
     flowchart += 'flowchart TB\n'
-    flowchart += '    %%%%{init: { "theme": ' + themeName + ', "flowchart": { "htmlLabels": true, "useMaxWidth": true } } }%%%%\n'
-    flowchart += '    classDef gray fill:' + grayColor + ',stroke:' + grayColor + ',stroke-width:1px\n'
-    flowchart += '    classDef red fill:' + redColor + ',stroke:' + redColor + ',stroke-width:1px\n'
-    flowchart += '    classDef green fill:' + greenColor + ',stroke:' + greenColor + ',stroke-width:1px\n'
-    flowchart += '    classDef yellow fill:' + yellowColor + ',stroke:' + yellowColor + ',stroke-width:1px\n'
-    flowchart += '    subgraph LAN\n'
-    flowchart += '        subgraph Node-RED\n'
-    flowchart += '            ui["Vuetify-based UI"]\n'
+    flowchart += `    classDef gray fill:${gray},stroke:${gray},stroke-width:1px\n`
+    flowchart += `    classDef red fill:${red},stroke:${red},stroke-width:1px\n`
+    flowchart += `    classDef green fill:${green},stroke:${green},stroke-width:1px\n`
+    flowchart += `    classDef yellow fill:${yellow},stroke:${yellow},stroke-width:1px\n`
+    flowchart += '    subgraph LAN&nbsp;\n'
+    flowchart += '        subgraph Node-RED&nbsp;\n'
+    flowchart += '            ui["Vuetify-based UI&nbsp;"]\n'
     flowchart += '            class ui green\n'
-    flowchart += '            flow["Node-RED Flow\n(' + flowStatus + ')"]\n'
-    flowchart += '            class flow ' + flowClassName + '\n'
+    flowchart += `            flow["Node-RED Flow&nbsp;<br>(${flowStatus})"]\n`
+    flowchart += `            class flow ${flowClassName}\n`
     flowchart += '            ui <-- WebSocket --> flow\n'
     flowchart += '        end\n'
     let bridgeNumber = 1
@@ -79,14 +80,14 @@ function buildDiagram() {
                 hueStatus.value[address] == 1 ? 'green' :
                     'red'
         const bridgeName = 'hue_bridge_' + bridgeNumber
-        flowchart += '        ' + bridgeName + '["' + bridgeTitle + ' Hue Bridge\n(' + bridgeStatus + ')"]\n'
-        flowchart += '        class ' + bridgeName + ' ' + bridgeClassName + '\n'
-        flowchart += '        flow <-- WiFi --> ' + bridgeName + '\n'
+        flowchart += `        ${bridgeName}["${bridgeTitle} Hue Bridge&nbsp;<br>(${bridgeStatus})"]\n`
+        flowchart += `        class ${bridgeName} ${bridgeClassName}\n`
+        flowchart += `        flow <-- WiFi --> ${bridgeName}\n`
         const resources = hueResources.value[address]
         if (resources) {
-            const devicesName = 'hue_devices_' + bridgeNumber
-            flowchart += '        ' + devicesName + '([Hue Devices])\n'
-            flowchart += '        ' + bridgeName + '<-- Zigbee --> ' + devicesName + '\n'
+            const devicesName = `hue_devices_${bridgeNumber}`
+            flowchart += `        ${devicesName}([Hue Devices&nbsp;])\n`
+            flowchart += `        ${bridgeName}  <-- Zigbee --> ${devicesName}\n`
         }
         bridgeNumber += 1
     }
@@ -97,11 +98,11 @@ function buildDiagram() {
         const hubStatus = powerviewStatus.value == 0 ? 'unknown' :
             powerviewStatus.value == 1 ? 'connected' :
                 'error'
-        flowchart += '        powerview_hub["PowerView Hub\n(' + hubStatus + ')"]\n'
-        flowchart += '        class powerview_hub ' + powerviewClassName + '\n'
+        flowchart += `        powerview_hub["PowerView Hub&nbsp;<br>(${hubStatus})"]\n`
+        flowchart += `        class powerview_hub ${powerviewClassName}\n`
         flowchart += '        flow <-- WiFi --> powerview_hub\n'
         if (hasShades()) {
-            flowchart += '        powerview_shades([PowerView Shades])\n'
+            flowchart += '        powerview_shades([PowerView Shades&nbsp;])\n'
             flowchart += '        powerview_hub <-- Bluetooth --> powerview_shades\n'
         }
     }
@@ -148,11 +149,6 @@ watch(powerviewModel, refreshDiagram)
 watch(websocketStatus, refreshDiagram)
 watch(powerviewStatus, refreshDiagram)
 watch(theme.global.current, refreshDiagram)
-
-////////////////////////////////////////////////////////////////////////////////
-// TO DO: investigate ways to have the mermaid diagram invoke these directly
-// rather than using indirection through index.html
-////////////////////////////////////////////////////////////////////////////////
 
 function onHueBridgeInfo(address) {
     const bridge = hueBridges.value[address]

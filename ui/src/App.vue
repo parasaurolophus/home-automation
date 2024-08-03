@@ -48,7 +48,7 @@ onUpdated(initializeMermaid)
 function initializeMermaid() {
   mermaid.initialize({
     startOnLoad: false,
-    theme: 'dark',
+    theme: theme.global.current.value.dark ? 'dark' : 'default',
   })
 }
 </script>
