@@ -1,13 +1,18 @@
 <template>
-<pre class="mermaid">
-    graph TB
+    <v-theme-provider theme="dark" with-background>
+        <pre class="mermaid">
+---
+title: A Graph
+---
+graph TB
 
-        a --> b
-        b --> d
+    a --> b
+    b --> d
 
-        a --> c
-        c --> d
-</pre>
+    a --> c
+    c --> d
+        </pre>
+    </v-theme-provider>
 </template>
 
 <script setup>

@@ -1,7 +1,9 @@
 <template>
     <v-card>
         <v-card-text>
-            <pre ref="diagram"></pre>
+            <v-theme-provider theme="dark" with-background>
+                <pre ref="diagram"></pre>
+            </v-theme-provider>
         </v-card-text>
         <v-card-actions>
             <v-btn @click="onResetConnections()">Reconnect</v-btn>
@@ -137,7 +139,6 @@ async function renderMermaid() {
     bindFunctions?.(diagram.value)
 }
 
-mermaid.flowchartConfig = { width: '100%' }
 onMounted(refreshDiagram)
 watch(hueBridges, refreshDiagram)
 watch(hueResources, refreshDiagram)
