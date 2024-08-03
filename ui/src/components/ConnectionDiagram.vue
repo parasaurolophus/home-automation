@@ -50,24 +50,23 @@ function buildDiagram() {
     const flowClassName = websocketStatus.value == 0 ? 'yellow' :
         websocketStatus.value == 1 ? 'green' :
             'red'
-    let flowchart = ''
-    flowchart += '---\n'
-    flowchart += 'config:\n'
-    flowchart += `  theme: ${mermaidTheme}\n`
-    flowchart += '---\n'
-    flowchart += 'flowchart TB\n'
-    flowchart += `    classDef gray fill:${gray},stroke:${gray},stroke-width:1px\n`
-    flowchart += `    classDef red fill:${red},stroke:${red},stroke-width:1px\n`
-    flowchart += `    classDef green fill:${green},stroke:${green},stroke-width:1px\n`
-    flowchart += `    classDef yellow fill:${yellow},stroke:${yellow},stroke-width:1px\n`
-    flowchart += '    subgraph LAN&nbsp;\n'
-    flowchart += '        subgraph Node-RED&nbsp;\n'
-    flowchart += '            ui["Vuetify-based UI&nbsp;"]\n'
-    flowchart += '            class ui green\n'
-    flowchart += `            flow["Node-RED Flow&nbsp;<br>(${flowStatus})"]\n`
-    flowchart += `            class flow ${flowClassName}\n`
-    flowchart += '            ui <-- WebSocket --> flow\n'
-    flowchart += '        end\n'
+    let flowchart = `---
+config:
+  theme: ${mermaidTheme}
+---
+flowchart TB
+    classDef gray fill:${gray},stroke:${gray},stroke-width:1px
+    classDef red fill:${red},stroke:${red},stroke-width:1px
+    classDef green fill:${green},stroke:${green},stroke-width:1px
+    classDef yellow fill:${yellow},stroke:${yellow},stroke-width:1px
+    subgraph LAN&nbsp;
+        subgraph Node-RED&nbsp;
+            ui["Vuetify-based UI&nbsp;"]
+            class ui green
+            flow["Node-RED Flow&nbsp;<br>(${flowStatus})"]
+            class flow ${flowClassName}
+            ui <-- WebSocket --> flow
+        end`
     let bridgeNumber = 1
     for (let address in hueBridges.value) {
         const bridgeTitle = hueTitle.value[address] ?? address
@@ -79,15 +78,17 @@ function buildDiagram() {
             hueStatus.value[address] == 0 ? 'yellow' :
                 hueStatus.value[address] == 1 ? 'green' :
                     'red'
-        const bridgeName = 'hue_bridge_' + bridgeNumber
-        flowchart += `        ${bridgeName}["${bridgeTitle} Hue Bridge&nbsp;<br>(${bridgeStatus})"]\n`
-        flowchart += `        class ${bridgeName} ${bridgeClassName}\n`
-        flowchart += `        flow <-- WiFi --> ${bridgeName}\n`
+        const bridgeName = `hue_bridge_${bridgeNumber}`
+        flowchart += `
+        ${bridgeName}["${bridgeTitle} Hue Bridge&nbsp;<br>(${bridgeStatus})"]
+        class ${bridgeName} ${bridgeClassName}
+        flow <-- WiFi --> ${bridgeName}`
         const resources = hueResources.value[address]
         if (resources) {
             const devicesName = `hue_devices_${bridgeNumber}`
-            flowchart += `        ${devicesName}([Hue Devices&nbsp;])\n`
-            flowchart += `        ${bridgeName}  <-- Zigbee --> ${devicesName}\n`
+            flowchart += `
+        ${devicesName}([Hue Devices&nbsp;])
+        ${bridgeName}  <-- Zigbee --> ${devicesName}`
         }
         bridgeNumber += 1
     }
@@ -98,15 +99,19 @@ function buildDiagram() {
         const hubStatus = powerviewStatus.value == 0 ? 'unknown' :
             powerviewStatus.value == 1 ? 'connected' :
                 'error'
-        flowchart += `        powerview_hub["PowerView Hub&nbsp;<br>(${hubStatus})"]\n`
-        flowchart += `        class powerview_hub ${powerviewClassName}\n`
-        flowchart += '        flow <-- WiFi --> powerview_hub\n'
+        flowchart += `
+        powerview_hub["PowerView Hub&nbsp;<br>(${hubStatus})"]
+        class powerview_hub ${powerviewClassName}
+        flow <-- WiFi --> powerview_hub`
         if (hasShades()) {
-            flowchart += '        powerview_shades([PowerView Shades&nbsp;])\n'
-            flowchart += '        powerview_hub <-- Bluetooth --> powerview_shades\n'
+            flowchart += `
+        powerview_shades([PowerView Shades&nbsp;])
+        powerview_hub <-- Bluetooth --> powerview_shades`
         }
     }
-    flowchart += '    end\n'
+    flowchart += `
+        end`
+    console.log(flowchart)
     return flowchart
 }
 
