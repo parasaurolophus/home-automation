@@ -110,8 +110,7 @@ flowchart TB
         }
     }
     flowchart += `
-        end`
-    console.log(flowchart)
+    end`
     return flowchart
 }
 
