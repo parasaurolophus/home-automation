@@ -1,16 +1,20 @@
 <template>
     <v-theme-provider theme="dark" with-background>
         <pre class="mermaid">
----
-title: A Graph
----
-graph TB
-
-    a --> b
-    b --> d
-
-    a --> c
-    c --> d
+flowchart TD
+    inception -->|iterate| inception
+    inception -->|requirements| architecture
+    architecture -->|iterate| architecture
+    architecture -->|request change| inception
+    architecture -->|specifications<br>designs| development
+    development -->|iterate| development
+    development -->|request change| architecture
+    development -->|commit| test
+    test -->|iterate| test
+    test -->|report bugs| development
+    test -->|approve| operations
+    operations -->|deploy<br>monitor| operations
+    operations -->|report bugs| development
         </pre>
     </v-theme-provider>
 </template>
@@ -19,10 +23,6 @@ graph TB
 import { onMounted, onUpdated } from 'vue'
 import mermaid from 'mermaid'
 
-onMounted(runMermaid)
-onUpdated(runMermaid)
-
-function runMermaid() {
-    mermaid.run()
-}
+onMounted(mermaid.run)
+onUpdated(mermaid.run)
 </script>
