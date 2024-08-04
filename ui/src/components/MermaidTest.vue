@@ -1,6 +1,10 @@
 <template>
     <v-theme-provider theme="dark" with-background>
         <pre class="mermaid">
+---
+config:
+  theme: dark
+---
 flowchart TD
     inception -->|iterate| inception
     inception -->|requirements| architecture
