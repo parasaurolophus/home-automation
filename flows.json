@@ -673,9 +673,9 @@
         "nodes": [
             "b044e7bab42607f8"
         ],
-        "x": 914,
-        "y": 559,
-        "w": 452,
+        "x": 94,
+        "y": 719,
+        "w": 712,
         "h": 82
     },
     {
@@ -1533,10 +1533,7 @@
         "links": [
             "be6b7a2f92b316c1",
             "5c6f1c011af44f05",
-            "80eecde95e26624e",
-            "cd183a27ed2dc1da",
-            "6a19e3e44e985fd4",
-            "259a4bbee836a7ca"
+            "80eecde95e26624e"
         ],
         "x": 1210,
         "y": 100,
@@ -2109,9 +2106,7 @@
         "z": "e1d7dd3bdd3cf24a",
         "g": "c4e6856650bacfda",
         "name": "send to websocket",
-        "links": [
-            "d067db1451aabd34"
-        ],
+        "links": [],
         "x": 230,
         "y": 400,
         "wires": [
@@ -2196,14 +2191,12 @@
             "6b128a9892bb5129",
             "564413ccb5bf6302",
             "32b6005aefb60beb",
-            "9b35549167fe59d4",
             "8e90c65ef5411fce",
             "dfbca0a007fe3ab3",
             "c3be86c162b3618e",
             "4b45acf4dec45b69",
             "06a2bc05ac2bd7e3",
             "cd8737251a5d81c2",
-            "b2bbe27faae5bd67",
             "14578045116ea043",
             "f98821f373a40879"
         ],
@@ -2588,8 +2581,8 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/9c1c7975-2f47-4552-bac8-c19b643cd678\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Floor\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/6f513d61-1c85-457e-9b40-a6ebdcec1b76\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Bathroom\"}]",
-                "type": "json"
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/9c1c7975-2f47-4552-bac8-c19b643cd678\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Floor\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/6f513d61-1c85-457e-9b40-a6ebdcec1b76\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Bathroom\"}]",
+                "type": "env"
             }
         ],
         "x": 620,
@@ -2654,8 +2647,8 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/01d77dc0-3ff8-4afc-a943-9b04e4a8da0d\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Nightlight\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/84e98f82-c1f6-4be7-b66b-bb6e2ee9c848\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Bathroom/Nightlight\"}]",
-                "type": "json"
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/01d77dc0-3ff8-4afc-a943-9b04e4a8da0d\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Nightlight\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/84e98f82-c1f6-4be7-b66b-bb6e2ee9c848\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Bathroom/Nightlight\"}]",
+                "type": "env"
             }
         ],
         "x": 630,
@@ -2671,8 +2664,8 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/e9503c3a-16b3-49ae-a4f9-2f6074d67be0\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Tribal\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
-                "type": "json"
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/e9503c3a-16b3-49ae-a4f9-2f6074d67be0\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Tribal\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
+                "type": "env"
             }
         ],
         "x": 770,
@@ -2688,8 +2681,8 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/85aef9e7-9805-4f07-afc9-80aa14e7be61\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"label\":\"Exterior/Spooky\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
-                "type": "json"
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/85aef9e7-9805-4f07-afc9-80aa14e7be61\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"label\":\"Exterior/Spooky\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
+                "type": "env"
             }
         ],
         "x": 780,
@@ -2705,8 +2698,8 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/a1a2735c-def7-4db7-8d8e-bebe2a7e2200\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Jolly\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
-                "type": "json"
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/a1a2735c-def7-4db7-8d8e-bebe2a7e2200\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Jolly\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
+                "type": "env"
             }
         ],
         "x": 770,
@@ -2722,8 +2715,8 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/192.168.1.12/resource/scene/6918db34-c83f-4e37-9581-8d4255bfd1f8\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Sunset\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
-                "type": "json"
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/6918db34-c83f-4e37-9581-8d4255bfd1f8\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Sunset\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
+                "type": "env"
             }
         ],
         "x": 780,
@@ -2767,10 +2760,10 @@
         "type": "comment",
         "z": "94027c46c4bfae12",
         "g": "f33001c4a3f90bd3",
-        "name": "assumes ${LATITUDE} and ${LONGITUDE} are defined",
+        "name": "assumes ${GROUND_FLOOR_HUE_ADDRESS}, ${LATITUDE} and ${LONGITUDE} are defined",
         "info": "",
-        "x": 1140,
-        "y": 600,
+        "x": 450,
+        "y": 760,
         "wires": []
     },
     {
@@ -2780,10 +2773,7 @@
         "g": "b10eb6ebfd377efe",
         "name": "initialize",
         "mode": "link",
-        "links": [
-            "0dfcf308245816ba",
-            "08b9165876ab2131"
-        ],
+        "links": [],
         "x": 400,
         "y": 180,
         "wires": [],
@@ -3116,7 +3106,6 @@
         "name": "reset bedtime",
         "mode": "link",
         "links": [
-            "d8203a0ddd97b936",
             "8df09ed123e9dda6"
         ],
         "x": 760,
@@ -3132,8 +3121,6 @@
         "name": "reset lighting",
         "mode": "link",
         "links": [
-            "43188c75feb44742",
-            "9d30e6537dee4911",
             "96f8511f1df7faeb"
         ],
         "x": 750,
@@ -3149,9 +3136,7 @@
         "name": "reset shades",
         "mode": "link",
         "links": [
-            "aa30475a841de070",
-            "9cdaafc330c26d06",
-            "178f71b38b1e27a1"
+            "9cdaafc330c26d06"
         ],
         "x": 750,
         "y": 540,
@@ -3217,7 +3202,6 @@
         "g": "6cbb92fa530f2a8d",
         "name": "reset bedtime",
         "links": [
-            "0a1c0fddf6b6ca0b",
             "c556cb062dc66d2a"
         ],
         "x": 190,
@@ -3236,7 +3220,6 @@
         "g": "6cbb92fa530f2a8d",
         "name": "reset shades",
         "links": [
-            "a5741ce43908ad92",
             "70d2ad7cf7335e75"
         ],
         "x": 190,
@@ -3479,7 +3462,6 @@
         "g": "6cbb92fa530f2a8d",
         "name": "reset lighting",
         "links": [
-            "811aa5e79e9f10e6",
             "148d79087235cd86"
         ],
         "x": 190,
@@ -3815,7 +3797,6 @@
         "name": "restart browser",
         "mode": "link",
         "links": [
-            "24c5060618b2a3bf",
             "c37ccd155fd5e0a1"
         ],
         "x": 900,
