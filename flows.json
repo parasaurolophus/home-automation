@@ -332,9 +332,9 @@
             "dfbca0a007fe3ab3",
             "74892fde4d091f6c"
         ],
-        "x": 94,
+        "x": 84,
         "y": 119,
-        "w": 1112,
+        "w": 1122,
         "h": 322
     },
     {
@@ -386,9 +386,9 @@
             "93a323937c189b13",
             "80eecde95e26624e"
         ],
-        "x": 14,
+        "x": 4,
         "y": 19,
-        "w": 1052,
+        "w": 1062,
         "h": 162
     },
     {
@@ -458,7 +458,7 @@
         ],
         "x": 94,
         "y": 599,
-        "w": 1012,
+        "w": 1022,
         "h": 162
     },
     {
@@ -560,9 +560,9 @@
             "9cb4a587d2d04193",
             "032d5842e53c6015"
         ],
-        "x": 114,
+        "x": 104,
         "y": 19,
-        "w": 712,
+        "w": 722,
         "h": 202,
         "info": "Broadcast messages received from any client to all clients. Note that\nall properties other than `msg._session` and `msg.retain` are\ntransmitted directly from the publisher to all subscribers.\n\n- Removes `msg._session` entirely, in the case of initially published\n  messages.\n\n- Handles `msg.topic` and `msg.retain` in a fashion inspired by MQTT.\n\nIf a client publishes a message with `msg.retain` set to `true`, the\n`retain` function node saves a clone of the message in flow context\nusing a file-system backed context store using `msg.topic` as the key.\nIt then sets `msg.retain` to `false` before broadcasting the message\nto subscribed clients.\n\nEach time a client connects, the `retained` function node sends that\nclient all currently stored messages with `msg.retain` set to `true`.\n\nRetained messages' contents can be updated by sending subsequent\nmessages with the same `msg.topic` and `msg.retain` set to `true`.\n\nRetained messages can be deleted by sending subsequent messages with\nthe same `msg.topic`, `msg.retain` set to `true` and `msg.payload`\nset to the empty string (`''`)."
     },
@@ -625,7 +625,7 @@
         ],
         "x": 94,
         "y": 279,
-        "w": 962,
+        "w": 1052,
         "h": 202,
         "info": "Activate the corresponding PowerView scene upon receipt of of each\n`automation/trigger` event"
     },
@@ -673,9 +673,9 @@
         "nodes": [
             "b044e7bab42607f8"
         ],
-        "x": 94,
+        "x": 104,
         "y": 719,
-        "w": 712,
+        "w": 692,
         "h": 82
     },
     {
@@ -714,9 +714,9 @@
         "nodes": [
             "d046e6267c76dfe1"
         ],
-        "x": 94,
+        "x": 114,
         "y": 19,
-        "w": 1132,
+        "w": 1092,
         "h": 82
     },
     {
@@ -1717,14 +1717,15 @@
         "type": "link out",
         "z": "85ed27d795e6e866",
         "g": "96971e50c13ead01",
-        "name": "link out 1",
+        "name": "status",
         "mode": "link",
         "links": [
             "6a7c1dfd3079768a"
         ],
-        "x": 935,
+        "x": 970,
         "y": 600,
-        "wires": []
+        "wires": [],
+        "l": true
     },
     {
         "id": "6a7c1dfd3079768a",
@@ -1920,8 +1921,9 @@
         "type": "function",
         "z": "450f4de3c4f73b40",
         "name": "commands",
-        "func": "const messages = []\n\nfor (let command of env.get('COMMANDS')) {\n\n    const message = RED.util.cloneMessage(msg)\n\n    message.payload = command.payload\n    message.topic = command.topic\n    message.method = command.method\n    messages.push(message)\n\n}\n\nnode.status({\n    text: messages.length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn [messages]",
+        "func": "const json = env.get('COMMANDS')\nconst commands = JSON.parse(json)\nconst messages = []\n\nfor (let command of commands) {\n\n    const message = RED.util.cloneMessage(msg)\n\n    message.payload = command.payload\n    message.topic = command.topic\n    message.method = command.method\n    messages.push(message)\n\n}\n\nnode.status({\n    text: messages.length,\n    shape: 'dot',\n    fill: 'blue'\n})\n\nreturn [messages]",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -2581,7 +2583,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/9c1c7975-2f47-4552-bac8-c19b643cd678\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Floor\"},{\"topic\":\"put/hue/192.168.1.12/resource/grouped_light/6f513d61-1c85-457e-9b40-a6ebdcec1b76\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Bathroom\"}]",
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/grouped_light/9c1c7975-2f47-4552-bac8-c19b643cd678\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Floor\"},{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/grouped_light/6f513d61-1c85-457e-9b40-a6ebdcec1b76\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Main Bathroom\"}]",
                 "type": "env"
             }
         ],
@@ -2647,7 +2649,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/01d77dc0-3ff8-4afc-a943-9b04e4a8da0d\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Nightlight\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/84e98f82-c1f6-4be7-b66b-bb6e2ee9c848\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Bathroom/Nightlight\"}]",
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/grouped_light/a8498fe0-27a4-446b-9350-d236c7c663e1\",\"payload\":{\"on\":{\"on\":false}},\"method\":\"PUT\",\"label\":\"Exterior\"},{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/01d77dc0-3ff8-4afc-a943-9b04e4a8da0d\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Nightlight\"},{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/84e98f82-c1f6-4be7-b66b-bb6e2ee9c848\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Bathroom/Nightlight\"}]",
                 "type": "env"
             }
         ],
@@ -2664,7 +2666,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/e9503c3a-16b3-49ae-a4f9-2f6074d67be0\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Tribal\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/e9503c3a-16b3-49ae-a4f9-2f6074d67be0\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Tribal\"},{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
                 "type": "env"
             }
         ],
@@ -2681,7 +2683,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/85aef9e7-9805-4f07-afc9-80aa14e7be61\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"label\":\"Exterior/Spooky\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/85aef9e7-9805-4f07-afc9-80aa14e7be61\",\"payload\":{\"recall\":{\"action\":\"dynamic_palette\"}},\"method\":\"PUT\",\"label\":\"Exterior/Spooky\"},{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
                 "type": "env"
             }
         ],
@@ -2698,7 +2700,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/a1a2735c-def7-4db7-8d8e-bebe2a7e2200\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Jolly\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/a1a2735c-def7-4db7-8d8e-bebe2a7e2200\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Jolly\"},{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
                 "type": "env"
             }
         ],
@@ -2715,7 +2717,7 @@
         "env": [
             {
                 "name": "COMMANDS",
-                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/6918db34-c83f-4e37-9581-8d4255bfd1f8\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Sunset\"},{\"topic\":\"put/hue/192.168.1.12/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
+                "value": "[{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/6918db34-c83f-4e37-9581-8d4255bfd1f8\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Exterior/Sunset\"},{\"topic\":\"put/hue/${GROUND_FLOOR_HUE_ADDRESS}/resource/scene/6eff0801-01e2-4803-9840-e31c06cee079\",\"payload\":{\"recall\":{\"action\":\"active\"}},\"method\":\"PUT\",\"label\":\"Main Floor/Sunset\"}]",
                 "type": "env"
             }
         ],
@@ -2920,12 +2922,11 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 1015,
+        "x": 1060,
         "y": 380,
         "wires": [
             []
-        ],
-        "l": false
+        ]
     },
     {
         "id": "6752a070cde6d949",
